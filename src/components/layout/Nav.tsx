@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 
 export function Nav() {
   const pathname = usePathname();
-  const isAdmin = pathname.startsWith("/admin");
   const isHome = pathname === "/" || pathname === "/home";
 
   // No navbar on intro gate or main homepage
@@ -35,14 +34,6 @@ export function Nav() {
             className="text-xs uppercase tracking-widest text-[var(--muted)] transition-colors hover:text-[var(--foreground)]"
           >
             Ana Sayfa
-          </Link>
-          <Link
-            href="/admin"
-            className={`text-xs uppercase tracking-widest transition-colors ${
-              isAdmin ? "text-[var(--accent)]" : "text-[var(--muted)] hover:text-[var(--foreground)]"
-            }`}
-          >
-            Admin
           </Link>
         </div>
       </div>

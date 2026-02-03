@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Source_Serif_4, DM_Sans, Cinzel, Inter } from "next/font/google";
+import { Cormorant_Garamond, Source_Serif_4, DM_Sans, Cinzel, Inter, Caveat } from "next/font/google";
 import { Nav } from "@/components/layout/Nav";
 import { MainWrapper } from "@/components/layout/MainWrapper";
 import { MotionLayout } from "@/components/layout/MotionLayout";
+import SiteBackground from "@/components/SiteBackground";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -37,6 +38,13 @@ const inter = Inter({
   display: "swap",
 });
 
+const caveat = Caveat({
+  variable: "--font-handwriting",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "plaktakikitap — Film, Kitap, Proje Koleksiyonu",
   description: "Kişisel film, dizi, kitap ve proje koleksiyonum",
@@ -50,8 +58,9 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body
-        className={`${cormorant.variable} ${sourceSerif.variable} ${dmSans.variable} ${cinzel.variable} ${inter.variable} min-h-screen antialiased`}
+        className={`${cormorant.variable} ${sourceSerif.variable} ${dmSans.variable} ${cinzel.variable} ${inter.variable} ${caveat.variable} min-h-screen antialiased`}
       >
+        <SiteBackground />
         <Nav />
         <MainWrapper>
           <MotionLayout>{children}</MotionLayout>

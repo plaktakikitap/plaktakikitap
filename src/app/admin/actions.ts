@@ -1,6 +1,10 @@
 "use server";
 
 import {
+  createPlannerDecor,
+  deletePlannerDecor,
+} from "@/lib/planner";
+import {
   createFilm,
   createSeries,
   createBook,
@@ -15,6 +19,9 @@ import {
   deleteArt,
   addArtMedia,
   deleteArtMedia,
+  createManualTrack,
+  updateManualTrack,
+  deleteManualTrack,
 } from "@/lib/db/queries";
 
 export async function adminCreateFilm(formData: FormData) {
@@ -161,6 +168,38 @@ export async function adminDeletePlannerMedia(id: string) {
   return deletePlannerMedia(id);
 }
 
+// Planner decor
+export async function adminCreatePlannerDecor(formData: FormData) {
+  const year = parseInt(formData.get("year") as string, 10);
+  const month = parseInt(formData.get("month") as string, 10);
+  const page = formData.get("page") as "left" | "right";
+  const type = formData.get("type") as "sticker" | "tape" | "paperclip" | "pin";
+  const x = parseFloat(formData.get("x") as string) || 0.5;
+  const y = parseFloat(formData.get("y") as string) || 0.5;
+  const rotation = parseFloat(formData.get("rotation") as string) || 0;
+  const scale = parseFloat(formData.get("scale") as string) || 1;
+  const assetUrl = (formData.get("asset_url") as string)?.trim() || null;
+
+  if (!page || !type || isNaN(year) || isNaN(month)) {
+    return { error: "Year, month, page, type gerekli" };
+  }
+  return createPlannerDecor({
+    year,
+    month,
+    page,
+    type,
+    assetUrl,
+    x,
+    y,
+    rotation,
+    scale,
+  });
+}
+
+export async function adminDeletePlannerDecor(id: string) {
+  return deletePlannerDecor(id);
+}
+
 // Art
 export async function adminCreateArt(formData: FormData) {
   const title = (formData.get("title") as string)?.trim();
@@ -200,4 +239,190 @@ export async function adminAddArtMedia(formData: FormData) {
 
 export async function adminDeleteArtMedia(id: string) {
   return deleteArtMedia(id);
+}
+
+// Manual Now Playing (Spotify fallback)
+export async function adminCreateManualTrack(formData: FormData) {
+  const title = (formData.get("title") as string)?.trim();
+  const artist = (formData.get("artist") as string)?.trim();
+  if (!title || !artist) return { error: "Başlık ve sanatçı gerekli" };
+  return createManualTrack({
+    title,
+    artist,
+    album_art_url: (formData.get("album_art_url") as string)?.trim() || null,
+    track_url: (formData.get("track_url") as string)?.trim() || null,
+    is_active: formData.get("is_active") === "on",
+  });
+}
+
+export async function adminUpdateManualTrack(id: string, formData: FormData) {
+  return updateManualTrack(id, {
+    title: (formData.get("title") as string)?.trim(),
+    artist: (formData.get("artist") as string)?.trim(),
+    album_art_url: (formData.get("album_art_url") as string)?.trim() || null,
+    track_url: (formData.get("track_url") as string)?.trim() || null,
+    is_active: formData.get("is_active") === "on",
+  });
+}
+
+export async function adminDeleteManualTrack(id: string) {
+  return deleteManualTrack(id);
+}
+
+export async function adminSetActiveManualTrack(id: string) {
+  return updateManualTrack(id, { is_active: true });
+}
+
+// Reading status (Şu an okuyorum)
+export async function adminUpsertReadingStatus(formData: FormData) {
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const supabase = createAdminClient();
+  const book_title = (formData.get("book_title") as string)?.trim();
+  const author = (formData.get("author") as string)?.trim() || null;
+  const cover_url = (formData.get("cover_url") as string)?.trim() || null;
+  const note = (formData.get("note") as string)?.trim() || null;
+  const status = (formData.get("status") as "reading" | "last") || "reading";
+
+  if (!book_title) return { error: "Kitap adı gerekli" };
+
+  const { data: existing } = await supabase
+    .from("reading_status")
+    .select("id")
+    .limit(1)
+    .maybeSingle();
+
+  const row = {
+    book_title,
+    author,
+    cover_url,
+    note,
+    status,
+    updated_at: new Date().toISOString(),
+  };
+
+  if (existing) {
+    const { error } = await supabase
+      .from("reading_status")
+      .update(row)
+      .eq("id", existing.id);
+    if (error) return { error: error.message };
+  } else {
+    const { error } = await supabase.from("reading_status").insert(row);
+    if (error) return { error: error.message };
+  }
+  return { success: true };
+}
+
+// Site links (Footer)
+export async function adminCreateSiteLink(formData: FormData) {
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const supabase = createAdminClient();
+  const type = (formData.get("type") as string)?.trim() || "link";
+  const label = (formData.get("label") as string)?.trim();
+  const url = (formData.get("url") as string)?.trim();
+  const sort_order = parseInt((formData.get("sort_order") as string) || "0", 10);
+  const is_active = formData.get("is_active") === "on";
+
+  if (!label || !url) return { error: "Etiket ve URL gerekli" };
+
+  const { error } = await supabase.from("site_links").insert({
+    type,
+    label,
+    url,
+    sort_order,
+    is_active,
+  });
+  if (error) return { error: error.message };
+  return { success: true };
+}
+
+export async function adminUpdateSiteLink(id: string, formData: FormData) {
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const supabase = createAdminClient();
+  const type = (formData.get("type") as string)?.trim() || "link";
+  const label = (formData.get("label") as string)?.trim();
+  const url = (formData.get("url") as string)?.trim();
+  const sort_order = parseInt((formData.get("sort_order") as string) || "0", 10);
+  const is_active = formData.get("is_active") === "on";
+
+  if (!label || !url) return { error: "Etiket ve URL gerekli" };
+
+  const { error } = await supabase
+    .from("site_links")
+    .update({ type, label, url, sort_order, is_active })
+    .eq("id", id);
+  if (error) return { error: error.message };
+  return { success: true };
+}
+
+export async function adminDeleteSiteLink(id: string) {
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("site_links").delete().eq("id", id);
+  if (error) return { error: error.message };
+  return { success: true };
+}
+
+// Social links (Footer — Bana ulaşın)
+export async function adminCreateSocialLink(formData: FormData) {
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const supabase = createAdminClient();
+  const platform = (formData.get("platform") as string)?.trim() || "link";
+  const url = (formData.get("url") as string)?.trim();
+  const icon_name = (formData.get("icon_name") as string)?.trim() || null;
+  const order_index = parseInt((formData.get("order_index") as string) || "0", 10);
+  const is_active = formData.get("is_active") === "on";
+
+  if (!url) return { error: "URL gerekli" };
+
+  const { error } = await supabase.from("social_links").insert({
+    platform,
+    url,
+    icon_name,
+    order_index,
+    is_active,
+  });
+  if (error) return { error: error.message };
+  return { success: true };
+}
+
+export async function adminUpdateSocialLink(id: string, formData: FormData) {
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const supabase = createAdminClient();
+  const platform = (formData.get("platform") as string)?.trim() || "link";
+  const url = (formData.get("url") as string)?.trim();
+  const icon_name = (formData.get("icon_name") as string)?.trim() || null;
+  const order_index = parseInt((formData.get("order_index") as string) || "0", 10);
+  const is_active = formData.get("is_active") === "on";
+
+  if (!url) return { error: "URL gerekli" };
+
+  const { error } = await supabase
+    .from("social_links")
+    .update({ platform, url, icon_name, order_index, is_active })
+    .eq("id", id);
+  if (error) return { error: error.message };
+  return { success: true };
+}
+
+export async function adminDeleteSocialLink(id: string) {
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("social_links").delete().eq("id", id);
+  if (error) return { error: error.message };
+  return { success: true };
+}
+
+export async function adminReorderSocialLinks(
+  orderedIds: string[]
+) {
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const supabase = createAdminClient();
+  for (let i = 0; i < orderedIds.length; i++) {
+    await supabase
+      .from("social_links")
+      .update({ order_index: i })
+      .eq("id", orderedIds[i]);
+  }
+  return { success: true };
 }

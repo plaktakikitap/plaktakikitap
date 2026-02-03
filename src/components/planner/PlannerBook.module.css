@@ -1,0 +1,92 @@
+/* BookStage: ana wrapper — overflow hidden, transparent bg */
+.bookStage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0;
+  perspective: 2000px;
+  overflow: hidden;
+  background: transparent;
+}
+
+/* BookShell: defter kabuğu — rounded, gölge, kalınlık hissi */
+.bookShell {
+  position: relative;
+  z-index: 1;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: transparent;
+  /* Masa üstü gölge */
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.25),
+    0 12px 24px rgba(0, 0, 0, 0.2),
+    0 30px 80px rgba(0, 0, 0, 0.4);
+}
+
+/* Kapak kalınlığı — alt kenar */
+.bookShell::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: clamp(6px, 1vw, 10px);
+  background: linear-gradient(
+    180deg,
+    rgba(60, 55, 48, 0.4) 0%,
+    rgba(40, 36, 30, 0.6) 35%,
+    rgba(30, 26, 22, 0.5) 100%
+  );
+  border-radius: 0 0 0.75rem 0.75rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Kapak kalınlığı — sağ kenar */
+.bookShell::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: clamp(4px, 0.6vw, 8px);
+  background: linear-gradient(
+    90deg,
+    rgba(50, 46, 40, 0.35) 0%,
+    rgba(35, 30, 26, 0.55) 50%,
+    rgba(28, 24, 20, 0.45) 100%
+  );
+  border-radius: 0 0.75rem 0.75rem 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Spread: flip içeriği — gutter gölgesi için merkez */
+.spread {
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: transparent;
+}
+
+/* Merkez gutter gölgesi — iki sayfa arasında */
+.spread::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 16px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.08) 20%,
+    rgba(0, 0, 0, 0.12) 50%,
+    rgba(0, 0, 0, 0.08) 80%,
+    transparent 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}

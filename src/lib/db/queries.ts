@@ -238,6 +238,7 @@ export interface PlannerEntryWithMedia {
   date: string;
   title: string | null;
   body: string | null;
+  created_at?: string;
   media: { id: string; kind: string; url: string; caption: string | null }[];
 }
 
@@ -277,7 +278,7 @@ export async function getPlannerEntriesByMonth(
 
   const { data: entries, error } = await supabase
     .from("planner_entries")
-    .select("id, date, title, body")
+    .select("id, date, title, body, created_at")
     .in("visibility", ["public", "unlisted"])
     .gte("date", start)
     .lte("date", end)
@@ -325,7 +326,7 @@ export async function getPlannerEntriesByDate(
   const supabase = await createServerClient();
   const { data: entry, error } = await supabase
     .from("planner_entries")
-    .select("id, date, title, body")
+    .select("id, date, title, body, created_at")
     .eq("date", dateStr)
     .in("visibility", ["public", "unlisted"])
     .single();
@@ -343,6 +344,7 @@ export async function getPlannerEntriesByDate(
       date: entry.date,
       title: entry.title,
       body: entry.body,
+      created_at: entry.created_at,
       media: media ?? [],
     },
   ];
@@ -827,4 +829,151 @@ export async function deleteArtMedia(id: string) {
   revalidatePath("/art");
   revalidatePath("/admin/art");
   return { success: true };
+}
+
+// --- Manual Now Playing (Spotify fallback) ---
+
+export interface ManualNowPlayingItem {
+  id: string;
+  title: string;
+  artist: string;
+  album_art_url: string | null;
+  track_url: string | null;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+}
+
+export async function getActiveManualTrack(): Promise<ManualNowPlayingItem | null> {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase
+    .from("manual_now_playing")
+    .select("*")
+    .eq("is_active", true)
+    .limit(1)
+    .maybeSingle();
+  if (error || !data) return null;
+  return data as ManualNowPlayingItem;
+}
+
+export async function getManualNowPlayingList(): Promise<ManualNowPlayingItem[]> {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase
+    .from("manual_now_playing")
+    .select("*")
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: false });
+  if (error) return [];
+  return (data ?? []) as ManualNowPlayingItem[];
+}
+
+export async function createManualTrack(input: {
+  title: string;
+  artist: string;
+  album_art_url?: string | null;
+  track_url?: string | null;
+  is_active?: boolean;
+}) {
+  const supabase = await createServerClient();
+  if (input.is_active) {
+    await supabase.from("manual_now_playing").update({ is_active: false }).eq("is_active", true);
+  }
+  const { data, error } = await supabase
+    .from("manual_now_playing")
+    .insert({
+      title: input.title.trim(),
+      artist: input.artist.trim(),
+      album_art_url: input.album_art_url?.trim() || null,
+      track_url: input.track_url?.trim() || null,
+      is_active: input.is_active ?? false,
+      sort_order: 0,
+    })
+    .select("id")
+    .single();
+  if (error) return { error: error.message };
+  revalidatePath("/");
+  revalidatePath("/home");
+  return { success: true, id: data.id };
+}
+
+export async function updateManualTrack(
+  id: string,
+  input: {
+    title?: string;
+    artist?: string;
+    album_art_url?: string | null;
+    track_url?: string | null;
+    is_active?: boolean;
+  }
+) {
+  const supabase = await createServerClient();
+  const updates: Record<string, unknown> = {};
+  if (input.title != null) updates.title = input.title.trim();
+  if (input.artist != null) updates.artist = input.artist.trim();
+  if (input.album_art_url !== undefined) updates.album_art_url = input.album_art_url?.trim() || null;
+  if (input.track_url !== undefined) updates.track_url = input.track_url?.trim() || null;
+  if (input.is_active === true) {
+    await supabase.from("manual_now_playing").update({ is_active: false }).eq("is_active", true);
+    updates.is_active = true;
+  } else if (input.is_active === false) {
+    updates.is_active = false;
+  }
+  const { error } = await supabase.from("manual_now_playing").update(updates).eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/");
+  revalidatePath("/home");
+  return { success: true };
+}
+
+export async function deleteManualTrack(id: string) {
+  const supabase = await createServerClient();
+  const { error } = await supabase.from("manual_now_playing").delete().eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/");
+  revalidatePath("/home");
+  return { success: true };
+}
+
+// --- reading_status (Şu an okuyorum) ---
+export interface ReadingStatus {
+  id: string;
+  book_title: string;
+  author: string | null;
+  cover_url: string | null;
+  note: string | null;
+  status: "reading" | "last";
+  updated_at: string;
+}
+
+export async function getReadingStatus(): Promise<ReadingStatus | null> {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase
+    .from("reading_status")
+    .select("*")
+    .order("updated_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error || !data) return null;
+  return data as ReadingStatus;
+}
+
+// --- site_links (Footer) ---
+export interface SiteLink {
+  id: string;
+  type: string;
+  label: string;
+  url: string;
+  sort_order: number;
+  is_active: boolean;
+}
+
+export async function getSiteLinks(): Promise<SiteLink[]> {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase
+    .from("site_links")
+    .select("*")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true });
+  if (error) return [];
+  return (data ?? []) as SiteLink[];
 }

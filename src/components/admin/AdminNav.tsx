@@ -4,22 +4,35 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createBrowserClient } from "@/lib/supabase/browser";
 import type { User } from "@supabase/supabase-js";
-import { LayoutDashboard, LogOut, ImageIcon, Calendar, Palette } from "lucide-react";
+import { LayoutDashboard, LogOut, ImageIcon, Calendar, Palette, Music, BookOpen, Link2, Share2 } from "lucide-react";
 
 const adminLinks = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/media", label: "Media", icon: ImageIcon },
   { href: "/admin/planner", label: "Planner", icon: Calendar },
   { href: "/admin/art", label: "Art", icon: Palette },
+  { href: "/admin/now-playing", label: "Şu an dinliyorum", icon: Music },
+  { href: "/admin/reading", label: "Şu an okuyorum", icon: BookOpen },
+  { href: "/admin/site-links", label: "Site linkleri", icon: Link2 },
+  { href: "/admin/socials", label: "Bana Ulaşın", icon: Share2 },
 ];
 
-export function AdminNav({ user }: { user: User }) {
+export function AdminNav({
+  user,
+}: {
+  user: User | { isSimpleAuth: true };
+}) {
   const pathname = usePathname();
   const router = useRouter();
+  const isSimpleAuth = "isSimpleAuth" in user && user.isSimpleAuth;
 
   async function handleLogout() {
-    const supabase = createBrowserClient();
-    await supabase.auth.signOut();
+    if (isSimpleAuth) {
+      await fetch("/api/admin/logout", { method: "POST" });
+    } else {
+      const supabase = createBrowserClient();
+      await supabase.auth.signOut();
+    }
     router.push("/admin/login");
     router.refresh();
   }
@@ -47,7 +60,9 @@ export function AdminNav({ user }: { user: User }) {
           ))}
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-[var(--muted)]">{user.email}</span>
+          {!isSimpleAuth && (
+            <span className="text-sm text-[var(--muted)]">{(user as User).email}</span>
+          )}
           <button
             onClick={handleLogout}
             className="flex items-center gap-1 rounded px-2 py-1 text-sm text-[var(--muted)] hover:bg-[var(--card)] hover:text-[var(--foreground)]"

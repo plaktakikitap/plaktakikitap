@@ -1,101 +1,72 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  adminCreatePlannerEntry,
-  adminUpdatePlannerEntry,
-  adminDeletePlannerEntry,
-  adminAddPlannerMedia,
-  adminDeletePlannerMedia,
-} from "@/app/admin/actions";
-import type { PlannerEntryWithMedia } from "@/lib/db/queries";
-import { getVideoEmbedUrl } from "@/lib/utils/embed";
-import {
-  ChevronLeft,
-  ChevronRight,
-  X,
-  Image as ImageIcon,
-  Video,
-  Link2,
-  Trash2,
-} from "lucide-react";
+import type { PlannerDaySummary, PlannerEntryWithMedia } from "@/lib/planner";
+import { AdminPlannerDecor } from "./AdminPlannerDecor";
+import { AdminPlannerMessySettings } from "./AdminPlannerMessySettings";
+import { ChevronLeft, ChevronRight, X, Upload, Paperclip, Plus, Eraser } from "lucide-react";
 
-type EntryWithVisibility = PlannerEntryWithMedia & { visibility: string };
-
-const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
+const MONTH_NAMES_TR = [
+  "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
+  "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık",
 ];
 
-function getDaysInMonth(year: number, month: number): number {
+function getDaysInMonth(year: number, month: number) {
   return new Date(year, month + 1, 0).getDate();
 }
 
-interface AdminPlannerProps {
-  entries: EntryWithVisibility[];
+function firstWeekday(year: number, month: number) {
+  const js = new Date(year, month, 1).getDay();
+  return (js + 6) % 7;
 }
 
-export function AdminPlanner({ entries }: AdminPlannerProps) {
+export function AdminPlanner() {
   const router = useRouter();
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
+  const [summary, setSummary] = useState<PlannerDaySummary[]>([]);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const entryByDate = useMemo(() => {
-    const map: Record<string, EntryWithVisibility> = {};
-    for (const e of entries) {
-      map[e.date] = e;
-    }
-    return map;
-  }, [entries]);
+  useEffect(() => {
+    fetch(`/api/planner/entries?year=${year}&month=${month}`)
+      .then((r) => r.json())
+      .then(setSummary)
+      .catch(() => setSummary([]));
+  }, [year, month]);
 
-  const selectedEntry = selectedDate ? entryByDate[selectedDate] : null;
+  const hasEntry: Record<string, boolean> = {};
+  for (const s of summary) {
+    if (s.entryCount > 0) hasEntry[s.date] = true;
+  }
 
   const daysInMonth = getDaysInMonth(year, month);
-  const startDow = new Date(year, month, 1).getDay();
+  const start = firstWeekday(year, month);
 
   const cells = [];
-  for (let i = 0; i < startDow; i++) {
+  for (let i = 0; i < start; i++) {
     cells.push(<div key={`pad-${i}`} />);
   }
   for (let d = 1; d <= daysInMonth; d++) {
     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-    const hasEntry = !!entryByDate[dateStr];
     cells.push(
       <button
         key={d}
+        type="button"
         onClick={() => setSelectedDate(dateStr)}
         className={`flex flex-col items-center justify-center rounded py-2 text-sm transition hover:bg-[var(--accent-soft)]/50 ${
-          hasEntry ? "bg-[var(--accent-soft)]/30 font-medium" : "text-[var(--foreground)]"
+          hasEntry[dateStr] ? "bg-[var(--accent-soft)]/30 font-medium" : "text-[var(--foreground)]"
         }`}
+        aria-label={`${d} — entry ekle/düzenle`}
       >
         {d}
-        {hasEntry && (
+        {hasEntry[dateStr] && (
           <span className="mt-0.5 h-1 w-1 rounded-full bg-[var(--accent)]" />
         )}
       </button>
     );
-  }
-
-  function goPrevMonth() {
-    if (month <= 0) {
-      setMonth(11);
-      setYear((y) => y - 1);
-    } else {
-      setMonth((m) => m - 1);
-    }
-  }
-
-  function goNextMonth() {
-    if (month >= 11) {
-      setMonth(0);
-      setYear((y) => y + 1);
-    } else {
-      setMonth((m) => m + 1);
-    }
   }
 
   return (
@@ -103,31 +74,34 @@ export function AdminPlanner({ entries }: AdminPlannerProps) {
       <header>
         <h1 className="text-3xl font-bold text-[var(--foreground)]">Planner</h1>
         <p className="mt-1 text-[var(--muted)]">
-          Click a day to add or edit the entry.
+          Takvimden gün seç, o güne entry ekle (başlık, içerik, etiketler, medya).
         </p>
       </header>
 
-      {/* Month calendar */}
       <section className="rounded-xl border border-[var(--card-border)] bg-[var(--card)] p-4">
         <div className="mb-4 flex items-center justify-between">
           <button
-            onClick={goPrevMonth}
+            type="button"
+            onClick={() => setMonth((m) => (m <= 0 ? 11 : m - 1))}
             className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)] hover:text-[var(--foreground)]"
+            aria-label="Önceki ay"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
-          <h2 className="font-editorial text-lg font-medium">
-            {MONTH_NAMES[month]} {year}
+          <h2 className="font-medium">
+            {MONTH_NAMES_TR[month]} {year}
           </h2>
           <button
-            onClick={goNextMonth}
+            type="button"
+            onClick={() => setMonth((m) => (m >= 11 ? 0 : m + 1))}
             className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)] hover:text-[var(--foreground)]"
+            aria-label="Sonraki ay"
           >
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
         <div className="grid grid-cols-7 gap-1 text-center">
-          {["S", "M", "T", "W", "T", "F", "S"].map((d) => (
+          {["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"].map((d) => (
             <div key={d} className="py-1 text-xs font-medium text-[var(--muted)]">
               {d}
             </div>
@@ -136,15 +110,24 @@ export function AdminPlanner({ entries }: AdminPlannerProps) {
         </div>
       </section>
 
-      {/* Entry modal */}
+      <AdminPlannerMessySettings />
+      <AdminPlannerDecor year={year} monthIndex={month} />
+
       {selectedDate && (
-        <EntryModal
+        <PlannerDateModal
           date={selectedDate}
-          entry={selectedEntry ?? undefined}
-          onClose={() => setSelectedDate(null)}
+          onClose={() => {
+            setSelectedDate(null);
+            setError(null);
+          }}
           onSaved={() => {
             setSelectedDate(null);
+            setError(null);
             router.refresh();
+            fetch(`/api/planner/entries?year=${year}&month=${month}`)
+              .then((r) => r.json())
+              .then(setSummary)
+              .catch(() => {});
           }}
           onError={setError}
         />
@@ -159,70 +142,201 @@ export function AdminPlanner({ entries }: AdminPlannerProps) {
   );
 }
 
-const inputClass =
-  "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-1.5 text-sm";
+const inputClass = "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-1.5 text-sm";
 const labelClass = "block text-xs font-medium text-[var(--muted)] mt-3 first:mt-0";
 
-function MediaPreview({
-  media,
-  onDelete,
+const ATTACHMENT_OPTIONS = [
+  { value: "", label: "Yok" },
+  { value: "standard_clip", label: "Metalik Ataş" },
+  { value: "colorful_clip", label: "Neon Renkli Ataş" },
+  { value: "binder_clip", label: "Siyah Mandal" },
+  { value: "staple", label: "Zımba Teli" },
+] as const;
+
+function PlannerDateModal({
+  date,
+  onClose,
+  onSaved,
+  onError,
 }: {
-  media: { id: string; kind: string; url: string; caption: string | null };
-  onDelete: () => void;
+  date: string;
+  onClose: () => void;
+  onSaved: () => void;
+  onError: (msg: string | null) => void;
 }) {
-  const embedUrl = getVideoEmbedUrl(media.url);
+  const [entries, setEntries] = useState<PlannerEntryWithMedia[]>([]);
+  const [hasSmudge, setHasSmudge] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [mode, setMode] = useState<"list" | "create" | "edit">("list");
+  const [editingEntry, setEditingEntry] = useState<PlannerEntryWithMedia | null>(null);
+  const [smudgeLoading, setSmudgeLoading] = useState(false);
+
+  const [d, m, y] = date.split("-").map(Number);
+  const display = `${d} ${MONTH_NAMES_TR[m - 1]} ${y}`;
+
+  useEffect(() => {
+    Promise.all([
+      fetch(`/api/planner/entries/${date}`).then((r) => r.json()),
+      fetch(`/api/planner/smudge/${date}`).then((r) => r.json()),
+    ])
+      .then(([entriesData, smudgeData]) => {
+        setEntries(Array.isArray(entriesData) ? entriesData : []);
+        setHasSmudge(!!smudgeData?.preset);
+        setMode(Array.isArray(entriesData) && entriesData.length > 0 ? "list" : "create");
+      })
+      .catch(() => {
+        setEntries([]);
+        setHasSmudge(false);
+      })
+      .finally(() => setLoading(false));
+  }, [date]);
+
+  async function handleAddSmudge() {
+    setSmudgeLoading(true);
+    try {
+      const res = await fetch(`/api/planner/smudge/${date}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
+      if (res.ok) setHasSmudge(true);
+    } finally {
+      setSmudgeLoading(false);
+    }
+  }
+
+  async function handleRemoveSmudge() {
+    setSmudgeLoading(true);
+    try {
+      const res = await fetch(`/api/planner/smudge/${date}`, { method: "DELETE" });
+      if (res.ok) setHasSmudge(false);
+    } finally {
+      setSmudgeLoading(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+        <div className="rounded-xl bg-[var(--card)] px-8 py-4" onClick={(e) => e.stopPropagation()}>
+          Yükleniyor…
+        </div>
+      </div>
+    );
+  }
+
+  if (mode === "create" || mode === "edit") {
+    return (
+      <EntryFormModal
+        date={date}
+        entry={editingEntry ?? undefined}
+        hasSmudge={hasSmudge}
+        onAddSmudge={handleAddSmudge}
+        onRemoveSmudge={handleRemoveSmudge}
+        smudgeLoading={smudgeLoading}
+        onClose={() => {
+          if (entries.length > 0) {
+            setMode("list");
+            setEditingEntry(null);
+          } else {
+            onClose();
+          }
+        }}
+        onSaved={() => {
+          if (editingEntry) {
+            setEditingEntry(null);
+            setMode("list");
+            fetch(`/api/planner/entries/${date}`)
+              .then((r) => r.json())
+              .then((data) => setEntries(Array.isArray(data) ? data : []));
+          } else {
+            onSaved();
+          }
+        }}
+        onError={onError}
+      />
+    );
+  }
 
   return (
-    <div className="group relative overflow-hidden rounded-lg border border-[var(--card-border)] bg-[var(--background)]">
-      <div className="flex items-center gap-2 border-b border-[var(--card-border)] px-2 py-1 text-xs text-[var(--muted)]">
-        {media.kind === "image" && <ImageIcon className="h-3 w-3" />}
-        {media.kind === "video" && <Video className="h-3 w-3" />}
-        {media.kind === "link" && <Link2 className="h-3 w-3" />}
-        <span className="flex-1 truncate">{media.url}</span>
-        <button
-          type="button"
-          onClick={onDelete}
-          className="rounded p-0.5 text-[var(--muted)] hover:bg-red-500/10 hover:text-red-500"
-          title="Remove"
-        >
-          <Trash2 className="h-3.5 w-3.5" />
-        </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+      <div
+        className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-xl border border-[var(--card-border)] bg-[var(--card)] shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="sticky top-0 flex items-center justify-between border-b border-[var(--card-border)] bg-[var(--card)] px-4 py-3">
+          <h3 className="font-medium">{display} — Kayıtlar</h3>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={hasSmudge ? handleRemoveSmudge : handleAddSmudge}
+              disabled={smudgeLoading}
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm ${
+                hasSmudge
+                  ? "border border-[var(--card-border)] text-[var(--muted)] hover:bg-[var(--background)]"
+                  : "bg-[#36454F] text-white hover:bg-[#2a3640]"
+              }`}
+              title={hasSmudge ? "Lekeyi kaldır" : "Yazıyı dağıt (mürekkep lekesi ekle)"}
+            >
+              <Eraser className="h-4 w-4" />
+              {hasSmudge ? "Lekeyi Kaldır" : "Yazıyı Dağıt"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEditingEntry(null);
+                setMode("create");
+              }}
+              className="flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-3 py-1.5 text-sm text-white"
+            >
+              <Plus className="h-4 w-4" />
+              Yeni
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)]"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+        <div className="p-4 space-y-3">
+          {entries.map((entry) => (
+            <div
+              key={entry.id}
+              className="rounded-lg border border-[var(--card-border)] p-4"
+            >
+              <h4 className="font-medium line-clamp-1">{entry.title || "(Başlıksız)"}</h4>
+              {entry.summaryQuote && (
+                <p className="mt-1 text-xs text-[var(--muted)] line-clamp-2">{entry.summaryQuote}</p>
+              )}
+              <div className="mt-2 flex items-center gap-2">
+                {entry.media.some((mm) => mm.attachmentType === "paperclip" || mm.attachmentStyle) && (
+                  <span className="flex items-center gap-1 text-xs text-[var(--muted)]">
+                    <Paperclip className="h-3 w-3" /> Ataşlı
+                  </span>
+                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingEntry(entry);
+                    setMode("edit");
+                  }}
+                  className="text-sm text-[var(--accent)] hover:underline"
+                >
+                  Düzenle
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="aspect-video bg-black">
-        {embedUrl ? (
-          <iframe
-            src={embedUrl}
-            title={media.caption ?? "Video"}
-            className="h-full w-full"
-            allowFullScreen
-          />
-        ) : media.kind === "image" ? (
-          <img
-            src={media.url}
-            alt={media.caption ?? ""}
-            className="h-full w-full object-contain"
-          />
-        ) : media.kind === "video" ? (
-          <video src={media.url} controls className="h-full w-full" />
-        ) : (
-          <a
-            href={media.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex h-full items-center justify-center text-[var(--accent)] hover:underline"
-          >
-            {media.caption || "Open link"}
-          </a>
-        )}
-      </div>
-      {media.caption && (
-        <p className="px-2 py-1 text-xs text-[var(--muted)]">{media.caption}</p>
-      )}
     </div>
   );
 }
 
-function EntryModal({
+function EntryFormModal({
   date,
   entry,
   onClose,
@@ -230,182 +344,227 @@ function EntryModal({
   onError,
 }: {
   date: string;
-  entry: EntryWithVisibility | undefined;
+  entry?: PlannerEntryWithMedia;
   onClose: () => void;
   onSaved: () => void;
   onError: (msg: string | null) => void;
 }) {
-  const router = useRouter();
-  const [addingMedia, setAddingMedia] = useState(false);
+  const [files, setFiles] = useState<File[]>([]);
+  const [submitting, setSubmitting] = useState(false);
+  const [firstImagePaperclip, setFirstImagePaperclip] = useState(!!entry?.media.some((m) => m.attachmentType === "paperclip" || m.attachmentStyle));
 
-  const [d, m, y] = date.split("-");
-  const display = `${Number(d)} ${MONTH_NAMES[Number(m) - 1]} ${y}`;
+  const [d, m, y] = date.split("-").map(Number);
+  const display = `${d} ${MONTH_NAMES_TR[m - 1]} ${y}`;
+  const isEdit = !!entry;
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     onError(null);
-    if (entry) {
-      const r = await adminUpdatePlannerEntry(entry.id, formData);
-      if (r.error) onError(r.error);
-      else onSaved();
-    } else {
-      const r = await adminCreatePlannerEntry(formData);
-      if (r.error) onError(r.error);
-      else onSaved();
+    setSubmitting(true);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const title = (formData.get("title") as string)?.trim() || null;
+    const content = (formData.get("content") as string)?.trim() || null;
+    const tagsRaw = (formData.get("tags") as string)?.trim() || "";
+    const tags = tagsRaw ? tagsRaw.split(/[\s,]+/).filter(Boolean) : [];
+    const summaryQuote = (formData.get("summaryQuote") as string)?.trim() || null;
+    const stickerRaw = (formData.get("stickerSelection") as string)?.trim() || "";
+    const stickerSelection = stickerRaw ? stickerRaw.split(/[\s,]+/).filter(Boolean) : null;
+
+    try {
+      if (isEdit) {
+        const res = await fetch(`/api/planner/entry/${entry.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title, content, tags, summaryQuote, stickerSelection }),
+        });
+        if (!res.ok) {
+          const data = await res.json();
+          onError(data.error || "Güncellenemedi");
+          setSubmitting(false);
+          return;
+        }
+        if (files.length > 0) {
+          const imageFiles = files.filter((f) => f.type.startsWith("image/"));
+          const videoFiles = files.filter((f) => f.type.startsWith("video/"));
+          for (let i = 0; i < imageFiles.length; i++) {
+            const fd = new FormData();
+            fd.append("file", imageFiles[i]);
+            fd.append("entryId", entry.id);
+            if (i === 0 && firstImagePaperclip) {
+              fd.append("attachmentType", "paperclip");
+              fd.append("attachmentStyle", "standard_clip");
+            }
+            await fetch("/api/planner/upload", { method: "POST", body: fd });
+          }
+          for (const f of videoFiles) {
+            const fd = new FormData();
+            fd.append("file", f);
+            fd.append("entryId", entry.id);
+            await fetch("/api/planner/upload", { method: "POST", body: fd });
+          }
+        }
+        for (const m of entry.media) {
+          const sel = form.querySelector(`[name="media-attach-${m.id}"]`) as HTMLSelectElement;
+          if (sel) {
+            const val = sel.value as "" | "standard_clip" | "colorful_clip" | "binder_clip" | "staple";
+            await fetch(`/api/planner/media/${m.id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                attachmentStyle: val || null,
+                attachmentType: val === "standard_clip" || val === "colorful_clip" ? "paperclip" : val === "staple" ? "staple" : val === "binder_clip" ? "paste" : null,
+              }),
+            });
+          }
+        }
+        onSaved();
+      } else {
+        const createRes = await fetch("/api/planner/entry", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ date, title, content, tags, summaryQuote, stickerSelection }),
+        });
+        const createData = await createRes.json();
+        if (!createRes.ok) {
+          onError(createData.error || "Entry oluşturulamadı");
+          setSubmitting(false);
+          return;
+        }
+        const entryId = createData.id;
+        if (!entryId) {
+          onSaved();
+          setSubmitting(false);
+          return;
+        }
+        const imageFiles = files.filter((f) => f.type.startsWith("image/"));
+        for (let i = 0; i < imageFiles.length; i++) {
+          const fd = new FormData();
+          fd.append("file", imageFiles[i]);
+          fd.append("entryId", entryId);
+          if (i === 0 && firstImagePaperclip) fd.append("attachmentType", "paperclip");
+          await fetch("/api/planner/upload", { method: "POST", body: fd });
+        }
+        const videoFiles = files.filter((f) => f.type.startsWith("video/"));
+        for (const f of videoFiles) {
+          const fd = new FormData();
+          fd.append("file", f);
+          fd.append("entryId", entryId);
+          await fetch("/api/planner/upload", { method: "POST", body: fd });
+        }
+        onSaved();
+      }
+    } catch (err) {
+      onError(err instanceof Error ? err.message : "Hata oluştu");
+    } finally {
+      setSubmitting(false);
     }
-  }
-
-  async function handleAddMedia(formData: FormData) {
-    onError(null);
-    if (!entry) return;
-    const r = await adminAddPlannerMedia(formData);
-    if (r.error) onError(r.error);
-    else {
-      setAddingMedia(false);
-      router.refresh();
-    }
-  }
-
-  async function handleDeleteMedia(id: string) {
-    await adminDeletePlannerMedia(id);
-    router.refresh();
-  }
-
-  async function handleDelete() {
-    if (!entry || !confirm("Delete this entry?")) return;
-    await adminDeletePlannerEntry(entry.id);
-    onSaved();
   }
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
       <div
         className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-xl border border-[var(--card-border)] bg-[var(--card)] shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sticky top-0 flex items-center justify-between border-b border-[var(--card-border)] bg-[var(--card)] px-4 py-3">
-          <h3 className="font-editorial font-medium">
-            {entry ? "Edit" : "Add"} — {display}
-          </h3>
-          <button
-            onClick={onClose}
-            className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)] hover:text-[var(--foreground)]"
-          >
-            <X className="h-5 w-5" />
-          </button>
+          <h3 className="font-medium">{isEdit ? "Entry düzenle" : "Entry ekle"} — {display}</h3>
+          <div className="flex items-center gap-2">
+            {onAddSmudge && onRemoveSmudge && (
+              <button
+                type="button"
+                onClick={hasSmudge ? onRemoveSmudge : onAddSmudge}
+                disabled={smudgeLoading}
+                className={`flex items-center gap-1 rounded px-2 py-1 text-xs ${
+                  hasSmudge ? "border border-[var(--card-border)] text-[var(--muted)]" : "bg-[#36454F] text-white"
+                }`}
+                title={hasSmudge ? "Lekeyi kaldır" : "Yazıyı dağıt"}
+              >
+                <Eraser className="h-3.5 w-3.5" />
+                {hasSmudge ? "Lekeyi Kaldır" : "Yazıyı Dağıt"}
+              </button>
+            )}
+            <button type="button" onClick={onClose} className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)]">
+              <X className="h-5 w-5" />
+            </button>
+          </div>
         </div>
 
-        <form action={handleSubmit} className="p-4">
-          <input type="hidden" name="date" value={date} />
-          <label className={labelClass}>Title</label>
-          <input
-            name="title"
-            className={inputClass}
-            defaultValue={entry?.title ?? ""}
-            placeholder="Entry title"
-          />
-          <label className={labelClass}>Body</label>
-          <textarea
-            name="body"
-            rows={5}
-            className={inputClass}
-            defaultValue={entry?.body ?? ""}
-            placeholder="Journal text..."
-          />
-          <label className={labelClass}>Visibility</label>
-          <select
-            name="visibility"
-            className="rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-1.5 text-sm"
-            defaultValue={entry?.visibility ?? "private"}
-          >
-            <option value="private">Private</option>
-            <option value="unlisted">Unlisted</option>
-            <option value="public">Public</option>
-          </select>
+        <form onSubmit={handleSubmit} className="p-4">
+          <label className={labelClass}>Başlık</label>
+          <input name="title" className={inputClass} placeholder="Entry başlığı" defaultValue={entry?.title ?? ""} />
 
-          {entry && (
-            <>
-              <label className={labelClass}>Media</label>
-              {entry.media.length > 0 && (
-                <div className="mb-2 grid gap-2 sm:grid-cols-2">
-                  {entry.media.map((m) => (
-                    <MediaPreview
-                      key={m.id}
-                      media={m}
-                      onDelete={() => handleDeleteMedia(m.id)}
-                    />
-                  ))}
-                </div>
-              )}
-              {addingMedia ? (
-                <form action={handleAddMedia} className="mb-4 rounded-lg border border-[var(--card-border)] bg-[var(--background)] p-3">
-                  <input type="hidden" name="planner_entry_id" value={entry.id} />
-                  <label className={labelClass}>Kind</label>
+          <label className={labelClass}>Özet cümle (takvimde görünür)</label>
+          <input
+            name="summaryQuote"
+            className={inputClass}
+            placeholder="Kısa özet..."
+            defaultValue={entry?.summaryQuote ?? ""}
+          />
+
+          <label className={labelClass}>İçerik</label>
+          <textarea name="content" rows={5} className={inputClass} placeholder="Günlük metni..." defaultValue={entry?.content ?? ""} />
+
+          <label className={labelClass}>Etiketler (virgül veya boşlukla ayır)</label>
+          <input name="tags" className={inputClass} placeholder="ör: kitap, film, not" defaultValue={entry?.tags?.join(", ") ?? ""} />
+
+          <label className={labelClass}>Sticker seçimi (virgülle ayır: star, heart, ...)</label>
+          <input
+            name="stickerSelection"
+            className={inputClass}
+            placeholder="star, heart"
+            defaultValue={entry?.stickerSelection?.join(", ") ?? ""}
+          />
+
+          <label className={labelClass}>Medya (foto / video)</label>
+          <input type="file" accept="image/*,video/*" multiple className={inputClass} onChange={(e) => setFiles(Array.from(e.target.files ?? []))} />
+          {files.length > 0 && (
+            <p className="mt-1 text-xs text-[var(--muted)]">{files.length} dosya seçildi</p>
+          )}
+
+          <label className="mt-3 flex cursor-pointer items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={firstImagePaperclip}
+              onChange={(e) => setFirstImagePaperclip(e.target.checked)}
+              className="h-4 w-4 rounded"
+            />
+            <Paperclip className="h-4 w-4 text-[var(--muted)]" />
+            İlk fotoğrafa ataş ekle
+          </label>
+
+          {isEdit && entry.media.length > 0 && (
+            <div className="mt-4 space-y-2">
+              <p className={labelClass}>Mevcut medya — Ekleme tipi</p>
+              {entry.media.map((m) => (
+                <div key={m.id} className="flex items-center gap-2">
+                  {m.type === "image" && (
+                    <img src={m.thumbUrl || m.url} alt="" className="h-10 w-10 rounded object-cover" />
+                  )}
                   <select
-                    name="kind"
-                    className="rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-1.5 text-sm"
+                    name={`media-attach-${m.id}`}
+                    className={inputClass}
+                    defaultValue={
+                      m.attachmentStyle ??
+                      (m.attachmentType === "paperclip" ? "standard_clip" : m.attachmentType === "staple" ? "staple" : m.attachmentType === "paste" ? "colorful_clip" : "")
+                    }
                   >
-                    <option value="image">Image</option>
-                    <option value="video">Video</option>
-                    <option value="link">Link (YouTube, Vimeo, etc.)</option>
+                    {ATTACHMENT_OPTIONS.map((o) => (
+                      <option key={o.value} value={o.value}>{o.label}</option>
+                    ))}
                   </select>
-                  <label className={labelClass}>URL *</label>
-                  <input name="url" type="url" required className={inputClass} />
-                  <label className={labelClass}>Caption</label>
-                  <input name="caption" className={inputClass} />
-                  <div className="mt-2 flex gap-2">
-                    <button
-                      type="submit"
-                      className="rounded-lg bg-[var(--accent)] px-3 py-1.5 text-sm text-white"
-                    >
-                      Add
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setAddingMedia(false)}
-                      className="rounded-lg border px-3 py-1.5 text-sm"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </form>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setAddingMedia(true)}
-                  className="mb-4 text-sm text-[var(--accent)] hover:underline"
-                >
-                  + Add media URL
-                </button>
-              )}
-            </>
+                </div>
+              ))}
+            </div>
           )}
 
           <div className="mt-6 flex gap-2">
-            <button
-              type="submit"
-              className="rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white"
-            >
-              {entry ? "Save" : "Create"}
+            <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white disabled:opacity-50">
+              <Upload className="h-4 w-4" />
+              {submitting ? "Kaydediliyor…" : "Kaydet"}
             </button>
-            {entry && (
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="rounded-lg border border-red-500/50 px-4 py-2 text-sm text-red-600 hover:bg-red-500/10"
-              >
-                Delete
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-lg border border-[var(--card-border)] px-4 py-2 text-sm"
-            >
-              Cancel
-            </button>
+            <button type="button" onClick={onClose} className="rounded-lg border border-[var(--card-border)] px-4 py-2 text-sm">İptal</button>
           </div>
         </form>
       </div>

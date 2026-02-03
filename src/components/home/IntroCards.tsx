@@ -20,37 +20,37 @@ const CARDS: {
   Icon: LucideIcon;
 }[] = [
   {
-    href: "/about",
+    href: "/beni-taniyin",
     label: "Beni Tanıyın",
     subtitle: "kim olduğumu, nasıl düşündüğümü",
     Icon: User,
   },
   {
-    href: "/projects",
+    href: "/yaptiklarim",
     label: "Yaptıklarım",
     subtitle: "üretimler, projeler, denemeler",
     Icon: FolderKanban,
   },
   {
-    href: "/posts",
+    href: "/yazilarim",
     label: "Yazılarım",
     subtitle: "düşünceler, denemeler, parçalar",
     Icon: FileText,
   },
   {
-    href: "/books",
+    href: "/okuma-gunlugum",
     label: "Okuma Günlüğüm",
     subtitle: "altını çizdiklerim, notlarım",
     Icon: BookOpen,
   },
   {
-    href: "/cinema",
+    href: "/izleme-gunlugum",
     label: "İzleme Günlüğüm",
     subtitle: "film, dizi, sahne, detay",
     Icon: Film,
   },
   {
-    href: "/translations",
+    href: "/cevirilerim",
     label: "Çevirilerim",
     subtitle: "metinler, notlar, tercih sebepleri",
     Icon: Languages,

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Disc3, Book } from "lucide-react";
+import { playSound, AUDIO } from "@/lib/audio";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const TRANSITION = { duration: 0.22, ease: EASE };
@@ -15,6 +16,9 @@ const BLUE_GLOW =
   "drop-shadow(0 0 10px rgba(80,140,255,0.75)) drop-shadow(0 0 34px rgba(40,120,255,0.35))";
 const BASE_SHADOW = "drop-shadow(0 20px 40px rgba(0,0,0,0.55))";
 
+const PLAK_SOUND_DURATION_MS = 1500;
+const KITAP_SOUND_DURATION_MS = 500;
+
 export default function IntroGate() {
   const router = useRouter();
   const reduce = useReducedMotion();
@@ -23,13 +27,16 @@ export default function IntroGate() {
   const handleChoice = (entry: "plak" | "kitap") => {
     if (selected) return;
     setSelected(entry);
-    if (reduce) {
-      router.push(`/home?entry=${entry}`);
-      return;
+
+    if (entry === "plak") {
+      playSound(AUDIO.recordChoice, { volume: 0.7 });
+      const delay = reduce ? 250 : PLAK_SOUND_DURATION_MS;
+      setTimeout(() => router.push(`/home?entry=${entry}`), delay);
+    } else {
+      playSound(AUDIO.bookChoice, { volume: 0.8 });
+      const delay = reduce ? 250 : KITAP_SOUND_DURATION_MS;
+      setTimeout(() => router.push(`/home?entry=${entry}`), delay);
     }
-    setTimeout(() => {
-      router.push(`/home?entry=${entry}`);
-    }, 250);
   };
 
   const hoverAnim = reduce

@@ -1,23 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import FramedCrossfade from "@/components/home/FramedCrossfade";
-import { HomeHeroBackground } from "@/components/home/HomeHeroBackground";
 import { IntroCards } from "@/components/home/IntroCards";
 import { ScrollIndicator } from "@/components/home/ScrollHint";
-import { getStoredEntry } from "@/components/home/EntrySeedHandler";
+import PlannerFlipbook from "@/components/PlannerFlipbook";
 
-export function HomePageContent() {
-  const [entry, setEntry] = useState<"plak" | "kitap" | null>(null);
+interface HomePageContentProps {
+  children?: React.ReactNode;
+}
 
-  useEffect(() => {
-    setEntry(getStoredEntry());
-  }, []);
-
+export function HomePageContent({ children }: HomePageContentProps) {
   return (
     <>
-      <HomeHeroBackground entrySeed={entry} />
-
       <main className="relative min-h-screen text-[#F3EBDD]">
         {/* Hero - tall so users must scroll */}
         <section className="flex min-h-[140vh] flex-col items-center justify-start px-6 pt-14 pb-8">
@@ -51,12 +45,20 @@ export function HomePageContent() {
               yanii... nam-ı diğer Plaktaki Kitap
             </p>
 
-            {/* Soft cards - hemen altında */}
-            <IntroCards />
+            {/* Kart grid bölümü */}
+            <div className="mx-auto mt-12 w-full max-w-6xl px-6 pt-10">
+              <IntroCards />
+            </div>
           </div>
         </section>
 
-        {/* Bottom spacing so last buttons aren't cramped */}
+        {/* Bullet journal flipbook ajanda */}
+        <PlannerFlipbook />
+
+        {/* Şu an paneli — Spotify + Okuyorum */}
+        {children}
+
+        {/* Bottom spacing */}
         <div className="h-24" />
       </main>
     </>
