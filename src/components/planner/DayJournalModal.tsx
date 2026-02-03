@@ -2,18 +2,12 @@
 
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import type { PlannerEntryWithMedia } from "@/lib/planner";
+import type { PlannerEntryWithMedia, DaySmudge } from "@/lib/planner";
 import { InkBleedText } from "./InkBleedText";
 import { SmudgeOverlay, type SmudgePreset } from "./SmudgeOverlay";
 import { getVideoEmbedUrl } from "@/lib/utils/embed";
 
-export type DaySmudge = {
-  preset?: string;
-  x?: number;
-  y?: number;
-  rotation?: number;
-  opacity?: number;
-} | null;
+export type { DaySmudge };
 
 function formatDateTR(day: number, monthName: string, year: number) {
   return `${day} ${monthName} ${year}`;

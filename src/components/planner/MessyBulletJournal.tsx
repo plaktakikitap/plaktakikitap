@@ -8,7 +8,8 @@ import { MessyBookShell } from "./MessyBookShell";
 import { MessyPaperPage } from "./MessyPaperPage";
 import { MessyCalendarGrid } from "./MessyCalendarGrid";
 import { MessyNotesPage } from "./MessyNotesPage";
-import { DayJournalModal, type DaySmudge } from "./DayJournalModal";
+import { DayJournalModal } from "./DayJournalModal";
+import type { DaySmudge } from "@/lib/planner";
 import type { PlannerDaySummary, PlannerEntryWithMedia } from "@/lib/planner";
 
 const HTMLFlipBook = dynamic(() => import("react-pageflip"), { ssr: false });

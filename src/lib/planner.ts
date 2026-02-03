@@ -11,6 +11,11 @@ export interface DaySmudgeData {
   opacity: number;
 }
 
+/** Modal/API için — tüm alanlar opsiyonel */
+export type DaySmudge =
+  | { preset?: string; x?: number; y?: number; rotation?: number; opacity?: number }
+  | null;
+
 export interface PlannerDaySummary {
   date: string;
   dayId: string;

@@ -5,7 +5,8 @@ import dynamic from "next/dynamic";
 import { playSound, AUDIO } from "@/lib/audio";
 import { AnimatePresence } from "framer-motion";
 import { CalendarGrid, monthNameTR } from "@/components/planner/CalendarGrid";
-import { DayJournalModal, type DaySmudge } from "@/components/planner/DayJournalModal";
+import { DayJournalModal } from "@/components/planner/DayJournalModal";
+import type { DaySmudge } from "@/lib/planner";
 import { PaperPage } from "@/components/planner/PaperPage";
 import type {
   PlannerDaySummary,
