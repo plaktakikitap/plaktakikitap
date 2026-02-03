@@ -74,7 +74,7 @@ export function AdminPlanner() {
       <header>
         <h1 className="text-3xl font-bold text-[var(--foreground)]">Planner</h1>
         <p className="mt-1 text-[var(--muted)]">
-          Takvimden gün seç, o güne entry ekle (başlık, içerik, etiketler, medya).
+          Takvimden gün seç, o güne entry ekle. Her entry için: summary_quote (takvimde görünen özet), attachment_type (ataşlı/yapıştırma/zımba), sticker_selection (dijital sticker&apos;lar).
         </p>
       </header>
 
@@ -110,7 +110,7 @@ export function AdminPlanner() {
         </div>
       </section>
 
-      <AdminPlannerMessySettings />
+      <AdminPlannerMessySettings year={year} month={month + 1} />
       <AdminPlannerDecor year={year} monthIndex={month} />
 
       {selectedDate && (
@@ -147,11 +147,13 @@ const labelClass = "block text-xs font-medium text-[var(--muted)] mt-3 first:mt-
 
 const ATTACHMENT_OPTIONS = [
   { value: "", label: "Yok" },
-  { value: "standard_clip", label: "Metalik Ataş" },
-  { value: "colorful_clip", label: "Neon Renkli Ataş" },
-  { value: "binder_clip", label: "Siyah Mandal" },
-  { value: "staple", label: "Zımba Teli" },
+  { value: "standard_clip", label: "Metalik ataş (standard_clip)" },
+  { value: "colorful_clip", label: "Neon renkli ataş (colorful_clip)" },
+  { value: "binder_clip", label: "Siyah mandal (binder_clip)" },
+  { value: "staple", label: "Zımba teli (staple)" },
 ] as const;
+
+const STICKER_HINTS = "star, heart, moon, sun, flower, check, x — virgülle ayırın";
 
 function PlannerDateModal({
   date,
@@ -230,10 +232,6 @@ function PlannerDateModal({
       <EntryFormModal
         date={date}
         entry={editingEntry ?? undefined}
-        hasSmudge={hasSmudge}
-        onAddSmudge={handleAddSmudge}
-        onRemoveSmudge={handleRemoveSmudge}
-        smudgeLoading={smudgeLoading}
         onClose={() => {
           if (entries.length > 0) {
             setMode("list");
@@ -312,7 +310,7 @@ function PlannerDateModal({
                 <p className="mt-1 text-xs text-[var(--muted)] line-clamp-2">{entry.summaryQuote}</p>
               )}
               <div className="mt-2 flex items-center gap-2">
-                {entry.media.some((mm) => mm.attachmentType === "paperclip" || mm.attachmentStyle) && (
+                {entry.media.some((mm) => mm.attachmentType === "paperclip" || mm.attachmentType === "paste" || mm.attachmentType === "staple" || mm.attachmentStyle) && (
                   <span className="flex items-center gap-1 text-xs text-[var(--muted)]">
                     <Paperclip className="h-3 w-3" /> Ataşlı
                   </span>
@@ -443,7 +441,10 @@ function EntryFormModal({
           const fd = new FormData();
           fd.append("file", imageFiles[i]);
           fd.append("entryId", entryId);
-          if (i === 0 && firstImagePaperclip) fd.append("attachmentType", "paperclip");
+          if (i === 0 && firstImagePaperclip) {
+            fd.append("attachmentType", "paperclip");
+            fd.append("attachmentStyle", "standard_clip");
+          }
           await fetch("/api/planner/upload", { method: "POST", body: fd });
         }
         const videoFiles = files.filter((f) => f.type.startsWith("video/"));
@@ -470,25 +471,9 @@ function EntryFormModal({
       >
         <div className="sticky top-0 flex items-center justify-between border-b border-[var(--card-border)] bg-[var(--card)] px-4 py-3">
           <h3 className="font-medium">{isEdit ? "Entry düzenle" : "Entry ekle"} — {display}</h3>
-          <div className="flex items-center gap-2">
-            {onAddSmudge && onRemoveSmudge && (
-              <button
-                type="button"
-                onClick={hasSmudge ? onRemoveSmudge : onAddSmudge}
-                disabled={smudgeLoading}
-                className={`flex items-center gap-1 rounded px-2 py-1 text-xs ${
-                  hasSmudge ? "border border-[var(--card-border)] text-[var(--muted)]" : "bg-[#36454F] text-white"
-                }`}
-                title={hasSmudge ? "Lekeyi kaldır" : "Yazıyı dağıt"}
-              >
-                <Eraser className="h-3.5 w-3.5" />
-                {hasSmudge ? "Lekeyi Kaldır" : "Yazıyı Dağıt"}
-              </button>
-            )}
-            <button type="button" onClick={onClose} className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)]">
-              <X className="h-5 w-5" />
-            </button>
-          </div>
+          <button type="button" onClick={onClose} className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)]">
+            <X className="h-5 w-5" />
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-4">
@@ -531,12 +516,17 @@ function EntryFormModal({
               className="h-4 w-4 rounded"
             />
             <Paperclip className="h-4 w-4 text-[var(--muted)]" />
-            İlk fotoğrafa ataş ekle
+            İlk fotoğrafa ataş ekle (Metalik)
           </label>
 
           {isEdit && entry.media.length > 0 && (
             <div className="mt-4 space-y-2">
-              <p className={labelClass}>Mevcut medya — Ekleme tipi</p>
+              <p className={labelClass}>
+                attachment_style — Ekleme tipi (mevcut medya)
+              </p>
+              <p className="text-[10px] text-[var(--muted)] -mt-1">
+                standard_clip (metalik), colorful_clip (neon), binder_clip (siyah mandal), staple (zımba teli)
+              </p>
               {entry.media.map((m) => (
                 <div key={m.id} className="flex items-center gap-2">
                   {m.type === "image" && (

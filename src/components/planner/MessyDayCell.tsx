@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import type { PlannerDaySummary } from "@/lib/planner";
+import { SmudgeOverlay } from "./SmudgeOverlay";
 
 function isTodayCell(dateStr: string): boolean {
   if (!dateStr) return false;
@@ -10,7 +11,11 @@ function isTodayCell(dateStr: string): boolean {
   return dateStr === todayStr;
 }
 
-const POLAROID_ROTATIONS = [-45, 45, -35, 35, -25];
+/** Rastgele ±45 derece — minik polaroidler için */
+function polaroidRotation(index: number, day: number): number {
+  const seed = (day * 7 + index) % 4;
+  return seed < 2 ? -45 : 45;
+}
 
 interface MessyDayCellProps {
   day: number | null;
@@ -37,19 +42,23 @@ export function MessyDayCell({
   const isBusy = !!summary?.isBusy;
   const imageUrls = summary?.imageUrls ?? [];
   const summaryQuote = summary?.summaryQuote;
+  const smudge = summary?.smudge;
 
   return (
     <button
       type="button"
       className={cn(
-        "messy-day-cell relative flex min-h-[56px] flex-col rounded-md border border-black/8 bg-white/30 p-1 text-left transition hover:bg-white/60",
+        "messy-day-cell relative flex min-h-[56px] flex-col rounded-md border border-black/8 bg-white/30 p-1 text-left shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition hover:bg-white/60 hover:shadow-[0_2px_6px_rgba(0,0,0,0.06)]",
         today && "today",
         hasEntry && "ring-1 ring-amber-900/20",
         isBusy && "ring-1 ring-amber-600/30"
       )}
+      style={{
+        transformStyle: "preserve-3d",
+        transform: `skewX(${day % 5 === 0 ? -0.5 : day % 5 === 2 ? 0.5 : 0}deg)`,
+      }}
       onClick={() => onDayClick(dateStr, monthName, day)}
       aria-label={`${day} ${monthName}`}
-      style={{ transformStyle: "preserve-3d" }}
     >
       <div className="relative z-[2] flex justify-end">
         <span
@@ -60,73 +69,76 @@ export function MessyDayCell({
         </span>
       </div>
 
-      {/* El çizimi daire — giriş varsa */}
-      {hasEntry && (
+      {/* El çizimi daire — giriş varsa (daire içine alma) */}
+      {hasEntry && !isBusy && (
         <div
           className="pointer-events-none absolute inset-0 flex items-center justify-center"
           style={{ zIndex: 0 }}
         >
           <svg
             viewBox="0 0 40 40"
-            className="h-[70%] w-[70%] opacity-25"
-            style={{ transform: "rotate(-2deg)" }}
+            className="h-[70%] w-[70%] opacity-30"
+            style={{ transform: `rotate(${day % 3 === 0 ? -1.5 : day % 3 === 1 ? 2 : -3}deg)` }}
           >
             <ellipse
               cx="20"
               cy="20"
-              rx="16"
-              ry="17"
+              rx="15.5"
+              ry="16.5"
               fill="none"
-              stroke="rgba(120,80,50,0.5)"
-              strokeWidth="1.5"
-              strokeDasharray="2 1"
-            />
-          </svg>
-        </div>
-      )}
-
-      {/* Yoğun gün — daire içine alma doodle */}
-      {isBusy && (
-        <div
-          className="pointer-events-none absolute inset-0 flex items-center justify-center"
-          style={{ zIndex: 0 }}
-        >
-          <svg
-            viewBox="0 0 40 40"
-            className="h-[85%] w-[85%] opacity-30"
-            style={{ transform: `rotate(${day % 2 === 0 ? 3 : -4}deg)` }}
-          >
-            <path
-              d="M8 20 Q8 8 20 8 Q32 8 32 20 Q32 32 20 32 Q8 32 8 20"
-              fill="none"
-              stroke="rgba(180,120,60,0.4)"
-              strokeWidth="1.2"
-              strokeDasharray="3 2"
+              stroke="rgba(100,75,50,0.55)"
+              strokeWidth="1.4"
+              strokeDasharray="2.5 1.2"
               strokeLinecap="round"
             />
           </svg>
         </div>
       )}
 
-      {/* Minik polaroidler — rastgele ±45 derece, üst üste bindirilmiş */}
+      {/* Yoğun gün — kutucuğun etrafına daire içine alma (doodle) */}
+      {hasEntry && isBusy && (
+        <div
+          className="pointer-events-none absolute inset-0 flex items-center justify-center"
+          style={{ zIndex: 0 }}
+        >
+          <svg
+            viewBox="0 0 100 100"
+            className="absolute inset-0 h-full w-full opacity-40"
+            style={{ transform: `rotate(${day % 3 === 0 ? -2 : day % 3 === 1 ? 3 : -4}deg)` }}
+          >
+            <ellipse
+              cx="50"
+              cy="50"
+              rx="46"
+              ry="48"
+              fill="none"
+              stroke="rgba(100,75,50,0.45)"
+              strokeWidth="1.2"
+              strokeDasharray="3 2 1 2"
+              strokeLinecap="round"
+            />
+          </svg>
+        </div>
+      )}
+
+      {/* Admin'den yüklenen fotoğraflar — rastgele ±45° ile üst üste binmiş */}
       {imageUrls.length > 0 && (
         <div
           className="absolute bottom-0 right-0 flex items-end justify-end"
-          style={{ zIndex: 1, width: "85%", height: "75%" }}
+          style={{ zIndex: 1, width: "88%", height: "78%" }}
         >
-          {imageUrls.slice(0, 3).map((url, i) => {
-            const rot = POLAROID_ROTATIONS[i] ?? (i % 2 === 0 ? -45 : 45);
+          {imageUrls.slice(0, 4).map((url, i) => {
+            const rot = polaroidRotation(i, day);
             return (
               <div
                 key={i}
-                className="absolute overflow-hidden rounded-sm border border-black/12 bg-white shadow-sm"
+                className="absolute overflow-hidden rounded-sm border border-black/12 bg-white shadow-[0_1px_4px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.06)]"
                 style={{
-                  width: 24 - i * 2,
-                  height: 20 - i * 1.5,
+                  width: 26 - i * 2,
+                  height: 22 - i * 1.5,
                   right: i * 5,
-                  bottom: i * 3,
-                  transform: `rotate(${rot}deg)`,
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                  bottom: i * 4,
+                  transform: `rotate(${rot}deg) skew(${i % 2 === 0 ? -2 : 2}deg, ${i % 2 === 0 ? 1 : -1}deg)`,
                 }}
               >
                 <img src={url} alt="" className="h-full w-full object-cover" />
@@ -136,16 +148,30 @@ export function MessyDayCell({
         </div>
       )}
 
-      {/* Özet cümle — kurşun kalemle sonradan eklenmiş, silik, el yazısı */}
+      {/* Yazıyı Dağıt — leke/parmak izi overlay (flip ile birlikte hareket eder) */}
+      {smudge?.preset && (
+        <SmudgeOverlay
+          preset={smudge.preset}
+          x={smudge.x ?? 0.3}
+          y={smudge.y ?? 0.5}
+          rotation={smudge.rotation ?? 0}
+          opacity={smudge.opacity ?? 0.15}
+          style={{ width: 36, height: 28, zIndex: 1 }}
+        />
+      )}
+
+      {/* Özet cümle (summary_quote) — kurşun kalemle sonradan eklenmiş, silik, el yazısı */}
       {summaryQuote && (
         <p
-          className="absolute bottom-0 left-0.5 right-0.5 line-clamp-2 text-[7px] leading-tight"
+          className="absolute bottom-0 left-0.5 right-0.5 line-clamp-2 leading-tight -skew-x-1"
           style={{
             fontFamily: "var(--font-handwriting), cursive",
+            fontSize: "6px",
             zIndex: 2,
-            color: "rgba(80,70,60,0.55)",
-            textShadow: "0 0 1px rgba(120,100,80,0.2)",
+            color: "rgba(90,85,75,0.52)",
+            textShadow: "0 0 1px rgba(140,130,110,0.12), 0 1px 1px rgba(0,0,0,0.03), 0 0 0 1px rgba(0,0,0,0.02)",
             fontStyle: "italic",
+            letterSpacing: "0.02em",
           }}
         >
           {summaryQuote}

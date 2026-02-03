@@ -112,7 +112,7 @@ export function SocialLinksSection({ links }: SocialLinksSectionProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [mailOpen, setMailOpen] = useState(false);
   const [mailUrl, setMailUrl] = useState<string | undefined>();
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;

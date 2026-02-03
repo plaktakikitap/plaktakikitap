@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Source_Serif_4, DM_Sans, Cinzel, Inter, Caveat } from "next/font/google";
+import { Cormorant_Garamond, Source_Serif_4, DM_Sans, Cinzel, Inter, Caveat, Permanent_Marker } from "next/font/google";
 import { Nav } from "@/components/layout/Nav";
 import { MainWrapper } from "@/components/layout/MainWrapper";
 import { MotionLayout } from "@/components/layout/MotionLayout";
@@ -45,6 +45,13 @@ const caveat = Caveat({
   display: "swap",
 });
 
+const permanentMarker = Permanent_Marker({
+  variable: "--font-handwriting-title",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "plaktakikitap — Film, Kitap, Proje Koleksiyonu",
   description: "Kişisel film, dizi, kitap ve proje koleksiyonum",
@@ -58,7 +65,7 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body
-        className={`${cormorant.variable} ${sourceSerif.variable} ${dmSans.variable} ${cinzel.variable} ${inter.variable} ${caveat.variable} min-h-screen antialiased`}
+        className={`${cormorant.variable} ${sourceSerif.variable} ${dmSans.variable} ${cinzel.variable} ${inter.variable} ${caveat.variable} ${permanentMarker.variable} min-h-screen antialiased`}
       >
         <SiteBackground />
         <Nav />

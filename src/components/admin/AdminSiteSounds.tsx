@@ -14,12 +14,12 @@ export function AdminSiteSounds() {
         ) : (
           <VolumeX className="h-5 w-5 text-[var(--muted)]" />
         )}
-        Site sesleri
+        Site Sesleri
       </h2>
       <p className="mb-4 text-sm text-[var(--muted)]">
-        Giriş ekranı ve ajanda sayfa çevirme seslerini aç/kapat
+        Giriş ekranı (Plak/Kitap) ve ajanda sayfa çevirme seslerini kontrol eder
       </p>
-      <label className="flex cursor-pointer items-center gap-3">
+      <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-[var(--card-border)] px-4 py-3 transition hover:bg-[var(--background)]">
         <input
           type="checkbox"
           checked={enabled}
@@ -27,7 +27,7 @@ export function AdminSiteSounds() {
           className="h-5 w-5 rounded border-[var(--input)]"
         />
         <span className="text-sm font-medium">
-          Sesler {enabled ? "açık" : "kapalı"}
+          Site Sesleri: {enabled ? "Açık" : "Kapalı"}
         </span>
       </label>
     </section>

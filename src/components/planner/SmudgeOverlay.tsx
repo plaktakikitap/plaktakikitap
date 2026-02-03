@@ -2,8 +2,9 @@
 
 export type SmudgePreset = "fingerprint" | "smudge_blob" | "smudge_stain" | "ink_bleed";
 
-const INK_MIDNIGHT = "#191970";
-const INK_CHARCOAL = "#36454F";
+/** Midnight Blue / Charcoal Black — el yazısı fontuyla uyumlu */
+const INK_MIDNIGHT_BLUE = "#191970";
+const INK_CHARCOAL_BLACK = "#36454F";
 
 interface SmudgeOverlayProps {
   preset: SmudgePreset;
@@ -25,7 +26,7 @@ export function SmudgeOverlay({
   className = "",
   style = {},
 }: SmudgeOverlayProps) {
-  const fill = INK_CHARCOAL;
+  const fill = INK_CHARCOAL_BLACK;
 
   const svgContent = {
     fingerprint: (
@@ -48,7 +49,7 @@ export function SmudgeOverlay({
     ink_bleed: (
       <path
         d="M4 10C6 6 10 4 14 6C18 8 20 12 18 16C16 20 10 22 6 18C2 14 2 12 4 10Z"
-        fill={INK_MIDNIGHT}
+        fill={INK_MIDNIGHT_BLUE}
         fillOpacity="0.5"
       />
     ),

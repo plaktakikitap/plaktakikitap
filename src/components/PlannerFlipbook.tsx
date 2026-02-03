@@ -10,6 +10,7 @@ import { PaperPage } from "@/components/planner/PaperPage";
 import type {
   PlannerDaySummary,
   PlannerEntryWithMedia,
+  PlannerDecor,
 } from "@/lib/planner";
 
 const HTMLFlipBook = dynamic(() => import("react-pageflip"), { ssr: false });
@@ -78,20 +79,45 @@ export default function PlannerFlipbook() {
   const [modalEntries, setModalEntries] = useState<PlannerEntryWithMedia[]>([]);
   const [modalSmudge, setModalSmudge] = useState<DaySmudge | null | undefined>(undefined);
   const [modalLoading, setModalLoading] = useState(false);
+  const [decors, setDecors] = useState<PlannerDecor[]>([]);
+
+  // Decors fetch (admin'den eklenen sticker/tape vb.)
+  useEffect(() => {
+    fetch(`/api/planner/decor?year=${year}&month=${monthIndex}`)
+      .then((r) => r.json())
+      .then((data) => setDecors(Array.isArray(data) ? data : []))
+      .catch(() => setDecors([]));
+  }, [year, monthIndex]);
 
   // startPage: spread index * 2 (ilk sayfa sol)
   const startPage = monthIndex * 2;
   const lastFlipTime = useRef(0);
+  const flipStartTime = useRef<number | null>(null);
+  const [flipInProgress, setFlipInProgress] = useState(false);
+
+  const handleChangeState = useCallback((e: { data: string }) => {
+    if (e.data === "flipping") flipStartTime.current = Date.now();
+    setFlipInProgress(e.data === "flipping");
+  }, []);
 
   const handleFlip = useCallback((e: { data: number }) => {
-    setMonthIndex(Math.floor(e.data / 2));
+    const newIdx = Math.floor(e.data / 2);
+    setMonthIndex(newIdx);
     const now = Date.now();
     if (now - lastFlipTime.current > 150) {
       lastFlipTime.current = now;
-      const pitch = 0.95 + Math.random() * 0.1;
+      const elapsed = flipStartTime.current != null ? now - flipStartTime.current : 650;
+      flipStartTime.current = null;
+      const basePitch = 1.0 + (650 - elapsed) / 650 * 0.1;
+      const pitch = Math.max(0.9, Math.min(1.1, basePitch + (Math.random() - 0.5) * 0.04));
       playSound(AUDIO.paperFlip, { volume: 0.5, playbackRate: pitch });
+      const summaries = summaryCache[`${year}-${newIdx}`] ?? [];
+      const hasAttachments = summaries.some((s) => (s.attachedImages?.length ?? 0) > 0 || (s.paperclipImageUrls?.length ?? 0) > 0);
+      if (hasAttachments) {
+        setTimeout(() => playSound(AUDIO.metallicClick, { volume: 0.22, playbackRate: 1.05 }), 120);
+      }
     }
-  }, []);
+  }, [summaryCache, year]);
 
   // Tüm ayların verilerini yükle
   useEffect(() => {
@@ -155,7 +181,7 @@ export default function PlannerFlipbook() {
       </div>
 
       <div className="w-full flex justify-center">
-        <div className="relative overflow-hidden rounded-[28px] shadow-[0_30px_120px_rgba(0,0,0,0.55)]">
+        <div className="relative overflow-hidden rounded-[28px] shadow-[0_30px_120px_rgba(0,0,0,0.55)]" data-flipping={flipInProgress}>
           {/* Defter kalınlığı — alt sayfa çıkıntısı */}
           <div
             className="pointer-events-none absolute -bottom-3 left-10 right-10 h-10 rounded-b-[28px] bg-white/10 blur-[2px]"
@@ -176,6 +202,8 @@ export default function PlannerFlipbook() {
             width={520}
             height={640}
             size="fixed"
+            startZIndex={0}
+            autoSize={false}
             minWidth={320}
             maxWidth={520}
             minHeight={420}
@@ -193,6 +221,7 @@ export default function PlannerFlipbook() {
             showPageCorners
             disableFlipByClick={false}
             onFlip={handleFlip}
+            onChangeState={handleChangeState}
             className="bg-transparent ajanda-flipbook"
             style={{}}
           >

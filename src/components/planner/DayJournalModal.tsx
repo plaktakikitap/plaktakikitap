@@ -3,6 +3,17 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import type { PlannerEntryWithMedia } from "@/lib/planner";
+import { InkBleedText } from "./InkBleedText";
+import { SmudgeOverlay, type SmudgePreset } from "./SmudgeOverlay";
+import { getVideoEmbedUrl } from "@/lib/utils/embed";
+
+export type DaySmudge = {
+  preset?: string;
+  x?: number;
+  y?: number;
+  rotation?: number;
+  opacity?: number;
+} | null;
 
 function formatDateTR(day: number, monthName: string, year: number) {
   return `${day} ${monthName} ${year}`;
@@ -24,9 +35,11 @@ interface DayJournalModalProps {
   monthName: string;
   year: number;
   entries: PlannerEntryWithMedia[];
+  smudge?: DaySmudge;
   onClose: () => void;
 }
 
+/** Insert paper — sağ sayfanın üzerine açılan, defterin arasından çıkan ek kağıt */
 export function DayJournalModal({
   day,
   monthName,
@@ -80,68 +93,93 @@ export function DayJournalModal({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{
-        background: "radial-gradient(ellipse at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%)",
+        background: "radial-gradient(ellipse 80% 60% at 60% 50%, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.55) 100%)",
       }}
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-labelledby="day-modal-title"
     >
-      {/* Insert paper — defterin arasından çıkıyormuş animasyonu */}
+      {/* Insert paper — defterin arasından çıkıyormuş gibi animasyon */}
       <motion.div
         ref={containerRef}
-        initial={{ opacity: 0, y: 40, rotateX: -8, transformPerspective: 800 }}
+        initial={{
+          opacity: 0,
+          x: -80,
+          rotateY: -12,
+          scale: 0.96,
+          transformOrigin: "left center",
+        }}
         animate={{
           opacity: 1,
-          y: 0,
-          rotateX: 0,
+          x: 0,
+          rotateY: 0,
+          scale: 1,
           transition: {
             type: "spring",
-            damping: 25,
-            stiffness: 200,
+            damping: 28,
+            stiffness: 220,
+            mass: 0.9,
           },
         }}
         exit={{
           opacity: 0,
-          y: 20,
-          rotateX: 5,
-          transition: { duration: 0.2 },
+          x: -40,
+          rotateY: -8,
+          scale: 0.98,
+          transition: { duration: 0.18 },
         }}
-        className="relative max-h-[85vh] w-full max-w-lg overflow-hidden rounded-sm border border-black/20 bg-[#F3EAD7] shadow-2xl"
+        className="relative max-h-[88vh] w-full max-w-xl overflow-hidden rounded-sm border border-black/15 bg-[#F3EAD7]"
         style={{
           transformStyle: "preserve-3d",
-          boxShadow: "0 25px 50px -12px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.05)",
+          perspective: 1200,
+          boxShadow:
+            "24px 8px 40px -8px rgba(0,0,0,0.4), 8px 4px 20px -4px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.5)",
           backgroundImage: [
-            "repeating-linear-gradient(transparent, transparent 30px, rgba(0,0,0,0.04) 30px, rgba(0,0,0,0.04) 31px)",
-            "linear-gradient(rgba(0,0,0,0.02), transparent)",
+            "repeating-linear-gradient(transparent, transparent 30px, rgba(0,0,0,0.035) 30px, rgba(0,0,0,0.035) 31px)",
+            "linear-gradient(rgba(0,0,0,0.015), transparent 20%)",
           ].join(", "),
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Sol margin line — bullet journal */}
+        {/* Yazıyı Dağıt — leke overlay (varsa) */}
+        {smudge?.preset && (
+          <SmudgeOverlay
+            preset={smudge.preset as SmudgePreset}
+            x={smudge.x ?? 0.75}
+            y={smudge.y ?? 0.3}
+            rotation={smudge.rotation ?? 15}
+            opacity={(smudge.opacity ?? 0.12) * 0.8}
+            style={{ zIndex: 1 }}
+          />
+        )}
+
+        {/* Sol kenar — defter cilt izi / insert kenarı */}
         <div
-          className="absolute left-0 top-0 h-full w-1"
+          className="absolute left-0 top-0 h-full w-1.5"
           style={{
-            background: "linear-gradient(180deg, #c44 0%, #e88 50%, #c44 100%)",
-            opacity: 0.6,
+            background: "linear-gradient(180deg, #b55 0%, #e99 40%, #c66 100%)",
+            opacity: 0.7,
+            boxShadow: "inset 0 0 4px rgba(0,0,0,0.1)",
           }}
         />
 
-        <div className="relative z-[2] overflow-y-auto pl-6 pr-6 pt-6 pb-8" style={{ maxHeight: "85vh" }}>
+        <div className="relative z-[2] overflow-y-auto pl-7 pr-6 pt-6 pb-10" style={{ maxHeight: "88vh" }}>
           <div className="mb-6 flex items-center justify-between">
             <h2
               id="day-modal-title"
-              className="text-xl font-semibold text-[#201A14]"
-              style={{ fontFamily: "var(--font-display), Georgia, serif" }}
+              className="text-2xl font-semibold text-[#201A14]"
+              style={{ fontFamily: "var(--font-handwriting-title), cursive" }}
             >
               {headerLabel}
             </h2>
             <button
               type="button"
               onClick={onClose}
-              className="rounded-full p-1.5 text-black/50 transition hover:bg-black/5 hover:text-black/70"
+              className="rounded-full p-2 text-black/45 transition hover:bg-black/8 hover:text-black/70"
               aria-label="Kapat"
             >
               ×
@@ -150,22 +188,22 @@ export function DayJournalModal({
 
           {entries.length === 0 ? (
             <p
-              className="py-8 text-center text-sm text-black/50"
-              style={{ fontFamily: "var(--font-sans), sans-serif" }}
+              className="py-12 text-center text-sm text-black/50"
+              style={{ fontFamily: "var(--font-handwriting), cursive" }}
             >
               Bu güne henüz not eklenmemiş.
             </p>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-8">
               {entries.map((entry) => (
-                <div
+                <article
                   key={entry.id}
-                  className="rounded-lg border border-black/8 bg-white/40 p-4"
+                  className="space-y-4 rounded-lg border border-black/6 bg-white/30 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
                 >
                   {entry.title && (
                     <h3
-                      className="mb-2 font-semibold text-[#201A14]"
-                      style={{ fontFamily: "var(--font-display), Georgia, serif" }}
+                      className="text-lg font-semibold text-[#201A14]"
+                      style={{ fontFamily: "var(--font-handwriting-title), cursive" }}
                     >
                       {entry.title}
                     </h3>
@@ -178,52 +216,72 @@ export function DayJournalModal({
                       <InkBleedText text={entry.content} seed={entry.id?.length ?? 0} />
                     </p>
                   )}
+
+                  {/* Büyük fotoğraflar ve videolar — şık hiyerarşi */}
+                  {entry.media.length > 0 && (
+                    <div className="mt-4 space-y-5">
+                      {entry.media.map((m) => (
+                        <div key={m.id} className="space-y-2">
+                          {m.type === "image" && (
+                            <img
+                              src={m.url}
+                              alt=""
+                              className="w-full rounded-lg border border-black/10 object-cover shadow-[0_2px_12px_rgba(0,0,0,0.1),0_4px_20px_rgba(0,0,0,0.06)]"
+                              style={{ maxHeight: 360 }}
+                            />
+                          )}
+                          {m.type === "video" && (() => {
+                            const embedUrl = getVideoEmbedUrl(m.url);
+                            if (embedUrl) {
+                              return (
+                                <div className="aspect-video w-full overflow-hidden rounded-lg border border-black/10 shadow-[0_2px_12px_rgba(0,0,0,0.1)]">
+                                  <iframe
+                                    src={embedUrl}
+                                    title="Video"
+                                    className="h-full w-full"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                  />
+                                </div>
+                              );
+                            }
+                            return (
+                              <a
+                                href={m.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="flex items-center gap-2 rounded-lg border border-black/10 bg-black/5 px-4 py-3 text-sm text-[#2563eb] hover:bg-black/8 hover:underline"
+                              >
+                                <span className="text-lg">▶</span> Video izle
+                              </a>
+                            );
+                          })()}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
                   {entry.tags.length > 0 && (
-                    <div className="mt-2 flex flex-wrap gap-1">
+                    <div className="mt-3 flex flex-wrap gap-2">
                       {entry.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="rounded bg-black/8 px-2 py-0.5 text-xs text-black/65"
+                          className="rounded bg-amber-900/10 px-2.5 py-1 text-xs text-amber-900/75"
                         >
                           #{tag}
                         </span>
                       ))}
                     </div>
                   )}
-                  {entry.media.length > 0 && (
-                    <div className="mt-3 flex flex-col gap-4">
-                      {entry.media.map((m) => (
-                        <div key={m.id} className="space-y-1">
-                          {m.type === "image" && (
-                            <img
-                              src={m.url}
-                              alt=""
-                              className="max-h-64 w-full rounded-lg border border-black/10 object-cover shadow-sm"
-                            />
-                          )}
-                          {m.type === "video" && (
-                            <a
-                              href={m.url}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="block rounded-lg border border-black/10 bg-black/5 px-3 py-2 text-sm text-blue-700 hover:underline"
-                            >
-                              Video →
-                            </a>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
                   {entry.createdAt && (
                     <p
-                      className="mt-3 text-xs text-black/45"
+                      className="text-xs text-black/40"
                       style={{ fontFamily: "var(--font-sans), sans-serif" }}
                     >
                       {formatCreatedAt(entry.createdAt)}
                     </p>
                   )}
-                </div>
+                </article>
               ))}
             </div>
           )}

@@ -37,6 +37,11 @@ export default function MessyBulletJournal() {
 
   const startPage = monthIndex * 2;
   const lastFlipTime = useRef(0);
+  const [flipInProgress, setFlipInProgress] = useState(false);
+
+  const handleChangeState = useCallback((e: { data: string }) => {
+    setFlipInProgress(e.data === "flipping");
+  }, []);
 
   const handleFlip = useCallback((e: { data: number }) => {
     const newIdx = Math.floor(e.data / 2);
@@ -47,27 +52,54 @@ export default function MessyBulletJournal() {
       lastFlipTime.current = now;
       const pitch = 0.95 + Math.random() * 0.1;
       playSound(AUDIO.paperFlip, { volume: 0.5, playbackRate: pitch });
-      const summaries = summaryCache[`${year}-${newIdx}`] ?? [];
-      const hasAttachments = summaries.some((s) => (s.attachedImages?.length ?? 0) > 0 || (s.paperclipImageUrls?.length ?? 0) > 0);
+      const prevSummaries = summaryCache[`${year}-${prevIdx}`] ?? [];
+      const newSummaries = summaryCache[`${year}-${newIdx}`] ?? [];
+      const hasAttachments = [prevSummaries, newSummaries].some((summaries) =>
+        summaries.some((s) => (s.attachedImages?.length ?? 0) > 0 || (s.paperclipImageUrls?.length ?? 0) > 0)
+      );
       if (hasAttachments) {
-        playSound(AUDIO.metallicClick, { volume: 0.25, playbackRate: 1.1 });
+        setTimeout(() => playSound(AUDIO.metallicClick, { volume: 0.22, playbackRate: 1.05 }), 120);
       }
     }
   }, [monthIndex, summaryCache, year]);
 
-  const [pageSettings, setPageSettings] = useState({
-    show_coffee_stain: true,
-    show_washi_tape: true,
-    show_polaroid: true,
-    show_curled_corner: true,
-  });
+  const [pageSettings, setPageSettings] = useState<Record<string, {
+    show_coffee_stain: boolean;
+    show_washi_tape: boolean;
+    show_polaroid: boolean;
+    show_curled_corner: boolean;
+    custom_fields?: { label: string; content: string }[];
+  }>>({});
 
   useEffect(() => {
-    fetch(`/api/planner/settings?year=${year}&month=${monthIndex + 1}`)
-      .then((r) => r.json())
-      .then(setPageSettings)
-      .catch(() => {});
-  }, [year, monthIndex]);
+    const defaults = {
+      show_coffee_stain: true,
+      show_washi_tape: true,
+      show_polaroid: true,
+      show_curled_corner: true,
+      custom_fields: [] as { label: string; content: string }[],
+    };
+    Array.from({ length: 12 }, (_, m) => m).forEach((monthIdx) => {
+      const key = `${year}-${monthIdx}`;
+      fetch(`/api/planner/settings?year=${year}&month=${monthIdx + 1}`)
+        .then((r) => r.json())
+        .then((data) =>
+          setPageSettings((prev) => ({
+            ...prev,
+            [key]: {
+              show_coffee_stain: data.show_coffee_stain ?? true,
+              show_washi_tape: data.show_washi_tape ?? true,
+              show_polaroid: data.show_polaroid ?? true,
+              show_curled_corner: data.show_curled_corner ?? true,
+              custom_fields: Array.isArray(data.custom_fields) ? data.custom_fields : [],
+            },
+          }))
+        )
+        .catch(() =>
+          setPageSettings((prev) => ({ ...prev, [key]: defaults }))
+        );
+    });
+  }, [year]);
 
   useEffect(() => {
     Array.from({ length: 12 }, (_, m) => m).forEach((m) => {
@@ -101,12 +133,19 @@ export default function MessyBulletJournal() {
     setSelectedDay({ dateStr, monthName, day });
     setModalLoading(true);
     setModalEntries([]);
+    setModalSmudge(undefined);
     try {
-      const res = await fetch(`/api/planner/entries/${dateStr}`);
-      const data = await res.json();
-      setModalEntries(Array.isArray(data) ? data : []);
+      const [entriesRes, smudgeRes] = await Promise.all([
+        fetch(`/api/planner/entries/${dateStr}`),
+        fetch(`/api/planner/smudge/${dateStr}`),
+      ]);
+      const entriesData = await entriesRes.json();
+      const smudgeData = await smudgeRes.json();
+      setModalEntries(Array.isArray(entriesData) ? entriesData : []);
+      setModalSmudge(smudgeData?.preset ? smudgeData : null);
     } catch {
       setModalEntries([]);
+      setModalSmudge(null);
     } finally {
       setModalLoading(false);
     }
@@ -125,21 +164,23 @@ export default function MessyBulletJournal() {
 
   return (
     <section className="mx-auto max-w-6xl px-6 pb-24">
-      <div className="mb-6">
+      <div className="mb-6 -skew-x-1">
         <h2
-          className="text-2xl font-semibold tracking-tight"
-          style={{ fontFamily: "var(--font-handwriting), cursive" }}
+          className="text-2xl font-semibold tracking-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.06)]"
+          style={{ fontFamily: "var(--font-handwriting-title), cursive" }}
         >
           Bullet Journal
         </h2>
       </div>
 
-      <MessyBookShell monthIndex={monthIndex}>
-        <div className="relative overflow-hidden rounded-2xl">
+      <MessyBookShell monthIndex={monthIndex} flipInProgress={flipInProgress}>
+        <div className="relative overflow-hidden rounded-2xl" data-flipping={flipInProgress}>
           <HTMLFlipBook
             width={560}
             height={680}
             size="fixed"
+            startZIndex={0}
+            autoSize={false}
             minWidth={360}
             maxWidth={560}
             minHeight={460}
@@ -157,24 +198,26 @@ export default function MessyBulletJournal() {
             showPageCorners
             disableFlipByClick={false}
             onFlip={handleFlip}
+            onChangeState={handleChangeState}
             className="bg-transparent ajanda-flipbook"
             style={{}}
           >
             {months.flatMap((m) => [
               <div
                 key={`${m.key}-cal`}
-                className="h-full w-full rounded-r-none"
+                className="relative h-full w-full overflow-hidden rounded-r-none"
                 style={{
                   width: "100%",
                   height: "100%",
                   backgroundColor: PAPER_BG,
                   boxSizing: "border-box",
+                  transformStyle: "preserve-3d",
                 }}
               >
                 <MessyPaperPage
                   side="left"
-                  showCurledCorner={false}
-                  showCoffeeStain={pageSettings.show_coffee_stain}
+                  showCurledCorner={pageSettings[`${year}-${m.index}`]?.show_curled_corner ?? true}
+                  showCoffeeStain={pageSettings[`${year}-${m.index}`]?.show_coffee_stain ?? true}
                 >
                   <MessyCalendarGrid
                     year={year}
@@ -186,7 +229,7 @@ export default function MessyBulletJournal() {
               </div>,
               <div
                 key={`${m.key}-notes`}
-                className="h-full w-full rounded-l-none"
+                className="relative h-full w-full overflow-hidden rounded-l-none"
                 style={{
                   width: "100%",
                   height: "100%",
@@ -197,8 +240,8 @@ export default function MessyBulletJournal() {
               >
                 <MessyPaperPage
                   side="right"
-                  showCurledCorner={pageSettings.show_curled_corner}
-                  showCoffeeStain={pageSettings.show_coffee_stain}
+                  showCurledCorner={pageSettings[`${year}-${m.index}`]?.show_curled_corner ?? true}
+                  showCoffeeStain={pageSettings[`${year}-${m.index}`]?.show_coffee_stain ?? true}
                 >
                   <MessyNotesPage
                     monthName={m.label}
@@ -218,8 +261,9 @@ export default function MessyBulletJournal() {
                     attachedImages={
                       (summaryCache[`${year}-${m.index}`] ?? []).flatMap((s) => s.attachedImages ?? [])
                     }
-                    showWashiTape={pageSettings.show_washi_tape}
-                    showPolaroid={pageSettings.show_polaroid}
+                    showWashiTape={pageSettings[`${year}-${m.index}`]?.show_washi_tape ?? true}
+                    showPolaroid={pageSettings[`${year}-${m.index}`]?.show_polaroid ?? true}
+                    customFields={pageSettings[`${year}-${m.index}`]?.custom_fields ?? []}
                   />
                 </MessyPaperPage>
               </div>,

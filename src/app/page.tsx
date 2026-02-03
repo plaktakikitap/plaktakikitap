@@ -1,5 +1,10 @@
 "use client";
 
+/**
+ * Giriş: Kapüşonlu figür ellerini uzatıyor (arkaplan + Plak/Kitap seçenekleri)
+ * Seçim: Plak → cızırtılı melodi → morph ile ana sayfa
+ *        Kitap → sayfa sesi → morph ile ana sayfa
+ */
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

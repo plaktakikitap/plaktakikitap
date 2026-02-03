@@ -1,6 +1,16 @@
 import "server-only";
 import { createServerClient } from "@/lib/supabase/server";
 
+export type SmudgePreset = "fingerprint" | "smudge_blob" | "smudge_stain" | "ink_bleed";
+
+export interface DaySmudgeData {
+  preset: SmudgePreset;
+  x: number;
+  y: number;
+  rotation: number;
+  opacity: number;
+}
+
 export interface PlannerDaySummary {
   date: string;
   dayId: string;
@@ -13,6 +23,7 @@ export interface PlannerDaySummary {
   paperclipImageUrls: string[];
   attachedImages: { url: string; style: AttachmentStyle }[];
   isBusy: boolean;
+  smudge?: DaySmudgeData | null;
 }
 
 export interface PlannerDecor {
@@ -49,6 +60,7 @@ export interface PlannerEntryWithMedia {
     url: string;
     thumbUrl: string | null;
     attachmentType: AttachmentType | null;
+    attachmentStyle?: AttachmentStyle | null;
   }[];
 }
 
@@ -80,6 +92,22 @@ export async function fetchPlannerMonthSummary(
       .from("planner-media")
       .createSignedUrl(path, 3600);
     return data?.signedUrl ?? path;
+  }
+
+  const { data: smudges } = await supabase
+    .from("planner_day_smudge")
+    .select("date, preset, x, y, rotation, opacity")
+    .in("date", days.map((x) => x.date));
+
+  const smudgeByDate = new Map<string, DaySmudgeData>();
+  for (const s of smudges ?? []) {
+    smudgeByDate.set(s.date, {
+      preset: s.preset as DaySmudgeData["preset"],
+      x: s.x ?? 0.3,
+      y: s.y ?? 0.5,
+      rotation: s.rotation ?? 0,
+      opacity: s.opacity ?? 0.15,
+    });
   }
 
   for (const d of days) {
@@ -139,6 +167,7 @@ export async function fetchPlannerMonthSummary(
       paperclipImageUrls,
       attachedImages,
       isBusy,
+      smudge: smudgeByDate.get(d.date) ?? null,
     });
   }
 

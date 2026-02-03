@@ -47,6 +47,7 @@
   --font-serif: var(--font-serif), Georgia, serif;
   --font-display: var(--font-display), "Cormorant Garamond", Georgia, serif;
   --font-handwriting: var(--font-handwriting), "Caveat", cursive;
+  --font-handwriting-title: var(--font-handwriting-title), "Permanent Marker", cursive;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -193,10 +194,15 @@ body::before {
   overflow: hidden !important;
   background: transparent !important;
 }
-/* StPageFlip — flip sırasında gölge geçişi (açıya göre koyulaşıp açılır) */
+/* StPageFlip — sayfa çevrilirken gölgeler açıya göre koyulaşıp açılsın (kısa transition) */
 .ajanda-flipbook .stf__hardShadow,
 .ajanda-flipbook .stf__hardInnerShadow {
-  transition: opacity 0.15s ease, filter 0.15s ease !important;
+  transition: opacity 0.06s ease-out, filter 0.08s ease-out, transform 0.06s ease-out !important;
+}
+/* Flip sırasında gölge tepkisi hızlanır — sayfa açısına göre koyulaşma/açılma */
+[data-flipping="true"] .ajanda-flipbook .stf__hardShadow,
+[data-flipping="true"] .ajanda-flipbook .stf__hardInnerShadow {
+  transition-duration: 0.04s !important;
 }
 
 /* Messy bullet journal — bugün hücresi */

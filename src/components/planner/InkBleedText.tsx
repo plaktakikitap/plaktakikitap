@@ -2,7 +2,9 @@
 
 import { useMemo } from "react";
 
-const INK_CHARCOAL = "rgba(54, 69, 79, 0.45)";
+/** Midnight Blue / Charcoal Black — el yazısı fontuyla uyumlu */
+const INK_MIDNIGHT_BLUE = "rgba(25, 25, 112, 0.5)";
+const INK_CHARCOAL_BLACK = "rgba(54, 69, 79, 0.48)";
 
 /** Kelime indekslerini seç — rastgele kelimeler ve cümle sonları */
 function pickWordIndices(text: string, seed: number): Set<number> {
@@ -58,13 +60,26 @@ export function InkBleedText({ text, className = "", style = {}, seed = 0 }: Ink
             style={{ fontFamily: "inherit" }}
           >
             {p.content}
+            {/* Mürekkep dağılması — blur + opacity, kalemden fazla mürekkep / el bulaştırması */}
             <span
               className="absolute left-0 top-0.5 -z-10 whitespace-nowrap"
               style={{
-                color: INK_CHARCOAL,
-                filter: "blur(1.8px)",
-                opacity: 0.55,
-                transform: "translateY(1px) scaleX(1.08)",
+                color: INK_CHARCOAL_BLACK,
+                filter: "blur(2px)",
+                opacity: 0.5,
+                transform: "translateY(1.5px) scaleX(1.06)",
+              }}
+              aria-hidden
+            >
+              {p.content}
+            </span>
+            <span
+              className="absolute left-0 top-0.5 -z-20 whitespace-nowrap"
+              style={{
+                color: INK_MIDNIGHT_BLUE,
+                filter: "blur(3px)",
+                opacity: 0.2,
+                transform: "translateY(2px) scaleX(1.1)",
               }}
               aria-hidden
             >

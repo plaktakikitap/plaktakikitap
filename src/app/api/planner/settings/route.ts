@@ -6,6 +6,7 @@ const DEFAULTS = {
   show_washi_tape: true,
   show_polaroid: true,
   show_curled_corner: true,
+  custom_fields: [] as { label: string; content: string }[],
 };
 
 export async function GET(request: NextRequest) {
@@ -23,7 +24,9 @@ export async function GET(request: NextRequest) {
       .maybeSingle();
 
     if (error) return NextResponse.json(DEFAULTS);
-    return NextResponse.json(data ?? DEFAULTS);
+    const out = { ...DEFAULTS, ...data };
+    if (Array.isArray(data?.custom_fields)) out.custom_fields = data.custom_fields;
+    return NextResponse.json(out);
   } catch {
     return NextResponse.json(DEFAULTS);
   }
@@ -35,15 +38,19 @@ export async function POST(request: NextRequest) {
     const { year = 2026, month = 1, ...settings } = body;
 
     const supabase = createAdminClient();
+    const payload: Record<string, unknown> = {
+      year: Number(year),
+      month: Number(month),
+      show_coffee_stain: settings.show_coffee_stain ?? true,
+      show_washi_tape: settings.show_washi_tape ?? true,
+      show_polaroid: settings.show_polaroid ?? true,
+      show_curled_corner: settings.show_curled_corner ?? true,
+    };
+    if (Array.isArray(settings.custom_fields)) {
+      payload.custom_fields = settings.custom_fields;
+    }
     const { error } = await supabase.from("planner_page_settings").upsert(
-      {
-        year: Number(year),
-        month: Number(month),
-        show_coffee_stain: settings.show_coffee_stain ?? true,
-        show_washi_tape: settings.show_washi_tape ?? true,
-        show_polaroid: settings.show_polaroid ?? true,
-        show_curled_corner: settings.show_curled_corner ?? true,
-      },
+      payload,
       { onConflict: "year,month" }
     );
 

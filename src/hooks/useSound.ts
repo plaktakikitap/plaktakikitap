@@ -25,7 +25,7 @@ export function useSoundsEnabled() {
 export function usePlaySound() {
   const play = useCallback(
     (
-      src: string,
+      src: string | readonly string[],
       options?: { volume?: number; playbackRate?: number; onEnded?: () => void }
     ) => playSound(src, options),
     []
