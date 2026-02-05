@@ -24,36 +24,32 @@ export default async function AdminBooksPage() {
       </div>
 
       <div className="space-y-2">
-        {books.map((item, i) => {
-          const book = Array.isArray(item.book) ? item.book[0] : item.book;
-          if (!book) return null;
-          return (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.03 }}
-              className="flex items-center justify-between rounded-lg border border-[var(--card-border)] bg-[var(--card)] px-4 py-3"
-            >
-              <div>
-                <p className="font-medium">{item.title}</p>
-                <p className="text-sm text-[var(--muted)]">
-                  {book.author && `${book.author} • `}
-                  {item.visibility}
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <Link
-                  href={`/admin/books/${item.id}/edit`}
-                  className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)] hover:text-[var(--foreground)]"
-                >
-                  <Pencil className="h-4 w-4" />
-                </Link>
-                <DeleteButton id={item.id} type="book" label={item.title} />
-              </div>
-            </motion.div>
-          );
-        })}
+        {books.map((book, i) => (
+          <motion.div
+            key={book.id}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.03 }}
+            className="flex items-center justify-between rounded-lg border border-[var(--card-border)] bg-[var(--card)] px-4 py-3"
+          >
+            <div>
+              <p className="font-medium">{book.title}</p>
+              <p className="text-sm text-[var(--muted)]">
+                {book.author && `${book.author} • `}
+                {book.visibility ?? "public"}
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Link
+                href={`/admin/books/${book.id}/edit`}
+                className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)] hover:text-[var(--foreground)]"
+              >
+                <Pencil className="h-4 w-4" />
+              </Link>
+              <DeleteButton id={book.id} type="book" label={book.title} />
+            </div>
+          </motion.div>
+        ))}
       </div>
 
       {books.length === 0 && (

@@ -4,12 +4,19 @@ import FramedCrossfade from "@/components/home/FramedCrossfade";
 import { IntroCards } from "@/components/home/IntroCards";
 import { ScrollIndicator } from "@/components/home/ScrollHint";
 import PlannerFlipbook from "@/components/PlannerFlipbook";
+import type { Video } from "@/types/videos";
 
 interface HomePageContentProps {
   children?: React.ReactNode;
+  latestVideo?: Video | null;
+  latestVideoThumb?: string | null;
 }
 
-export function HomePageContent({ children }: HomePageContentProps) {
+export function HomePageContent({
+  children,
+  latestVideo,
+  latestVideoThumb,
+}: HomePageContentProps) {
   return (
     <>
       <main className="relative min-h-screen text-[#F3EBDD]">
@@ -49,7 +56,10 @@ export function HomePageContent({ children }: HomePageContentProps) {
 
             {/* Kart grid */}
             <div className="mx-auto mt-8 w-full max-w-6xl px-2 pt-6 sm:mt-12 sm:px-6 sm:pt-10">
-              <IntroCards />
+              <IntroCards
+                latestVideo={latestVideo}
+                latestVideoThumb={latestVideoThumb}
+              />
             </div>
           </div>
         </section>

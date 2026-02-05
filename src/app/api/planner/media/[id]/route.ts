@@ -14,12 +14,14 @@ export async function PATCH(
     const validType =
       attachmentType === undefined ||
       attachmentType === null ||
+      attachmentType === "" ||
       attachmentType === "paperclip" ||
       attachmentType === "paste" ||
       attachmentType === "staple";
     const validStyle =
       attachmentStyle === undefined ||
       attachmentStyle === null ||
+      attachmentStyle === "" ||
       attachmentStyle === "standard_clip" ||
       attachmentStyle === "colorful_clip" ||
       attachmentStyle === "binder_clip" ||
@@ -30,8 +32,8 @@ export async function PATCH(
     }
 
     const result = await updatePlannerMedia(id, {
-      attachmentType: attachmentType ?? undefined,
-      attachmentStyle: attachmentStyle ?? undefined,
+      attachmentType: (attachmentType === "" ? null : attachmentType) ?? undefined,
+      attachmentStyle: (attachmentStyle === "" ? null : attachmentStyle) ?? undefined,
     });
     if (result.error) {
       return NextResponse.json({ error: result.error }, { status: 500 });

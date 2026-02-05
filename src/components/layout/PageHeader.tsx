@@ -8,9 +8,10 @@ interface PageHeaderProps {
   title: string;
   subtitle?: string;
   titleClassName?: string;
+  subtitleClassName?: string;
 }
 
-export function PageHeader({ layoutId, title, subtitle, titleClassName }: PageHeaderProps) {
+export function PageHeader({ layoutId, title, subtitle, titleClassName, subtitleClassName }: PageHeaderProps) {
   return (
     <motion.header
       layoutId={layoutId}
@@ -22,7 +23,11 @@ export function PageHeader({ layoutId, title, subtitle, titleClassName }: PageHe
       <h1 className={cn("font-editorial text-2xl font-medium text-[var(--foreground)] sm:text-3xl", titleClassName)}>
         {title}
       </h1>
-      {subtitle && <p className="mt-1 text-[var(--muted)]">{subtitle}</p>}
+      {subtitle && (
+        <p className={cn("mt-1 text-[var(--muted)]", subtitleClassName)}>
+          {subtitle}
+        </p>
+      )}
     </motion.header>
   );
 }

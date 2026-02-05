@@ -1,0 +1,149 @@
+/* Hyper-realistic library spine: responsive height via inline calc(clamp + variation), width from page_count */
+.spine {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  min-width: 18px;
+  padding: 4px;
+  border-radius: 2px;
+  border: 1px solid rgba(80, 50, 20, 0.4);
+  background: linear-gradient(
+    90deg,
+    rgba(60, 40, 25, 0.95) 0%,
+    rgba(45, 35, 25, 0.98) 50%,
+    rgba(35, 28, 22, 0.98) 100%
+  );
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 1px 0 0 rgba(255, 255, 255, 0.06),
+    inset -1px 0 0 rgba(0, 0, 0, 0.2);
+  transition: transform 0.25s ease, box-shadow 0.3s ease;
+  transform: translateZ(0);
+}
+
+/* Glossy highlight on left edge (opposite to thickness shadow) */
+.spine::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 0.22) 15%,
+    rgba(255, 255, 255, 0.32) 50%,
+    rgba(255, 255, 255, 0.22) 85%,
+    transparent 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Thickness illusion: 6–10px darker side edge gradient on the right */
+.spine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 100%;
+  box-sizing: border-box;
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.25) 0%,
+    rgba(0, 0, 0, 0.5) 50%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
+  border-radius: 0 2px 2px 0;
+  pointer-events: none;
+}
+
+.spine:hover {
+  transform: translateY(-10px) translateZ(0);
+  box-shadow:
+    0 18px 36px rgba(0, 0, 0, 0.5),
+    0 8px 16px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(212, 175, 55, 0.18),
+    0 0 0 1px rgba(212, 175, 55, 0.25);
+}
+
+.spineInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.spineImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  background: rgba(40, 30, 20, 0.6);
+}
+
+.spinePlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    rgba(80, 60, 40, 0.4) 0%,
+    rgba(50, 40, 30, 0.5) 100%
+  );
+  color: rgba(255, 255, 255, 0.25);
+}
+
+/* Shelf base: thin horizontal line + subtle shadow */
+.shelfBase {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1.5rem;
+  height: 4px;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(
+    180deg,
+    rgba(139, 90, 43, 0.6) 0%,
+    rgba(101, 67, 33, 0.85) 40%,
+    rgba(62, 39, 35, 0.95) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 2px 6px rgba(0, 0, 0, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.shelfBase::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: -5%;
+  right: -5%;
+  height: 16px;
+  background: radial-gradient(
+    ellipse 85% 50% at 50% 0%,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(0, 0, 0, 0.12) 50%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.spineTitle {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

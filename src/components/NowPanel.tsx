@@ -15,13 +15,21 @@ async function getNowTracks() {
 async function getReading() {
   const supabase = await supabaseServer();
   const { data } = await supabase
-    .from("reading_status")
-    .select("status, book_title, author, cover_url, note, updated_at")
-    .order("updated_at", { ascending: false })
+    .from("books")
+    .select("title, author, cover_url, progress_percent, last_progress_update_at")
+    .eq("status", "reading")
+    .order("last_progress_update_at", { ascending: false })
     .limit(1)
     .maybeSingle();
 
-  return data ?? null;
+  if (!data) return null;
+  return {
+    book_title: data.title,
+    author: data.author,
+    cover_url: data.cover_url,
+    note: null,
+    updated_at: data.last_progress_update_at,
+  };
 }
 
 function GlassCard({
@@ -47,14 +55,12 @@ export default async function NowPanel() {
     getReading(),
   ]);
 
-  const readingTitle =
-    reading?.status === "reading" ? "Şu an okuyorum:" : "En son okuduğum:";
+  const readingTitle = reading ? "Şu an okuyorum:" : "En son okuduğum:";
 
   return (
     <section className="mx-auto mt-12 w-full max-w-6xl px-4 sm:mt-16 sm:px-6">
-      <div className="mb-3 flex items-baseline justify-between">
+      <div className="mb-3">
         <h3 className="text-lg font-semibold text-white/90">Şu an</h3>
-        <span className="text-xs text-white/35">canlı köşe</span>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">

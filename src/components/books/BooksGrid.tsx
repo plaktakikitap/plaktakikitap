@@ -1,19 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import type { ContentItem, Book } from "@/types/database";
+import type { Book } from "@/types/database";
 import { BookOpen, FileText } from "lucide-react";
 
-type BookItem = ContentItem & { book: Book | Book[] | null };
-
-function getBook(d: BookItem): Book | null {
-  const b = d.book;
-  if (!b) return null;
-  return Array.isArray(b) ? b[0] ?? null : b;
-}
-
 interface BooksGridProps {
-  books: BookItem[];
+  books: Book[];
 }
 
 export function BooksGrid({ books }: BooksGridProps) {
@@ -25,15 +17,12 @@ export function BooksGrid({ books }: BooksGridProps) {
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {books.map((item, i) => {
-        const book = getBook(item);
-        if (!book) return null;
-
+      {books.map((book, i) => {
         const hasReview = !!book.review?.trim();
 
         return (
           <motion.article
-            key={item.id}
+            key={book.id}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: i * 0.02, duration: 0.15 }}
@@ -44,7 +33,7 @@ export function BooksGrid({ books }: BooksGridProps) {
               {book.cover_url ? (
                 <img
                   src={book.cover_url}
-                  alt={item.title}
+                  alt={book.title}
                   className="h-full w-full object-cover"
                 />
               ) : (
@@ -56,7 +45,7 @@ export function BooksGrid({ books }: BooksGridProps) {
 
             <div className="p-3">
               <h3 className="font-semibold text-[var(--foreground)] line-clamp-2">
-                {item.title}
+                {book.title}
               </h3>
               {book.author && (
                 <p className="mt-1 text-sm text-[var(--muted)] line-clamp-1">
@@ -64,22 +53,17 @@ export function BooksGrid({ books }: BooksGridProps) {
                 </p>
               )}
               <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-[var(--muted)]">
-                {item.rating != null && (
-                  <span className="text-[var(--accent)]">★ {item.rating}</span>
+                {book.rating != null && (
+                  <span className="text-[var(--accent)]">★ {book.rating}</span>
                 )}
-                {book.pages && <span>{book.pages} pages</span>}
+                <span>{book.page_count} sayfa</span>
                 {hasReview && (
                   <span className="inline-flex items-center gap-0.5">
                     <FileText className="h-3 w-3" />
-                    Reviewed
+                    İnceleme
                   </span>
                 )}
               </div>
-              {book.quote && (
-                <p className="mt-2 line-clamp-2 text-xs italic text-[var(--muted)]">
-                  &ldquo;{book.quote}&rdquo;
-                </p>
-              )}
             </div>
           </motion.article>
         );

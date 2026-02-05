@@ -7,6 +7,7 @@ export interface Film {
 }
 
 export interface Series {
+  total_duration_min?: number | null;
   avg_episode_min: number | null;
   episodes_watched: number | null;
 }
@@ -55,6 +56,34 @@ export function minutesToTurkish(mins: number): string {
   return parts.join(", ") || "0 Saat";
 }
 
+const MIN_PER_YEAR = 365 * 24 * MIN_PER_HOUR; // 1 yıl ≈ 365 gün
+
+/**
+ * Format total minutes as "X Yıl, Y Ay, Z Gün, W Saat" (Turkish).
+ * Film izlemek için harcadığı süre. Uses 1 Ay = 30 Gün, 1 Yıl = 365 Gün.
+ */
+export function formatWatchTimeYilAyGunSaat(totalMinutes: number): string {
+  if (totalMinutes < 0) return "0 Saat";
+  if (totalMinutes < MIN_PER_HOUR) return "0 Saat";
+
+  let rem = totalMinutes;
+  const yil = Math.floor(rem / MIN_PER_YEAR);
+  rem %= MIN_PER_YEAR;
+  const ay = Math.floor(rem / MIN_PER_MONTH);
+  rem %= MIN_PER_MONTH;
+  const gun = Math.floor(rem / MIN_PER_DAY);
+  rem %= MIN_PER_DAY;
+  const saat = Math.floor(rem / MIN_PER_HOUR);
+
+  const parts: string[] = [];
+  if (yil > 0) parts.push(`${yil} Yıl`);
+  if (ay > 0) parts.push(`${ay} Ay`);
+  if (gun > 0) parts.push(`${gun} Gün`);
+  if (saat > 0) parts.push(`${saat} Saat`);
+
+  return parts.join(", ") || "0 Saat";
+}
+
 export interface TotalLifeSpent {
   totalMinutes: number;
   humanTR: string;
@@ -70,10 +99,11 @@ export function calculateTotalLifeSpent(
   series: Series[]
 ): TotalLifeSpent {
   const filmMins = films.reduce((acc, f) => acc + (f.duration_min || 0), 0);
-  const seriesMins = series.reduce(
-    (acc, s) => acc + ((s.episodes_watched || 0) * (s.avg_episode_min || 0)),
-    0
-  );
+  const seriesMins = series.reduce((acc, s) => {
+    const stored = s.total_duration_min;
+    const computed = (s.episodes_watched || 0) * (s.avg_episode_min || 0);
+    return acc + (stored != null && !Number.isNaN(stored) ? stored : computed);
+  }, 0);
   let totalMinutes = filmMins + seriesMins;
 
   const minutesInHour = 60;

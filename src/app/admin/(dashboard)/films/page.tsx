@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { getFilms } from "@/lib/queries";
-import { Plus, Pencil, Trash2 } from "lucide-react";
-import { deleteContent } from "@/app/actions";
+import { Plus, Pencil } from "lucide-react";
 import { DeleteButton } from "@/components/admin/DeleteButton";
+import { FavoriteToggle } from "@/components/admin/FavoriteToggle";
 
 export default async function AdminFilmsPage() {
   const films = await getFilms(true);
@@ -43,7 +43,12 @@ export default async function AdminFilmsPage() {
                   {film.duration_min} dk • {item.visibility}
                 </p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
+                <FavoriteToggle
+                  contentId={item.id}
+                  type="film"
+                  isFavorite={!!film.is_favorite}
+                />
                 <Link
                   href={`/admin/films/${item.id}/edit`}
                   className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)] hover:text-[var(--foreground)]"

@@ -22,7 +22,7 @@ const MONTH_LABELS = [
 const PAPER_BG = "#ebe4d4";
 
 export default function MessyBulletJournal() {
-  const year = 2026;
+  const year = new Date().getFullYear();
   const [monthIndex, setMonthIndex] = useState(new Date().getMonth() % 12);
   const [summaryCache, setSummaryCache] = useState<
     Record<string, PlannerDaySummary[]>

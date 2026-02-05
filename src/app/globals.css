@@ -272,3 +272,39 @@ body::before {
     @apply bg-background text-foreground;
   }
 }
+
+/* Yazılarım: yumuşak sayfa geçişi */
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-page-fade-in {
+  animation: pageFadeIn 0.5s ease-out forwards;
+}
+
+/* Yazılarım: okuma deneyimi — kağıt dokusu */
+.yazilarim-paper {
+  background-color: #fafaf8;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+.dark .yazilarim-paper {
+  background-color: #1c1917;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.06'/%3E%3C/svg%3E");
+}
+
+/* Admin: TipTap editor içerik alanı */
+.yazilarim-editor-wrap .ProseMirror p { margin-bottom: 0.75rem; line-height: 1.65; }
+.yazilarim-editor-wrap .ProseMirror h2 { font-size: 1.125rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem; }
+.yazilarim-editor-wrap .ProseMirror h3 { font-size: 1rem; font-weight: 600; margin-top: 0.75rem; margin-bottom: 0.35rem; }
+.yazilarim-editor-wrap .ProseMirror ul { list-style-type: disc; padding-left: 1.5rem; margin: 0.5rem 0; }
+.yazilarim-editor-wrap .ProseMirror ol { list-style-type: decimal; padding-left: 1.5rem; margin: 0.5rem 0; }
+.yazilarim-editor-wrap .ProseMirror a { color: var(--accent); text-decoration: underline; }
+.yazilarim-editor-wrap .ProseMirror strong { font-weight: 600; }
+.yazilarim-editor-wrap .ProseMirror em { font-style: italic; }
+.yazilarim-editor-wrap .ProseMirror.is-editor-empty:before { color: var(--muted); float: left; height: 0; pointer-events: none; content: attr(data-placeholder); }

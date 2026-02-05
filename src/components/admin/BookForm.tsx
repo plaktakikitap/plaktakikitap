@@ -54,22 +54,51 @@ export function BookForm() {
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="block text-sm font-medium">Sayfa</label>
+          <label className="block text-sm font-medium">Sayfa Sayısı *</label>
           <input
             name="pages"
             type="number"
             min={1}
+            step={1}
+            required
+            placeholder="Örn. 256"
             className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium">Puan (0-10)</label>
+          <label className="block text-sm font-medium">Durum (status)</label>
+          <select
+            name="status"
+            className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
+          >
+            <option value="reading">Okunuyor</option>
+            <option value="finished">Bitti</option>
+            <option value="paused">Duraklatıldı</option>
+            <option value="dropped">Bırakıldı</option>
+          </select>
+        </div>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium">İlerleme % (0-100, okunuyorsa)</label>
           <input
-            name="rating"
+            name="progress_percent"
             type="number"
-            step="0.1"
             min={0}
-            max={10}
+            max={100}
+            placeholder="Örn. 45"
+            className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium">Kitap puanı (0-5)</label>
+          <input
+            name="book_rating"
+            type="number"
+            step="0.25"
+            min={0}
+            max={5}
+            placeholder="0–5"
             className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
           />
         </div>
@@ -85,12 +114,51 @@ export function BookForm() {
           <option value="private">Sadece ben</option>
         </select>
       </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium">Kapak URL (cover_url)</label>
+          <input
+            name="cover_url"
+            type="url"
+            placeholder="https://..."
+            className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium">Sırt URL (spine_url) *</label>
+          <input
+            name="spine_url"
+            type="url"
+            required
+            placeholder="https://... (kitaplık sırtı)"
+            className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
+          />
+        </div>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium">Başlangıç tarihi (start_date)</label>
+          <input
+            name="start_date"
+            type="date"
+            className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium">Bitiş tarihi (end_date)</label>
+          <input
+            name="end_date"
+            type="date"
+            className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
+          />
+        </div>
+      </div>
       <div>
-        <label className="block text-sm font-medium">Kapak URL</label>
+        <label className="block text-sm font-medium">Etiketler (#etiketler)</label>
         <input
-          name="cover_url"
-          type="url"
-          placeholder="https://..."
+          name="tags"
+          type="text"
+          placeholder="roman, klasik, distopya (virgülle ayırın)"
           className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
         />
       </div>

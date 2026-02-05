@@ -37,13 +37,11 @@ export async function getSeries(includePrivate = false): Promise<(ContentItem & 
   return (data ?? []) as (ContentItem & { series: Series })[];
 }
 
-export async function getBooks(includePrivate = false): Promise<(ContentItem & { book: Book })[]> {
+export async function getBooks(includePrivate = false): Promise<Book[]> {
   const supabase = await createServerClient();
   let query = supabase
-    .from("content_items")
-    .select("*, book:books(*)")
-    .eq("type", "book")
-    .not("book", "is", null)
+    .from("books")
+    .select("*")
     .order("created_at", { ascending: false });
 
   if (!includePrivate) {
@@ -52,7 +50,7 @@ export async function getBooks(includePrivate = false): Promise<(ContentItem & {
 
   const { data, error } = await query;
   if (error) throw error;
-  return (data ?? []) as (ContentItem & { book: Book })[];
+  return (data ?? []) as Book[];
 }
 
 const DEFAULT_STATS: Stats = {
@@ -104,7 +102,7 @@ export async function getStats(includePrivate = false): Promise<Stats> {
   const [filmsRes, seriesRes, booksRes] = await Promise.all([
     supabase.from("content_items").select("id").eq("type", "film").in("visibility", vis),
     supabase.from("content_items").select("id").eq("type", "series").in("visibility", vis),
-    supabase.from("content_items").select("id").eq("type", "book").in("visibility", vis),
+    supabase.from("books").select("id, review").in("visibility", vis),
   ]);
 
   const films = filmsRes.data ?? [];
@@ -123,16 +121,16 @@ export async function getStats(includePrivate = false): Promise<Stats> {
   }
 
   for (const s of series) {
-    const { data: ser } = await supabase.from("series").select("avg_episode_min, episodes_watched, review").eq("content_id", s.id).single();
+    const { data: ser } = await supabase.from("series").select("total_duration_min, avg_episode_min, episodes_watched, review").eq("content_id", s.id).single();
     if (ser) {
-      totalWatchTime += (ser.avg_episode_min ?? 0) * (ser.episodes_watched ?? 0);
+      const mins = (ser as { total_duration_min?: number | null }).total_duration_min;
+      totalWatchTime += mins != null && !Number.isNaN(mins) ? mins : (ser.avg_episode_min ?? 0) * (ser.episodes_watched ?? 0);
       if (ser.review) totalReviews++;
     }
   }
 
   for (const b of books) {
-    const { data: book } = await supabase.from("books").select("review").eq("content_id", b.id).single();
-    if (book?.review) totalReviews++;
+    if ((b as { review?: string | null }).review) totalReviews++;
   }
 
   return {

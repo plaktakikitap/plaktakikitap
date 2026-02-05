@@ -25,6 +25,7 @@ export function SeriesCard({
   if (!series) return null;
 
   const totalMins =
+    series.total_duration_min ??
     (series.avg_episode_min ?? 0) * (series.episodes_watched ?? 0);
 
   return (

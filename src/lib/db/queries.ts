@@ -8,6 +8,14 @@ import type { ContentItem, Film, Series, Book, Translation } from "@/types/datab
 
 const visibilitySchema = z.enum(["public", "unlisted", "private"]);
 const ratingSchema = z.number().min(0).max(10).optional().nullable();
+/** 0-5, 0.25 adımları (çeyrek/yarım yıldız) */
+const rating5Schema = z
+  .number()
+  .min(0)
+  .max(5)
+  .multipleOf(0.25)
+  .optional()
+  .nullable();
 
 export const createFilmSchema = z.object({
   title: z.string().min(1, "Başlık gerekli"),
@@ -22,7 +30,15 @@ export const createFilmSchema = z.object({
     .optional()
     .nullable()
     .transform((v) => (v && v.trim() ? v : null)),
+  spine_url: z
+    .union([z.literal(""), z.string().url()])
+    .optional()
+    .nullable()
+    .transform((v) => (v && v.trim() ? v : null)),
   review: z.string().optional().nullable(),
+  director: z.string().optional().nullable().transform((v) => (v && v.trim() ? v.trim() : null)),
+  genre_tags: z.array(z.string()).optional().default([]),
+  rating_5: rating5Schema,
 });
 
 export const createSeriesSchema = z.object({
@@ -43,8 +59,8 @@ export const createBookSchema = z.object({
   description: z.string().optional().nullable(),
   rating: ratingSchema,
   visibility: visibilitySchema.default("public"),
-  pages: z.number().int().positive().optional().nullable(),
-  author: z.string().optional().nullable(),
+  pages: z.number().int().positive("Sayfa sayısı gerekli"),
+  author: z.string().optional().nullable().transform((v) => (v && v.trim() ? v.trim() : "")),
   quote: z.string().optional().nullable(),
   review: z.string().optional().nullable(),
   cover_url: z
@@ -52,6 +68,11 @@ export const createBookSchema = z.object({
     .optional()
     .nullable()
     .transform((v) => (v && v.trim() ? v : null)),
+  spine_url: z
+    .string()
+    .optional()
+    .nullable()
+    .transform((v) => (v && v.trim() ? v.trim() : "")),
 });
 
 export type CreateFilmInput = z.infer<typeof createFilmSchema>;
@@ -61,8 +82,17 @@ export type CreateBookInput = z.infer<typeof createBookSchema>;
 export interface CinemaStats {
   totalFilms: number;
   totalSeries: number;
+  /** Toplam film süresi (dakika) */
+  totalFilmWatchTimeMinutes: number;
+  /** Toplam dizi izleme süresi (dakika) */
+  totalSeriesWatchTimeMinutes: number;
+  /** Film + dizi toplam süre (geriye uyumluluk) */
   totalWatchTimeMinutes: number;
   totalReviews: number;
+  /** Bu ay (watched_at) izlenen film sayısı */
+  filmWatchedThisMonth: number;
+  /** Bu ay (watched_at) izlenen dizi sayısı */
+  seriesWatchedThisMonth: number;
 }
 
 // --- Helpers ---
@@ -83,6 +113,12 @@ function slugify(text: string): string {
 
 // --- Public queries ---
 
+function getFilmWatchedAt(item: ContentItem & { film: Film | Film[] | null }): string {
+  const f = item.film;
+  const film = Array.isArray(f) ? f[0] : f;
+  return (film as { watched_at?: string | null })?.watched_at ?? item.created_at;
+}
+
 export async function getPublicFilms(): Promise<
   (ContentItem & { film: Film | Film[] | null })[]
 > {
@@ -91,11 +127,18 @@ export async function getPublicFilms(): Promise<
     .from("content_items")
     .select("*, film:films(*)")
     .eq("type", "film")
-    .in("visibility", ["public", "unlisted"])
-    .order("created_at", { ascending: false });
+    .in("visibility", ["public", "unlisted"]);
 
   if (error) return [];
-  return (data ?? []) as (ContentItem & { film: Film | Film[] | null })[];
+  const list = (data ?? []) as (ContentItem & { film: Film | Film[] | null })[];
+  list.sort((a, b) => new Date(getFilmWatchedAt(a)).getTime() - new Date(getFilmWatchedAt(b)).getTime());
+  return list;
+}
+
+function getSeriesWatchedAt(item: ContentItem & { series: Series | Series[] | null }): string {
+  const s = item.series;
+  const series = Array.isArray(s) ? s[0] : s;
+  return (series as { watched_at?: string | null })?.watched_at ?? item.created_at;
 }
 
 export async function getPublicSeries(): Promise<
@@ -106,26 +149,89 @@ export async function getPublicSeries(): Promise<
     .from("content_items")
     .select("*, series:series(*)")
     .eq("type", "series")
-    .in("visibility", ["public", "unlisted"])
-    .order("created_at", { ascending: false });
+    .in("visibility", ["public", "unlisted"]);
 
   if (error) return [];
-  return (data ?? []) as (ContentItem & { series: Series | Series[] | null })[];
+  const list = (data ?? []) as (ContentItem & { series: Series | Series[] | null })[];
+  list.sort((a, b) => new Date(getSeriesWatchedAt(a)).getTime() - new Date(getSeriesWatchedAt(b)).getTime());
+  return list;
 }
 
-export async function getPublicBooks(): Promise<
-  (ContentItem & { book: Book | Book[] | null })[]
+/** En son işaretlenen 5 favori film (VIP vitrin için). */
+export async function getPublicFavoriteFilms(): Promise<
+  (ContentItem & { film: Film | Film[] | null })[]
 > {
   const supabase = await createServerClient();
-  const { data, error } = await supabase
+  const { data: filmsRows, error: filmsErr } = await supabase
+    .from("films")
+    .select("*")
+    .eq("is_favorite", true)
+    .order("favorite_order", { ascending: false, nullsFirst: false })
+    .limit(5);
+  if (filmsErr || !filmsRows?.length) return [];
+  const contentIds = filmsRows.map((f) => f.content_id);
+  const { data: items, error: itemsErr } = await supabase
     .from("content_items")
-    .select("*, book:books(*)")
-    .eq("type", "book")
+    .select("*")
+    .in("id", contentIds)
+    .in("visibility", ["public", "unlisted"]);
+  if (itemsErr || !items?.length) return [];
+  const itemMap = new Map(items.map((i) => [i.id, i]));
+  const result: (ContentItem & { film: Film | Film[] | null })[] = [];
+  for (const film of filmsRows) {
+    const content = itemMap.get(film.content_id);
+    if (content) result.push({ ...content, film });
+  }
+  return result;
+}
+
+/** En son işaretlenen 5 favori dizi (VIP vitrin için). */
+export async function getPublicFavoriteSeries(): Promise<
+  (ContentItem & { series: Series | Series[] | null })[]
+> {
+  const supabase = await createServerClient();
+  const { data: seriesRows, error: seriesErr } = await supabase
+    .from("series")
+    .select("*")
+    .eq("is_favorite", true)
+    .order("favorite_order", { ascending: false, nullsFirst: false })
+    .limit(5);
+  if (seriesErr || !seriesRows?.length) return [];
+  const contentIds = seriesRows.map((s) => s.content_id);
+  const { data: items, error: itemsErr } = await supabase
+    .from("content_items")
+    .select("*")
+    .in("id", contentIds)
+    .in("visibility", ["public", "unlisted"]);
+  if (itemsErr || !items?.length) return [];
+  const itemMap = new Map(items.map((i) => [i.id, i]));
+  const result: (ContentItem & { series: Series | Series[] | null })[] = [];
+  for (const seriesRow of seriesRows) {
+    const content = itemMap.get(seriesRow.content_id);
+    if (content) result.push({ ...content, series: seriesRow });
+  }
+  return result;
+}
+
+/** Public/unlisted books from standalone books table (reading log). */
+export async function getPublicBooks(): Promise<Book[]> {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase
+    .from("books")
+    .select("*")
     .in("visibility", ["public", "unlisted"])
     .order("created_at", { ascending: false });
 
   if (error) return [];
-  return (data ?? []) as (ContentItem & { book: Book | Book[] | null })[];
+  return (data ?? []) as Book[];
+}
+
+/** Single book by id (admin edit). */
+export async function getBookById(id: string): Promise<Book | null> {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase.from("books").select("*").eq("id", id).maybeSingle();
+  if (error || !data) return null;
+  return data as Book;
 }
 
 export interface ArtItem {
@@ -353,7 +459,7 @@ export async function getPlannerEntriesByDate(
 export type RecentItem =
   | { type: "film"; item: ContentItem & { film: Film | Film[] | null } }
   | { type: "series"; item: ContentItem & { series: Series | Series[] | null } }
-  | { type: "book"; item: ContentItem & { book: Book | Book[] | null } };
+  | { type: "book"; item: Book };
 
 export async function getAdminRecentItems(limit = 15): Promise<RecentItem[]> {
   const [films, series, books] = await Promise.all([
@@ -399,15 +505,14 @@ async function getAdminSeries() {
   return (data ?? []) as (ContentItem & { series: Series | Series[] | null })[];
 }
 
-async function getAdminBooks() {
+async function getAdminBooks(): Promise<Book[]> {
   const supabase = await createServerClient();
   const { data, error } = await supabase
-    .from("content_items")
-    .select("*, book:books(*)")
-    .eq("type", "book")
+    .from("books")
+    .select("*")
     .order("created_at", { ascending: false });
   if (error) return [];
-  return (data ?? []) as (ContentItem & { book: Book | Book[] | null })[];
+  return (data ?? []) as Book[];
 }
 
 export async function deleteContentItem(
@@ -415,11 +520,17 @@ export async function deleteContentItem(
   type: "film" | "series" | "book"
 ) {
   const supabase = await createServerClient();
-  const { error } = await supabase.from("content_items").delete().eq("id", id);
-  if (error) return { error: error.message };
+  if (type === "book") {
+    const { error } = await supabase.from("books").delete().eq("id", id);
+    if (error) return { error: error.message };
+  } else {
+    const { error } = await supabase.from("content_items").delete().eq("id", id);
+    if (error) return { error: error.message };
+  }
   revalidatePath("/");
   revalidatePath("/cinema");
   revalidatePath("/books");
+  revalidatePath("/okuma-gunlugum");
   revalidatePath("/admin");
   revalidatePath(`/admin/${type}s`);
   return { success: true };
@@ -428,8 +539,12 @@ export async function deleteContentItem(
 const DEFAULT_CINEMA_STATS: CinemaStats = {
   totalFilms: 0,
   totalSeries: 0,
+  totalFilmWatchTimeMinutes: 0,
+  totalSeriesWatchTimeMinutes: 0,
   totalWatchTimeMinutes: 0,
   totalReviews: 0,
+  filmWatchedThisMonth: 0,
+  seriesWatchedThisMonth: 0,
 };
 
 export async function getCinemaStats(): Promise<CinemaStats> {
@@ -452,37 +567,61 @@ export async function getCinemaStats(): Promise<CinemaStats> {
 
   const films = filmsRes.data ?? [];
   const series = seriesRes.data ?? [];
-  let totalWatchTimeMinutes = 0;
+  let totalFilmWatchTimeMinutes = 0;
+  let totalSeriesWatchTimeMinutes = 0;
   let totalReviews = 0;
+  let filmWatchedThisMonth = 0;
+  let seriesWatchedThisMonth = 0;
+
+  const now = new Date();
+  const startOfMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+  const endOfMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0, 23, 59, 59, 999));
+  const startMs = startOfMonth.getTime();
+  const endMs = endOfMonth.getTime();
 
   for (const f of films) {
     const { data: film } = await supabase
       .from("films")
-      .select("duration_min, review")
+      .select("duration_min, review, watched_at")
       .eq("content_id", f.id)
       .single();
-    if (film?.duration_min) totalWatchTimeMinutes += film.duration_min;
+    if (film?.duration_min) totalFilmWatchTimeMinutes += film.duration_min;
     if (film?.review) totalReviews++;
+    if (film?.watched_at) {
+      const t = new Date(film.watched_at).getTime();
+      if (t >= startMs && t <= endMs) filmWatchedThisMonth++;
+    }
   }
 
   for (const s of series) {
     const { data: ser } = await supabase
       .from("series")
-      .select("avg_episode_min, episodes_watched, review")
+      .select("total_duration_min, avg_episode_min, episodes_watched, review, watched_at")
       .eq("content_id", s.id)
       .single();
     if (ser) {
-      totalWatchTimeMinutes +=
-        (ser.avg_episode_min ?? 0) * (ser.episodes_watched ?? 0);
+      const mins = (ser as { total_duration_min?: number | null }).total_duration_min;
+      totalSeriesWatchTimeMinutes +=
+        mins != null && !Number.isNaN(mins)
+          ? mins
+          : (ser.avg_episode_min ?? 0) * (ser.episodes_watched ?? 0);
       if (ser.review) totalReviews++;
+      if (ser.watched_at) {
+        const t = new Date(ser.watched_at).getTime();
+        if (t >= startMs && t <= endMs) seriesWatchedThisMonth++;
+      }
     }
   }
 
   return {
     totalFilms: films.length,
     totalSeries: series.length,
-    totalWatchTimeMinutes,
+    totalFilmWatchTimeMinutes,
+    totalSeriesWatchTimeMinutes,
+    totalWatchTimeMinutes: totalFilmWatchTimeMinutes + totalSeriesWatchTimeMinutes,
     totalReviews,
+    filmWatchedThisMonth,
+    seriesWatchedThisMonth,
   };
   } catch {
     return DEFAULT_CINEMA_STATS;
@@ -526,7 +665,11 @@ export async function createFilm(
     duration_min: data.duration_min,
     year: data.year ?? null,
     poster_url: data.poster_url ?? null,
+    spine_url: data.spine_url ?? null,
     review: data.review || null,
+    director: data.director ?? null,
+    genre_tags: data.genre_tags ?? [],
+    rating_5: data.rating_5 ?? null,
   });
 
   if (filmError) return { error: filmError.message };
@@ -568,10 +711,16 @@ export async function createSeries(
   if (contentError) return { error: contentError.message };
   if (!content) return { error: "Failed to create content" };
 
+  const total_duration_min =
+    data.episodes_watched > 0 && data.avg_episode_min != null && data.avg_episode_min > 0
+      ? data.episodes_watched * data.avg_episode_min
+      : null;
+
   const { error: seriesError } = await supabase.from("series").insert({
     content_id: content.id,
     avg_episode_min: data.avg_episode_min ?? null,
     episodes_watched: data.episodes_watched,
+    total_duration_min,
     seasons_watched: data.seasons_watched,
     review: data.review || null,
   });
@@ -595,42 +744,34 @@ export async function createBook(
   const data = parsed.data;
 
   const supabase = await createServerClient();
-  const slug = data.slug?.trim()
-    ? slugify(data.slug)
-    : slugify(data.title) + "-" + Date.now();
-
-  const { data: content, error: contentError } = await supabase
-    .from("content_items")
+  const { data: book, error: bookError } = await supabase
+    .from("books")
     .insert({
-      type: "book",
       title: data.title,
-      slug,
-      description: data.description || null,
-      rating: data.rating ?? null,
+      author: data.author ?? "",
+      page_count: data.pages ?? 1,
+      status: "reading",
+      rating: null,
+      tags: [],
+      review: data.review || null,
+      cover_url: data.cover_url ?? null,
+      spine_url: data.spine_url ?? "",
+      start_date: null,
+      end_date: null,
+      progress_percent: null,
       visibility: data.visibility,
     })
     .select("id")
     .single();
 
-  if (contentError) return { error: contentError.message };
-  if (!content) return { error: "Failed to create content" };
-
-  const { error: bookError } = await supabase.from("books").insert({
-    content_id: content.id,
-    pages: data.pages ?? null,
-    author: data.author || null,
-    quote: data.quote || null,
-    review: data.review || null,
-    cover_url: data.cover_url ?? null,
-  });
-
   if (bookError) return { error: bookError.message };
 
   revalidatePath("/");
   revalidatePath("/books");
+  revalidatePath("/okuma-gunlugum");
   revalidatePath("/admin");
   revalidatePath("/admin/books");
-  return { success: true, id: content.id };
+  return { success: true, id: book.id };
 }
 
 // --- Planner (admin) ---
@@ -934,7 +1075,9 @@ export async function deleteManualTrack(id: string) {
   return { success: true };
 }
 
-// --- reading_status (Şu an okuyorum) ---
+// --- Reading log: current book + goal from books + settings ---
+
+/** Legacy shape for API / components that expect reading_status row */
 export interface ReadingStatus {
   id: string;
   book_title: string;
@@ -942,19 +1085,253 @@ export interface ReadingStatus {
   cover_url: string | null;
   note: string | null;
   status: "reading" | "last";
+  progress_percent: number | null;
   updated_at: string;
 }
 
-export async function getReadingStatus(): Promise<ReadingStatus | null> {
+/** "Şu an okuyorum": featured current book if any (status=reading + is_featured_current=true), else most recently updated reading */
+export async function getCurrentReading(): Promise<Book | null> {
   const supabase = await createServerClient();
-  const { data, error } = await supabase
-    .from("reading_status")
+  const { data: featured } = await supabase
+    .from("books")
     .select("*")
-    .order("updated_at", { ascending: false })
+    .eq("status", "reading")
+    .eq("is_featured_current", true)
+    .limit(1)
+    .maybeSingle();
+  if (featured) return featured as Book;
+  const { data, error } = await supabase
+    .from("books")
+    .select("*")
+    .eq("status", "reading")
+    .order("last_progress_update_at", { ascending: false })
     .limit(1)
     .maybeSingle();
   if (error || !data) return null;
-  return data as ReadingStatus;
+  return data as Book;
+}
+
+/** Number of books currently reading (status='reading') */
+export async function getReadingCount(): Promise<number> {
+  const supabase = await createServerClient();
+  const { count, error } = await supabase
+    .from("books")
+    .select("*", { count: "exact", head: true })
+    .eq("status", "reading");
+  if (error) return 0;
+  return count ?? 0;
+}
+
+/** Yıllık hedef: settings key reading_goal_{year}, value_json { year, goal }; read_count from books (finished, end_date in year) */
+export interface ReadingGoal {
+  year: number;
+  goal: number;
+  read_count: number;
+}
+
+export async function getReadingGoal(year?: number): Promise<ReadingGoal | null> {
+  const supabase = await createServerClient();
+  const y = year ?? new Date().getFullYear();
+  const key = `reading_goal_${y}`;
+  const { data: row, error } = await supabase
+    .from("settings")
+    .select("value_json")
+    .eq("key", key)
+    .maybeSingle();
+  if (error || !row) return null;
+  const value = row.value_json as { year?: number; goal?: number } | null;
+  const goal = value?.goal ?? 12;
+
+  const startOfYear = `${y}-01-01`;
+  const endOfYear = `${y}-12-31`;
+  const { count, error: countErr } = await supabase
+    .from("books")
+    .select("*", { count: "exact", head: true })
+    .eq("status", "finished")
+    .gte("end_date", startOfYear)
+    .lte("end_date", endOfYear);
+  const read_count = countErr ? 0 : count ?? 0;
+
+  return { year: y, goal, read_count };
+}
+
+/** Legacy: same shape as old reading_status for API compatibility (from books) */
+export async function getReadingStatus(): Promise<ReadingStatus | null> {
+  const book = await getCurrentReading();
+  if (!book) return null;
+  return {
+    id: book.id,
+    book_title: book.title,
+    author: book.author || null,
+    cover_url: book.cover_url,
+    note: null,
+    status: "reading",
+    progress_percent: book.progress_percent,
+    updated_at: book.last_progress_update_at,
+  };
+}
+
+/** Translations page intro text (settings key: translation_intro, value_json: { text: string }) */
+export async function getTranslationIntro(): Promise<string | null> {
+  const supabase = await createServerClient();
+  const { data: row, error } = await supabase
+    .from("settings")
+    .select("value_json")
+    .eq("key", "translation_intro")
+    .maybeSingle();
+  if (error || !row) return null;
+  const value = row.value_json as { text?: string } | null;
+  const text = value?.text?.trim();
+  return text || null;
+}
+
+/** Plaktaki Kitap sayfası: kanal tanıtım (settings key: youtube_intro) */
+export interface YoutubeIntroRow {
+  text: string | null;
+  channel_url: string | null;
+  channel_id: string | null;
+  spotify_url: string | null;
+}
+
+export async function getYoutubeIntro(): Promise<YoutubeIntroRow> {
+  const supabase = await createServerClient();
+  const { data: row, error } = await supabase
+    .from("settings")
+    .select("value_json")
+    .eq("key", "youtube_intro")
+    .maybeSingle();
+  if (error || !row) {
+    return { text: null, channel_url: null, channel_id: null, spotify_url: null };
+  }
+  const value = row.value_json as {
+    text?: string;
+    channel_url?: string;
+    channel_id?: string;
+    spotify_url?: string;
+  } | null;
+  return {
+    text: value?.text?.trim() || null,
+    channel_url: value?.channel_url?.trim() || null,
+    channel_id: value?.channel_id?.trim() || null,
+    spotify_url: value?.spotify_url?.trim() || null,
+  };
+}
+
+export interface AcademiaProject {
+  title: string;
+  url: string;
+}
+
+export interface TranslationAcademia {
+  profile_url: string;
+  projects: AcademiaProject[];
+}
+
+/** Academia.edu bölümü (settings key: translation_academia) */
+export async function getTranslationAcademia(): Promise<TranslationAcademia | null> {
+  const supabase = await createServerClient();
+  const { data: row, error } = await supabase
+    .from("settings")
+    .select("value_json")
+    .eq("key", "translation_academia")
+    .maybeSingle();
+  if (error || !row) return null;
+  const v = row.value_json as { profile_url?: string; projects?: AcademiaProject[] } | null;
+  if (!v) return null;
+  const profile_url = typeof v.profile_url === "string" ? v.profile_url.trim() : "";
+  const projects = Array.isArray(v.projects)
+    ? v.projects.filter((p) => p && typeof p.title === "string" && typeof p.url === "string")
+    : [];
+  return profile_url || projects.length > 0 ? { profile_url, projects } : null;
+}
+
+export interface VolunteerProject {
+  title: string;
+  description: string;
+  url: string;
+}
+
+export interface TranslationVolunteer {
+  projects: VolunteerProject[];
+}
+
+/** Gönüllü projeler (settings key: translation_volunteer) */
+export async function getTranslationVolunteer(): Promise<TranslationVolunteer | null> {
+  const supabase = await createServerClient();
+  const { data: row, error } = await supabase
+    .from("settings")
+    .select("value_json")
+    .eq("key", "translation_volunteer")
+    .maybeSingle();
+  if (error || !row) return null;
+  const v = row.value_json as { projects?: VolunteerProject[] } | null;
+  if (!v || !Array.isArray(v.projects)) return null;
+  const projects = v.projects.filter(
+    (p) => p && typeof p.title === "string" && typeof p.url === "string"
+  );
+  return projects.length > 0 ? { projects } : null;
+}
+
+// --- published_books (Çeviriler sayfası) ---
+export async function getPublishedBooks(): Promise<
+  import("@/types/database").PublishedBook[]
+> {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase
+    .from("published_books")
+    .select("*")
+    .order("order_index", { ascending: true })
+    .order("year", { ascending: false, nullsFirst: false })
+    .order("created_at", { ascending: false });
+  if (error) return [];
+  return (data ?? []) as import("@/types/database").PublishedBook[];
+}
+
+// --- Portfolio translations (translations_settings, translation_books, translation_independent, translation_volunteer_projects) ---
+
+export async function getTranslationsSettings(): Promise<import("@/types/database").TranslationsSettingsRow | null> {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase
+    .from("translations_settings")
+    .select("*")
+    .limit(1)
+    .maybeSingle();
+  if (error) return null;
+  return data as import("@/types/database").TranslationsSettingsRow | null;
+}
+
+export async function getTranslationBooksPublic(): Promise<import("@/types/database").TranslationBookRow[]> {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase
+    .from("translation_books")
+    .select("*")
+    .order("is_released", { ascending: false })
+    .order("order_index", { ascending: true })
+    .order("created_at", { ascending: false });
+  if (error) return [];
+  return (data ?? []) as import("@/types/database").TranslationBookRow[];
+}
+
+export async function getTranslationIndependentPublic(): Promise<import("@/types/database").TranslationIndependentRow[]> {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase
+    .from("translation_independent")
+    .select("*")
+    .order("order_index", { ascending: true })
+    .order("created_at", { ascending: false });
+  if (error) return [];
+  return (data ?? []) as import("@/types/database").TranslationIndependentRow[];
+}
+
+export async function getTranslationVolunteerPublic(): Promise<import("@/types/database").TranslationVolunteerProjectRow[]> {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase
+    .from("translation_volunteer_projects")
+    .select("*")
+    .order("order_index", { ascending: true })
+    .order("created_at", { ascending: false });
+  if (error) return [];
+  return (data ?? []) as import("@/types/database").TranslationVolunteerProjectRow[];
 }
 
 // --- site_links (Footer) ---

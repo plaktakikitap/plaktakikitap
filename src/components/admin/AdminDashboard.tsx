@@ -21,8 +21,7 @@ function getDetail(entry: RecentItem): string {
     return s ? `${s.episodes_watched} ep` : "";
   }
   if (entry.type === "book") {
-    const b = Array.isArray(entry.item.book) ? entry.item.book[0] : entry.item.book;
-    return b?.author || "";
+    return entry.item.author || "";
   }
   return "";
 }

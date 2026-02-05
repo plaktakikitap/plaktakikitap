@@ -200,6 +200,7 @@ export function CinemaPage({ films, series, stats }: CinemaPageProps) {
                 const s = getSeries(item);
                 if (!s) return null;
                 const totalMins =
+                  s.total_duration_min ??
                   (s.avg_episode_min ?? 0) * (s.episodes_watched ?? 0);
                 return (
                   <motion.article

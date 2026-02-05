@@ -11,6 +11,7 @@ interface AdminReadingFormProps {
     cover_url: string | null;
     note: string | null;
     status: string;
+    progress_percent: number | null;
   } | null;
 }
 
@@ -75,6 +76,20 @@ export function AdminReadingForm({ initial }: AdminReadingFormProps) {
             defaultValue={initial?.cover_url ?? ""}
             className="w-full rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
             placeholder="https://..."
+          />
+        </div>
+        <div>
+          <label className="mb-1 block text-sm text-[var(--muted)]">
+            İlerleme (%) — sadece &quot;Şu an okuyorum&quot; için
+          </label>
+          <input
+            name="progress_percent"
+            type="number"
+            min={0}
+            max={100}
+            defaultValue={initial?.progress_percent ?? ""}
+            className="w-full rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
+            placeholder="0–100"
           />
         </div>
         <div>

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { getSeries } from "@/lib/queries";
 import { Plus, Pencil } from "lucide-react";
 import { DeleteButton } from "@/components/admin/DeleteButton";
+import { FavoriteToggle } from "@/components/admin/FavoriteToggle";
 
 export default async function AdminSeriesPage() {
   const series = await getSeries(true);
@@ -38,10 +39,18 @@ export default async function AdminSeriesPage() {
               <div>
                 <p className="font-medium">{item.title}</p>
                 <p className="text-sm text-[var(--muted)]">
-                  {s.episodes_watched} bölüm • {item.visibility}
+                  {s.episodes_watched} bölüm
+                  {s.seasons_watched > 0 && ` • ${s.seasons_watched} sezon izlendi`}
+                  {s.total_seasons != null && ` • ${s.total_seasons} sezon (toplam)`}
+                  {` • ${item.visibility}`}
                 </p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
+                <FavoriteToggle
+                  contentId={item.id}
+                  type="series"
+                  isFavorite={!!s.is_favorite}
+                />
                 <Link
                   href={`/admin/series/${item.id}/edit`}
                   className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)] hover:text-[var(--foreground)]"
