@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Source_Serif_4, DM_Sans, Cinzel, Inter, Caveat, Permanent_Marker } from "next/font/google";
+import { Cormorant_Garamond, Source_Serif_4, DM_Sans, Cinzel, Inter, Caveat, Permanent_Marker, Patrick_Hand, Nothing_You_Could_Do } from "next/font/google";
 import { Nav } from "@/components/layout/Nav";
 import { MainWrapper } from "@/components/layout/MainWrapper";
 import { MotionLayout } from "@/components/layout/MotionLayout";
@@ -52,6 +52,20 @@ const permanentMarker = Permanent_Marker({
   display: "swap",
 });
 
+const patrickHand = Patrick_Hand({
+  variable: "--font-handwriting-alt",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
+const nothingYouCouldDo = Nothing_You_Could_Do({
+  variable: "--font-handwriting-doodle",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "plaktakikitap — Film, Kitap, Proje Koleksiyonu",
   description: "Kişisel film, dizi, kitap ve proje koleksiyonum",
@@ -72,7 +86,7 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body
-        className={`${cormorant.variable} ${sourceSerif.variable} ${dmSans.variable} ${cinzel.variable} ${inter.variable} ${caveat.variable} ${permanentMarker.variable} min-h-screen antialiased`}
+        className={`${cormorant.variable} ${sourceSerif.variable} ${dmSans.variable} ${cinzel.variable} ${inter.variable} ${caveat.variable} ${permanentMarker.variable} ${patrickHand.variable} ${nothingYouCouldDo.variable} min-h-screen antialiased`}
       >
         <SiteBackground />
         <Nav />

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import type { PlannerDaySummary, PlannerEntryWithMedia } from "@/lib/planner";
+import type { PlannerDaySummary, PlannerEntryWithMedia, PlannerDayEntry } from "@/lib/planner";
 import { AdminPlannerDecor } from "./AdminPlannerDecor";
 import { AdminPlannerMessySettings } from "./AdminPlannerMessySettings";
+import { AdminPlannerCanvas } from "./AdminPlannerCanvas";
 import { ChevronLeft, ChevronRight, X, Upload, Paperclip, Plus, Eraser } from "lucide-react";
 
 const MONTH_NAMES_TR = [
@@ -111,6 +112,7 @@ export function AdminPlanner() {
       </section>
 
       <AdminPlannerMessySettings year={year} month={month + 1} />
+      <AdminPlannerCanvas year={year} monthIndex={month} />
       <AdminPlannerDecor year={year} monthIndex={month} />
 
       {selectedDate && (
@@ -167,9 +169,10 @@ function PlannerDateModal({
   onError: (msg: string | null) => void;
 }) {
   const [entries, setEntries] = useState<PlannerEntryWithMedia[]>([]);
+  const [dayEntry, setDayEntry] = useState<PlannerDayEntry | null>(null);
   const [hasSmudge, setHasSmudge] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [mode, setMode] = useState<"list" | "create" | "edit">("list");
+  const [mode, setMode] = useState<"list" | "create" | "edit" | "day-entry">("list");
   const [editingEntry, setEditingEntry] = useState<PlannerEntryWithMedia | null>(null);
   const [smudgeLoading, setSmudgeLoading] = useState(false);
 
@@ -180,15 +183,18 @@ function PlannerDateModal({
     Promise.all([
       fetch(`/api/planner/entries/${date}`).then((r) => r.json()),
       fetch(`/api/planner/smudge/${date}`).then((r) => r.json()),
+      fetch(`/api/planner/day-entries/${date}`).then((r) => r.json()),
     ])
-      .then(([entriesData, smudgeData]) => {
+      .then(([entriesData, smudgeData, dayEntryData]) => {
         setEntries(Array.isArray(entriesData) ? entriesData : []);
         setHasSmudge(!!smudgeData?.preset);
+        setDayEntry(dayEntryData?.id ? dayEntryData : null);
         setMode(Array.isArray(entriesData) && entriesData.length > 0 ? "list" : "create");
       })
       .catch(() => {
         setEntries([]);
         setHasSmudge(false);
+        setDayEntry(null);
       })
       .finally(() => setLoading(false));
   }, [date]);
@@ -256,6 +262,25 @@ function PlannerDateModal({
     );
   }
 
+  if (mode === "day-entry") {
+    return (
+      <DayEntryFormModal
+        date={date}
+        display={display}
+        initial={dayEntry}
+        onClose={() => setMode("list")}
+        onSaved={() => {
+          setMode("list");
+          fetch(`/api/planner/day-entries/${date}`)
+            .then((r) => r.json())
+            .then((data) => setDayEntry(data?.id ? data : null));
+          onSaved();
+        }}
+        onError={onError}
+      />
+    );
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
       <div
@@ -300,6 +325,27 @@ function PlannerDateModal({
           </div>
         </div>
         <div className="p-4 space-y-3">
+          <div className="rounded-lg border border-[var(--card-border)] bg-[var(--background)]/50 p-3">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-[var(--muted)]">Gün notu</span>
+              <button
+                type="button"
+                onClick={() => setMode("day-entry")}
+                className="text-sm text-[var(--accent)] hover:underline"
+              >
+                {dayEntry ? "Düzenle" : "Ekle"}
+              </button>
+            </div>
+            {dayEntry && (
+              <div className="mt-2 text-sm">
+                {dayEntry.title && <p className="font-medium line-clamp-1">{dayEntry.title}</p>}
+                {dayEntry.content && <p className="mt-0.5 line-clamp-2 text-[var(--muted)]">{dayEntry.content}</p>}
+                {(dayEntry.tags?.length ?? 0) > 0 && (
+                  <p className="mt-1 text-xs text-[var(--muted)]">{dayEntry.tags.join(", ")}</p>
+                )}
+              </div>
+            )}
+          </div>
           {entries.map((entry) => (
             <div
               key={entry.id}
@@ -329,6 +375,125 @@ function PlannerDateModal({
             </div>
           ))}
         </div>
+      </div>
+    </div>
+  );
+}
+
+function DayEntryFormModal({
+  date,
+  display,
+  initial,
+  onClose,
+  onSaved,
+  onError,
+}: {
+  date: string;
+  display: string;
+  initial: PlannerDayEntry | null;
+  onClose: () => void;
+  onSaved: () => void;
+  onError: (msg: string | null) => void;
+}) {
+  const [title, setTitle] = useState(initial?.title ?? "");
+  const [content, setContent] = useState(initial?.content ?? "");
+  const [photos, setPhotos] = useState<string[]>(initial?.photos ?? []);
+  const [tags, setTags] = useState((initial?.tags ?? []).join(", "));
+  const [submitting, setSubmitting] = useState(false);
+  const [photoUploading, setPhotoUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  async function handlePhotoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setPhotoUploading(true);
+    try {
+      const form = new FormData();
+      form.set("file", file);
+      const res = await fetch("/api/planner/upload", { method: "POST", body: form });
+      const data = await res.json();
+      const url = data.publicUrl || (data.path && typeof window !== "undefined" && process.env.NEXT_PUBLIC_SUPABASE_URL
+        ? `${process.env.NEXT_PUBLIC_SUPABASE_URL.replace(/\/$/, "")}/storage/v1/object/public/planner-media/${data.path}`
+        : data.path);
+      if (url) setPhotos((p) => [...p, url]);
+    } finally {
+      setPhotoUploading(false);
+    }
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    onError(null);
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/planner/day-entries", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          date,
+          title: title.trim() || null,
+          content: content.trim() || null,
+          photos,
+          tags: tags.trim() ? tags.split(/[\s,]+/).filter(Boolean) : [],
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        onError(data.error || "Kaydedilemedi");
+        return;
+      }
+      onSaved();
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+      <div
+        className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-xl border border-[var(--card-border)] bg-[var(--card)] shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="sticky top-0 flex items-center justify-between border-b border-[var(--card-border)] bg-[var(--card)] px-4 py-3">
+          <h3 className="font-medium">Gün notu — {display}</h3>
+          <button type="button" onClick={onClose} className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)]">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        <form onSubmit={handleSubmit} className="p-4 space-y-3">
+          <label className={labelClass}>Başlık</label>
+          <input name="title" className={inputClass} value={title} onChange={(e) => setTitle(e.target.value)} />
+          <label className={labelClass}>İçerik</label>
+          <textarea name="content" className={inputClass + " min-h-[80px]"} value={content} onChange={(e) => setContent(e.target.value)} />
+          <div>
+            <label className={labelClass}>Fotoğraflar</label>
+            <input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handlePhotoUpload} />
+            <button type="button" disabled={photoUploading} className="rounded border border-[var(--card-border)] px-2 py-1 text-sm hover:bg-[var(--background)]" onClick={() => fileInputRef.current?.click()}>
+              {photoUploading ? "Yükleniyor…" : "Yükle"}
+            </button>
+            {photos.length > 0 && (
+              <ul className="mt-2 space-y-1">
+                {photos.map((url, i) => (
+                  <li key={i} className="flex items-center gap-2 text-xs">
+                    <a href={url} target="_blank" rel="noopener noreferrer" className="truncate text-[var(--accent)]">{url}</a>
+                    <button type="button" className="text-red-500 hover:underline" onClick={() => setPhotos((p) => p.filter((_, j) => j !== i))}>Kaldır</button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <label className={labelClass}>Etiketler (virgülle ayırın)</label>
+          <input name="tags" className={inputClass} value={tags} onChange={(e) => setTags(e.target.value)} placeholder="etiket1, etiket2" />
+          <div className="flex gap-2 pt-2">
+            <button type="submit" disabled={submitting} className="rounded-lg bg-[var(--accent)] px-4 py-2 text-sm text-white disabled:opacity-50">
+              {submitting ? "Kaydediliyor…" : "Kaydet"}
+            </button>
+            <button type="button" onClick={onClose} className="rounded-lg border border-[var(--card-border)] px-4 py-2 text-sm hover:bg-[var(--background)]">
+              İptal
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

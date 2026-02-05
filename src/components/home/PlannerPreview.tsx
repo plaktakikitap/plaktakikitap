@@ -45,7 +45,7 @@ export function PlannerPreview({ entries }: PlannerPreviewProps) {
             Henüz kayıt yok.
           </p>
           <Link
-            href="/planner"
+            href="/home#ajanda"
             className="mt-4 inline-block text-sm text-[var(--muted)] underline-offset-2 hover:underline"
           >
             Ajandaya git →
@@ -70,7 +70,7 @@ export function PlannerPreview({ entries }: PlannerPreviewProps) {
           {entries.map((entry) => (
             <li key={entry.id}>
               <Link
-                href={`/planner?date=${entry.date}`}
+                href="/home#ajanda"
                 className="block rounded-lg border border-transparent py-2 transition-colors hover:border-[var(--card-border)] hover:bg-[var(--card)]/50"
               >
                 <span className="text-xs uppercase tracking-wider text-[var(--muted)]">
@@ -84,7 +84,7 @@ export function PlannerPreview({ entries }: PlannerPreviewProps) {
           ))}
         </ul>
         <Link
-          href="/planner"
+          href="/home#ajanda"
           className="mt-6 inline-block text-sm text-[var(--muted)] underline-offset-2 hover:underline"
         >
           Ajandaya git →

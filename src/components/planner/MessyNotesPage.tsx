@@ -1,10 +1,14 @@
 "use client";
 
 import { useMemo } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import type { PlannerDaySummary, AttachmentStyle } from "@/lib/planner";
+import type { PlannerDaySummary, AttachmentStyle, PlannerCanvasItem } from "@/lib/planner";
 import { AttachmentSVG } from "./AttachmentSVG";
 import { GlossyWashiTape } from "./GlossyWashiTape";
+
+const BLUR_DATA_URL =
+  "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUG/8QAIhAAAgEDBAMBAAAAAAAAAAAAAQIDAAQRBRIhMQYTQVFh/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBEQACEQADAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAT8Q/9k=";
 
 interface CustomField {
   label: string;
@@ -21,6 +25,8 @@ interface MessyNotesPageProps {
   showWashiTape?: boolean;
   showPolaroid?: boolean;
   customFields?: CustomField[];
+  /** Kaydedilmiş canvas konumları (admin’den sürükle-bırak); varsa kullanılır */
+  canvasItems?: PlannerCanvasItem[];
 }
 
 /** Deterministik rastgele — aynı seed için aynı değer */
@@ -42,29 +48,65 @@ export function MessyNotesPage({
   showWashiTape = true,
   showPolaroid = true,
   customFields = [],
+  canvasItems = [],
 }: MessyNotesPageProps) {
+  const canvasMap = useMemo(() => {
+    const m = new Map<string, { left: number; top: number; rotate: number; skew: number; zIndex: number }>();
+    for (const it of canvasItems) {
+      if (it.page !== "right") continue;
+      m.set(`${it.item_kind}:${it.item_key}`, {
+        left: it.x * 100,
+        top: it.y * 100,
+        rotate: it.rotation,
+        skew: 0,
+        zIndex: it.z_index,
+      });
+    }
+    return m;
+  }, [canvasItems]);
+
   const { polaroidTilts, polaroidSkews, washiRotates, noteTilts, noteSkews, attachedPositions, customFieldPositions } = useMemo(() => {
-    const polaroidTilts = images.slice(0, 5).map((_, i) => seeded(i + 1, -3, 3));
-    const polaroidSkews = images.slice(0, 5).map((_, i) => seeded(i + 2, -1, 1));
+    const polaroidTilts = images.slice(0, 5).map((_, i) => seeded(i + 1, -5, 5));
+    const polaroidSkews = images.slice(0, 5).map((_, i) => seeded(i + 2, -2, 2));
     const washiRotates = [12, -8, 18, -5, 22].map((v, i) => seeded(i + 10, -25, 25));
-    const noteTilts = summaries.slice(0, 5).map((_, i) => seeded(i + 20, -3, 3));
-    const noteSkews = summaries.slice(0, 5).map((_, i) => seeded(i + 25, -1, 1));
-    const attachedPositions = (attachedImages.length ? attachedImages : paperclipImages.map((p) => ({ url: p.url, style: "standard_clip" as AttachmentStyle })))
-      .slice(0, 4)
-      .map((_, i) => ({
+    const noteTilts = summaries.slice(0, 5).map((_, i) => seeded(i + 20, -5, 5));
+    const noteSkews = summaries.slice(0, 5).map((_, i) => seeded(i + 25, -2, 2));
+    const attachedListLen = (attachedImages.length ? attachedImages : paperclipImages.map((p) => ({ url: p.url, style: "standard_clip" as AttachmentStyle }))).slice(0, 4).length;
+    const attachedPositions = Array.from({ length: attachedListLen }, (_, i) => {
+      const saved = canvasMap.get(`attached_photo:${i}`);
+      if (saved) return { left: saved.left, top: saved.top, rotate: saved.rotate, skew: 0, zIndex: saved.zIndex };
+      return {
         left: 8 + (i % 2) * 42,
         top: 2 + Math.floor(i / 2) * 16,
-        rotate: seeded(i + 30, -3, 3),
-        skew: seeded(i + 31, -1.5, 1.5),
-      }));
-    const customFieldPositions = customFields.map((_, i) => ({
-      left: 5 + (i % 3) * 35,
-      top: 48 + Math.floor(i / 3) * 22,
-      rotate: seeded(i + 40, -5, 5),
-      skew: seeded(i + 41, -1.5, 1.5),
-    }));
-    return { polaroidTilts, polaroidSkews, washiRotates, noteTilts, noteSkews, attachedPositions, customFieldPositions };
-  }, [images, summaries, attachedImages, paperclipImages, customFields]);
+        rotate: seeded(i + 30, -5, 5),
+        skew: seeded(i + 31, -2, 2),
+        zIndex: 50 + i,
+      };
+    });
+    const customFieldPositions = customFields.map((_, i) => {
+      const saved = canvasMap.get(`custom_field:${i}`);
+      if (saved) return { left: saved.left, top: saved.top, rotate: saved.rotate, skew: saved.skew ?? 0, zIndex: saved.zIndex };
+      return {
+        left: 5 + (i % 3) * 35,
+        top: 48 + Math.floor(i / 3) * 22,
+        rotate: seeded(i + 40, -5, 5),
+        skew: seeded(i + 41, -1.5, 1.5),
+        zIndex: 6,
+      };
+    });
+    const polaroidPositions = images.slice(0, 4).map((_, i) => {
+      const saved = canvasMap.get(`polaroid:${i}`);
+      if (saved) return { left: saved.left, top: saved.top, rotate: saved.rotate, zIndex: saved.zIndex, fromCanvas: true };
+      return {
+        right: 6 + i * 12,
+        bottom: 10 + (i % 2) * 8,
+        rotate: polaroidTilts[i] ?? 0,
+        zIndex: 40 + i,
+        fromCanvas: false,
+      };
+    });
+    return { polaroidTilts, polaroidSkews, washiRotates, noteTilts, noteSkews, attachedPositions, customFieldPositions, polaroidPositions };
+  }, [images, summaries, attachedImages, paperclipImages, customFields, canvasMap]);
 
   const attachedList = attachedImages.length
     ? attachedImages
@@ -74,7 +116,7 @@ export function MessyNotesPage({
     <div className="relative h-full w-full overflow-hidden" style={{ transformStyle: "preserve-3d" }}>
       {/* Katman 1: Ataşlı görseller — sayfa üst kısmında, flip ile birlikte döner */}
       {attachedList.slice(0, 4).map((img, i) => {
-        const pos = attachedPositions[i] ?? { left: 8, top: 2, rotate: 0, skew: 0 };
+        const pos = attachedPositions[i] ?? { left: 8, top: 2, rotate: 0, skew: 0, zIndex: 50 + i };
         return (
           <motion.div
             key={i}
@@ -85,7 +127,7 @@ export function MessyNotesPage({
               top: `${pos.top}%`,
               transform: `rotate(${pos.rotate}deg) skew(${pos.skew ?? 0}deg, ${(pos.skew ?? 0) * 0.5}deg)`,
               transformStyle: "preserve-3d",
-              zIndex: 50 + i,
+              zIndex: pos.zIndex ?? 50 + i,
             }}
           >
             {/* Kağıtta ataş ezilmesi — hafif gölge */}
@@ -107,7 +149,16 @@ export function MessyNotesPage({
                 boxShadow: "0 2px 8px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.6)",
               }}
             >
-              <img src={img.url} alt="" className="h-full w-full object-cover" />
+              <Image
+                src={img.url}
+                alt=""
+                width={72}
+                height={56}
+                className="h-full w-full object-cover"
+                placeholder="blur"
+                blurDataURL={BLUR_DATA_URL}
+                sizes="72px"
+              />
             </div>
             <div
               className="absolute -right-1.5 -top-1.5 z-[50]"
@@ -172,7 +223,7 @@ export function MessyNotesPage({
 
       {/* Katman 2b: Özel alanlar — dağınık düzen (Hayatımın Film Müziği vb.) */}
       {customFields.filter((f) => f.label || f.content).map((f, i) => {
-        const pos = customFieldPositions[i] ?? { left: 5, top: 50, rotate: 0, skew: 0 };
+        const pos = customFieldPositions[i] ?? { left: 5, top: 50, rotate: 0, skew: 0, zIndex: 6 };
         return (
           <motion.div
             key={i}
@@ -184,7 +235,7 @@ export function MessyNotesPage({
               width: "min(38%, 160px)",
               transform: `rotate(${pos.rotate}deg) skew(${pos.skew ?? 0}deg, ${(pos.skew ?? 0) * 0.3}deg)`,
               transformOrigin: "top left",
-              zIndex: 6,
+              zIndex: pos.zIndex ?? 6,
               fontFamily: "var(--font-handwriting), cursive",
             }}
           >
@@ -197,26 +248,25 @@ export function MessyNotesPage({
               </h4>
             )}
             {f.content && (
-              <p className="mt-0.5 whitespace-pre-wrap text-xs text-black/75 line-clamp-3" style={{ filter: "blur(0.2px)", opacity: 0.9 }}>{f.content}</p>
+              <p className="mt-0.5 whitespace-pre-wrap text-xs text-black/75 line-clamp-3" style={{ fontFamily: "var(--font-handwriting), cursive", filter: "blur(0.2px)", opacity: 0.9 }}>{f.content}</p>
             )}
           </motion.div>
         );
       })}
 
-      {/* Katman 3: Polaroid — absolute, beyaz çerçeve, rastgele -3°..3° eğim */}
+      {/* Katman 3: Polaroid — absolute, beyaz çerçeve; konum canvas’tan veya varsayılan */}
       {showPolaroid &&
-        images.slice(0, 4).map((img, i) => (
+        images.slice(0, 4).map((img, i) => {
+          const pos = polaroidPositions[i];
+          const style = pos?.fromCanvas
+            ? { left: `${pos.left}%`, top: `${pos.top}%`, transform: `rotate(${pos.rotate}deg)`, transformStyle: "preserve-3d" as const, zIndex: pos.zIndex }
+            : { right: `${pos?.right ?? 6 + i * 12}%`, bottom: `${pos?.bottom ?? 10 + (i % 2) * 8}%`, transform: `rotate(${pos?.rotate ?? 0}deg)`, transformStyle: "preserve-3d" as const, zIndex: pos?.zIndex ?? 40 + i };
+          return (
           <motion.div
             key={i}
             layout
             className="absolute"
-            style={{
-              right: `${6 + i * 12}%`,
-              bottom: `${10 + (i % 2) * 8}%`,
-              transform: `rotate(${polaroidTilts[i] ?? 0}deg)`,
-              transformStyle: "preserve-3d",
-              zIndex: 40 + i,
-            }}
+            style={style}
           >
             <PolaroidFrame
               src={img.url}
@@ -225,7 +275,8 @@ export function MessyNotesPage({
               washiVariant={WASHI_VARIANTS[i % WASHI_VARIANTS.length]}
             />
           </motion.div>
-        ))}
+          );
+        })}
     </div>
   );
 }
@@ -259,7 +310,16 @@ function PolaroidFrame({
         />
       )}
       <div className="relative h-16 w-full overflow-hidden rounded-sm">
-        <img src={src} alt="" className="h-full w-full object-cover" />
+        <Image
+          src={src}
+          alt=""
+          width={74}
+          height={64}
+          className="h-full w-full object-cover"
+          placeholder="blur"
+          blurDataURL={BLUR_DATA_URL}
+          sizes="74px"
+        />
       </div>
     </div>
   );

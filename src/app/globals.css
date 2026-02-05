@@ -48,9 +48,13 @@
   --font-display: var(--font-display), "Cormorant Garamond", Georgia, serif;
   --font-handwriting: var(--font-handwriting), "Caveat", cursive;
   --font-handwriting-title: var(--font-handwriting-title), "Permanent Marker", cursive;
+  --font-handwriting-alt: var(--font-handwriting-alt), "Patrick Hand", cursive;
+  --font-handwriting-doodle: var(--font-handwriting-doodle), "Nothing You Could Do", cursive;
   /* El yazısı mürekkep efekti — kağıda hafifçe yayılmış */
   --ink-effect: blur(0.2px);
   --ink-opacity: 0.9;
+  /* Mürekkep dağılması (ink-bleed) — metinlerde çok hafif */
+  --ink-bleed: 0 0 0.3px rgba(0, 0, 0, 0.35);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -198,10 +202,19 @@ body::before {
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-/* Ajanda flipbook — tek spread, overflow hidden, paper sayfalar */
+/* Ajanda flipbook — tek spread, overflow hidden; sabit başlık yok, sadece sayfa içi başlık */
 .ajanda-flipbook {
   overflow: hidden !important;
   background: transparent !important;
+}
+/* Sayfa öğesi: 3D bağlamı — içerik (fotoğraf, ataş, not) sayfa ile birlikte döner */
+.ajanda-flipbook .stf__item {
+  transform-style: preserve-3d !important;
+  backface-visibility: hidden;
+}
+/* İç sarmalayıcı da 3D bağlamında (bükülme perspective + rotateX JS tarafında) */
+.ajanda-flipbook .stf__item > * {
+  transform-style: preserve-3d !important;
 }
 /* StPageFlip — sayfa çevrilirken gölgeler açıya göre koyulaşıp açılsın (kısa transition) */
 .ajanda-flipbook .stf__hardShadow,
@@ -212,6 +225,18 @@ body::before {
 [data-flipping="true"] .ajanda-flipbook .stf__hardShadow,
 [data-flipping="true"] .ajanda-flipbook .stf__hardInnerShadow {
   transition-duration: 0.04s !important;
+}
+
+/* Bullet journal — mürekkep efekti: el yazısı + blur(0.2px) kağıda dağılmış hissi (başlık/notlarda kullan) */
+.planner-ink {
+  font-family: var(--font-handwriting), cursive;
+  filter: blur(0.2px);
+  -webkit-filter: blur(0.2px);
+}
+
+/* Messy BuJo — metinlerde çok hafif ink-bleed hissi */
+.messy-ink-bleed {
+  text-shadow: var(--ink-bleed);
 }
 
 /* Messy bullet journal — bugün hücresi */

@@ -59,10 +59,11 @@ export function playSound(
   return attempt(0);
 }
 
-/** Ses yolları — .webm (daha küçük) önce, .mp3 yedek */
+/** Ses yolları — sayfa çevirme tek asset: public/sfx/page-turn.mp3 */
 export const AUDIO = {
   recordChoice: ["/audio/record-choice.webm", "/audio/record-choice.mp3"],
   bookChoice: ["/audio/book-choice.webm", "/audio/book-choice.mp3"],
-  paperFlip: ["/audio/paper-flip.webm", "/audio/paper-flip.mp3"],
+  /** Sayfa çevirme — tek kısa asset (public/sfx/page-turn.mp3) */
+  paperFlip: ["/sfx/page-turn.mp3", "/audio/paper-flip.mp3"],
   metallicClick: ["/audio/metallic-click.webm", "/audio/metallic-click.mp3"],
 } as const;

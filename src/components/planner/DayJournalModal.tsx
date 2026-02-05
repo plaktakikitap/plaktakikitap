@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import type { PlannerEntryWithMedia, DaySmudge } from "@/lib/planner";
 import { InkBleedText } from "./InkBleedText";
@@ -8,10 +9,6 @@ import { SmudgeOverlay, type SmudgePreset } from "./SmudgeOverlay";
 import { getVideoEmbedUrl } from "@/lib/utils/embed";
 
 export type { DaySmudge };
-
-function formatDateTR(day: number, monthName: string, year: number) {
-  return `${day} ${monthName} ${year}`;
-}
 
 function formatCreatedAt(iso?: string) {
   if (!iso) return null;
@@ -80,24 +77,22 @@ export function DayJournalModal({
     return () => el.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const headerLabel = formatDateTR(day, monthName, year);
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.15 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md"
       style={{
-        background: "radial-gradient(ellipse 80% 60% at 60% 50%, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.55) 100%)",
+        background: "radial-gradient(ellipse 80% 60% at 60% 50%, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.45) 100%)",
       }}
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-labelledby="day-modal-title"
+      aria-label="Gün kayıtları"
     >
-      {/* Insert paper — defterin arasından çıkıyormuş gibi animasyon */}
+      {/* Mini Journal Modal — glass + paper: cam blur arka plan, kağıt panel */}
       <motion.div
         ref={containerRef}
         initial={{
@@ -126,15 +121,15 @@ export function DayJournalModal({
           scale: 0.98,
           transition: { duration: 0.18 },
         }}
-        className="relative max-h-[88vh] w-full max-w-xl overflow-hidden rounded-sm border border-black/15 bg-[#F3EAD7]"
+        className="relative max-h-[88vh] w-full max-w-xl overflow-hidden rounded-xl border border-black/12 border-white/20 bg-[#F3EAD7]/95 shadow-2xl ring-1 ring-white/10"
         style={{
           transformStyle: "preserve-3d",
           perspective: 1200,
           boxShadow:
-            "24px 8px 40px -8px rgba(0,0,0,0.4), 8px 4px 20px -4px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.5)",
+            "0 25px 50px -12px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.08), inset 0 1px 0 rgba(255,255,255,0.6)",
           backgroundImage: [
-            "repeating-linear-gradient(transparent, transparent 30px, rgba(0,0,0,0.035) 30px, rgba(0,0,0,0.035) 31px)",
-            "linear-gradient(rgba(0,0,0,0.015), transparent 20%)",
+            "repeating-linear-gradient(transparent, transparent 30px, rgba(0,0,0,0.03) 30px, rgba(0,0,0,0.03) 31px)",
+            "linear-gradient(rgba(0,0,0,0.02), transparent 20%)",
           ].join(", "),
         }}
         onClick={(e) => e.stopPropagation()}
@@ -162,24 +157,6 @@ export function DayJournalModal({
         />
 
         <div className="relative z-[2] overflow-y-auto pl-7 pr-6 pt-6 pb-10" style={{ maxHeight: "88vh" }}>
-          <div className="mb-6 flex items-center justify-between">
-            <h2
-              id="day-modal-title"
-              className="text-2xl font-semibold text-[#201A14]"
-              style={{ fontFamily: "var(--font-handwriting-title), cursive" }}
-            >
-              {headerLabel}
-            </h2>
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-full p-2 text-black/45 transition hover:bg-black/8 hover:text-black/70"
-              aria-label="Kapat"
-            >
-              ×
-            </button>
-          </div>
-
           {entries.length === 0 ? (
             <p
               className="py-12 text-center text-sm text-black/50"
@@ -217,12 +194,19 @@ export function DayJournalModal({
                       {entry.media.map((m) => (
                         <div key={m.id} className="space-y-2">
                           {m.type === "image" && (
-                            <img
-                              src={m.url}
-                              alt=""
-                              className="w-full rounded-lg border border-black/10 object-cover shadow-[0_2px_12px_rgba(0,0,0,0.1),0_4px_20px_rgba(0,0,0,0.06)]"
-                              style={{ maxHeight: 360 }}
-                            />
+                            <div className="relative w-full overflow-hidden rounded-lg border border-black/10 shadow-[0_2px_12px_rgba(0,0,0,0.1),0_4px_20px_rgba(0,0,0,0.06)]" style={{ maxHeight: 360 }}>
+                              <Image
+                                src={m.url}
+                                alt=""
+                                width={800}
+                                height={360}
+                                className="w-full rounded-lg object-cover"
+                                style={{ maxHeight: 360 }}
+                                placeholder="blur"
+                                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUG/8QAIhAAAgEDBAMBAAAAAAAAAAAAAQIDAAQRBRIhMQYTQVFh/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBEQACEQADAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAT8Q/9k="
+                                sizes="(max-width: 640px) 100vw, 800px"
+                              />
+                            </div>
                           )}
                           {m.type === "video" && (() => {
                             const embedUrl = getVideoEmbedUrl(m.url);

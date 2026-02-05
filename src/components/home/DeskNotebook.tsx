@@ -36,7 +36,7 @@ export function DeskNotebook({ entries }: DeskNotebookProps) {
       className="absolute right-4 bottom-4 z-10 w-56 md:right-8 md:bottom-8 md:w-64"
     >
       <Link
-        href="/planner"
+        href="/home#ajanda"
         className="block outline-none focus-visible:ring-2 focus-visible:ring-[var(--foreground)]/20 focus-visible:ring-offset-2 rounded-sm"
       >
         {/* Half-open notebook: soft shadow, left edge like binding */}

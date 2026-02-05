@@ -60,7 +60,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ path: data.path, mediaId: result.id });
     }
 
-    return NextResponse.json({ path: data.path });
+    const base = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "") || "";
+    const publicUrl = base ? `${base}/storage/v1/object/public/${BUCKET}/${data.path}` : "";
+    return NextResponse.json({ path: data.path, publicUrl });
   } catch {
     return NextResponse.json({ error: "Upload failed" }, { status: 500 });
   }

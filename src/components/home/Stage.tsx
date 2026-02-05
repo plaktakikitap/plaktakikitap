@@ -23,7 +23,7 @@ const NODES = [
   { href: "/projects", label: "Projects", mood: "tech" as const, word: "Build" },
   { href: "/posts", label: "Posts", mood: "neutral" as const, word: "Notes" },
   { href: "/translations", label: "Translations", mood: "neutral" as const, word: "Translate" },
-  { href: "/planner", label: "Planner", mood: "cream" as const, word: "Journal" },
+  { href: "/home#ajanda", label: "Ajanda", mood: "cream" as const, word: "Journal" },
   { href: "/certificates", label: "Certificates", mood: "neutral" as const, word: "Achieve" },
   { href: "/art", label: "Art", mood: "neutral" as const, word: "Create" },
   { href: "/about", label: "About", mood: "neutral" as const, word: "Eymen" },

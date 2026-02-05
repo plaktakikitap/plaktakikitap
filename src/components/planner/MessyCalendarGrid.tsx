@@ -46,7 +46,10 @@ export function MessyCalendarGrid({
         <span className="text-sm opacity-60 skew-x-1" style={{ fontFamily: "var(--font-handwriting), cursive", filter: "blur(0.2px)", opacity: 0.9 }}>{year}</span>
       </div>
 
-      <div className="mt-2 grid grid-cols-7 gap-0.5 text-[10px] opacity-70">
+      <div
+        className="mt-2 grid grid-cols-7 gap-0.5 text-[10px] opacity-70"
+        style={{ fontFamily: "var(--font-handwriting), cursive", filter: "blur(0.2px)" }}
+      >
         {["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"].map((d, i) => (
           <div key={d} className={`py-0.5 text-center font-medium ${i % 3 === 0 ? "-skew-x-0.5" : i % 3 === 1 ? "skew-x-0.5" : ""}`}>
             {d}

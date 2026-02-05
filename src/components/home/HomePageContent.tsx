@@ -3,7 +3,7 @@
 import FramedCrossfade from "@/components/home/FramedCrossfade";
 import { IntroCards } from "@/components/home/IntroCards";
 import { ScrollIndicator } from "@/components/home/ScrollHint";
-import PlannerFlipbook from "@/components/PlannerFlipbook";
+import MessyBulletJournal from "@/components/planner/MessyBulletJournal";
 import type { Video } from "@/types/videos";
 
 interface HomePageContentProps {
@@ -64,8 +64,10 @@ export function HomePageContent({
           </div>
         </section>
 
-        {/* Bullet journal flipbook ajanda */}
-        <PlannerFlipbook />
+        {/* Bullet journal — messy ajanda (flip + modal + previews) */}
+        <section id="ajanda" className="scroll-mt-6">
+          <MessyBulletJournal />
+        </section>
 
         {/* Şu an paneli — Spotify + Okuyorum */}
         {children}

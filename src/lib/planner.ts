@@ -473,3 +473,320 @@ export async function deletePlannerDecor(id: string): Promise<{ error?: string }
   if (error) return { error: error.message };
   return {};
 }
+
+// --- planner_spreads + planner_elements (migration 046) ---
+
+export interface PlannerSpread {
+  id: string;
+  year: number;
+  month: number;
+  created_at?: string;
+}
+
+export type PlannerElementType =
+  | "photo"
+  | "sticky_note"
+  | "washi_tape"
+  | "paperclip"
+  | "sticker"
+  | "text_block"
+  | "doodle"
+  | "coffee_stain";
+
+export interface PlannerElement {
+  id: string;
+  spread_id: string;
+  page_side: "left" | "right";
+  type: PlannerElementType;
+  src: string | null;
+  text: string | null;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  rotation: number;
+  z_index: number;
+  meta: Record<string, unknown>;
+  created_at?: string;
+}
+
+/** Get or create spread for year/month (month 1–12). */
+export async function getOrCreateSpread(
+  year: number,
+  month: number
+): Promise<{ id: string; year: number; month: number } | { error: string }> {
+  const supabase = await createServerClient();
+  const { data: existing, error: fetchErr } = await supabase
+    .from("planner_spreads")
+    .select("id, year, month")
+    .eq("year", year)
+    .eq("month", month)
+    .maybeSingle();
+
+  if (fetchErr) return { error: fetchErr.message };
+  if (existing) return { id: existing.id, year: existing.year, month: existing.month };
+
+  const { data: inserted, error: insertErr } = await supabase
+    .from("planner_spreads")
+    .insert({ year, month })
+    .select("id, year, month")
+    .single();
+
+  if (insertErr) return { error: insertErr.message };
+  return { id: inserted.id, year: inserted.year, month: inserted.month };
+}
+
+/** List all elements for a spread. */
+export async function getSpreadElements(spreadId: string): Promise<PlannerElement[]> {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase
+    .from("planner_elements")
+    .select("id, spread_id, page_side, type, src, text, x, y, w, h, rotation, z_index, meta, created_at")
+    .eq("spread_id", spreadId)
+    .order("z_index", { ascending: true })
+    .order("created_at", { ascending: true });
+
+  if (error) return [];
+
+  return (data ?? []).map((row) => ({
+    id: row.id,
+    spread_id: row.spread_id,
+    page_side: row.page_side as "left" | "right",
+    type: row.type as PlannerElementType,
+    src: row.src,
+    text: row.text,
+    x: row.x,
+    y: row.y,
+    w: row.w,
+    h: row.h,
+    rotation: row.rotation,
+    z_index: row.z_index,
+    meta: (row.meta as Record<string, unknown>) ?? {},
+    created_at: row.created_at,
+  }));
+}
+
+/** Upsert elements for a spread. Keeps payload items; deletes spread elements whose id is not in the payload. */
+export async function upsertSpreadElements(
+  spreadId: string,
+  elements: Array<{
+    id?: string | null;
+    page_side: "left" | "right";
+    type: PlannerElementType;
+    src?: string | null;
+    text?: string | null;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    rotation: number;
+    z_index: number;
+    meta?: Record<string, unknown> | null;
+  }>
+): Promise<{ error?: string }> {
+  const supabase = await createServerClient();
+  const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+  const payloadIds = new Set(elements.map((e) => e.id).filter(Boolean) as string[]);
+
+  const { data: existing } = await supabase
+    .from("planner_elements")
+    .select("id")
+    .eq("spread_id", spreadId);
+  const toDelete = (existing ?? []).filter((r) => !payloadIds.has(r.id)).map((r) => r.id);
+  for (const id of toDelete) {
+    const { error } = await supabase.from("planner_elements").delete().eq("id", id);
+    if (error) return { error: error.message };
+  }
+
+  for (const el of elements) {
+    const x = clamp(Number(el.x), 0, 1);
+    const y = clamp(Number(el.y), 0, 1);
+    const w = clamp(Number(el.w), 0, 1);
+    const h = clamp(Number(el.h), 0, 1);
+    const rotation = Number(el.rotation) || 0;
+    const z_index = Number(el.z_index) || 0;
+    const payload = {
+      spread_id: spreadId,
+      page_side: el.page_side,
+      type: el.type,
+      src: (el.src ?? "").trim() || null,
+      text: (el.text ?? "").trim() || null,
+      x,
+      y,
+      w,
+      h,
+      rotation,
+      z_index,
+      meta: el.meta ?? {},
+    };
+
+    if (el.id) {
+      const { error } = await supabase
+        .from("planner_elements")
+        .update(payload)
+        .eq("id", el.id);
+      if (error) return { error: error.message };
+    } else {
+      const { error } = await supabase.from("planner_elements").insert(payload);
+      if (error) return { error: error.message };
+    }
+  }
+  return {};
+}
+
+/** planner_day_entries: one row per date */
+export interface PlannerDayEntry {
+  id: string;
+  date: string;
+  title: string | null;
+  content: string | null;
+  photos: string[];
+  tags: string[];
+  created_at: string;
+  updated_at: string;
+}
+
+export async function getDayEntry(date: string): Promise<PlannerDayEntry | null> {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase
+    .from("planner_day_entries")
+    .select("id, date, title, content, photos, tags, created_at, updated_at")
+    .eq("date", date)
+    .maybeSingle();
+
+  if (error || !data) return null;
+
+  return {
+    id: data.id,
+    date: data.date,
+    title: data.title,
+    content: data.content,
+    photos: Array.isArray(data.photos) ? data.photos : [],
+    tags: Array.isArray(data.tags) ? data.tags : [],
+    created_at: data.created_at,
+    updated_at: data.updated_at,
+  };
+}
+
+export async function upsertDayEntry(payload: {
+  date: string;
+  title?: string | null;
+  content?: string | null;
+  photos?: string[];
+  tags?: string[];
+}): Promise<{ error?: string }> {
+  const supabase = await createServerClient();
+  const { data: existing } = await supabase
+    .from("planner_day_entries")
+    .select("id")
+    .eq("date", payload.date)
+    .maybeSingle();
+
+  const row = {
+    date: payload.date,
+    title: (payload.title ?? "").trim() || null,
+    content: (payload.content ?? "").trim() || null,
+    photos: Array.isArray(payload.photos) ? payload.photos : [],
+    tags: Array.isArray(payload.tags) ? payload.tags : [],
+  };
+
+  if (existing) {
+    const { error } = await supabase.from("planner_day_entries").update(row).eq("id", existing.id);
+    return error ? { error: error.message } : {};
+  }
+  const { error } = await supabase.from("planner_day_entries").insert(row);
+  return error ? { error: error.message } : {};
+}
+
+/** Canvas item: tek bir öğenin sayfa üzerindeki konumu (x, y 0–1, rotation derece) */
+export type PlannerCanvasItemKind =
+  | "attached_photo"
+  | "polaroid"
+  | "note"
+  | "custom_field"
+  | "paperclip"
+  | "washi";
+
+export interface PlannerCanvasItem {
+  id: string;
+  year: number;
+  month: number;
+  page: "left" | "right";
+  item_kind: PlannerCanvasItemKind;
+  item_key: string;
+  x: number;
+  y: number;
+  rotation: number;
+  z_index: number;
+}
+
+/** Seçili ay için tüm canvas öğelerini getir */
+export async function fetchCanvasItems(
+  year: number,
+  month: number
+): Promise<PlannerCanvasItem[]> {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase
+    .from("planner_canvas_item")
+    .select("id, year, month, page, item_kind, item_key, x, y, rotation, z_index")
+    .eq("year", year)
+    .eq("month", month)
+    .order("z_index", { ascending: true })
+    .order("page", { ascending: true });
+
+  if (error) return [];
+
+  return (data ?? []).map((row) => ({
+    id: row.id,
+    year: row.year,
+    month: row.month,
+    page: row.page as "left" | "right",
+    item_kind: row.item_kind as PlannerCanvasItemKind,
+    item_key: row.item_key,
+    x: row.x,
+    y: row.y,
+    rotation: row.rotation,
+    z_index: row.z_index,
+  }));
+}
+
+/** Canvas öğelerini kaydet (upsert: year, month, page, item_kind, item_key ile) */
+export async function saveCanvasItems(
+  year: number,
+  month: number,
+  items: Array<{
+    page: "left" | "right";
+    item_kind: PlannerCanvasItemKind;
+    item_key: string;
+    x: number;
+    y: number;
+    rotation: number;
+    z_index: number;
+  }>
+): Promise<{ error?: string }> {
+  const supabase = await createServerClient();
+  for (const it of items) {
+    const x = Math.max(0, Math.min(1, it.x));
+    const y = Math.max(0, Math.min(1, it.y));
+    const { error } = await supabase
+      .from("planner_canvas_item")
+      .upsert(
+        {
+          year,
+          month,
+          page: it.page,
+          item_kind: it.item_kind,
+          item_key: it.item_key,
+          x,
+          y,
+          rotation: it.rotation,
+          z_index: it.z_index,
+        },
+        {
+          onConflict: "year,month,page,item_kind,item_key",
+        }
+      );
+    if (error) return { error: error.message };
+  }
+  return {};
+}

@@ -42,7 +42,7 @@ export function DeskNotebookMobile({ entries }: DeskNotebookMobileProps) {
           {entries.slice(0, 3).map((e) => (
             <li key={e.id}>
               <Link
-                href={`/planner?date=${e.date}`}
+                href="/home#ajanda"
                 className="block rounded py-1.5"
               >
                 <span className="text-[10px] text-[var(--muted)]">
@@ -57,7 +57,7 @@ export function DeskNotebookMobile({ entries }: DeskNotebookMobileProps) {
         </ul>
       )}
       <Link
-        href="/planner"
+        href="/home#ajanda"
         className="mt-4 inline-block text-sm text-[var(--muted)] underline-offset-2 hover:underline"
       >
         Ajandaya git →

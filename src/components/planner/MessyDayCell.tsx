@@ -1,10 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { PlannerDaySummary } from "@/lib/planner";
 import { SmudgeOverlay } from "./SmudgeOverlay";
-import { AttachmentSVG } from "./AttachmentSVG";
-import { GlossyWashiTape } from "./GlossyWashiTape";
+
+const BLUR_DATA_URL =
+  "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUG/8QAIhAAAgEDBAMBAAAAAAAAAAAAAQIDAAQRBRIhMQYTQVFh/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBEQACEQADAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAT8Q/9k=";
 
 function isTodayCell(dateStr: string): boolean {
   if (!dateStr) return false;
@@ -13,10 +15,19 @@ function isTodayCell(dateStr: string): boolean {
   return dateStr === todayStr;
 }
 
-/** Deterministik rastgele -3..3 derece — el yapımı havası */
-function seededRotate(seed: number, min: number, max: number): number {
-  const x = Math.sin(seed * 9999) * 10000;
-  return min + (x - Math.floor(x)) * (max - min);
+/** Minik sticker ikonu — entry varsa gösterilir */
+function StickerChip() {
+  return (
+    <span
+      className="absolute right-0.5 top-0.5 text-[10px] opacity-80"
+      style={{ zIndex: 3 }}
+      aria-hidden
+    >
+      <svg viewBox="0 0 12 12" className="h-3 w-3" fill="currentColor">
+        <path d="M6 1L7.2 4.4L11 5L8 7.7L8.8 11L6 9.2L3.2 11L4 7.7L1 5L4.8 4.4L6 1Z" />
+      </svg>
+    </span>
+  );
 }
 
 interface MessyDayCellProps {
@@ -27,7 +38,7 @@ interface MessyDayCellProps {
   monthName: string;
 }
 
-/** El çizimi daire, polaroid önizlemeler, özet cümle, yoğun gün doodle */
+/** Gün hücresi: preview chips (1 polaroid thumbnail, 1–2 satır soluk metin, minik sticker ikonu). Tıklanınca Journal Modal açılır. */
 export function MessyDayCell({
   day,
   summary,
@@ -42,17 +53,15 @@ export function MessyDayCell({
   const hasEntry = !!summary && summary.entryCount > 0;
   const today = isTodayCell(dateStr);
   const isBusy = !!summary?.isBusy;
-  const imageUrls = summary?.imageUrls ?? [];
-  const attachedImages = summary?.attachedImages ?? [];
-  const summaryQuote = summary?.summaryQuote;
+  const firstImageUrl = summary?.firstImageUrl ?? summary?.imageUrls?.[0];
   const smudge = summary?.smudge;
-  const hasPaperclip = attachedImages.length > 0;
+  const textPreview = summary?.summaryQuote ?? summary?.firstEntryTitle ?? summary?.firstEntryContent ?? null;
 
   return (
     <button
       type="button"
       className={cn(
-        "messy-day-cell relative flex min-h-[56px] flex-col rounded-md border border-black/8 bg-white/30 p-1 text-left shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition hover:bg-white/60 hover:shadow-[0_2px_6px_rgba(0,0,0,0.06)]",
+        "messy-day-cell relative flex min-h-[56px] flex-col overflow-visible rounded-md border border-black/8 bg-white/30 p-1 text-left shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition hover:bg-white/60 hover:shadow-[0_2px_6px_rgba(0,0,0,0.06)]",
         today && "today",
         hasEntry && "ring-1 ring-amber-900/20",
         isBusy && "ring-1 ring-amber-600/30"
@@ -73,7 +82,10 @@ export function MessyDayCell({
         </span>
       </div>
 
-      {/* El çizimi daire — giriş varsa (daire içine alma) */}
+      {/* Sticker / entry göstergesi — minik ikon */}
+      {hasEntry && <StickerChip />}
+
+      {/* El çizimi daire — giriş varsa */}
       {hasEntry && !isBusy && (
         <div
           className="pointer-events-none absolute inset-0 flex items-center justify-center"
@@ -99,7 +111,6 @@ export function MessyDayCell({
         </div>
       )}
 
-      {/* Yoğun gün — kutucuğun etrafına daire içine alma (doodle) */}
       {hasEntry && isBusy && (
         <div
           className="pointer-events-none absolute inset-0 flex items-center justify-center"
@@ -125,47 +136,49 @@ export function MessyDayCell({
         </div>
       )}
 
-      {/* Admin'den yüklenen fotoğraflar — rotate(-3..3deg) ile el yapımı havası, ataş + washi */}
-      {imageUrls.length > 0 && (
+      {/* Preview: 1 küçük polaroid thumbnail, 45deg rotate, köşeden taşabilir */}
+      {hasEntry && firstImageUrl && (
         <div
-          className="absolute bottom-0 right-0 flex items-end justify-end"
-          style={{ zIndex: 1, width: "88%", height: "78%" }}
+          className="absolute -bottom-0.5 -right-0.5 overflow-hidden rounded-sm bg-white shadow-[0_2px_8px_rgba(0,0,0,0.15),0_1px_3px_rgba(0,0,0,0.1)]"
+          style={{
+            zIndex: 1,
+            width: 28,
+            padding: "2px 2px 8px 2px",
+            border: "1px solid rgba(0,0,0,0.08)",
+            transform: "rotate(45deg)",
+          }}
         >
-          {imageUrls.slice(0, 4).map((url, i) => {
-            const rot = seededRotate(day * 7 + i, -3, 3);
-            const showClip = hasPaperclip && i === 0;
-            const clipStyle = attachedImages[0]?.style ?? "standard_clip";
-            return (
-              <div
-                key={i}
-                className="relative overflow-hidden rounded-sm border border-black/12 bg-white shadow-[0_1px_4px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.06)]"
-                style={{
-                  width: 26 - i * 2,
-                  height: 22 - i * 1.5,
-                  right: i * 5,
-                  bottom: i * 4,
-                  transform: `rotate(${rot}deg) skew(${i % 2 === 0 ? -1.5 : 1.5}deg, ${i % 2 === 0 ? 0.5 : -0.5}deg)`,
-                }}
-              >
-                <img src={url} alt="" className="h-full w-full object-cover" />
-                {showClip && (
-                  <div className="absolute -right-0.5 -top-0.5 z-[50]" style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.2))" }}>
-                    <AttachmentSVG style={clipStyle} size={12} />
-                  </div>
-                )}
-                <GlossyWashiTape
-                  className="absolute -top-0.5 -right-0.5 h-1.5 w-4 opacity-40"
-                  variant="beige"
-                  rotateDeg={seededRotate(day + i * 11, -15, 15)}
-                  style={{ zIndex: 2 }}
-                />
-              </div>
-            );
-          })}
+          <div className="relative h-5 w-6 overflow-hidden rounded-[1px]">
+            <Image
+              src={firstImageUrl}
+              alt=""
+              width={28}
+              height={24}
+              className="h-full w-full object-cover"
+              placeholder="blur"
+              blurDataURL={BLUR_DATA_URL}
+              sizes="28px"
+            />
+          </div>
         </div>
       )}
 
-      {/* Yazıyı Dağıt — leke/parmak izi overlay (flip ile birlikte hareket eder) */}
+      {/* Preview: 1–2 satır çok soluk metin (text-xs, opacity 0.55) */}
+      {hasEntry && textPreview && (
+        <p
+          className="messy-ink-bleed absolute bottom-0.5 left-0.5 right-0.5 line-clamp-2 leading-tight text-xs -skew-x-0.5"
+          style={{
+            fontFamily: "var(--font-handwriting), cursive",
+            zIndex: 2,
+            color: "rgba(60,55,50,0.85)",
+            opacity: 0.55,
+            filter: "blur(0.15px)",
+          }}
+        >
+          {textPreview}
+        </p>
+      )}
+
       {smudge?.preset && (
         <SmudgeOverlay
           preset={smudge.preset}
@@ -175,26 +188,6 @@ export function MessyDayCell({
           opacity={smudge.opacity ?? 0.15}
           style={{ width: 36, height: 28, zIndex: 1 }}
         />
-      )}
-
-      {/* Özet cümle (summary_quote) — kurşun kalem + mürekkep efekti */}
-      {summaryQuote && (
-        <p
-          className="absolute bottom-0 left-0.5 right-0.5 line-clamp-2 leading-tight -skew-x-1"
-          style={{
-            fontFamily: "var(--font-handwriting), cursive",
-            fontSize: "6px",
-            zIndex: 2,
-            color: "rgba(90,85,75,0.52)",
-            textShadow: "0 0 1px rgba(140,130,110,0.12), 0 1px 1px rgba(0,0,0,0.03), 0 0 0 1px rgba(0,0,0,0.02)",
-            fontStyle: "italic",
-            letterSpacing: "0.02em",
-            filter: "blur(0.2px)",
-            opacity: 0.9,
-          }}
-        >
-          {summaryQuote}
-        </p>
       )}
     </button>
   );
