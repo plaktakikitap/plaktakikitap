@@ -17,25 +17,33 @@ export interface Writing {
 
 /** Public: all writings, newest first per category */
 export async function getWritingsPublic(): Promise<Writing[]> {
-  const supabase = createAdminClient();
-  const { data, error } = await supabase
-    .from("writings")
-    .select("id, category, title, body, published_at, created_at, updated_at")
-    .order("published_at", { ascending: false });
-  if (error) return [];
-  return (data ?? []) as Writing[];
+  try {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from("writings")
+      .select("id, category, title, body, published_at, created_at, updated_at, tefrika_issue, external_url")
+      .order("published_at", { ascending: false });
+    if (error) return [];
+    return (data ?? []) as Writing[];
+  } catch {
+    return [];
+  }
 }
 
 /** Public: single writing by id */
 export async function getWritingById(id: string): Promise<Writing | null> {
-  const supabase = createAdminClient();
-  const { data, error } = await supabase
-    .from("writings")
-    .select("*")
-    .eq("id", id)
-    .maybeSingle();
-  if (error || !data) return null;
-  return data as Writing;
+  try {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from("writings")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle();
+    if (error || !data) return null;
+    return data as Writing;
+  } catch {
+    return null;
+  }
 }
 
 export interface WritingInsert {
@@ -56,6 +64,8 @@ export async function createWriting(payload: WritingInsert): Promise<Writing | n
       title: payload.title.trim() || "",
       body: payload.body.trim() || "",
       published_at: payload.published_at ?? new Date().toISOString(),
+      tefrika_issue: payload.tefrika_issue?.trim() || null,
+      external_url: payload.external_url?.trim() || null,
     })
     .select()
     .single();

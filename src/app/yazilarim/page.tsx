@@ -47,32 +47,34 @@ export default async function YazilarimPage() {
 
   return (
     <PageTransitionTarget layoutId="card-/yazilarim">
-      <main className="yazilarim-paper min-h-screen">
+      <main className="relative min-h-screen text-white">
         <div className="animate-page-fade-in mx-auto max-w-2xl px-4 py-10 sm:px-6">
           <PageHeader
             layoutId="nav-/yazilarim"
             title="Yazılarım"
+            titleClassName="!text-white"
             subtitle="Denemeler, şiirler ve diğer metinler"
+            subtitleClassName="text-white/70"
           />
 
           <div className="space-y-12">
             {sections.map(({ category, label, items }) => (
               <section key={category}>
-                <h2 className="mb-4 border-b border-[var(--border)] pb-2 font-editorial text-lg font-medium text-[var(--foreground)]">
+                <h2 className="mb-4 border-b border-white/20 pb-2 font-editorial text-lg font-medium text-white">
                   {label}
                 </h2>
                 {items.length === 0 && category !== "diger" ? (
-                  <p className="text-sm text-[var(--muted)]">Henüz yazı yok.</p>
+                  <p className="text-sm text-white/60">Henüz yazı yok.</p>
                 ) : (
                   <ul className="space-y-1">
                     {items.map((w) => (
                       <li key={w.id}>
                         <Link
                           href={`/yazilarim/${w.id}`}
-                          className="flex flex-wrap items-baseline justify-between gap-2 py-2 text-[var(--foreground)] no-underline hover:text-[var(--accent)] hover:underline"
+                          className="flex flex-wrap items-baseline justify-between gap-2 py-2 text-white no-underline hover:text-amber-300 hover:underline"
                         >
                           <span className="font-medium">{w.title}</span>
-                          <time dateTime={w.published_at} className="text-sm text-[var(--muted)]">
+                          <time dateTime={w.published_at} className="text-sm text-white/60">
                             {formatDate(w.published_at)}
                           </time>
                         </Link>
@@ -83,20 +85,20 @@ export default async function YazilarimPage() {
                 {category === "diger" && (
                   <>
                     {digerNormal.length === 0 && tefrikaItems.length === 0 && (
-                      <p className="text-sm text-[var(--muted)]">Henüz yazı yok.</p>
+                      <p className="text-sm text-white/60">Henüz yazı yok.</p>
                     )}
                     {tefrikaItems.length > 0 && (
                       <div className="mt-8">
-                        <h3 className="mb-4 border-b border-[var(--border)] pb-2 font-editorial text-base font-medium text-[var(--foreground)]">
+                        <h3 className="mb-4 border-b border-white/20 pb-2 font-editorial text-base font-medium text-white">
                           Tefrika Dergisi&apos;nde Yayınlananlar
                         </h3>
                         <ul className="space-y-4">
                           {tefrikaItems.map((w) => (
                             <li
                               key={w.id}
-                              className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[var(--border)] bg-[var(--secondary)]/30 px-4 py-3"
+                              className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-white/20 bg-white/5 px-4 py-3"
                             >
-                              <p className="min-w-0 flex-1 font-medium text-[var(--foreground)]">
+                              <p className="min-w-0 flex-1 font-medium text-white">
                                 {w.tefrika_issue}. Sayı İçin Yazdığım Yazı: {w.title}
                               </p>
                               {w.external_url ? (
@@ -104,13 +106,13 @@ export default async function YazilarimPage() {
                                   href={w.external_url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-sm font-medium text-[var(--foreground)] transition hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
+                                  className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-amber-500/20 hover:text-amber-200"
                                 >
                                   <ExternalLink className="h-4 w-4" aria-hidden />
                                   Dergiyi Satın Al
                                 </a>
                               ) : (
-                                <span className="text-sm text-[var(--muted)]">Link eklenmemiş</span>
+                                <span className="text-sm text-white/50">Link eklenmemiş</span>
                               )}
                             </li>
                           ))}
@@ -118,7 +120,7 @@ export default async function YazilarimPage() {
                         <p className="mt-6 text-center">
                           <Link
                             href="/translations"
-                            className="inline-flex items-center gap-2 font-medium text-[var(--accent)] no-underline hover:underline"
+                            className="inline-flex items-center gap-2 font-medium text-amber-300 no-underline hover:underline"
                           >
                             Çevirilerim için tıklayınız
                           </Link>

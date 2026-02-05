@@ -22,7 +22,13 @@ export function AdminLoginForm() {
     });
     if (signInError) {
       setLoading(false);
-      setError(signInError.message);
+      if (signInError.message.toLowerCase().includes("email not confirmed")) {
+        setError(
+          "E-posta henüz doğrulanmamış. Supabase Dashboard > Authentication > Providers > Email bölümünden \"Confirm email\" ayarını kapatın veya e-postanızdaki doğrulama linkine tıklayın."
+        );
+      } else {
+        setError(signInError.message);
+      }
       return;
     }
     const res = await fetch("/api/admin/check-access");
@@ -53,7 +59,7 @@ export function AdminLoginForm() {
           onChange={(e) => setEmail(e.target.value)}
           required
           autoComplete="email"
-          placeholder="eyemenyalaz@hotmail.com"
+          placeholder="eymenyalaz@hotmail.com"
           className="mt-1 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/30"
         />
       </div>
