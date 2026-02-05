@@ -53,7 +53,7 @@ export function MessyPaperPage({
         }}
       />
 
-      {/* Kahve lekesi — hafif sarı-kahverengi lekeler */}
+      {/* Kahve lekesi — sayfa köşelerinde organik overlay (bg benzeri) */}
       {showCoffeeStain && (
         <>
           <div
@@ -68,6 +68,23 @@ export function MessyPaperPage({
             style={{
               background: "radial-gradient(ellipse 50% 50%, rgba(140,95,60,0.4) 0%, transparent 60%)",
               filter: "blur(8px)",
+            }}
+          />
+          {/* Sayfa köşesi kahve lekesi — rastgele alan */}
+          <div
+            className="pointer-events-none absolute bottom-[8%] right-[4%] h-24 w-24"
+            style={{
+              background: "radial-gradient(ellipse 60% 55% at 50% 50%, rgba(120,80,50,0.35) 0%, rgba(100,65,40,0.15) 40%, transparent 70%)",
+              filter: "blur(6px)",
+              opacity: 0.12,
+            }}
+          />
+          <div
+            className="pointer-events-none absolute left-[6%] top-[18%] h-20 w-20"
+            style={{
+              background: "radial-gradient(ellipse 55% 50% at 50% 50%, rgba(130,85,55,0.3) 0%, transparent 65%)",
+              filter: "blur(5px)",
+              opacity: 0.08,
             }}
           />
         </>

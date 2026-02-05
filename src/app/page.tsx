@@ -49,9 +49,119 @@ export default function IntroGate() {
     : { y: -10, scale: 1.06, transition: TRANSITION };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-black px-6">
-      {/* Stage: arka plan + ikonlar aynı container → zoom'da birlikte ölçeklenir */}
-      <div className="relative w-[min(1200px,95vw)] aspect-[16/9]">
+    <main className="relative min-h-screen flex items-center justify-center bg-black px-6">
+      {/* Mobil: lacivert + parıltılı arka plan (ana sayfa ile aynı) */}
+      <div className="fixed inset-0 -z-10 md:hidden" aria-hidden>
+        <div className="absolute inset-0" style={{ backgroundColor: "#050A14" }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "radial-gradient(900px 600px at 50% 18%, rgba(255,255,255,0.08), transparent 60%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(0,0,0,0.2) 0%, transparent 30%, transparent 60%, rgba(0,0,0,0.75) 100%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-[0.035] pointer-events-none"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+            mixBlendMode: "soft-light",
+          }}
+        />
+        <div className="absolute inset-0 pointer-events-none">
+          {[
+            { left: "18%", top: "22%", size: 12, delay: "0s" },
+            { left: "82%", top: "28%", size: 12, delay: "1.2s" },
+            { left: "12%", top: "65%", size: 16, delay: "2.4s" },
+            { left: "88%", top: "72%", size: 12, delay: "0.8s" },
+            { left: "45%", top: "12%", size: 12, delay: "1.8s" },
+          ].map((s, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full animate-sparkle"
+              style={{
+                left: s.left,
+                top: s.top,
+                width: s.size,
+                height: s.size,
+                background:
+                  "radial-gradient(circle at center, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.4) 40%, transparent 65%)",
+                boxShadow: "0 0 8px rgba(255,255,255,0.3)",
+                animationDelay: s.delay,
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Mobil: başlık + alt başlık + plak / kitap alt alta */}
+      <div className="flex md:hidden w-full flex-col items-center justify-center gap-8 py-12">
+        <div className="flex flex-col items-center gap-1">
+          <h1
+            className="text-center text-3xl font-semibold tracking-[0.12em] text-[#F3EBDD] uppercase"
+            style={{
+              fontFamily: "var(--font-cinzel), serif",
+              textShadow: "0 0 12px rgba(255,255,255,0.15), 0 10px 30px rgba(0,0,0,0.4)",
+            }}
+          >
+            Make Your Choice
+          </h1>
+          <p
+            className="text-sm font-normal tracking-[0.04em] text-[#F3EBDD] opacity-80"
+            style={{ fontFamily: "var(--font-inter), sans-serif" }}
+          >
+            Plaktaki Kitap edition
+          </p>
+        </div>
+        <motion.button
+          type="button"
+          aria-label="Plak"
+          onClick={() => handleChoice("plak")}
+          animate={
+            selected
+              ? selected === "plak"
+                ? { scale: 1.08, opacity: 1, filter: `${BASE_SHADOW} ${RED_GLOW}` }
+                : { opacity: 0.35, filter: BASE_SHADOW }
+              : {}
+          }
+          transition={TRANSITION}
+          whileHover={
+            selected ? undefined : { scale: 1.05, filter: `${BASE_SHADOW} ${RED_GLOW}` }
+          }
+          style={{ filter: !selected ? BASE_SHADOW : undefined }}
+          className="flex size-24 items-center justify-center rounded-full touch-manipulation"
+        >
+          <Disc3 size={80} strokeWidth={1.5} className="text-[#F3EBDD]" />
+        </motion.button>
+        <motion.button
+          type="button"
+          aria-label="Kitap"
+          onClick={() => handleChoice("kitap")}
+          animate={
+            selected
+              ? selected === "kitap"
+                ? { scale: 1.08, opacity: 1, filter: `${BASE_SHADOW} ${BLUE_GLOW}` }
+                : { opacity: 0.35, filter: BASE_SHADOW }
+              : {}
+          }
+          transition={TRANSITION}
+          whileHover={
+            selected ? undefined : { scale: 1.05, filter: `${BASE_SHADOW} ${BLUE_GLOW}` }
+          }
+          style={{ filter: !selected ? BASE_SHADOW : undefined }}
+          className="flex size-24 items-center justify-center rounded-xl touch-manipulation"
+        >
+          <Book size={72} strokeWidth={1.5} className="text-[#F3EBDD]" />
+        </motion.button>
+      </div>
+
+      {/* Masaüstü: stage + arka plan görseli + ikonlar */}
+      <div className="relative hidden w-[min(1200px,95vw)] aspect-[16/9] md:block">
         {/* Arka plan — stage içinde */}
         <Image
           src="/images/intro/arkaplan.png"

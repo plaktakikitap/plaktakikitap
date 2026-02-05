@@ -78,15 +78,26 @@ export function MessyBookShell({ children, monthIndex = 0, flipInProgress = fals
         aria-hidden
       />
 
-      {/* Ana kabuk — deri dokusu (gradient + noise), 3D gölge */}
+      {/* 5-6 katmanlı sayfa yığını — overflow olmadan gölge görünsün */}
+      <div
+        className="relative rounded-2xl"
+        style={{
+          boxShadow: `
+            3px 3px 0 #e8e4dc,
+            6px 6px 0 #d8d2c8,
+            9px 9px 0 #c4bcaa,
+            12px 12px 0 #b0a692,
+            15px 15px 0 #9c8e7a,
+            20px 20px 40px rgba(0,0,0,0.45)
+          `,
+        }}
+      >
+      {/* Ana kabuk — deri dokusu */}
       <div
         className="relative overflow-hidden rounded-2xl"
         style={{
           boxShadow: `
             0 0 0 1px rgba(0,0,0,0.15),
-            0 2px 4px rgba(0,0,0,0.1),
-            0 8px 24px rgba(0,0,0,0.2),
-            0 20px 48px rgba(0,0,0,0.3),
             inset 0 1px 0 rgba(255,255,255,0.06),
             inset 0 -1px 0 rgba(0,0,0,0.1)
           `,
@@ -98,19 +109,19 @@ export function MessyBookShell({ children, monthIndex = 0, flipInProgress = fals
           backgroundSize: "100% 100%, 120px 120px",
         }}
       >
-        {/* Spine — ortadaki dikiş/birleşme, recessed 3D hissi */}
+        {/* Spine — ortadaki dikiş izi, koyu linear-gradient ile belirgin */}
         <div
           className="pointer-events-none absolute left-1/2 top-0 bottom-0 w-5 -translate-x-1/2"
           style={{
-            background: "linear-gradient(90deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 20%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.15) 80%, rgba(0,0,0,0.35) 100%)",
-            boxShadow: "inset 2px 0 1px rgba(255,255,255,0.02), inset -2px 0 1px rgba(0,0,0,0.1)",
+            background: "linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 15%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.35) 85%, rgba(0,0,0,0.55) 100%)",
+            boxShadow: "inset 2px 0 2px rgba(255,255,255,0.03), inset -2px 0 2px rgba(0,0,0,0.25)",
           }}
           aria-hidden
         />
-        {/* Spine dikiş detayı — delikler hissi */}
+        {/* Spine dikiş detayı — delikler hissi (koyu spine ile uyumlu) */}
         <div
-          className="pointer-events-none absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 opacity-20"
-          style={{ background: "repeating-linear-gradient(180deg, transparent 0, transparent 8px, rgba(0,0,0,0.4) 8px, rgba(0,0,0,0.4) 10px)" }}
+          className="pointer-events-none absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2"
+          style={{ background: "repeating-linear-gradient(180deg, transparent 0, transparent 8px, rgba(0,0,0,0.5) 8px, rgba(0,0,0,0.5) 10px)", opacity: 0.35 }}
           aria-hidden
         />
 
@@ -145,6 +156,7 @@ export function MessyBookShell({ children, monthIndex = 0, flipInProgress = fals
         />
 
         <div className="relative overflow-hidden rounded-2xl">{children}</div>
+      </div>
       </div>
     </div>
   );

@@ -40,10 +40,10 @@ export function MessyCalendarGrid({
     <>
       <div
         className="flex items-baseline justify-between -skew-x-1"
-        style={{ fontFamily: "var(--font-handwriting-title), cursive" }}
+        style={{ fontFamily: "var(--font-handwriting-title), cursive", filter: "blur(0.2px)", opacity: 0.9 }}
       >
         <h3 className="text-2xl font-semibold text-black/85 drop-shadow-[0_1px_2px_rgba(0,0,0,0.04)]">{monthName}</h3>
-        <span className="text-sm opacity-60 skew-x-1" style={{ fontFamily: "var(--font-handwriting), cursive" }}>{year}</span>
+        <span className="text-sm opacity-60 skew-x-1" style={{ fontFamily: "var(--font-handwriting), cursive", filter: "blur(0.2px)", opacity: 0.9 }}>{year}</span>
       </div>
 
       <div className="mt-2 grid grid-cols-7 gap-0.5 text-[10px] opacity-70">

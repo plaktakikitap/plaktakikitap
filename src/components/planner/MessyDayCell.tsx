@@ -3,6 +3,8 @@
 import { cn } from "@/lib/utils";
 import type { PlannerDaySummary } from "@/lib/planner";
 import { SmudgeOverlay } from "./SmudgeOverlay";
+import { AttachmentSVG } from "./AttachmentSVG";
+import { GlossyWashiTape } from "./GlossyWashiTape";
 
 function isTodayCell(dateStr: string): boolean {
   if (!dateStr) return false;
@@ -11,10 +13,10 @@ function isTodayCell(dateStr: string): boolean {
   return dateStr === todayStr;
 }
 
-/** Rastgele ±45 derece — minik polaroidler için */
-function polaroidRotation(index: number, day: number): number {
-  const seed = (day * 7 + index) % 4;
-  return seed < 2 ? -45 : 45;
+/** Deterministik rastgele -3..3 derece — el yapımı havası */
+function seededRotate(seed: number, min: number, max: number): number {
+  const x = Math.sin(seed * 9999) * 10000;
+  return min + (x - Math.floor(x)) * (max - min);
 }
 
 interface MessyDayCellProps {
@@ -41,8 +43,10 @@ export function MessyDayCell({
   const today = isTodayCell(dateStr);
   const isBusy = !!summary?.isBusy;
   const imageUrls = summary?.imageUrls ?? [];
+  const attachedImages = summary?.attachedImages ?? [];
   const summaryQuote = summary?.summaryQuote;
   const smudge = summary?.smudge;
+  const hasPaperclip = attachedImages.length > 0;
 
   return (
     <button
@@ -63,7 +67,7 @@ export function MessyDayCell({
       <div className="relative z-[2] flex justify-end">
         <span
           className="text-xs font-semibold text-black/75"
-          style={{ fontFamily: "var(--font-handwriting), cursive" }}
+          style={{ fontFamily: "var(--font-handwriting), cursive", filter: "blur(0.2px)", opacity: 0.9 }}
         >
           {day}
         </span>
@@ -121,27 +125,40 @@ export function MessyDayCell({
         </div>
       )}
 
-      {/* Admin'den yüklenen fotoğraflar — rastgele ±45° ile üst üste binmiş */}
+      {/* Admin'den yüklenen fotoğraflar — rotate(-3..3deg) ile el yapımı havası, ataş + washi */}
       {imageUrls.length > 0 && (
         <div
           className="absolute bottom-0 right-0 flex items-end justify-end"
           style={{ zIndex: 1, width: "88%", height: "78%" }}
         >
           {imageUrls.slice(0, 4).map((url, i) => {
-            const rot = polaroidRotation(i, day);
+            const rot = seededRotate(day * 7 + i, -3, 3);
+            const showClip = hasPaperclip && i === 0;
+            const clipStyle = attachedImages[0]?.style ?? "standard_clip";
             return (
               <div
                 key={i}
-                className="absolute overflow-hidden rounded-sm border border-black/12 bg-white shadow-[0_1px_4px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.06)]"
+                className="relative overflow-hidden rounded-sm border border-black/12 bg-white shadow-[0_1px_4px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.06)]"
                 style={{
                   width: 26 - i * 2,
                   height: 22 - i * 1.5,
                   right: i * 5,
                   bottom: i * 4,
-                  transform: `rotate(${rot}deg) skew(${i % 2 === 0 ? -2 : 2}deg, ${i % 2 === 0 ? 1 : -1}deg)`,
+                  transform: `rotate(${rot}deg) skew(${i % 2 === 0 ? -1.5 : 1.5}deg, ${i % 2 === 0 ? 0.5 : -0.5}deg)`,
                 }}
               >
                 <img src={url} alt="" className="h-full w-full object-cover" />
+                {showClip && (
+                  <div className="absolute -right-0.5 -top-0.5 z-[50]" style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.2))" }}>
+                    <AttachmentSVG style={clipStyle} size={12} />
+                  </div>
+                )}
+                <GlossyWashiTape
+                  className="absolute -top-0.5 -right-0.5 h-1.5 w-4 opacity-40"
+                  variant="beige"
+                  rotateDeg={seededRotate(day + i * 11, -15, 15)}
+                  style={{ zIndex: 2 }}
+                />
               </div>
             );
           })}
@@ -160,7 +177,7 @@ export function MessyDayCell({
         />
       )}
 
-      {/* Özet cümle (summary_quote) — kurşun kalemle sonradan eklenmiş, silik, el yazısı */}
+      {/* Özet cümle (summary_quote) — kurşun kalem + mürekkep efekti */}
       {summaryQuote && (
         <p
           className="absolute bottom-0 left-0.5 right-0.5 line-clamp-2 leading-tight -skew-x-1"
@@ -172,6 +189,8 @@ export function MessyDayCell({
             textShadow: "0 0 1px rgba(140,130,110,0.12), 0 1px 1px rgba(0,0,0,0.03), 0 0 0 1px rgba(0,0,0,0.02)",
             fontStyle: "italic",
             letterSpacing: "0.02em",
+            filter: "blur(0.2px)",
+            opacity: 0.9,
           }}
         >
           {summaryQuote}

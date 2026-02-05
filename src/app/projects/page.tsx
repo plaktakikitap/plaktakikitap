@@ -6,7 +6,7 @@ import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 export default function ProjectsPage() {
   return (
     <PageTransitionTarget layoutId="card-/projects">
-      <div className="mx-auto max-w-6xl px-4 py-10">
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:py-10">
         <PageHeader
           layoutId="nav-/projects"
           title="Projects"

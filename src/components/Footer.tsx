@@ -18,12 +18,23 @@ export default async function Footer() {
   }[];
 
   return (
-    <footer className="mt-16 border-t border-white/10">
-      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-4 md:flex-row md:items-center md:justify-between">
-        <div className="text-xs text-white/50">
+    <footer className="!relative !mt-16 !overflow-hidden">
+      {/* Üst sınır — soldan sağa sönümlenen ince altın çizgi */}
+      <div
+        className="!absolute !left-0 !right-0 !top-0 !h-px !w-full"
+        style={{
+          background: "linear-gradient(90deg, rgba(212,175,55,0.6) 0%, rgba(212,175,55,0.2) 50%, transparent 100%)",
+        }}
+        aria-hidden
+      />
+
+      <div className="!mx-auto !flex !max-w-6xl !flex-col !gap-4 !px-4 !py-5 !sm:px-6 !md:flex-row !md:items-end !md:justify-between">
+        <div className="!text-[11px] !font-light !tracking-[0.2em] !text-white/50 sm:!text-xs sm:!tracking-[0.25em]">
           © 2026 Eymen — Plaktaki Kitap
         </div>
-        <SocialLinksSection links={links} />
+        <div className="!flex !justify-end !md:ml-auto">
+          <SocialLinksSection links={links} />
+        </div>
       </div>
     </footer>
   );

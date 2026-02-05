@@ -44,18 +44,18 @@ export function MessyNotesPage({
   customFields = [],
 }: MessyNotesPageProps) {
   const { polaroidTilts, polaroidSkews, washiRotates, noteTilts, noteSkews, attachedPositions, customFieldPositions } = useMemo(() => {
-    const polaroidTilts = images.slice(0, 5).map((_, i) => seeded(i + 1, -4, 4));
-    const polaroidSkews = images.slice(0, 5).map((_, i) => seeded(i + 2, -1.5, 1.5));
+    const polaroidTilts = images.slice(0, 5).map((_, i) => seeded(i + 1, -3, 3));
+    const polaroidSkews = images.slice(0, 5).map((_, i) => seeded(i + 2, -1, 1));
     const washiRotates = [12, -8, 18, -5, 22].map((v, i) => seeded(i + 10, -25, 25));
-    const noteTilts = summaries.slice(0, 5).map((_, i) => seeded(i + 20, -2.5, 2.5));
+    const noteTilts = summaries.slice(0, 5).map((_, i) => seeded(i + 20, -3, 3));
     const noteSkews = summaries.slice(0, 5).map((_, i) => seeded(i + 25, -1, 1));
     const attachedPositions = (attachedImages.length ? attachedImages : paperclipImages.map((p) => ({ url: p.url, style: "standard_clip" as AttachmentStyle })))
       .slice(0, 4)
       .map((_, i) => ({
         left: 8 + (i % 2) * 42,
         top: 2 + Math.floor(i / 2) * 16,
-        rotate: seeded(i + 30, -5, 5),
-        skew: seeded(i + 31, -2, 2),
+        rotate: seeded(i + 30, -3, 3),
+        skew: seeded(i + 31, -1.5, 1.5),
       }));
     const customFieldPositions = customFields.map((_, i) => ({
       left: 5 + (i % 3) * 35,
@@ -76,15 +76,16 @@ export function MessyNotesPage({
       {attachedList.slice(0, 4).map((img, i) => {
         const pos = attachedPositions[i] ?? { left: 8, top: 2, rotate: 0, skew: 0 };
         return (
-          <div
+          <motion.div
             key={i}
+            layout
             className="absolute"
             style={{
               left: `${pos.left}%`,
               top: `${pos.top}%`,
               transform: `rotate(${pos.rotate}deg) skew(${pos.skew ?? 0}deg, ${(pos.skew ?? 0) * 0.5}deg)`,
               transformStyle: "preserve-3d",
-              zIndex: 12 + i,
+              zIndex: 50 + i,
             }}
           >
             {/* Kağıtta ataş ezilmesi — hafif gölge */}
@@ -109,20 +110,20 @@ export function MessyNotesPage({
               <img src={img.url} alt="" className="h-full w-full object-cover" />
             </div>
             <div
-              className="absolute -right-1.5 -top-1.5 z-10"
+              className="absolute -right-1.5 -top-1.5 z-[50]"
               style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.25)) drop-shadow(0 0 0 1px rgba(0,0,0,0.04))" }}
             >
               <AttachmentSVG style={img.style} size={20} />
             </div>
             {showWashiTape && (
               <GlossyWashiTape
-                className="absolute -top-0.5 -right-1 h-2.5 w-6 opacity-90"
+                className="absolute -top-0.5 -right-1 h-2.5 w-6 opacity-40"
                 variant="beige"
                 rotateDeg={washiRotates[i % washiRotates.length]}
                 style={{ zIndex: 1 }}
               />
             )}
-          </div>
+          </motion.div>
         );
       })}
 
@@ -136,7 +137,7 @@ export function MessyNotesPage({
       >
         <h3
           className="text-2xl font-semibold text-black/85"
-          style={{ fontFamily: "var(--font-handwriting-title), cursive" }}
+          style={{ fontFamily: "var(--font-handwriting-title), cursive", filter: "blur(0.2px)", opacity: 0.9 }}
         >
           {monthName} — Notlar
         </h3>
@@ -147,6 +148,7 @@ export function MessyNotesPage({
             return (
               <motion.button
                 key={s.dayId}
+                layout
                 initial={{ opacity: 0, x: -6 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.04 }}
@@ -156,6 +158,8 @@ export function MessyNotesPage({
                   transform: `rotate(${noteTilts[i] ?? 0}deg) skewX(${noteSkews[i] ?? 0}deg)`,
                   transformOrigin: "top left",
                   fontFamily: "var(--font-handwriting), cursive",
+                  filter: "blur(0.2px)",
+                  opacity: 0.9,
                 }}
               >
                 <span className="text-sm font-semibold text-amber-900/80">{day}.{m}</span>
@@ -170,8 +174,9 @@ export function MessyNotesPage({
       {customFields.filter((f) => f.label || f.content).map((f, i) => {
         const pos = customFieldPositions[i] ?? { left: 5, top: 50, rotate: 0, skew: 0 };
         return (
-          <div
+          <motion.div
             key={i}
+            layout
             className="absolute rounded-lg border border-black/10 bg-white/60 px-3 py-2 shadow-[0_2px_8px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.05)]"
             style={{
               left: `${pos.left}%`,
@@ -186,29 +191,31 @@ export function MessyNotesPage({
             {f.label && (
               <h4
                 className="text-sm font-semibold text-black/80"
-                style={{ fontFamily: "var(--font-handwriting-title), cursive" }}
+                style={{ fontFamily: "var(--font-handwriting-title), cursive", filter: "blur(0.2px)", opacity: 0.9 }}
               >
                 {f.label}
               </h4>
             )}
             {f.content && (
-              <p className="mt-0.5 whitespace-pre-wrap text-xs text-black/75 line-clamp-3">{f.content}</p>
+              <p className="mt-0.5 whitespace-pre-wrap text-xs text-black/75 line-clamp-3" style={{ filter: "blur(0.2px)", opacity: 0.9 }}>{f.content}</p>
             )}
-          </div>
+          </motion.div>
         );
       })}
 
       {/* Katman 3: Polaroid — absolute, beyaz çerçeve, rastgele -3°..3° eğim */}
       {showPolaroid &&
         images.slice(0, 4).map((img, i) => (
-          <div
+          <motion.div
             key={i}
+            layout
             className="absolute"
             style={{
               right: `${6 + i * 12}%`,
               bottom: `${10 + (i % 2) * 8}%`,
               transform: `rotate(${polaroidTilts[i] ?? 0}deg)`,
-              zIndex: 8 + i,
+              transformStyle: "preserve-3d",
+              zIndex: 40 + i,
             }}
           >
             <PolaroidFrame
@@ -217,7 +224,7 @@ export function MessyNotesPage({
               washiRotate={washiRotates[i + 2] ?? 15}
               washiVariant={WASHI_VARIANTS[i % WASHI_VARIANTS.length]}
             />
-          </div>
+          </motion.div>
         ))}
     </div>
   );
@@ -245,7 +252,7 @@ function PolaroidFrame({
     >
       {showWashi && (
         <GlossyWashiTape
-          className="absolute -top-0.5 -right-1.5 h-2.5 w-7 opacity-90"
+          className="absolute -top-0.5 -right-1.5 h-2.5 w-7 opacity-40"
           variant={washiVariant}
           rotateDeg={washiRotate}
           style={{ zIndex: 2 }}

@@ -113,8 +113,8 @@ export function IntroCards() {
             >
               <Link
                 href={card.href}
-                className="group flex w-full flex-col items-center justify-center rounded-xl border border-white/20 bg-white/10 p-6 text-center backdrop-blur-[12px] transition-all duration-300 hover:-translate-y-2 hover:bg-white/20 hover:border-amber-400/70 hover:shadow-[0_0_24px_rgba(251,191,36,0.15)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 md:p-8"
-                style={{ minHeight: "140px" }}
+                className="group flex w-full flex-col items-center justify-center rounded-xl border border-white/20 bg-white/10 p-4 text-center backdrop-blur-[12px] transition-all duration-300 hover:-translate-y-2 hover:bg-white/20 hover:border-amber-400/70 hover:shadow-[0_0_24px_rgba(251,191,36,0.15)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 sm:p-6 md:p-8"
+                style={{ minHeight: "120px" }}
               >
                 <span className="flex flex-col items-center gap-3">
                   <card.Icon

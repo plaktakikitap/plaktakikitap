@@ -1,10 +1,26 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
-import { Mail } from "lucide-react";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import {
+  Instagram,
+  Youtube,
+  Linkedin,
+  Mail,
+  Podcast,
+  type LucideIcon,
+} from "lucide-react";
 import { getLucideIcon } from "@/lib/lucide-icons";
 import { ContactModal } from "./ContactModal";
+
+/** X (Twitter) SVG — Lucide'da marka ikonu yok */
+function XIcon({ className, size = 20 }: { className?: string; size?: number }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="currentColor" aria-hidden>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
 
 export interface SocialLink {
   id: string;
@@ -19,181 +35,144 @@ interface SocialLinksSectionProps {
   links: SocialLink[];
 }
 
-function MagneticButton({
-  children,
+/** Varsayılan platformlar — veri gelmezse skeleton göster */
+const DEFAULT_PLATFORMS: { platform: string; icon: LucideIcon | typeof XIcon }[] = [
+  { platform: "instagram", icon: Instagram },
+  { platform: "x", icon: XIcon },
+  { platform: "linkedin", icon: Linkedin },
+  { platform: "youtube", icon: Youtube },
+  { platform: "spotify", icon: Podcast },
+  { platform: "mail", icon: Mail },
+];
+
+/** Altın glow — rgba(212, 175, 55, 0.4) */
+const GOLD_GLOW = "0 0 20px rgba(212, 175, 55, 0.4)";
+/** Spotify — yeşilimsi altın */
+const SPOTIFY_GLOW = "0 0 24px rgba(30, 215, 96, 0.35), 0 0 20px rgba(212, 175, 55, 0.25)";
+
+function SocialButton({
   href,
   onClick,
   isSpotify,
-  index,
-  isVisible,
+  children,
+  isSkeleton = false,
 }: {
-  children: React.ReactNode;
   href?: string | null;
   onClick?: () => void;
   isSpotify: boolean;
-  index: number;
-  isVisible: boolean;
+  children: React.ReactNode;
+  isSkeleton?: boolean;
 }) {
-  const ref = useRef<HTMLAnchorElement | HTMLButtonElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springConfig = { damping: 20, stiffness: 200 };
-  const springX = useSpring(x, springConfig);
-  const springY = useSpring(y, springConfig);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const el = ref.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const deltaX = (e.clientX - centerX) * 0.2;
-    const deltaY = (e.clientY - centerY) * 0.2;
-    x.set(deltaX);
-    y.set(deltaY);
+  const glowStyle = isSpotify ? SPOTIFY_GLOW : GOLD_GLOW;
+  const motionProps = {
+    whileHover: { scale: 1.1, y: -5, boxShadow: glowStyle } as const,
+    whileTap: { scale: 0.95 } as const,
   };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
-  const baseSize = isSpotify ? "h-12 w-12 md:h-14 md:w-14" : "h-10 w-10 md:h-11 md:w-11";
-  const glowColor = isSpotify
-    ? "group-hover:shadow-[0_0_28px_rgba(251,191,36,0.4)] group-hover:border-amber-400/60"
-    : "group-hover:shadow-[0_0_20px_rgba(251,191,36,0.25)] group-hover:border-amber-400/50";
-
-  const content = (
-    <motion.span
-      style={{ x: springX, y: springY }}
-      className={`flex ${baseSize} items-center justify-center rounded-xl border border-white/20 bg-white/10 backdrop-blur-md transition-all duration-300 ${glowColor}`}
+  const inner = (
+    <div
+      className="!flex !h-10 !w-10 !cursor-pointer !items-center !justify-center !rounded-xl !border !border-[rgba(212,175,55,0.2)] !bg-white/5 !backdrop-blur-md !text-white/80 transition-all duration-300 hover:!border-[rgba(212,175,55,0.5)] hover:!text-white hover:!opacity-100 md:!h-11 md:!w-11"
+      style={{ boxShadow: "none" }}
     >
       {children}
-    </motion.span>
+    </div>
   );
 
   if (onClick) {
     return (
       <motion.button
-        ref={ref as React.RefObject<HTMLButtonElement>}
         type="button"
         onClick={onClick}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        initial={{ opacity: 0, x: -16 }}
-        animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -16 }}
-        transition={{ duration: 0.4, delay: index * 0.06 }}
-        className="group flex shrink-0"
+        className="!flex !h-10 !w-10 !shrink-0 !rounded-xl !border-0 !bg-transparent !p-0 md:!h-11 md:!w-11"
+        disabled={isSkeleton}
+        aria-label={isSkeleton ? undefined : "İletişim"}
+        {...motionProps}
       >
-        {content}
+        {inner}
       </motion.button>
     );
   }
 
   return (
     <motion.a
-      ref={ref as React.RefObject<HTMLAnchorElement>}
-      href={href ?? "#"}
+      href={isSkeleton ? "#" : (href ?? "#")}
       target="_blank"
       rel="noreferrer"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      initial={{ opacity: 0, x: -16 }}
-      animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -16 }}
-      transition={{ duration: 0.4, delay: index * 0.06 }}
-      className="group flex shrink-0 text-white/90"
+      className="!flex !h-10 !w-10 !shrink-0 !rounded-xl !no-underline !text-white/90 md:!h-11 md:!w-11"
+      aria-label={isSkeleton ? undefined : "Sosyal medya"}
+      {...motionProps}
     >
-      {content}
+      {inner}
     </motion.a>
   );
 }
 
 export function SocialLinksSection({ links }: SocialLinksSectionProps) {
-  const [isVisible, setIsVisible] = useState(false);
   const [mailOpen, setMailOpen] = useState(false);
   const [mailUrl, setMailUrl] = useState<string | undefined>();
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([e]) => setIsVisible(e.isIntersecting),
-      { rootMargin: "60px 0px 0px 0px", threshold: 0.1 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
 
   const activeLinks = links
     .filter((l) => l.is_active)
     .sort((a, b) => a.order_index - b.order_index);
 
-  // Link yoksa varsayılan mail butonu
-  const showDefaultMail = activeLinks.length === 0;
+  const showDefault = activeLinks.length === 0;
+  const items = showDefault
+    ? DEFAULT_PLATFORMS.map((p, i) => ({
+        id: `default-${i}`,
+        platform: p.platform,
+        url: "#",
+        icon: p.icon,
+        isMail: p.platform === "mail",
+        isSpotify: p.platform === "spotify",
+        onClick: p.platform === "mail" ? () => setMailOpen(true) : undefined,
+        isSkeleton: true,
+      }))
+    : activeLinks.map((link) => {
+        const iconOrName = link.icon_name ?? link.platform;
+        const key = iconOrName.toLowerCase();
+        const Icon = key === "x" || key === "twitter" ? XIcon : getLucideIcon(iconOrName);
+        const isMail = link.platform.toLowerCase() === "mail";
+        const isSpotify = link.platform.toLowerCase() === "spotify";
+
+        return {
+          id: link.id,
+          platform: link.platform,
+          url: link.url,
+          icon: Icon,
+          isMail,
+          isSpotify,
+          onClick: isMail
+            ? () => {
+                setMailUrl(link.url?.replace(/^mailto:/i, "").trim() || undefined);
+                setMailOpen(true);
+              }
+            : undefined,
+          isSkeleton: false,
+        };
+      });
 
   return (
     <>
-      <div ref={ref} className="flex items-center gap-2">
-        <span className="mr-2 text-xs text-white/40">Bana ulaşın</span>
-        <div className="flex items-center gap-2">
-          {showDefaultMail && (
-            <MagneticButton
-              onClick={() => setMailOpen(true)}
-              isSpotify={false}
-              index={0}
-              isVisible={isVisible}
-            >
-              <Mail className="h-5 w-5" strokeWidth={1.8} />
-            </MagneticButton>
-          )}
-          {activeLinks.map((link, i) => {
-            const Icon = getLucideIcon(link.icon_name ?? link.platform);
-            const isMail = link.platform.toLowerCase() === "mail";
-            const isSpotify = link.platform.toLowerCase() === "spotify";
-
-            if (isMail) {
-              return (
-                <MagneticButton
-                  key={link.id}
-                  onClick={() => {
-                    setMailUrl(link.url?.replace(/^mailto:/i, "").trim() || undefined);
-                    setMailOpen(true);
-                  }}
-                  isSpotify={false}
-                  index={i}
-                  isVisible={isVisible}
-                >
-                  <Icon className="h-5 w-5 md:h-5 md:w-5" strokeWidth={1.8} />
-                </MagneticButton>
-              );
-            }
-
+      <div className="!flex !items-center !justify-end !gap-3">
+        <span className="!text-xs !text-white/40">Bana ulaşın</span>
+        <div className="!flex !flex-wrap !items-center !justify-end !gap-2">
+          {items.map((item) => {
+            const Icon = item.icon;
             return (
-              <MagneticButton
-                key={link.id}
-                href={link.url}
-                isSpotify={isSpotify}
-                index={i}
-                isVisible={isVisible}
+              <SocialButton
+                key={item.id}
+                href={item.isMail ? undefined : item.url}
+                onClick={item.onClick}
+                isSpotify={item.isSpotify}
+                isSkeleton={item.isSkeleton}
               >
-                <Icon
-                  className={
-                    isSpotify ? "h-6 w-6 md:h-7 md:w-7" : "h-5 w-5 md:h-5 md:w-5"
-                  }
-                  strokeWidth={1.8}
-                />
-              </MagneticButton>
+                <Icon className="!h-5 !w-5 md:!h-5 md:!w-5" strokeWidth={1.8} size={20} />
+              </SocialButton>
             );
           })}
         </div>
       </div>
 
-      <ContactModal
-        isOpen={mailOpen}
-        onClose={() => setMailOpen(false)}
-        mailTo={mailUrl}
-      />
+      <ContactModal isOpen={mailOpen} onClose={() => setMailOpen(false)} mailTo={mailUrl} />
     </>
   );
 }

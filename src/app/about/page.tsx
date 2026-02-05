@@ -8,7 +8,7 @@ import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 export default function AboutPage() {
   return (
     <PageTransitionTarget layoutId="card-/about">
-      <div className="mx-auto max-w-2xl px-4 py-10">
+      <div className="mx-auto max-w-2xl px-4 py-8 sm:py-10">
         <PageHeader
           layoutId="nav-/about"
           title="About"

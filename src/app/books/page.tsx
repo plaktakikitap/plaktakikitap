@@ -8,7 +8,7 @@ export default async function BooksPage() {
 
   return (
     <PageTransitionTarget layoutId="card-/books">
-      <div className="mx-auto max-w-6xl px-4 py-10">
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:py-10">
         <PageHeader
           layoutId="nav-/books"
           title="Books"

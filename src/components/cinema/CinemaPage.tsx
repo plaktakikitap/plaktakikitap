@@ -41,7 +41,7 @@ export function CinemaPage({ films, series, stats }: CinemaPageProps) {
   const { humanTR } = calculateTotalLifeSpent(filmList, seriesList);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:py-10">
       <PageHeader
         layoutId="nav-/cinema"
         title="Cinema"
@@ -53,16 +53,16 @@ export function CinemaPage({ films, series, stats }: CinemaPageProps) {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.03, duration: 0.2 }}
-        className="mb-8 flex items-center gap-4 rounded-xl border border-[var(--card-border)] bg-[var(--card)] px-6 py-5"
+        className="mb-6 flex min-w-0 items-center gap-3 rounded-xl border border-[var(--card-border)] bg-[var(--card)] px-4 py-4 sm:mb-8 sm:gap-4 sm:px-6 sm:py-5"
       >
-        <div className="rounded-lg bg-[var(--accent-soft)] p-3">
-          <Clock className="h-8 w-8 text-[var(--accent)]" />
+        <div className="shrink-0 rounded-lg bg-[var(--accent-soft)] p-2.5 sm:p-3">
+          <Clock className="h-7 w-7 text-[var(--accent)] sm:h-8 sm:w-8" />
         </div>
-        <div>
-          <p className="font-editorial text-2xl font-medium text-[var(--foreground)]">
+        <div className="min-w-0">
+          <p className="font-editorial text-lg font-medium text-[var(--foreground)] sm:text-2xl">
             {humanTR}
           </p>
-          <p className="text-sm text-[var(--muted)]">Total life spent watching</p>
+          <p className="text-xs text-[var(--muted)] sm:text-sm">Total life spent watching</p>
         </div>
       </motion.div>
 

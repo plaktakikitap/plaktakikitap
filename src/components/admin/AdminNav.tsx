@@ -4,10 +4,12 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createBrowserClient } from "@/lib/supabase/browser";
 import type { User } from "@supabase/supabase-js";
-import { LayoutDashboard, LogOut, ImageIcon, Calendar, Palette, Music, BookOpen, Link2, Share2 } from "lucide-react";
+import { LayoutDashboard, LogOut, ImageIcon, Calendar, Palette, Music, BookOpen, Link2, Share2, UserCircle, Briefcase } from "lucide-react";
 
 const adminLinks = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/about", label: "Beni Tanıyın", icon: UserCircle },
+  { href: "/admin/works", label: "Yaptıklarım", icon: Briefcase },
   { href: "/admin/media", label: "Media", icon: ImageIcon },
   { href: "/admin/planner", label: "Planner", icon: Calendar },
   { href: "/admin/art", label: "Art", icon: Palette },

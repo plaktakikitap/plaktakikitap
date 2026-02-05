@@ -32,11 +32,11 @@ function GlassCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl">
-      <div className="px-6 pt-6">
+    <div className="rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:rounded-3xl">
+      <div className="px-4 pt-4 sm:px-6 sm:pt-6">
         <p className="text-sm tracking-wide text-white/70">{title}</p>
       </div>
-      <div className="px-6 pb-6 pt-4">{children}</div>
+      <div className="px-4 pb-4 pt-3 sm:px-6 sm:pb-6 sm:pt-4">{children}</div>
     </div>
   );
 }
@@ -51,8 +51,8 @@ export default async function NowPanel() {
     reading?.status === "reading" ? "Şu an okuyorum:" : "En son okuduğum:";
 
   return (
-    <section className="mx-auto mt-16 w-full max-w-6xl">
-      <div className="mb-3 flex items-baseline justify-between px-1">
+    <section className="mx-auto mt-12 w-full max-w-6xl px-4 sm:mt-16 sm:px-6">
+      <div className="mb-3 flex items-baseline justify-between">
         <h3 className="text-lg font-semibold text-white/90">Şu an</h3>
         <span className="text-xs text-white/35">canlı köşe</span>
       </div>
