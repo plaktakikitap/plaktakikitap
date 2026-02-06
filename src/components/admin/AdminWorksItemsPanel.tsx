@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { WorksItem, WorksItemType } from "@/types/works";
+import { AdminImageUpload } from "./AdminImageUpload";
 
 const inputClass = "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm";
 const labelClass = "mb-1 block text-sm font-medium text-[var(--muted)]";
@@ -196,8 +197,8 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
             )}
             {(tab === "art" || tab === "photo" || tab === "certificate") && (
               <div>
-                <label className={labelClass}>Görsel URL (veya yükledikten sonra path)</label>
-                <input name="image_url" type="text" className={inputClass} placeholder="works-media/..." />
+                <label className={labelClass}>Görsel</label>
+                <AdminImageUpload name="image_url" placeholder="Görsel yükle" />
               </div>
             )}
             {(tab === "project" || tab === "experience") && (

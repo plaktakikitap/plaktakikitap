@@ -7,6 +7,7 @@ export interface PlaktakiKitapSettingsRow {
   intro_text: string;
   youtube_channel_url: string;
   youtube_channel_id: string;
+  youtube_subscriber_count: number | null;
   spotify_profile_url: string | null;
   updated_at: string;
 }
@@ -71,6 +72,7 @@ export interface PlaktakiKitapSettingsUpdate {
   intro_text?: string;
   youtube_channel_url?: string;
   youtube_channel_id?: string;
+  youtube_subscriber_count?: number | null;
   spotify_profile_url?: string | null;
 }
 
@@ -102,6 +104,7 @@ export async function updatePlaktakiKitapSettings(
       intro_text: payload.intro_text ?? "",
       youtube_channel_url: payload.youtube_channel_url ?? "",
       youtube_channel_id: payload.youtube_channel_id ?? "",
+      youtube_subscriber_count: payload.youtube_subscriber_count ?? null,
       spotify_profile_url: payload.spotify_profile_url ?? null,
     })
     .select()

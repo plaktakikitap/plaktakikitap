@@ -7,6 +7,7 @@ import {
   adminSetActiveManualTrack,
 } from "@/app/admin/actions";
 import type { ManualNowPlayingItem } from "@/lib/db/queries";
+import { AdminImageUpload } from "./AdminImageUpload";
 import { Music, Plus, Trash2, Star } from "lucide-react";
 import { useState } from "react";
 
@@ -79,12 +80,10 @@ export function AdminNowPlaying({ tracks }: AdminNowPlayingProps) {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="mb-1 block text-sm text-[var(--muted)]">Albüm kapağı URL (isteğe bağlı)</label>
-            <input
+            <label className="mb-1 block text-sm text-[var(--muted)]">Albüm kapağı (isteğe bağlı)</label>
+            <AdminImageUpload
               name="album_art_url"
-              type="url"
-              className="w-full rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
-              placeholder="https://..."
+              placeholder="Albüm kapağı yükle"
             />
           </div>
           <div className="sm:col-span-2">

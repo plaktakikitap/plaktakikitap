@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, Trash2, Upload, Image as ImageIcon } from "lucide-react";
+import { AdminImageUpload } from "./AdminImageUpload";
 import type { Photo } from "@/types/photos";
 
 export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) {
@@ -299,13 +300,11 @@ export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) 
         </h2>
         <form onSubmit={handleCreate} className="space-y-4">
           <div>
-            <label className="mb-1 block text-sm text-[var(--muted)]">Görsel URL / storage path *</label>
-            <input
+            <label className="mb-1 block text-sm text-[var(--muted)]">Görsel *</label>
+            <AdminImageUpload
               value={form.image_url}
-              onChange={(e) => setForm((f) => ({ ...f, image_url: e.target.value }))}
-              type="text"
-              placeholder="2024/ocak-01.jpg veya https://..."
-              className="w-full rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
+              onChange={(url) => setForm((f) => ({ ...f, image_url: url }))}
+              placeholder="Fotoğraf yükle"
               required
             />
           </div>

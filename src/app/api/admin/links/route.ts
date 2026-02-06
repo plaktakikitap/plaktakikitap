@@ -14,7 +14,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.redirect(new URL("/admin?err=links_json", req.url));
   }
 
-  const supabase = createAdminClient();
+  let supabase;
+  try {
+    supabase = createAdminClient();
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Veritabanı bağlantısı yapılamadı.";
+    return NextResponse.redirect(new URL("/admin?err=links&msg=" + encodeURIComponent(msg), req.url));
+  }
 
   // Delete all existing links (match all UUIDs via neq to nil)
   await supabase
@@ -33,7 +39,10 @@ export async function POST(req: NextRequest) {
   };
   });
 
-  await supabase.from("site_links").insert(cleaned);
+  const { error } = await supabase.from("site_links").insert(cleaned);
 
-  return NextResponse.redirect(new URL("/admin", req.url));
+  if (error) {
+    return NextResponse.redirect(new URL("/admin?err=links&msg=" + encodeURIComponent(error.message), req.url));
+  }
+  return NextResponse.redirect(new URL("/admin?toast=saved", req.url));
 }

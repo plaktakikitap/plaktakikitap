@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { adminUpsertReadingStatus } from "@/app/admin/actions";
+import { AdminImageUpload } from "./AdminImageUpload";
 import { useState } from "react";
 
 interface AdminReadingFormProps {
@@ -68,14 +69,12 @@ export function AdminReadingForm({ initial }: AdminReadingFormProps) {
         </div>
         <div>
           <label className="mb-1 block text-sm text-[var(--muted)]">
-            Kapak URL (isteğe bağlı)
+            Kapak görseli (isteğe bağlı)
           </label>
-          <input
+          <AdminImageUpload
             name="cover_url"
-            type="url"
-            defaultValue={initial?.cover_url ?? ""}
-            className="w-full rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
-            placeholder="https://..."
+            value={initial?.cover_url ?? ""}
+            placeholder="Kapak yükle"
           />
         </div>
         <div>

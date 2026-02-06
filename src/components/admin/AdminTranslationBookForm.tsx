@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { adminUpdateTranslationBook } from "@/app/admin/actions";
 import type { TranslationBookRow } from "@/types/database";
+import { AdminImageUpload } from "./AdminImageUpload";
 
 const inputClass =
   "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm";
@@ -51,9 +52,12 @@ export function AdminTranslationBookForm({ book }: { book: TranslationBookRow })
         <input name="year" type="number" min="1900" max="2100" defaultValue={book.year ?? ""} className={inputClass} />
       </div>
       <div>
-        <label className={labelClass}>Kapak URL (veya yeni dosya yükle)</label>
-        <input name="cover_url" type="url" defaultValue={book.cover_url} className={inputClass} />
-        <input name="cover_file" type="file" accept="image/*" className="mt-2 text-sm" />
+        <label className={labelClass}>Kapak görseli</label>
+        <AdminImageUpload
+          name="cover_url"
+          value={book.cover_url ?? ""}
+          placeholder="Kapak yükle"
+        />
       </div>
       <div>
         <label className={labelClass}>Amazon URL</label>

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Plus, Trash2, Pencil, GripVertical } from "lucide-react";
 import type { TranslationBookRow } from "@/types/database";
+import { AdminImageUpload } from "./AdminImageUpload";
 import {
   adminCreateTranslationBook,
   adminDeleteTranslationBook,
@@ -105,9 +106,8 @@ export function AdminTranslationBooksPanel({ books }: { books: TranslationBookRo
             <input name="year" type="number" min="1900" max="2100" className={inputClass} placeholder="2024" />
           </div>
           <div className="sm:col-span-2">
-            <label className={labelClass}>Kapak (URL veya dosya yükle)</label>
-            <input name="cover_url" type="url" className={inputClass} placeholder="https://..." />
-            <input name="cover_file" type="file" accept="image/*" className="mt-2 text-sm" />
+            <label className={labelClass}>Kapak görseli</label>
+            <AdminImageUpload name="cover_url" placeholder="Kapak yükle" />
           </div>
           <div className="sm:col-span-2">
             <label className={labelClass}>Amazon URL</label>

@@ -12,9 +12,12 @@ export async function middleware(request: NextRequest) {
 
   const { response, user } = await updateSession(request);
 
-  // Admin: pk_admin cookie veya Supabase ile izinli e-posta
+  // Admin: local'de (development) giriş atlanır; production'da pk_admin veya Supabase gerekli
   if (pathname.startsWith("/admin")) {
     if (pathname === "/admin/login") {
+      return response;
+    }
+    if (process.env.NODE_ENV === "development") {
       return response;
     }
     const isCookieAuth = request.cookies.get("pk_admin")?.value === "1";

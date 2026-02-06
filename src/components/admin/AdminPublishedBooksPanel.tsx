@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Plus, Trash2, Pencil, GripVertical } from "lucide-react";
 import type { PublishedBook } from "@/types/database";
+import { AdminImageUpload } from "./AdminImageUpload";
 import {
   adminCreatePublishedBook,
   adminDeletePublishedBook,
@@ -103,8 +104,8 @@ export function AdminPublishedBooksPanel({ books }: { books: PublishedBook[] }) 
             <input name="year" type="number" min="1900" max="2100" className={inputClass} placeholder="2024" />
           </div>
           <div className="sm:col-span-2">
-            <label className={labelClass}>Kapak görseli URL</label>
-            <input name="cover_image" type="url" className={inputClass} placeholder="https://..." />
+            <label className={labelClass}>Kapak görseli</label>
+            <AdminImageUpload name="cover_image" placeholder="Kapak yükle" />
           </div>
           <div className="sm:col-span-2">
             <label className={labelClass}>Amazon URL (Satın Al linki)</label>

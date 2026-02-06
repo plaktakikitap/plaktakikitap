@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
+import { AdminImageUpload } from "./AdminImageUpload";
 
 const inputClass =
   "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm";
@@ -73,8 +74,8 @@ export function AdminPlaktakiKitapVideoForm() {
           <textarea name="description" rows={3} placeholder="Kisa aciklama (opsiyonel)" className={inputClass} />
         </div>
         <div>
-          <label className={labelClass}>custom_thumbnail (URL)</label>
-          <input name="custom_thumbnail" type="url" placeholder="https://... Özel kapak; boş bırakırsanız YouTube thumbnail kullanılır." className={inputClass} />
+          <label className={labelClass}>Özel kapak (boş bırakırsanız YouTube thumbnail kullanılır)</label>
+          <AdminImageUpload name="custom_thumbnail" placeholder="Görsel yükle" />
         </div>
         <button type="submit" disabled={loading} className="rounded bg-[var(--primary)] px-4 py-2 text-sm text-[var(--primary-foreground)] disabled:opacity-50">
           {loading ? "Ekleniyor…" : "Video ekle"}

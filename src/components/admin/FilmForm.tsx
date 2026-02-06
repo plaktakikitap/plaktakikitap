@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createFilm } from "@/app/actions";
 import { StarRatingInput } from "@/components/ui/StarRating";
+import { AdminImageUpload } from "./AdminImageUpload";
 import { X } from "lucide-react";
-import styles from "@/components/watch-log/WatchLogGrid.module.css";
 
 const SUGGESTED_GENRES = [
   "Drama",
@@ -26,8 +26,6 @@ export function FilmForm() {
   const [rating5, setRating5] = useState<number | null>(null);
   const [genreTags, setGenreTags] = useState<string[]>([]);
   const [genreInput, setGenreInput] = useState("");
-  const [posterUrl, setPosterUrl] = useState("");
-  const [spineUrl, setSpineUrl] = useState("");
 
   function addGenre(tag: string) {
     const t = tag.trim();
@@ -194,67 +192,20 @@ export function FilmForm() {
 
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
-          <label className="block text-sm font-medium">Kapak görseli (cover) URL</label>
-          <input
+          <label className="block text-sm font-medium">Kapak görseli (cover)</label>
+          <AdminImageUpload
             name="poster_url"
-            type="url"
-            value={posterUrl}
-            onChange={(e) => setPosterUrl(e.target.value)}
-            placeholder="https://..."
-            className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
+            placeholder="Kapak yükle"
+            className="mt-1"
           />
-          <p className="mt-1.5 text-xs text-[var(--muted)]">Modal önizleme (2:3 oran)</p>
-          <div className="mt-2 aspect-[2/3] w-full max-w-[180px] overflow-hidden rounded-lg border border-[var(--card-border)] bg-black/20">
-            {posterUrl ? (
-              <img
-                src={posterUrl}
-                alt=""
-                className="h-full w-full object-cover object-center"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = "none";
-                }}
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center text-xs text-[var(--muted)]">
-                Kapak yok
-              </div>
-            )}
-          </div>
         </div>
         <div>
-          <label className="block text-sm font-medium">Spine görseli (DVD yan yüz) URL</label>
-          <input
+          <label className="block text-sm font-medium">Spine görseli (DVD yan yüz, rafta görünür)</label>
+          <AdminImageUpload
             name="spine_url"
-            type="url"
-            value={spineUrl}
-            onChange={(e) => setSpineUrl(e.target.value)}
-            placeholder="https://... (rafta görünür)"
-            className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
+            placeholder="Spine yükle"
+            className="mt-1"
           />
-          <p className="mt-1.5 text-xs text-[var(--muted)]">Raf önizleme (raf oranı)</p>
-          <div className="mt-2 flex justify-start">
-            <div
-              className={styles.spineCard}
-              style={{ width: 60, height: 300, minWidth: 60, minHeight: 300 }}
-            >
-              <div className={styles.spineCardInner}>
-                {spineUrl ? (
-                  <img
-                    src={spineUrl}
-                    alt=""
-                    className={styles.spineImage}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = "none";
-                    }}
-                  />
-                ) : (
-                  <div className={styles.spinePlaceholder}>
-                    <span className="text-[10px]">Spine</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

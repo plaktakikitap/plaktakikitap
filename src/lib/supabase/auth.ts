@@ -7,9 +7,12 @@ import { verifyAdminSession } from "@/lib/admin-auth";
 
 /**
  * Requires an authenticated session for /admin routes.
- * Checks pk_admin cookie first (form login), then admin_session (legacy), then Supabase auth.
+ * Local'de (NODE_ENV=development) giriş atlanır; production'da pk_admin, admin_session veya Supabase gerekli.
  */
 export async function requireAdmin(): Promise<User | { isSimpleAuth: true }> {
+  if (process.env.NODE_ENV === "development") {
+    return { isSimpleAuth: true } as User & { isSimpleAuth: true };
+  }
   const cookieStore = await cookies();
   if (cookieStore.get("pk_admin")?.value === "1") {
     return { isSimpleAuth: true } as User & { isSimpleAuth: true };

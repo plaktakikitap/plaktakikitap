@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Youtube, ImageIcon, Briefcase, Award, ListTodo, Settings, Plus, Trash2 } from "lucide-react";
+import { AdminImageUpload } from "./AdminImageUpload";
 
 const inputClass =
   "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm";
@@ -268,8 +269,8 @@ export function AdminWorksPanel({
         </ul>
         <form onSubmit={addArt} className="flex flex-wrap items-end gap-3">
           <div className="min-w-[200px] flex-1">
-            <label className={labelClass}>Görsel URL</label>
-            <input name="image_url" type="url" className={inputClass} placeholder="https://..." required />
+            <label className={labelClass}>Görsel</label>
+            <AdminImageUpload name="image_url" placeholder="Görsel yükle" required />
           </div>
           <div className="min-w-[120px]">
             <label className={labelClass}>Altyazı</label>
@@ -338,8 +339,8 @@ export function AdminWorksPanel({
             <input name="title" type="text" className={inputClass} placeholder="AWS Certified" required />
           </div>
           <div className="min-w-[200px] flex-1">
-            <label className={labelClass}>Rozet görsel URL</label>
-            <input name="image_url" type="url" className={inputClass} placeholder="https://..." />
+            <label className={labelClass}>Rozet görseli</label>
+            <AdminImageUpload name="image_url" placeholder="Rozet yükle" />
           </div>
           <div className="min-w-[160px]">
             <label className={labelClass}>Link (isteğe bağlı)</label>

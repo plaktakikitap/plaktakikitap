@@ -1,35 +1,43 @@
 "use client";
 
-import { Volume2, VolumeX } from "lucide-react";
 import { useSoundsEnabled } from "@/hooks/useSound";
+
+const BARS = 5;
 
 export function AdminSiteSounds() {
   const [enabled, toggle] = useSoundsEnabled();
 
   return (
-    <section className="rounded-2xl border border-[var(--card-border)] bg-[var(--card)] p-6">
-      <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold">
-        {enabled ? (
-          <Volume2 className="h-5 w-5 text-[var(--accent)]" />
-        ) : (
-          <VolumeX className="h-5 w-5 text-[var(--muted)]" />
-        )}
+    <div className="h-full">
+      <h3 className="mb-4 flex items-center gap-2 text-sm font-medium text-[var(--muted-foreground)]">
         Site Sesleri
-      </h2>
-      <p className="mb-4 text-sm text-[var(--muted)]">
-        Giriş ekranı (Plak/Kitap) ve ajanda sayfa çevirme seslerini kontrol eder
+      </h3>
+      <p className="mb-4 text-xs text-[var(--muted-foreground)]">
+        Giriş ekranı ve ajanda sayfa çevirme sesleri
       </p>
-      <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-[var(--card-border)] px-4 py-3 transition hover:bg-[var(--background)]">
-        <input
-          type="checkbox"
-          checked={enabled}
-          onChange={toggle}
-          className="h-5 w-5 rounded border-[var(--input)]"
-        />
+      <button
+        type="button"
+        onClick={toggle}
+        aria-label={enabled ? "Sesleri kapat" : "Sesleri aç"}
+        className="admin-sound-btn group flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-6 py-5 transition-colors hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--admin-focus-ring)]"
+      >
+        <div className="flex items-end gap-1" style={{ height: 24 }}>
+          {Array.from({ length: BARS }).map((_, i) => (
+            <span
+              key={i}
+              className="w-1 rounded-full bg-current transition-colors"
+              style={{
+                height: enabled ? [8, 14, 20, 14, 8][i] : 6,
+                animation: enabled ? "admin-sound-bar 0.6s ease-in-out infinite" : "none",
+                animationDelay: enabled ? `${i * 0.08}s` : undefined,
+              }}
+            />
+          ))}
+        </div>
         <span className="text-sm font-medium">
-          Site Sesleri: {enabled ? "Açık" : "Kapalı"}
+          {enabled ? "Açık" : "Kapalı"}
         </span>
-      </label>
-    </section>
+      </button>
+    </div>
   );
 }

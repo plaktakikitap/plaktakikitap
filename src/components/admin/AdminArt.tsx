@@ -13,6 +13,7 @@ import {
 import type { ArtItem } from "@/lib/db/queries";
 import { getVideoEmbedUrl } from "@/lib/utils/embed";
 import { Palette, Plus, Pencil, Trash2, Image, Video, Link2, X } from "lucide-react";
+import { AdminImageUpload } from "./AdminImageUpload";
 
 const inputClass =
   "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-1.5 text-sm";
@@ -23,6 +24,7 @@ export function AdminArt({ items }: { items: ArtItem[] }) {
   const [showCreate, setShowCreate] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [addingMediaTo, setAddingMediaTo] = useState<string | null>(null);
+  const [addMediaKind, setAddMediaKind] = useState<"image" | "video" | "link">("image");
   const [error, setError] = useState<string | null>(null);
 
   async function handleCreate(formData: FormData) {
@@ -57,6 +59,7 @@ export function AdminArt({ items }: { items: ArtItem[] }) {
     if (r.error) setError(r.error);
     else {
       setAddingMediaTo(null);
+      setAddMediaKind("image");
       router.refresh();
     }
   }
@@ -252,14 +255,25 @@ export function AdminArt({ items }: { items: ArtItem[] }) {
                         <label className={labelClass}>Kind</label>
                         <select
                           name="kind"
+                          value={addMediaKind}
+                          onChange={(e) => setAddMediaKind(e.target.value as "image" | "video" | "link")}
                           className="rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-1.5 text-sm"
                         >
                           <option value="image">Image</option>
                           <option value="video">Video</option>
                           <option value="link">Link (YouTube, Vimeo)</option>
                         </select>
-                        <label className={labelClass}>URL *</label>
-                        <input name="url" type="url" required className={inputClass} />
+                        {addMediaKind === "image" ? (
+                          <>
+                            <label className={labelClass}>Görsel *</label>
+                            <AdminImageUpload name="url" placeholder="Görsel yükle" required />
+                          </>
+                        ) : (
+                          <>
+                            <label className={labelClass}>URL *</label>
+                            <input name="url" type="url" required className={inputClass} placeholder="YouTube, Vimeo vb." />
+                          </>
+                        )}
                         <label className={labelClass}>Caption</label>
                         <input name="caption" className={inputClass} />
                         <div className="mt-2 flex gap-2">
@@ -268,7 +282,7 @@ export function AdminArt({ items }: { items: ArtItem[] }) {
                           </button>
                           <button
                             type="button"
-                            onClick={() => setAddingMediaTo(null)}
+                            onClick={() => { setAddingMediaTo(null); setAddMediaKind("image"); }}
                             className="rounded-lg border px-3 py-1.5 text-sm"
                           >
                             Cancel

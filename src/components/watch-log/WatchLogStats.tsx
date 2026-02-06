@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { formatWatchTimeYilAyGunSaat } from "@/lib/utils/time";
-import { Film as FilmIcon, Tv, Clock, Calendar, BarChart3 } from "lucide-react";
+import { Film as FilmIcon, Tv, Clock, Calendar } from "lucide-react";
 
 export type WatchLogVariant = "film" | "series";
 
@@ -64,15 +64,6 @@ export function WatchLogStats({
         <div>
           <p className="text-xs text-white/60">Toplam süre</p>
           <p className="mt-0.5 font-medium text-white/95">{totalTimeStr}</p>
-        </div>
-      </div>
-
-      {/* Ortalama süre */}
-      <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-4 backdrop-blur-sm">
-        <BarChart3 className="h-6 w-6 shrink-0 text-amber-400/80" aria-hidden />
-        <div>
-          <p className="text-xs text-white/60">Ortalama süre ({label} başına)</p>
-          <p className="mt-0.5 font-medium text-white/95">{averageTimeStr}</p>
         </div>
       </div>
 

@@ -18,6 +18,15 @@ export async function PATCH(req: NextRequest) {
       intro_text: typeof b.intro_text === "string" ? b.intro_text : undefined,
       youtube_channel_url: typeof b.youtube_channel_url === "string" ? b.youtube_channel_url : undefined,
       youtube_channel_id: typeof b.youtube_channel_id === "string" ? b.youtube_channel_id : undefined,
+      youtube_subscriber_count:
+        b.youtube_subscriber_count !== undefined
+          ? (b.youtube_subscriber_count == null || b.youtube_subscriber_count === ""
+              ? null
+              : (() => {
+                  const n = Number(b.youtube_subscriber_count);
+                  return Number.isFinite(n) && n >= 0 ? n : null;
+                })())
+          : undefined,
       spotify_profile_url: b.spotify_profile_url !== undefined ? (b.spotify_profile_url == null ? null : String(b.spotify_profile_url).trim() || null) : undefined,
     };
     const result = await updatePlaktakiKitapSettings(payload);

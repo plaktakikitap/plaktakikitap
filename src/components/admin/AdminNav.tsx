@@ -5,7 +5,27 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createBrowserClient } from "@/lib/supabase/browser";
 import type { User } from "@supabase/supabase-js";
-import { LayoutDashboard, LogOut, ImageIcon, Calendar, Palette, Music, BookOpen, Link2, Share2, UserCircle, Briefcase, Camera, Video, Settings, Languages, FileText, Menu, X } from "lucide-react";
+import {
+  LayoutDashboard,
+  LogOut,
+  ImageIcon,
+  Calendar,
+  Palette,
+  Music,
+  BookOpen,
+  Link2,
+  Share2,
+  UserCircle,
+  Briefcase,
+  Camera,
+  Video,
+  Settings,
+  Languages,
+  FileText,
+  Menu,
+  X,
+  BookMarked,
+} from "lucide-react";
 
 const adminLinks = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -20,12 +40,17 @@ const adminLinks = [
   { href: "/admin/art", label: "Art", icon: Palette },
   { href: "/admin/now-playing", label: "Şu an dinliyorum", icon: Music },
   { href: "/admin/reading", label: "Şu an okuyorum", icon: BookOpen },
-  { href: "/admin/reading-log", label: "Okuma günlüğü", icon: BookOpen },
+  { href: "/admin/reading-log", label: "Okuma günlüğü", icon: BookMarked },
   { href: "/admin/translations", label: "Çeviriler", icon: Languages },
   { href: "/admin/site-links", label: "Site linkleri", icon: Link2 },
   { href: "/admin/socials", label: "Bana Ulaşın", icon: Share2 },
   { href: "/admin/settings", label: "Ayarlar", icon: Settings },
 ];
+
+function isActive(pathname: string, href: string) {
+  if (href === "/admin") return pathname === "/admin";
+  return pathname === href || pathname.startsWith(href + "/");
+}
 
 export function AdminNav({
   user,
@@ -65,88 +90,126 @@ export function AdminNav({
     router.refresh();
   }
 
-  const linkEl = (link: (typeof adminLinks)[0]) => (
-    <Link
-      key={link.href}
-      href={link.href}
-      onClick={() => setMenuOpen(false)}
-      className={`flex items-center gap-2 rounded px-2 py-1 text-sm ${
-        pathname === link.href
-          ? "bg-[var(--accent-soft)] text-[var(--accent)]"
-          : "text-[var(--muted)] hover:text-[var(--foreground)]"
-      }`}
-    >
-      <link.icon className="h-4 w-4 shrink-0" />
-      <span className="min-w-0 truncate">{link.label}</span>
-    </Link>
+  const NavLink = ({ link }: { link: (typeof adminLinks)[0] }) => {
+    const active = isActive(pathname, link.href);
+    return (
+      <Link
+        href={link.href}
+        onClick={() => setMenuOpen(false)}
+        title={link.label}
+        className={`group relative flex items-center gap-3 rounded-r-xl px-3 py-2.5 transition-all duration-200 ${
+          active
+            ? "admin-nav-active text-amber-400"
+            : "text-white/60 hover:text-white/90 hover:bg-white/5"
+        }`}
+      >
+        {active && (
+          <span
+            className="absolute left-0 top-1/2 h-8 w-1 -translate-y-1/2 rounded-r-full"
+            style={{
+              background: "linear-gradient(180deg, #d4af37, #f4d03f)",
+              boxShadow: "0 0 16px rgba(212, 175, 55, 0.6)",
+            }}
+          />
+        )}
+        <link.icon
+          className={`relative z-10 shrink-0 ${active ? "h-5 w-5" : "h-5 w-5"}`}
+        />
+        <span className="relative z-10 hidden min-w-0 truncate text-sm font-light lg:group-hover:inline xl:inline">
+          {link.label}
+        </span>
+      </Link>
+    );
+  };
+
+  const SidebarContent = () => (
+    <>
+      <div className="flex items-center justify-between border-b border-white/10 px-3 py-4">
+        <Link
+          href="/admin"
+          className="admin-heading font-semibold tracking-tight text-white"
+        >
+          <span className="hidden xl:inline">Command Center</span>
+          <span className="xl:hidden">CC</span>
+        </Link>
+        <button
+          type="button"
+          onClick={() => setMenuOpen(false)}
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-white/60 hover:bg-white/10 hover:text-white lg:hidden"
+          aria-label="Menüyü kapat"
+        >
+          <X className="h-5 w-5" />
+        </button>
+      </div>
+      <nav className="flex-1 space-y-0.5 overflow-y-auto px-2 py-3">
+        {adminLinks.map((link) => (
+          <NavLink key={link.href} link={link} />
+        ))}
+      </nav>
+      <div className="border-t border-white/10 px-2 py-3">
+        {!isSimpleAuth && (
+          <p className="mb-2 truncate px-3 text-xs font-light text-white/50">
+            {(user as User).email}
+          </p>
+        )}
+        <button
+          onClick={handleLogout}
+          className="flex w-full items-center gap-3 rounded-r-xl px-3 py-2.5 text-sm font-light text-white/60 hover:bg-white/5 hover:text-white"
+        >
+          <LogOut className="h-5 w-5 shrink-0" />
+          <span className="hidden xl:inline">Çıkış</span>
+        </button>
+      </div>
+    </>
   );
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--card-border)] bg-[var(--background)]/95 backdrop-blur-sm">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 px-4">
-          <div className="flex min-w-0 items-center gap-2">
-            <Link href="/admin" className="shrink-0 font-semibold text-[var(--foreground)]">
-              Admin
-            </Link>
-            {/* Masaüstü: linkler yan yana */}
-            <div className="hidden flex-wrap items-center gap-1 md:flex">
-              {adminLinks.map((link) => linkEl(link))}
-            </div>
-            {/* Mobil: hamburger */}
-            <button
-              type="button"
-              onClick={() => setMenuOpen(true)}
-              className="ml-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-[var(--muted)] hover:bg-[var(--card)] hover:text-[var(--foreground)] md:hidden"
-              aria-label="Menüyü aç"
-            >
-              <Menu className="h-5 w-5" />
-            </button>
-          </div>
-          <div className="flex shrink-0 items-center gap-2">
-            {!isSimpleAuth && (
-              <span className="hidden truncate text-sm text-[var(--muted)] max-w-[120px] sm:max-w-[180px] md:inline">
-                {(user as User).email}
-              </span>
-            )}
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-1 rounded px-2 py-1 text-sm text-[var(--muted)] hover:bg-[var(--card)] hover:text-[var(--foreground)]"
-            >
-              <LogOut className="h-4 w-4" />
-              <span className="hidden sm:inline">Çıkış</span>
-            </button>
-          </div>
-        </div>
-      </nav>
+      {/* Sabit sol sidebar — ikon odaklı, glassmorphism */}
+      <aside
+        className="fixed left-0 top-0 z-50 hidden h-screen w-[72px] flex-col border-r border-white/10 bg-black/30 shadow-[4px_0_32px_-8px_rgba(0,0,0,0.5)] backdrop-blur-xl xl:w-[200px] lg:flex"
+      >
+        <SidebarContent />
+      </aside>
 
-      {/* Mobil menü overlay */}
+      {/* Mobil: hamburger + overlay sidebar */}
+      <div className="fixed left-0 top-0 z-50 flex h-14 w-full items-center justify-between border-b border-white/10 bg-black/40 px-4 backdrop-blur-xl lg:hidden">
+        <button
+          type="button"
+          onClick={() => setMenuOpen(true)}
+          className="flex h-9 w-9 items-center justify-center rounded-lg text-white/80 hover:bg-white/10"
+          aria-label="Menüyü aç"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+        <Link href="/admin" className="admin-heading font-semibold text-white">
+          Command Center
+        </Link>
+        <button
+          onClick={handleLogout}
+          className="flex h-9 w-9 items-center justify-center rounded-lg text-white/80 hover:bg-white/10"
+          aria-label="Çıkış"
+        >
+          <LogOut className="h-5 w-5" />
+        </button>
+      </div>
+
       <div
-        className="fixed inset-0 z-40 bg-black/50 transition-opacity md:hidden"
-        style={{ opacity: menuOpen ? 1 : 0, pointerEvents: menuOpen ? "auto" : "none" }}
+        className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity lg:hidden"
+        style={{
+          opacity: menuOpen ? 1 : 0,
+          pointerEvents: menuOpen ? "auto" : "none",
+        }}
         onClick={() => setMenuOpen(false)}
         aria-hidden
       />
       <aside
-        className="fixed top-0 right-0 z-50 flex h-full w-full max-w-[min(320px,85vw)] flex-col border-l border-[var(--card-border)] bg-[var(--background)] shadow-xl transition-transform duration-200 ease-out md:hidden"
-        style={{ transform: menuOpen ? "translateX(0)" : "translateX(100%)" }}
+        className="fixed left-0 top-0 z-50 flex h-full w-[260px] max-w-[85vw] flex-col border-r border-white/10 bg-black/70 shadow-2xl backdrop-blur-xl transition-transform lg:hidden"
+        style={{
+          transform: menuOpen ? "translateX(0)" : "translateX(-100%)",
+        }}
       >
-        <div className="flex items-center justify-between border-b border-[var(--card-border)] px-4 py-3">
-          <span className="font-semibold text-[var(--foreground)]">Menü</span>
-          <button
-            type="button"
-            onClick={() => setMenuOpen(false)}
-            className="flex h-9 w-9 items-center justify-center rounded-md text-[var(--muted)] hover:bg-[var(--card)] hover:text-[var(--foreground)]"
-            aria-label="Menüyü kapat"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-        <div className="flex-1 overflow-y-auto px-3 py-4">
-          <div className="flex flex-col gap-0.5">
-            {adminLinks.map((link) => linkEl(link))}
-          </div>
-        </div>
+        <SidebarContent />
       </aside>
     </>
   );

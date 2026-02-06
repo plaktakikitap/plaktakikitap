@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createBook } from "@/app/actions";
+import { AdminImageUpload } from "./AdminImageUpload";
 
 export function BookForm() {
   const router = useRouter();
@@ -116,22 +117,20 @@ export function BookForm() {
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="block text-sm font-medium">Kapak URL (cover_url)</label>
-          <input
+          <label className="block text-sm font-medium">Kapak görseli</label>
+          <AdminImageUpload
             name="cover_url"
-            type="url"
-            placeholder="https://..."
-            className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
+            placeholder="Kapak yükle"
+            className="mt-1"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium">Sırt URL (spine_url) *</label>
-          <input
+          <label className="block text-sm font-medium">Sırt görseli (kitaplık) *</label>
+          <AdminImageUpload
             name="spine_url"
-            type="url"
+            placeholder="Sırt görseli yükle"
+            className="mt-1"
             required
-            placeholder="https://... (kitaplık sırtı)"
-            className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
           />
         </div>
       </div>

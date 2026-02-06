@@ -7,6 +7,7 @@ interface SettingsRow {
   intro_text: string;
   youtube_channel_url: string;
   youtube_channel_id: string;
+  youtube_subscriber_count: number | null;
   spotify_profile_url: string | null;
   updated_at: string;
 }
@@ -70,8 +71,19 @@ export function AdminPlaktakiKitapSettingsForm() {
         <input name="youtube_channel_url" type="url" defaultValue={settings.youtube_channel_url} placeholder="https://www.youtube.com/@..." className={inputClass} />
       </div>
       <div className="mt-4">
-        <label className={labelClass}>YouTube kanal ID (abone sayısı API)</label>
+        <label className={labelClass}>YouTube kanal ID</label>
         <input name="youtube_channel_id" type="text" defaultValue={settings.youtube_channel_id} placeholder="UC..." className={inputClass} />
+      </div>
+      <div className="mt-4">
+        <label className={labelClass}>YouTube abone sayısı (elle gir)</label>
+        <input
+          name="youtube_subscriber_count"
+          type="number"
+          min={0}
+          defaultValue={settings.youtube_subscriber_count ?? ""}
+          placeholder="1234"
+          className={inputClass}
+        />
       </div>
       <div className="mt-4">
         <label className={labelClass}>Spotify profil / podcast URL</label>

@@ -312,6 +312,33 @@ export async function getPublicPosts(limit = 5): Promise<{ id: string; title: st
   return (data ?? []) as { id: string; title: string }[];
 }
 
+/** Total books in catalog (admin stats). */
+export async function getTotalBooksCount(): Promise<number> {
+  const supabase = await createServerClient();
+  const { count, error } = await supabase
+    .from("books")
+    .select("*", { count: "exact", head: true });
+  if (error) return 0;
+  return count ?? 0;
+}
+
+/** Bu ay bitirilen kitap sayısı (status=finished, end_date bu ay). */
+export async function getBooksReadThisMonth(): Promise<number> {
+  const supabase = await createServerClient();
+  const now = new Date();
+  const startOfMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const endOfMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+  const { count, error } = await supabase
+    .from("books")
+    .select("*", { count: "exact", head: true })
+    .eq("status", "finished")
+    .gte("end_date", startOfMonth)
+    .lte("end_date", endOfMonth);
+  if (error) return 0;
+  return count ?? 0;
+}
+
 /** Public projects count. */
 export async function getPublicProjectsCount(): Promise<number> {
   const supabase = await createServerClient();

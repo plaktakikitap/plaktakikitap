@@ -109,7 +109,7 @@ export default function IntroGate() {
               textShadow: "0 0 12px rgba(255,255,255,0.15), 0 10px 30px rgba(0,0,0,0.4)",
             }}
           >
-            Make Your Choice
+            MAKE YOUR CHOICE
           </h1>
           <p
             className="text-sm font-normal tracking-[0.04em] text-[#F3EBDD] opacity-80"

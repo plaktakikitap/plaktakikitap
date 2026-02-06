@@ -1,5 +1,8 @@
+import { Suspense } from "react";
 import { requireAdmin } from "@/lib/supabase/auth";
 import { AdminNav } from "@/components/admin/AdminNav";
+import { AdminToast } from "@/components/admin/AdminToast";
+import { AdminQuickAdd } from "@/components/admin/AdminQuickAdd";
 
 export default async function AdminDashboardLayout({
   children,
@@ -9,9 +12,17 @@ export default async function AdminDashboardLayout({
   const user = await requireAdmin();
 
   return (
-    <div className="min-h-screen bg-[var(--background)]">
+    <div className="admin-command-center min-h-screen text-white/95">
       <AdminNav user={user} />
-      <div className="pt-14">{children}</div>
+      <main className="min-h-screen pt-14 lg:ml-[72px] lg:pt-0">
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+          {children}
+        </div>
+      </main>
+      <AdminQuickAdd />
+      <Suspense fallback={null}>
+        <AdminToast />
+      </Suspense>
     </div>
   );
 }

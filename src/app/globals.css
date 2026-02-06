@@ -46,6 +46,7 @@
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-serif), Georgia, serif;
   --font-display: var(--font-display), "Cormorant Garamond", Georgia, serif;
+  --font-playfair: var(--font-playfair), "Playfair Display", Georgia, serif;
   --font-handwriting: var(--font-handwriting), "Caveat", cursive;
   --font-handwriting-title: var(--font-handwriting-title), "Permanent Marker", cursive;
   --font-handwriting-alt: var(--font-handwriting-alt), "Patrick Hand", cursive;
@@ -120,6 +121,101 @@ h1, h2, h3, .font-editorial {
 
 .font-display {
   font-family: var(--font-display);
+}
+
+/* Admin panel: altın sarısı focus ring (The Glass Logic) */
+:root {
+  --admin-focus-ring: rgba(212, 175, 55, 0.5);
+}
+.admin-input {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.95);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.admin-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+.admin-input:focus {
+  border-color: rgba(212, 175, 55, 0.6);
+  box-shadow: 0 0 0 2px var(--admin-focus-ring);
+}
+.admin-btn {
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
+  background: var(--accent);
+  outline: none;
+  transition: opacity 0.2s, box-shadow 0.2s;
+}
+.admin-btn:hover {
+  opacity: 0.9;
+}
+.admin-btn:focus {
+  box-shadow: 0 0 0 2px var(--admin-focus-ring);
+}
+.admin-checkbox:has(input:focus) {
+  border-color: rgba(212, 175, 55, 0.6);
+  box-shadow: 0 0 0 2px var(--admin-focus-ring);
+}
+
+/* Command Center: lacivert/füme gradyan arka plan */
+.admin-command-center {
+  background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 35%, #151922 70%, #0d1117 100%);
+  min-height: 100vh;
+}
+
+/* Command Center: başlıklar için Playfair Display */
+.admin-heading {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
+/* Command Center: altın gradyanlı buton */
+.admin-btn-gold {
+  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 50%, #c9a227 100%);
+  color: #0d1117;
+  font-weight: 600;
+  border-radius: 1rem;
+  padding: 0.75rem 1.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+}
+.admin-btn-gold:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 28px rgba(212, 175, 55, 0.45);
+}
+.admin-btn-gold:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.6);
+}
+
+/* Command Center: bento kart stili */
+.admin-bento-card {
+  background: rgba(26, 26, 26, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Command Center: aktif sidebar link altın parlama */
+.admin-nav-active {
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.15), transparent);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+/* Admin Site Sounds: ses dalgası animasyonu */
+@keyframes admin-sound-bar {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
 }
 
 /* Home hero H1 - subtle text shadow for readability on dark */

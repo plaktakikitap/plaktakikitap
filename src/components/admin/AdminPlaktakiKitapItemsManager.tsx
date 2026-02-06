@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, Pencil, Trash2, GripVertical } from "lucide-react";
+import { AdminImageUpload } from "./AdminImageUpload";
 
 type ItemType = "video" | "audio_book";
 
@@ -198,8 +199,11 @@ export function AdminPlaktakiKitapItemsManager() {
         </div>
         {tab === "video" && (
           <div>
-            <label className={labelClass}>Özel thumbnail URL</label>
-            <input name="custom_thumbnail_url" type="url" placeholder="Boş = YouTube kapağı" className={inputClass} />
+            <label className={labelClass}>Özel thumbnail</label>
+            <AdminImageUpload
+              name="custom_thumbnail_url"
+              placeholder="Boş bırak = YouTube kapağı kullanılır"
+            />
           </div>
         )}
         <div>

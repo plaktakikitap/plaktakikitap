@@ -1,16 +1,26 @@
-import { NextResponse } from "next/server";
-import { supabaseServer } from "@/lib/supabase-server";
+import { NextRequest, NextResponse } from "next/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const form = await req.formData();
-  const title = String(form.get("title") ?? "");
-  const artist = String(form.get("artist") ?? "");
-  const cover_url = String(form.get("cover_url") ?? "");
+  const title = String(form.get("title") ?? "").trim();
+  const artist = String(form.get("artist") ?? "").trim();
+  const cover_url = String(form.get("cover_url") ?? "").trim();
   const duration_sec = Number(form.get("duration_sec") ?? 180) || 180;
   const sort_order = Number(form.get("sort_order") ?? 0) || 0;
 
-  const supabase = await supabaseServer();
-  await supabase.from("now_tracks").insert({
+  if (!title || !artist) {
+    return NextResponse.redirect(new URL("/admin?err=tracks_required", req.url));
+  }
+
+  let supabase;
+  try {
+    supabase = createAdminClient();
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Veritabanı bağlantısı yapılamadı.";
+    return NextResponse.redirect(new URL("/admin?err=tracks&msg=" + encodeURIComponent(msg), req.url));
+  }
+  const { error } = await supabase.from("now_tracks").insert({
     title,
     artist,
     cover_url: cover_url || null,
@@ -19,5 +29,8 @@ export async function POST(req: Request) {
     is_active: true,
   });
 
-  return NextResponse.redirect(new URL("/admin", req.url));
+  if (error) {
+    return NextResponse.redirect(new URL("/admin?err=tracks&msg=" + encodeURIComponent(error.message), req.url));
+  }
+  return NextResponse.redirect(new URL("/admin?toast=saved", req.url));
 }

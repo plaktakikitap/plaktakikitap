@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createBook, updateBook } from "@/app/actions";
 import type { Book } from "@/types/database";
 import { StarRatingInput } from "@/components/ui/StarRating";
+import { AdminImageUpload } from "./AdminImageUpload";
 import { BookOpen } from "lucide-react";
 
 /** Spine preview: shelf proportions (narrow vertical) */
@@ -150,60 +151,25 @@ export function AdminReadingLogBookForm({ book }: AdminReadingLogBookFormProps) 
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="block text-sm font-medium">Sırt görseli URL (spine_url) *</label>
-          <input
+          <label className="block text-sm font-medium">Sırt görseli (spine_url) *</label>
+          <AdminImageUpload
             name="spine_url"
-            type="url"
-            required
             value={spineUrl}
-            onChange={(e) => setSpineUrl(e.target.value)}
-            placeholder="https://..."
-            className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
+            onChange={setSpineUrl}
+            placeholder="Sırt görseli yükle"
+            className="mt-1"
+            required
           />
-          <p className="mt-1 text-xs text-[var(--muted)]">Raf oranında önizleme:</p>
-          <div
-            className="mt-1 overflow-hidden rounded border border-[var(--card-border)] bg-[var(--card)]"
-            style={{ width: SPINE_PREVIEW_WIDTH, height: SPINE_PREVIEW_HEIGHT }}
-          >
-            {spineUrl ? (
-              <img
-                src={spineUrl}
-                alt=""
-                className="h-full w-full object-cover"
-                onError={() => setSpineUrl("")}
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center text-[var(--muted)]">
-                <BookOpen className="h-8 w-8" />
-              </div>
-            )}
-          </div>
         </div>
         <div>
-          <label className="block text-sm font-medium">Kapak görseli URL (cover_url)</label>
-          <input
+          <label className="block text-sm font-medium">Kapak görseli (cover_url)</label>
+          <AdminImageUpload
             name="cover_url"
-            type="url"
             value={coverUrl}
-            onChange={(e) => setCoverUrl(e.target.value)}
-            placeholder="https://..."
-            className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
+            onChange={setCoverUrl}
+            placeholder="Kapak yükle"
+            className="mt-1"
           />
-          <p className="mt-1 text-xs text-[var(--muted)]">2:3 oran önizleme:</p>
-          <div className="mt-1 aspect-[2/3] w-24 overflow-hidden rounded border border-[var(--card-border)] bg-[var(--card)]">
-            {coverUrl ? (
-              <img
-                src={coverUrl}
-                alt=""
-                className="h-full w-full object-cover"
-                onError={() => setCoverUrl("")}
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center text-[var(--muted)]">
-                <BookOpen className="h-8 w-8" />
-              </div>
-            )}
-          </div>
         </div>
       </div>
 

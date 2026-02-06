@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { adminUpdatePublishedBook } from "@/app/admin/actions";
 import type { PublishedBook } from "@/types/database";
+import { AdminImageUpload } from "./AdminImageUpload";
 
 const inputClass =
   "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm";
@@ -118,13 +119,8 @@ export function AdminPublishedBookForm({ book }: { book: PublishedBook }) {
         />
       </div>
       <div>
-        <label className={labelClass}>Kapak görseli URL</label>
-        <input
-          name="cover_image"
-          type="url"
-          defaultValue={book.cover_image ?? ""}
-          className={inputClass}
-        />
+        <label className={labelClass}>Kapak görseli</label>
+        <AdminImageUpload name="cover_image" value={book.cover_image ?? ""} placeholder="Kapak yükle" />
       </div>
       <div>
         <label className={labelClass}>Amazon URL</label>

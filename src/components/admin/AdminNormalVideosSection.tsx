@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, Pencil, Trash2 } from "lucide-react";
+import { AdminImageUpload } from "./AdminImageUpload";
 import type { Video } from "@/types/videos";
 
 const inputClass =
@@ -104,8 +105,11 @@ export function AdminNormalVideosSection({ videos }: { videos: Video[] }) {
           <input name="youtube_url" type="url" required placeholder="https://www.youtube.com/watch?v=..." className={inputClass} />
         </div>
         <div>
-          <label className={labelClass}>Özel Thumbnail (URL)</label>
-          <input name="thumbnail_url" type="url" placeholder="Boş bırakırsanız YouTube kapağı kullanılır." className={inputClass} />
+          <label className={labelClass}>Özel Thumbnail</label>
+          <AdminImageUpload
+            name="thumbnail_url"
+            placeholder="Boş bırak = YouTube kapağı kullanılır"
+          />
         </div>
         <button type="submit" disabled={loading} className="inline-flex items-center gap-2 rounded bg-[var(--primary)] px-4 py-2 text-sm text-[var(--primary-foreground)] disabled:opacity-50">
           <Plus className="h-4 w-4" /> Yeni video ekle
@@ -173,7 +177,11 @@ function EditForm({
       <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Başlık" className={inputClass} />
       <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} placeholder="Açıklama" className={inputClass} />
       <input type="url" value={youtube_url} onChange={(e) => setYoutubeUrl(e.target.value)} placeholder="YouTube URL" className={inputClass} />
-      <input type="url" value={thumbnail_url} onChange={(e) => setThumbnailUrl(e.target.value)} placeholder="Özel Thumbnail URL" className={inputClass} />
+      <AdminImageUpload
+        value={thumbnail_url}
+        onChange={setThumbnailUrl}
+        placeholder="Özel Thumbnail"
+      />
       <div className="flex gap-2">
         <button type="submit" disabled={disabled} className="rounded bg-[var(--primary)] px-3 py-1.5 text-sm text-[var(--primary-foreground)] disabled:opacity-50">Kaydet</button>
         <button type="button" onClick={onCancel} className="rounded border border-[var(--card-border)] px-3 py-1.5 text-sm">İptal</button>
