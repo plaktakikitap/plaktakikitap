@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updatePlannerEntry } from "@/lib/planner";
+import { updatePlannerEntryAdmin } from "@/lib/planner-admin";
 
 export async function PATCH(
   _request: NextRequest,
@@ -9,7 +9,7 @@ export async function PATCH(
     const { id } = await params;
     const body = await _request.json();
 
-    const updates: Parameters<typeof updatePlannerEntry>[1] = {};
+    const updates: Parameters<typeof updatePlannerEntryAdmin>[1] = {};
     if (body.title !== undefined) updates.title = body.title;
     if (body.content !== undefined) updates.content = body.content;
     if (body.tags !== undefined) updates.tags = body.tags;
@@ -17,7 +17,7 @@ export async function PATCH(
     if (body.summaryQuote !== undefined) updates.summaryQuote = body.summaryQuote;
     if (body.stickerSelection !== undefined) updates.stickerSelection = body.stickerSelection;
 
-    const result = await updatePlannerEntry(id, updates);
+    const result = await updatePlannerEntryAdmin(id, updates);
     if (result.error) {
       return NextResponse.json({ error: result.error }, { status: 500 });
     }

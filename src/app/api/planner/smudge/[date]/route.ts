@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 const PRESETS = ["fingerprint", "smudge_blob", "smudge_stain", "ink_bleed"] as const;
 
@@ -39,7 +40,7 @@ export async function POST(
   const rotation = typeof body.rotation === "number" ? body.rotation : (Math.random() - 0.5) * 40;
   const opacity = typeof body.opacity === "number" ? Math.min(1, Math.max(0.05, body.opacity)) : 0.1 + Math.random() * 0.15;
 
-  const supabase = await createServerClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("planner_day_smudge")
     .upsert(
@@ -62,7 +63,7 @@ export async function DELETE(
     return NextResponse.json({ error: "Invalid date" }, { status: 400 });
   }
 
-  const supabase = await createServerClient();
+  const supabase = createAdminClient();
   const { error } = await supabase.from("planner_day_smudge").delete().eq("date", date);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });

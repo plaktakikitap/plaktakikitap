@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getOrCreateSpread } from "@/lib/planner";
+import { getOrCreateSpreadAdmin } from "@/lib/planner-admin";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     );
   }
   try {
-    const result = await getOrCreateSpread(year, month);
+    const result = await getOrCreateSpreadAdmin(year, month);
     if ("error" in result) {
       return NextResponse.json({ error: result.error }, { status: 500 });
     }

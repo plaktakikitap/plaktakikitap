@@ -15,7 +15,7 @@ export default async function AdminDashboardLayout({
     <div className="admin-command-center min-h-screen text-white/95">
       <AdminNav user={user} />
       <main className="min-h-screen pt-14 lg:ml-[72px] lg:pt-0">
-        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-8 sm:py-12 lg:px-10">
           {children}
         </div>
       </main>

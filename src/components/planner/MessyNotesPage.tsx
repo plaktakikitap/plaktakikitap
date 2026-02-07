@@ -65,12 +65,23 @@ export function MessyNotesPage({
     return m;
   }, [canvasItems]);
 
-  const { polaroidTilts, polaroidSkews, washiRotates, noteTilts, noteSkews, attachedPositions, customFieldPositions } = useMemo(() => {
+  const { polaroidTilts, polaroidSkews, washiRotates, noteTilts, noteSkews, attachedPositions, customFieldPositions, polaroidPositions } = useMemo(() => {
     const polaroidTilts = images.slice(0, 5).map((_, i) => seeded(i + 1, -5, 5));
     const polaroidSkews = images.slice(0, 5).map((_, i) => seeded(i + 2, -2, 2));
     const washiRotates = [12, -8, 18, -5, 22].map((v, i) => seeded(i + 10, -25, 25));
     const noteTilts = summaries.slice(0, 5).map((_, i) => seeded(i + 20, -5, 5));
     const noteSkews = summaries.slice(0, 5).map((_, i) => seeded(i + 25, -2, 2));
+    const notePositions = summaries.slice(0, 5).map((_, i) => {
+      const saved = canvasMap.get(`note:${i}`);
+      if (saved) return { left: saved.left, top: saved.top, rotate: saved.rotate, skew: 0, zIndex: saved.zIndex };
+      return {
+        left: 0,
+        top: 24 + i * 15,
+        rotate: noteTilts[i] ?? 0,
+        skew: noteSkews[i] ?? 0,
+        zIndex: 5 + i,
+      };
+    });
     const attachedListLen = (attachedImages.length ? attachedImages : paperclipImages.map((p) => ({ url: p.url, style: "standard_clip" as AttachmentStyle }))).slice(0, 4).length;
     const attachedPositions = Array.from({ length: attachedListLen }, (_, i) => {
       const saved = canvasMap.get(`attached_photo:${i}`);
@@ -105,7 +116,7 @@ export function MessyNotesPage({
         fromCanvas: false,
       };
     });
-    return { polaroidTilts, polaroidSkews, washiRotates, noteTilts, noteSkews, attachedPositions, customFieldPositions, polaroidPositions };
+    return { polaroidTilts, polaroidSkews, washiRotates, noteTilts, noteSkews, notePositions, attachedPositions, customFieldPositions, polaroidPositions };
   }, [images, summaries, attachedImages, paperclipImages, customFields, canvasMap]);
 
   const attachedList = attachedImages.length
@@ -121,6 +132,7 @@ export function MessyNotesPage({
           <motion.div
             key={i}
             layout
+            data-preserve-3d
             className="absolute"
             style={{
               left: `${pos.left}%`,
@@ -180,22 +192,33 @@ export function MessyNotesPage({
 
       {/* Katman 2: İçerik — başlıklar Permanent Marker, notlar Caveat */}
       <div
-        className="absolute inset-0 px-4 pb-4 pt-4"
+        className="absolute inset-0 px-5 pb-5 pt-4 sm:px-6 sm:pb-6"
         style={{
           paddingTop: attachedList.length > 0 ? "24%" : "8%",
           zIndex: 5,
         }}
       >
-        <h3
-          className="text-2xl font-semibold text-black/85"
-          style={{ fontFamily: "var(--font-handwriting-title), cursive", filter: "blur(0.2px)", opacity: 0.9 }}
-        >
+        <h3 className="text-2xl font-semibold text-black/85 font-display">
           {monthName} — Notlar
         </h3>
 
-        <div className="mt-3 space-y-2">
+        <div className="relative mt-3 min-h-[200px]">
           {summaries.slice(0, 5).map((s, i) => {
             const [, m, day] = s.date.split("-");
+            const np = notePositions[i] ?? { left: 0, top: 24 + i * 15, rotate: 0, skew: 0, zIndex: 5 + i };
+            const accessory = (i % 3 === 0 ? "paperclip" : i % 3 === 1 ? "washi" : "paperclip") as "paperclip" | "washi";
+            const accRotate = seeded(i + 50, -12, 12);
+            const accPos = i % 2 === 0 ? "topRight" : "topLeft";
+            const cardStyle: React.CSSProperties = {
+              position: "absolute",
+              left: `${np.left}%`,
+              top: `${np.top}%`,
+              transform: `rotate(${np.rotate}deg) skew(${np.skew ?? 0}deg, ${(np.skew ?? 0) * 0.5}deg)`,
+              transformOrigin: "top left",
+              transformStyle: "preserve-3d",
+              width: "min(85%, 260px)",
+              zIndex: np.zIndex ?? 5 + i,
+            };
             return (
               <motion.button
                 key={s.dayId}
@@ -204,15 +227,27 @@ export function MessyNotesPage({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.04 }}
                 onClick={() => onDayClick(s.date, monthName, parseInt(day ?? "1", 10))}
-                className="w-full text-left rounded-lg border border-black/10 bg-white/50 px-3 py-2 shadow-[0_1px_3px_rgba(0,0,0,0.06),0_2px_6px_rgba(0,0,0,0.04)] transition hover:bg-white/80 hover:shadow-[0_4px_12px_rgba(0,0,0,0.1),0_2px_4px_rgba(0,0,0,0.06)]"
-                style={{
-                  transform: `rotate(${noteTilts[i] ?? 0}deg) skewX(${noteSkews[i] ?? 0}deg)`,
-                  transformOrigin: "top left",
-                  fontFamily: "var(--font-handwriting), cursive",
-                  filter: "blur(0.2px)",
-                  opacity: 0.9,
-                }}
+                className="relative w-full text-left rounded-lg border border-black/10 bg-white/50 px-3 py-2 shadow-[0_1px_3px_rgba(0,0,0,0.06),0_2px_6px_rgba(0,0,0,0.04)] transition hover:bg-white/80 hover:shadow-[0_4px_12px_rgba(0,0,0,0.1),0_2px_4px_rgba(0,0,0,0.06)] overflow-visible font-sans"
+                style={cardStyle}
               >
+                {/* Metal Ataş veya Washi Tape — sayfa kenarından taşan, belirgin aksesuar */}
+                <div
+                  className="pointer-events-none absolute z-[70]"
+                  style={{
+                    ...(accPos === "topRight"
+                      ? { top: -6, right: -12, transform: `translateX(55%) rotate(${accRotate}deg)` }
+                      : { top: -4, left: -14, transform: `translateX(-55%) rotate(${accRotate}deg)` }),
+                    filter: "drop-shadow(0 2px 5px rgba(0,0,0,0.25)) drop-shadow(0 0 0 1px rgba(0,0,0,0.04))",
+                  }}
+                >
+                  {accessory === "paperclip" ? (
+                    <AttachmentSVG style="standard_clip" size={26} />
+                  ) : (
+                    <div style={{ width: 36, height: 16 }}>
+                      <GlossyWashiTape variant={WASHI_VARIANTS[i % WASHI_VARIANTS.length]} rotateDeg={accRotate} className="h-full w-full opacity-95" />
+                    </div>
+                  )}
+                </div>
                 <span className="text-sm font-semibold text-amber-900/80">{day}.{m}</span>
                 <span className="ml-2 text-sm text-black/75 line-clamp-1">{s.firstEntryTitle || s.firstEntryContent || "(Not)"}</span>
               </motion.button>
@@ -221,34 +256,52 @@ export function MessyNotesPage({
         </div>
       </div>
 
-      {/* Katman 2b: Özel alanlar — dağınık düzen (Hayatımın Film Müziği vb.) */}
+      {/* Katman 2b: Özel alanlar — dağınık düzen; her birine Metal Ataş veya Washi Tape */}
       {customFields.filter((f) => f.label || f.content).map((f, i) => {
         const pos = customFieldPositions[i] ?? { left: 5, top: 50, rotate: 0, skew: 0, zIndex: 6 };
+        const accessory = (i % 3 === 0 ? "paperclip" : i % 3 === 1 ? "washi" : "paperclip") as "paperclip" | "washi";
+        const accRotate = seeded(i + 60, -15, 15);
+        const accCorner = i % 2 === 0 ? "tr" : "tl";
         return (
           <motion.div
             key={i}
             layout
-            className="absolute rounded-lg border border-black/10 bg-white/60 px-3 py-2 shadow-[0_2px_8px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.05)]"
+            data-preserve-3d
+            className="absolute overflow-visible rounded-lg border border-black/10 bg-white/60 px-3 py-2 shadow-[0_2px_8px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.05)]"
             style={{
               left: `${pos.left}%`,
               top: `${pos.top}%`,
-              width: "min(38%, 160px)",
+              width: "min(38%, 200px)",
               transform: `rotate(${pos.rotate}deg) skew(${pos.skew ?? 0}deg, ${(pos.skew ?? 0) * 0.3}deg)`,
               transformOrigin: "top left",
+              transformStyle: "preserve-3d",
               zIndex: pos.zIndex ?? 6,
-              fontFamily: "var(--font-handwriting), cursive",
             }}
           >
+            <div
+              className="pointer-events-none absolute z-[70]"
+              style={{
+                ...(accCorner === "tr"
+                  ? { top: -8, right: -14, transform: `translateX(60%) rotate(${accRotate}deg)` }
+                  : { top: -6, left: -16, transform: `translateX(-60%) rotate(${accRotate}deg)` }),
+                filter: "drop-shadow(0 2px 5px rgba(0,0,0,0.28)) drop-shadow(0 0 0 1px rgba(0,0,0,0.05))",
+              }}
+            >
+              {accessory === "paperclip" ? (
+                <AttachmentSVG style="standard_clip" size={28} />
+              ) : (
+                <div style={{ width: 40, height: 18 }}>
+                  <GlossyWashiTape variant={WASHI_VARIANTS[(i + 2) % WASHI_VARIANTS.length]} rotateDeg={accRotate} className="h-full w-full opacity-95" />
+                </div>
+              )}
+            </div>
             {f.label && (
-              <h4
-                className="text-sm font-semibold text-black/80"
-                style={{ fontFamily: "var(--font-handwriting-title), cursive", filter: "blur(0.2px)", opacity: 0.9 }}
-              >
+              <h4 className="text-sm font-semibold text-black/80 font-display">
                 {f.label}
               </h4>
             )}
             {f.content && (
-              <p className="mt-0.5 whitespace-pre-wrap text-xs text-black/75 line-clamp-3" style={{ fontFamily: "var(--font-handwriting), cursive", filter: "blur(0.2px)", opacity: 0.9 }}>{f.content}</p>
+              <p className="mt-0.5 whitespace-pre-wrap text-xs text-black/75 line-clamp-3 font-sans">{f.content}</p>
             )}
           </motion.div>
         );
@@ -265,6 +318,7 @@ export function MessyNotesPage({
           <motion.div
             key={i}
             layout
+            data-preserve-3d
             className="absolute"
             style={style}
           >

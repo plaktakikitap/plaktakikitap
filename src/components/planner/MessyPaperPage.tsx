@@ -20,8 +20,8 @@ function seeded(seed: number, min: number, max: number) {
   return min + (x - Math.floor(x)) * (max - min);
 }
 
-/** Old paper — sarımtırak, dokulu kağıt (fractal noise) */
-const OLD_PAPER_NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
+/** Old paper — hafif grain, eski kağıt hissi (baseFrequency düşük = yumuşak, doğal) */
+const OLD_PAPER_NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.35' numOctaves='3' stitchTiles='stitch' result='noise'/%3E%3CfeColorMatrix in='noise' type='saturate' values='0' result='mono'/%3E%3CfeBlend in='SourceGraphic' in2='mono' mode='soft-light'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E")`;
 
 /**
  * Fiziksel sayfa: hafif sarımtırak, dokulu arka plan.
@@ -53,54 +53,53 @@ export function MessyPaperPage({
       style={{
         transformStyle: "preserve-3d",
         backfaceVisibility: "hidden",
-        backgroundColor: "#e6dcc8",
+        backgroundColor: "#ebe0c8",
         backgroundImage: [
-          "repeating-linear-gradient(transparent, transparent 26px, rgba(0,0,0,0.035) 26px, rgba(0,0,0,0.035) 27px)",
-          "linear-gradient(180deg, rgba(235,220,195,0.5) 0%, transparent 25%)",
-          "linear-gradient(270deg, rgba(210,195,165,0.25) 0%, transparent 18%)",
-          "radial-gradient(ellipse 80% 60% at 70% 95%, rgba(165,125,85,0.08) 0%, transparent 55%)",
+          "repeating-linear-gradient(transparent, transparent 26px, rgba(0,0,0,0.03) 26px, rgba(0,0,0,0.03) 27px)",
+          "linear-gradient(180deg, rgba(248,240,220,0.7) 0%, transparent 20%, transparent 80%, rgba(225,210,180,0.5) 100%)",
+          "linear-gradient(270deg, rgba(218,200,170,0.2) 0%, transparent 25%)",
+          "radial-gradient(ellipse 70% 50% at 75% 90%, rgba(180,155,120,0.08) 0%, transparent 60%)",
           OLD_PAPER_NOISE,
         ].join(", "),
-        backgroundBlendMode: "normal, normal, normal, normal, overlay",
-        backgroundSize: "auto, 100% 100%, 100% 100%, 100% 100%, 80px 80px",
+        backgroundBlendMode: "normal, normal, normal, normal, soft-light",
+        backgroundSize: "auto, 100% 100%, 100% 100%, 100% 100%, 90px 90px",
         boxShadow: [
-          "inset 0 0 0 1px rgba(0,0,0,0.06)",
-          "inset 1px 1px 0 rgba(255,255,255,0.4)",
+          "inset 0 0 0 1px rgba(0,0,0,0.07)",
+          "inset 1px 1px 0 rgba(255,255,255,0.5)",
         ].join(", "),
       }}
     >
-      {/* Kağıt dokusu overlay — lifli / eski kağıt hissi */}
+      {/* Kağıt grain — hafif, doğal eski kağıt hissi */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.08] mix-blend-multiply"
+        className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"
         style={{
           backgroundImage: OLD_PAPER_NOISE,
-          backgroundSize: "80px 80px",
+          backgroundSize: "100px 100px",
         }}
       />
 
-      {/* Metal ataş — sayfa kenarında / kenarından taşan illüzyonu, absolute */}
+      {/* Metal ataş — sayfa kenarından taşan, 3D illüzyon */}
       <div
         className="pointer-events-none absolute z-[60]"
         style={{
-          ...(side === "left" ? { left: 0, transform: `translateX(-45%) rotate(${paperclipEdge.rotate}deg)` } : { right: 0, transform: `translateX(45%) rotate(${paperclipEdge.rotate}deg)` }),
+          ...(side === "left" ? { left: 0, transform: `translateX(-55%) rotate(${paperclipEdge.rotate}deg)` } : { right: 0, transform: `translateX(55%) rotate(${paperclipEdge.rotate}deg)` }),
           top: paperclipEdge.top,
-          filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.2))",
+          filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.25)) drop-shadow(0 0 0 1px rgba(0,0,0,0.06))",
         }}
       >
-        <AttachmentSVG style="standard_clip" size={28} />
+        <AttachmentSVG style="standard_clip" size={32} />
       </div>
-      {/* Washi tape — yarı şeffaf bant, kenar boyunca */}
+      {/* Washi tape — kenar boyunca, sayfadan taşan bant */}
       <div
         className="pointer-events-none absolute z-[55]"
         style={{
-          ...(side === "left" ? { left: 0 } : { right: 0 }),
+          ...(side === "left" ? { left: 0, transform: `translateX(-30%) rotate(${washiEdge.rotate}deg)` } : { right: 0, transform: `translateX(30%) rotate(${washiEdge.rotate}deg)` }),
           top: washiEdge.top,
-          transform: `rotate(${washiEdge.rotate}deg)`,
-          width: 28,
-          height: 12,
+          width: 36,
+          height: 14,
         }}
       >
-        <GlossyWashiTape variant="pink" rotateDeg={washiEdge.rotate} className="h-full w-full opacity-80" />
+        <GlossyWashiTape variant="pink" rotateDeg={washiEdge.rotate} className="h-full w-full opacity-90" />
       </div>
 
       {/* Kahve lekesi — rastgele bölgelerde opacity 0.2 overlay (coffee-stain.png veya SVG fallback) */}
@@ -161,7 +160,7 @@ export function MessyPaperPage({
         />
       )}
 
-      <div className="relative z-10 h-full w-full p-4 sm:p-5">{children}</div>
+      <div className="relative z-10 h-full w-full p-5 sm:p-6 md:p-8" style={{ transformStyle: "preserve-3d" }}>{children}</div>
     </div>
   );
 }

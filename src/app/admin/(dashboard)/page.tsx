@@ -59,20 +59,28 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-16">
       {/* Hızlı İstatistikler */}
-      <AdminStatsStrip
-        totalBooks={totalBooks}
-        totalFilms={cinemaStats.totalFilms}
-        totalSeries={cinemaStats.totalSeries}
-        filmWatchedThisMonth={cinemaStats.filmWatchedThisMonth}
-        seriesWatchedThisMonth={cinemaStats.seriesWatchedThisMonth}
-        booksReadThisMonth={booksReadThisMonth}
-      />
+      <AdminSection
+        title="Site Özeti"
+        description="İçerik ve kanal istatistikleri — anlık sayılar."
+      >
+        <AdminStatsStrip
+          totalBooks={totalBooks}
+          totalFilms={cinemaStats.totalFilms}
+          totalSeries={cinemaStats.totalSeries}
+          filmWatchedThisMonth={cinemaStats.filmWatchedThisMonth}
+          seriesWatchedThisMonth={cinemaStats.seriesWatchedThisMonth}
+          booksReadThisMonth={booksReadThisMonth}
+        />
+      </AdminSection>
 
-      {/* İçerik Yönetimi — bento grid (AdminDashboard içinde AdminSection var) */}
+      {/* İçerik Yönetimi — bento grid */}
       <AdminDashboard recentItems={recentItems} />
 
       {/* Medya & Widget'lar */}
-      <AdminSection title="Medya & Widget'lar">
+      <AdminSection
+        title="Medya & Widget'lar"
+        description="Şu an okuyorum, şarkılar, site sesleri ve canlı önizleme."
+      >
         <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:auto-rows-[minmax(200px,auto)]">
           <AdminBentoCard colSpan={2} rowSpan={1}>
             <AdminReadingCard reading={reading} />
@@ -84,13 +92,16 @@ export default async function AdminDashboardPage() {
             <AdminSiteSounds />
           </AdminBentoCard>
         </div>
-        <div className="mt-6">
+        <AdminBentoCard colSpan={4} rowSpan={1} className="mt-6">
           <AdminMiniPreview />
-        </div>
+        </AdminBentoCard>
       </AdminSection>
 
       {/* Site Ayarları */}
-      <AdminSection title="Site Ayarları">
+      <AdminSection
+        title="Site Ayarları"
+        description="Footer linkleri ve diğer site genel ayarları."
+      >
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <AdminBentoCard colSpan={2} rowSpan={1}>
             <AdminLinksCard links={links} />

@@ -45,11 +45,7 @@ export function AdminStatsStrip({
   ];
 
   return (
-    <div className="space-y-3">
-      <h2 className="admin-heading text-lg font-medium tracking-tight text-white/95">
-        Site Özeti
-      </h2>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {items.map(({ icon: Icon, label, value, sub }) => (
           <div
             key={label}
@@ -71,7 +67,6 @@ export function AdminStatsStrip({
             </div>
           </div>
         ))}
-      </div>
     </div>
   );
 }

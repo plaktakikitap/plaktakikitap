@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useRouter } from "next/navigation";
 import {
   DndContext,
   PointerSensor,
@@ -13,7 +14,7 @@ import {
 import type { PlannerElement, PlannerElementType } from "@/lib/planner";
 import { AttachmentSVG } from "@/components/planner/AttachmentSVG";
 import { GlossyWashiTape } from "@/components/planner/GlossyWashiTape";
-import { ChevronDown, Upload, StickyNote, Tape, Paperclip, Image, Type, Coffee, Trash2 } from "lucide-react";
+import { ChevronDown, Upload, StickyNote, Layers, Paperclip, Image, Type, Coffee, Trash2 } from "lucide-react";
 
 const CANVAS_WIDTH = 400;
 const CANVAS_HEIGHT = 493;
@@ -354,6 +355,7 @@ export function AdminPlannerCanvas({ year, monthIndex }: AdminPlannerCanvasProps
     [addElement]
   );
 
+  const router = useRouter();
   const saveElements = useCallback(async () => {
     if (!spreadId) return;
     setSaving(true);
@@ -378,6 +380,8 @@ export function AdminPlannerCanvas({ year, monthIndex }: AdminPlannerCanvasProps
         body: JSON.stringify({ elements: payload }),
       });
       if (res.ok) {
+        router.push(`/admin/planner?toast=saved&msg=${encodeURIComponent("Notun ajandaya iğnelendi! ✨")}`);
+        router.refresh();
         const list = await fetch(`/api/planner/spreads/${spreadId}/elements`).then((r) => r.json());
         if (Array.isArray(list)) {
           setElements(
@@ -401,7 +405,7 @@ export function AdminPlannerCanvas({ year, monthIndex }: AdminPlannerCanvasProps
     } finally {
       setSaving(false);
     }
-  }, [spreadId, elements]);
+  }, [spreadId, elements, router]);
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     const id = String(event.active.id);
@@ -498,7 +502,7 @@ export function AdminPlannerCanvas({ year, monthIndex }: AdminPlannerCanvasProps
                     className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-[var(--background)]"
                     onClick={() => addElement("washi_tape")}
                   >
-                    <Tape className="h-4 w-4" /> Washi bant
+                    <Layers className="h-4 w-4" /> Washi bant
                   </button>
                   <button
                     type="button"

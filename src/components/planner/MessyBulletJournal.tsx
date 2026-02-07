@@ -25,21 +25,25 @@ const MONTH_LABELS = [
   "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık",
 ];
 
-const PAPER_BG = "#e6dcc8";
+const PAPER_BG = "#ebe0c8";
 
-/** Spread: 1100×700 masaüstü; mobilde fit-to-width (container maxWidth + aspect-ratio). */
-const DESKTOP_SPREAD_WIDTH = 1100;
+/** Spread: ajanda geniş — masa defteri hissi */
+const DESKTOP_SPREAD_WIDTH = 2200;
+const DESKTOP_SPREAD_HEIGHT = 1080;
 
-/** Varsayılan overlay: sol sayfa (takvim) — ataş + kahve lekesi */
+/** Varsayılan overlay: sol sayfa (takvim) — ataş, washi, kahve lekesi */
 const DEFAULT_LEFT_OVERLAY: MessyElement[] = [
-  { type: "paperclip", x: 0.08, y: 0.22, rotation: 5, zIndex: 50 },
-  { type: "coffee_stain", x: 0.88, y: 0.82, rotation: -3, zIndex: 5, size: 56 },
+  { type: "paperclip", x: 0.06, y: 0.2, rotation: 8, zIndex: 50, size: 26 },
+  { type: "paperclip", x: 0.94, y: 0.75, rotation: -6, zIndex: 48, size: 22 },
+  { type: "washi_tape", x: 0.04, y: 0.12, rotation: -12, zIndex: 45 },
+  { type: "coffee_stain", x: 0.86, y: 0.82, rotation: -3, zIndex: 5, size: 52 },
 ];
-/** Varsayılan overlay: sağ sayfa (notlar) — post-it, bant, kahve lekesi */
+/** Varsayılan overlay: sağ sayfa (notlar) — post-it, bant, ataş, kahve lekesi */
 const DEFAULT_RIGHT_OVERLAY: MessyElement[] = [
-  { type: "sticky_note", x: 0.78, y: 0.25, rotation: -4, zIndex: 30, text: "Notlar" },
-  { type: "washi_tape", x: 0.92, y: 0.12, rotation: -10, zIndex: 25 },
-  { type: "coffee_stain", x: 0.12, y: 0.18, rotation: 2, zIndex: 5, size: 48 },
+  { type: "sticky_note", x: 0.75, y: 0.22, rotation: -5, zIndex: 32, text: "Notlar", color: "#fef08a" },
+  { type: "washi_tape", x: 0.94, y: 0.08, rotation: -8, zIndex: 28, width: 36, height: 12 },
+  { type: "paperclip", x: 0.92, y: 0.38, rotation: 12, zIndex: 50, size: 24 },
+  { type: "coffee_stain", x: 0.1, y: 0.15, rotation: 4, zIndex: 5, size: 44 },
 ];
 
 export default function MessyBulletJournal() {
@@ -57,11 +61,11 @@ export default function MessyBulletJournal() {
   const [modalSmudge, setModalSmudge] = useState<DaySmudge | null | undefined>(undefined);
   const [modalLoading, setModalLoading] = useState(false);
 
-  const startPage = monthIndex * 2;
+  const startPage = 2 + monthIndex * 2;
   const lastFlipTime = useRef(0);
   const [flipInProgress, setFlipInProgress] = useState(false);
   const flipbookContainerRef = useRef<HTMLDivElement>(null);
-  const [pageSize, setPageSize] = useState({ width: 550, height: 350 });
+  const [pageSize, setPageSize] = useState({ width: 550, height: 700 });
   useEffect(() => {
     const el = flipbookContainerRef.current;
     if (!el) return;
@@ -78,18 +82,24 @@ export default function MessyBulletJournal() {
     return () => ro.disconnect();
   }, []);
 
+  const lastFlipStateRef = useRef<string | null>(null);
   const handleChangeState = useCallback((e: { data: string }) => {
+    const prev = lastFlipStateRef.current;
+    lastFlipStateRef.current = e.data;
     setFlipInProgress(e.data === "flipping");
+    /* Sayfa çevirme başladığı anda page-turn.mp3 tetikle */
+    if (e.data === "flipping" && prev !== "flipping") {
+      const pitch = 0.95 + Math.random() * 0.1;
+      playSound(AUDIO.paperFlip, { volume: 0.4, playbackRate: pitch });
+    }
   }, []);
 
   const handleFlip = useCallback((e: { data: number }) => {
-    const newIdx = Math.floor(e.data / 2);
+    const pageIdx = e.data;
+    const newIdx = pageIdx <= 1 ? 0 : pageIdx >= 25 ? 11 : Math.max(0, Math.min(11, Math.floor((pageIdx - 2) / 2)));
     const prevIdx = monthIndex;
     setMonthIndex(newIdx);
     const now = Date.now();
-    /* Her sayfa çevirmede page-turn sesi (kısa, volume 0.35) */
-    const pitch = 0.95 + Math.random() * 0.1;
-    playSound(AUDIO.paperFlip, { volume: 0.35, playbackRate: pitch });
     /* Ataşlı sayfalarda kısa metallic click (çift tetiklemeyi önlemek için throttle) */
     if (now - lastFlipTime.current > 180) {
       lastFlipTime.current = now;
@@ -219,24 +229,19 @@ export default function MessyBulletJournal() {
   );
 
   return (
-    <section className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
-      <div className="mb-6 -skew-x-1">
-        <h2
-          className="text-2xl font-semibold tracking-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.06)]"
-          style={{ fontFamily: "var(--font-handwriting-title), cursive" }}
-        >
-          Bullet Journal
-        </h2>
-      </div>
-
+    <section className="mx-auto w-full max-w-[2260px] px-2 pb-24 sm:px-6" style={{ minHeight: "min(95vh, 1200px)" }}>
       <BulletJournalBook flipInProgress={flipInProgress}>
         <div
           ref={flipbookContainerRef}
-          className="relative h-full w-full overflow-hidden rounded-r-xl"
+          className="relative h-full w-full overflow-hidden rounded-xl"
           style={{
             maxWidth: DESKTOP_SPREAD_WIDTH,
-            aspectRatio: `${DESKTOP_SPREAD_WIDTH}/${700}`,
+            aspectRatio: `${DESKTOP_SPREAD_WIDTH}/${DESKTOP_SPREAD_HEIGHT}`,
             width: "100%",
+            minHeight: 480,
+            backgroundColor: PAPER_BG,
+            perspective: "2200px",
+            transformStyle: "preserve-3d",
           }}
           data-flipping={flipInProgress}
         >
@@ -246,28 +251,86 @@ export default function MessyBulletJournal() {
             size="fixed"
             startZIndex={0}
             autoSize={false}
-            minWidth={280}
-            maxWidth={550}
-            minHeight={280}
-            maxHeight={700}
+            minWidth={360}
+            maxWidth={1100}
+            minHeight={480}
+            maxHeight={1080}
             usePortrait={false}
             showCover={false}
             mobileScrollSupport
-            maxShadowOpacity={0.35}
+            maxShadowOpacity={0.4}
             drawShadow
-            flippingTime={1000}
+            flippingTime={650}
             startPage={startPage}
             clickEventForward
             useMouseEvents
-            swipeDistance={30}
+            swipeDistance={25}
             showPageCorners
             disableFlipByClick={false}
             onFlip={handleFlip}
             onChangeState={handleChangeState}
             className="bg-transparent ajanda-flipbook"
-            style={{}}
           >
-            {/* Spread mantığı: her ay = 1 spread (sol takvim + sağ notlar). Tek spread görünür; overflow ile 4 sayfa bitişik hatası önlenir. */}
+            {/* Ön kapak — sert, kalın defter kapağı: koyu mavi deri hissi */}
+            <div
+              key="front-cover-left"
+              className="relative flex h-full w-full items-center justify-center overflow-hidden"
+              style={{
+                backgroundImage: `
+                  linear-gradient(145deg, #1e3a5f 0%, #0f2744 20%, #0a1f38 50%, #0d2440 80%, #153a6e 100%),
+                  radial-gradient(ellipse 80% 50% at 30% 40%, rgba(255,255,255,0.06) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 60%, rgba(0,0,0,0.15) 0%, transparent 40%)
+                `,
+                boxShadow: [
+                  "inset 6px 6px 24px rgba(255,255,255,0.06)",
+                  "inset -6px -6px 24px rgba(0,0,0,0.5)",
+                  "inset 0 0 100px rgba(0,0,0,0.25)",
+                  "8px 0 32px rgba(0,0,0,0.5)",
+                  "4px 0 12px rgba(0,0,0,0.3)",
+                  "0 0 0 1px rgba(0,0,0,0.2)",
+                ].join(", "),
+                borderRight: "3px solid rgba(0,0,0,0.4)",
+              }}
+            >
+              {/* Kapak kenarı kalınlık hissi */}
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  boxShadow: "inset 0 0 0 2px rgba(0,0,0,0.15)",
+                  borderRadius: "2px",
+                }}
+                aria-hidden
+              />
+              <div
+                className="text-center font-display"
+                style={{
+                  fontSize: "clamp(4rem, 11vw, 7rem)",
+                  fontWeight: 500,
+                  color: "#f5f0e1",
+                  letterSpacing: "0.3em",
+                  textShadow: [
+                    "0 2px 4px rgba(0,0,0,0.5)",
+                    "0 4px 12px rgba(0,0,0,0.4)",
+                    "0 0 40px rgba(255,235,180,0.15)",
+                    "0 1px 0 rgba(255,255,255,0.1)",
+                  ].join(", "),
+                  filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.6))",
+                }}
+              >
+                {year}
+              </div>
+            </div>
+            {/* Sağ sayfa: kapak kapalıyken boş (kapağın içi / ilk sayfa kenarı) */}
+            <div
+              key="front-cover-right"
+              className="relative flex h-full w-full items-center justify-center"
+              style={{
+                backgroundColor: "#e8e4dc",
+                backgroundImage: "linear-gradient(180deg, rgba(0,0,0,0.02) 0%, transparent 50%)",
+                boxShadow: "inset 2px 0 4px rgba(0,0,0,0.04)",
+              }}
+            />
+            {/* Her ay = 1 spread: sol takvim, sağ notlar */}
             {months.flatMap((m) => [
               <div
                 key={`${m.key}-cal`}
@@ -311,7 +374,7 @@ export default function MessyBulletJournal() {
                   boxShadow: "inset 1px 0 0 rgba(0,0,0,0.06)",
                 }}
               >
-                <div className="absolute inset-0 overflow-hidden rounded-l-none">
+                <div className="absolute inset-0 overflow-visible rounded-l-none">
                   <MessyPaperPage
                     side="right"
                     showCurledCorner={pageSettings[`${year}-${m.index}`]?.show_curled_corner ?? true}
@@ -345,6 +408,23 @@ export default function MessyBulletJournal() {
                 </div>
               </div>,
             ])}
+            {/* Arka kapak — Aralık'tan ileri çevirince */}
+            <div
+              key="back-cover"
+              className="relative flex h-full w-full items-center justify-center"
+              style={{
+                backgroundColor: "#2a2520",
+                backgroundImage: `linear-gradient(135deg, #2a2520 0%, #1f1c18 100%)`,
+                boxShadow: "inset 0 0 60px rgba(0,0,0,0.2)",
+              }}
+            >
+              <div
+                className="text-center font-sans text-sm opacity-60"
+                style={{ color: "rgba(255,255,255,0.5)" }}
+              >
+                {year}
+              </div>
+            </div>
           </HTMLFlipBook>
         </div>
       </BulletJournalBook>

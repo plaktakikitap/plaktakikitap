@@ -1,10 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Pencil, Trash2 } from "lucide-react";
-import { RichTextEditor } from "./RichTextEditor";
+
+const RichTextEditor = dynamic(
+  () => import("./RichTextEditor").then((m) => ({ default: m.RichTextEditor })),
+  { ssr: false }
+);
 
 type Writing = {
   id: string;
@@ -83,9 +88,12 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
     }
   }
 
-  function formatDate(iso: string): string {
+  function formatDate(iso: string | null | undefined): string {
+    if (!iso) return "";
     try {
-      return new Date(iso).toLocaleDateString("tr-TR", { day: "numeric", month: "short", year: "numeric" });
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return "";
+      return d.toLocaleDateString("tr-TR", { day: "numeric", month: "short", year: "numeric" });
     } catch {
       return "";
     }
@@ -152,7 +160,9 @@ function EditForm({
   const [category, setCategory] = useState(writing.category);
   const [title, setTitle] = useState(writing.title);
   const [body, setBody] = useState(writing.body);
-  const [published_at, setPublishedAt] = useState(writing.published_at.slice(0, 16));
+  const [published_at, setPublishedAt] = useState(
+    writing.published_at ? String(writing.published_at).slice(0, 16) : new Date().toISOString().slice(0, 16)
+  );
   const [tefrika_issue, setTefrikaIssue] = useState(writing.tefrika_issue ?? "");
   const [external_url, setExternalUrl] = useState(writing.external_url ?? "");
 

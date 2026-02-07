@@ -302,6 +302,7 @@ export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) 
           <div>
             <label className="mb-1 block text-sm text-[var(--muted)]">Görsel *</label>
             <AdminImageUpload
+              name="image_url"
               value={form.image_url}
               onChange={(url) => setForm((f) => ({ ...f, image_url: url }))}
               placeholder="Fotoğraf yükle"

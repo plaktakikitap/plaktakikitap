@@ -12,6 +12,7 @@ export function AdminToast() {
   const [visible, setVisible] = useState(false);
   const [animating, setAnimating] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   useEffect(() => {
     const toast = searchParams.get("toast");
@@ -20,13 +21,15 @@ export function AdminToast() {
 
     if (toast === "saved") {
       setErrorMsg(null);
+      setSuccessMsg(msg ? decodeURIComponent(msg) : MESSAGE);
       setVisible(true);
       setAnimating(true);
       const url = new URL(window.location.href);
       url.searchParams.delete("toast");
+      url.searchParams.delete("msg");
       router.replace(url.pathname + (url.search || ""), { scroll: false });
       const t = setTimeout(() => setAnimating(false), 300);
-      const hide = setTimeout(() => setVisible(false), 3500);
+      const hide = setTimeout(() => { setVisible(false); setSuccessMsg(null); }, 3500);
       return () => { clearTimeout(t); clearTimeout(hide); };
     }
 
@@ -68,7 +71,7 @@ export function AdminToast() {
           {errorMsg ? "⚠️" : "✨"}
         </span>
         <p className="font-display text-sm font-medium text-[var(--foreground)]">
-          {errorMsg ?? MESSAGE}
+          {errorMsg ?? successMsg ?? MESSAGE}
         </p>
       </div>
     </div>

@@ -27,7 +27,7 @@ export function AdminBentoCard({
 }: AdminBentoCardProps) {
   return (
     <div
-      className={`admin-bento-card p-6 ${colClasses[colSpan]} ${rowClasses[rowSpan]} ${className}`}
+      className={`admin-bento-card px-6 py-7 sm:px-8 sm:py-8 ${colClasses[colSpan]} ${rowClasses[rowSpan]} ${className}`}
     >
       {children}
     </div>

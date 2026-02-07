@@ -6,7 +6,7 @@ import { clampRotation } from "@/types/messy-elements";
 import { AttachmentSVG } from "./AttachmentSVG";
 import { GlossyWashiTape } from "./GlossyWashiTape";
 
-const DEFAULT_SHADOW = "0 1px 3px rgba(0,0,0,0.12)";
+const DEFAULT_SHADOW = "0 2px 6px rgba(0,0,0,0.18), 0 1px 2px rgba(0,0,0,0.1)";
 const POLAROID_SHADOW = "0 4px 14px rgba(0,0,0,0.2), 0 2px 6px rgba(0,0,0,0.12)";
 
 /** Küçük gri blur placeholder (remote görseller için) */
@@ -29,6 +29,7 @@ function renderElement(el: MessyElement, i: number) {
     left: `${x}%`,
     top: `${y}%`,
     transform: `translate(-50%, -50%) rotate(${rot}deg)`,
+    transformStyle: "preserve-3d",
     zIndex: z,
     pointerEvents: "none",
   };
@@ -67,16 +68,16 @@ function renderElement(el: MessyElement, i: number) {
       return (
         <div
           key={i}
-          className="messy-ink-bleed rounded px-2 py-1.5 shadow"
+          className="messy-ink-bleed rounded-md px-2.5 py-2 shadow"
           style={{
             ...baseStyle,
             backgroundColor: bg,
             boxShadow: DEFAULT_SHADOW,
-            filter: `drop-shadow(${DEFAULT_SHADOW})`,
-            fontFamily: "var(--font-handwriting), var(--font-handwriting-alt), cursive",
-            fontSize: 12,
-            maxWidth: 100,
-            color: "rgba(0,0,0,0.85)",
+            filter: `drop-shadow(0 2px 5px rgba(0,0,0,0.2))`,
+            fontFamily: "var(--font-sans), ui-sans-serif, sans-serif",
+            fontSize: 13,
+            maxWidth: 110,
+            color: "rgba(0,0,0,0.88)",
           }}
         >
           {el.text}
@@ -94,10 +95,10 @@ function renderElement(el: MessyElement, i: number) {
             ...baseStyle,
             width: w,
             height: h,
-            filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.1))",
+            filter: "drop-shadow(0 2px 3px rgba(0,0,0,0.15))",
           }}
         >
-          <GlossyWashiTape variant={variant} rotateDeg={rot} className="h-full w-full opacity-90" />
+          <GlossyWashiTape variant={variant} rotateDeg={rot} className="h-full w-full opacity-92" />
         </div>
       );
     }
@@ -109,7 +110,7 @@ function renderElement(el: MessyElement, i: number) {
           key={i}
           style={{
             ...baseStyle,
-            filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.2))",
+            filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.25)) drop-shadow(0 0 0 1px rgba(0,0,0,0.05))",
           }}
         >
           <AttachmentSVG style={style} size={size} />
@@ -150,7 +151,7 @@ function renderElement(el: MessyElement, i: number) {
           className="messy-ink-bleed whitespace-pre-wrap"
           style={{
             ...baseStyle,
-            fontFamily: "var(--font-handwriting), var(--font-handwriting-alt), cursive",
+            fontFamily: "var(--font-sans), ui-sans-serif, sans-serif",
             fontSize: fs,
             color: "rgba(0,0,0,0.88)",
             maxWidth: 140,
@@ -223,7 +224,7 @@ export function MessyElementsOverlay({ elements, className = "" }: MessyElements
   return (
     <div
       className={`pointer-events-none absolute inset-0 ${className}`}
-      style={{ overflow: "visible", zIndex: 20, isolation: "isolate" }}
+      style={{ overflow: "visible", zIndex: 20, isolation: "isolate", transformStyle: "preserve-3d" }}
       aria-hidden
     >
       {elements.map((el, i) => renderElement(el, i))}

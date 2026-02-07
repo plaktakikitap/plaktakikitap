@@ -16,7 +16,7 @@ export function AdminReadingCard({ reading }: { reading: Reading | null }) {
         Şu an okuyorum kartı
       </h3>
       <form action="/api/admin/reading" method="POST" className="space-y-4">
-        <select name="status" defaultValue={reading?.status ?? "reading"} className="admin-input">
+        <select name="status" defaultValue={reading?.status ?? "reading"} className="admin-input admin-select">
           <option value="reading">reading (Şu an okuyorum)</option>
           <option value="last">last (En son okuduğum)</option>
         </select>
@@ -42,8 +42,8 @@ export function AdminReadingCard({ reading }: { reading: Reading | null }) {
           name="note"
           defaultValue={reading?.note ?? ""}
           placeholder="Not (opsiyonel)"
-          rows={3}
-          className="admin-input min-h-[80px] resize-y"
+          rows={4}
+          className="admin-input admin-input-lg min-h-[100px] resize-y"
         />
         <button type="submit" className="admin-btn-gold w-full">
           Kaydet

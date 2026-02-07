@@ -2,9 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import {
-  createPlannerDecor,
-  deletePlannerDecor,
-} from "@/lib/planner";
+  createPlannerDecorAdmin,
+  deletePlannerDecorAdmin,
+} from "@/lib/planner-admin";
 import {
   createFilm,
   createSeries,
@@ -189,7 +189,7 @@ export async function adminCreatePlannerDecor(formData: FormData) {
   if (!page || !type || isNaN(year) || isNaN(month)) {
     return { error: "Year, month, page, type gerekli" };
   }
-  return createPlannerDecor({
+  return createPlannerDecorAdmin({
     year,
     month,
     page,
@@ -203,7 +203,7 @@ export async function adminCreatePlannerDecor(formData: FormData) {
 }
 
 export async function adminDeletePlannerDecor(id: string) {
-  return deletePlannerDecor(id);
+  return deletePlannerDecorAdmin(id);
 }
 
 // Art

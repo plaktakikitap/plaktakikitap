@@ -52,13 +52,19 @@ export function AdminPlannerMessySettings({ year, month }: AdminPlannerMessySett
 
   async function handleSave() {
     setSaving(true);
-    await fetch("/api/planner/settings", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ year, month, ...settings }),
-    });
-    setSaving(false);
-    router.refresh();
+    try {
+      const res = await fetch("/api/planner/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ year, month, ...settings }),
+      });
+      if (res.ok) {
+        router.push(`/admin/planner?toast=saved&msg=${encodeURIComponent("Notun ajandaya iğnelendi! ✨")}`);
+        router.refresh();
+      }
+    } finally {
+      setSaving(false);
+    }
   }
 
   function addCustomField() {

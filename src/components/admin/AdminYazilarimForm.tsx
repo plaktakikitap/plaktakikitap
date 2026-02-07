@@ -1,8 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { RichTextEditor } from "@/components/admin/RichTextEditor";
+
+const RichTextEditor = dynamic(
+  () => import("@/components/admin/RichTextEditor").then((m) => ({ default: m.RichTextEditor })),
+  { ssr: false }
+);
 
 const inputClass =
   "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm";

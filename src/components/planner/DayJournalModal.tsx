@@ -158,10 +158,7 @@ export function DayJournalModal({
 
         <div className="relative z-[2] overflow-y-auto pl-7 pr-6 pt-6 pb-10" style={{ maxHeight: "88vh" }}>
           {entries.length === 0 ? (
-            <p
-              className="py-12 text-center text-sm text-black/50"
-              style={{ fontFamily: "var(--font-handwriting), cursive" }}
-            >
+            <p className="py-12 text-center text-sm text-black/50 font-sans">
               Bu güne henüz not eklenmemiş.
             </p>
           ) : (
@@ -172,18 +169,12 @@ export function DayJournalModal({
                   className="space-y-4 rounded-lg border border-black/6 bg-white/30 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
                 >
                   {entry.title && (
-                    <h3
-                      className="text-lg font-semibold text-[#201A14]"
-                      style={{ fontFamily: "var(--font-handwriting-title), cursive" }}
-                    >
+                    <h3 className="text-lg font-semibold text-[#201A14] font-display">
                       {entry.title}
                     </h3>
                   )}
                   {entry.content && (
-                    <p
-                      className="whitespace-pre-wrap text-sm leading-relaxed text-black/85"
-                      style={{ fontFamily: "var(--font-handwriting), var(--font-sans), sans-serif" }}
-                    >
+                    <p className="whitespace-pre-wrap text-sm leading-relaxed text-black/85 font-sans">
                       <InkBleedText text={entry.content} seed={entry.id?.length ?? 0} />
                     </p>
                   )}
@@ -252,10 +243,7 @@ export function DayJournalModal({
                     </div>
                   )}
                   {entry.createdAt && (
-                    <p
-                      className="text-xs text-black/40"
-                      style={{ fontFamily: "var(--font-sans), sans-serif" }}
-                    >
+                    <p className="text-xs text-black/40 font-sans">
                       {formatCreatedAt(entry.createdAt)}
                     </p>
                   )}

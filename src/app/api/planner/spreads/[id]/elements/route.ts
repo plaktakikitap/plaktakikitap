@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSpreadElements, upsertSpreadElements, type PlannerElementType } from "@/lib/planner";
+import { getSpreadElements } from "@/lib/planner";
+import { upsertSpreadElementsAdmin, type PlannerElementType } from "@/lib/planner-admin";
 
 export async function GET(
   _request: NextRequest,
@@ -46,7 +47,7 @@ export async function PUT(
     if (!Array.isArray(elements)) {
       return NextResponse.json({ error: "elements array required" }, { status: 400 });
     }
-    const err = await upsertSpreadElements(spreadId, elements);
+    const err = await upsertSpreadElementsAdmin(spreadId, elements);
     if (err.error) {
       return NextResponse.json({ error: err.error }, { status: 500 });
     }

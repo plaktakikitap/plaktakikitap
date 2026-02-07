@@ -1,6 +1,8 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getReadingGoal } from "@/lib/db/queries";
 import { AdminReadingGoalForm } from "@/components/admin/AdminReadingGoalForm";
+import { AdminSection } from "@/components/admin/AdminSection";
+import { AdminBentoCard } from "@/components/admin/AdminBentoCard";
 
 export default async function AdminSettingsPage() {
   const supabase = createAdminClient();
@@ -22,19 +24,17 @@ export default async function AdminSettingsPage() {
   };
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8">
-      <h1 className="text-xl font-semibold">Ayarlar</h1>
-      <p className="mt-1 text-sm text-[var(--muted)]">
-        Genel ve okuma günlüğü ayarları
-      </p>
-
-      <section className="mt-8">
-        <h2 className="text-lg font-medium">Yıllık okuma hedefi</h2>
-        <p className="mt-1 text-sm text-[var(--muted)]">
-          Okuma günlüğü sayfasındaki &quot;X / Y kitap&quot; ve dairesel ilerleme çubuğu bu değerlerle güncellenir. Hedef ve okunan sayısını manuel girebilirsiniz.
-        </p>
-        <AdminReadingGoalForm initial={initial} />
-      </section>
+    <div className="space-y-12">
+      <AdminSection
+        title="Ayarlar"
+        description="Genel ve okuma günlüğü ayarları — hedef ve istatistikler."
+      >
+        <div className="grid gap-6 sm:grid-cols-1 lg:grid-cols-1 lg:max-w-2xl">
+          <AdminBentoCard colSpan={1} rowSpan={1}>
+            <AdminReadingGoalForm initial={initial} />
+          </AdminBentoCard>
+        </div>
+      </AdminSection>
     </div>
   );
 }

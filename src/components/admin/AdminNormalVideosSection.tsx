@@ -178,6 +178,7 @@ function EditForm({
       <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} placeholder="Açıklama" className={inputClass} />
       <input type="url" value={youtube_url} onChange={(e) => setYoutubeUrl(e.target.value)} placeholder="YouTube URL" className={inputClass} />
       <AdminImageUpload
+        name="thumbnail_url"
         value={thumbnail_url}
         onChange={setThumbnailUrl}
         placeholder="Özel Thumbnail"

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerClient } from "@/lib/supabase/server";
-import { addPlannerMedia } from "@/lib/planner";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { addPlannerMediaAdmin } from "@/lib/planner-admin";
 
 const BUCKET = "planner-media";
 const ALLOWED = ["image/jpeg", "image/png", "image/webp", "image/gif", "video/mp4", "video/webm"];
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid file type" }, { status: 400 });
     }
 
-    const supabase = await createServerClient();
+    const supabase = createAdminClient();
 
     const ext = file.name.split(".").pop() || "bin";
     const path = `${entryId || "temp"}/${crypto.randomUUID()}.${ext}`;
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     if (entryId) {
       const type = file.type.startsWith("video/") ? "video" : "image";
-      const result = await addPlannerMedia({
+      const result = await addPlannerMediaAdmin({
         entryId,
         type,
         url: data.path,

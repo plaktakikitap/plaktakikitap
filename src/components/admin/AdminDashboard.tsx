@@ -33,7 +33,7 @@ interface AdminDashboardProps {
 }
 
 const inputClass = "admin-input";
-const selectClass = "admin-input";
+const selectClass = "admin-input admin-select";
 
 export function AdminDashboard({ recentItems }: AdminDashboardProps) {
   const router = useRouter();

@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
-  ensurePlannerDay,
-  createPlannerEntry,
-  addPlannerMedia,
-} from "@/lib/planner";
-import { createServerClient } from "@/lib/supabase/server";
+  ensurePlannerDayAdmin,
+  createPlannerEntryAdmin,
+  addPlannerMediaAdmin,
+} from "@/lib/planner-admin";
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,12 +21,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid date" }, { status: 400 });
     }
 
-    const dayResult = await ensurePlannerDay(date);
+    const dayResult = await ensurePlannerDayAdmin(date);
     if ("error" in dayResult) {
       return NextResponse.json({ error: dayResult.error }, { status: 500 });
     }
 
-    const entryResult = await createPlannerEntry({
+    const entryResult = await createPlannerEntryAdmin({
       dayId: dayResult.id,
       title,
       content,
@@ -46,7 +45,7 @@ export async function POST(request: NextRequest) {
       const type = typeof item === "object" && item.type ? item.type : "image";
       const attachmentType = typeof item === "object" && item.attachmentType ? item.attachmentType : null;
       if (url && (type === "image" || type === "video")) {
-        await addPlannerMedia({
+        await addPlannerMediaAdmin({
           entryId: entryResult.id,
           type,
           url,

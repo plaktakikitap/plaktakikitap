@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updatePlannerMedia } from "@/lib/planner";
+import { updatePlannerMediaAdmin } from "@/lib/planner-admin";
 
 export async function PATCH(
   _request: NextRequest,
@@ -31,7 +31,7 @@ export async function PATCH(
       return NextResponse.json({ error: "Invalid attachment" }, { status: 400 });
     }
 
-    const result = await updatePlannerMedia(id, {
+    const result = await updatePlannerMediaAdmin(id, {
       attachmentType: (attachmentType === "" ? null : attachmentType) ?? undefined,
       attachmentStyle: (attachmentStyle === "" ? null : attachmentStyle) ?? undefined,
     });

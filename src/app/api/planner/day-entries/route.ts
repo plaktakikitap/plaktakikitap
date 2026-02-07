@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { upsertDayEntry } from "@/lib/planner";
+import { upsertDayEntryAdmin } from "@/lib/planner-admin";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -8,7 +8,7 @@ export async function PUT(request: NextRequest) {
     if (!date?.match(/^\d{4}-\d{2}-\d{2}$/)) {
       return NextResponse.json({ error: "Valid date (YYYY-MM-DD) required" }, { status: 400 });
     }
-    const result = await upsertDayEntry({
+    const result = await upsertDayEntryAdmin({
       date,
       title: body.title,
       content: body.content,

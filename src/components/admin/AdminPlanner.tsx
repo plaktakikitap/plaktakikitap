@@ -125,11 +125,16 @@ export function AdminPlanner() {
           onSaved={() => {
             setSelectedDate(null);
             setError(null);
+            router.push(`/admin/planner?toast=saved&msg=${encodeURIComponent("Notun ajandaya iğnelendi! ✨")}`);
             router.refresh();
             fetch(`/api/planner/entries?year=${year}&month=${month}`)
               .then((r) => r.json())
               .then(setSummary)
               .catch(() => {});
+          }}
+          onShowToast={() => {
+            router.push(`/admin/planner?toast=saved&msg=${encodeURIComponent("Notun ajandaya iğnelendi! ✨")}`);
+            router.refresh();
           }}
           onError={setError}
         />
@@ -161,11 +166,13 @@ function PlannerDateModal({
   date,
   onClose,
   onSaved,
+  onShowToast,
   onError,
 }: {
   date: string;
   onClose: () => void;
   onSaved: () => void;
+  onShowToast?: () => void;
   onError: (msg: string | null) => void;
 }) {
   const [entries, setEntries] = useState<PlannerEntryWithMedia[]>([]);
@@ -250,6 +257,7 @@ function PlannerDateModal({
           if (editingEntry) {
             setEditingEntry(null);
             setMode("list");
+            onShowToast?.();
             fetch(`/api/planner/entries/${date}`)
               .then((r) => r.json())
               .then((data) => setEntries(Array.isArray(data) ? data : []));

@@ -47,7 +47,7 @@ export function MessyDayCell({
   monthName,
 }: MessyDayCellProps) {
   if (!day) {
-    return <div className="min-h-[56px]" />;
+    return <div className="min-h-[64px]" />;
   }
 
   const hasEntry = !!summary && summary.entryCount > 0;
@@ -61,7 +61,7 @@ export function MessyDayCell({
     <button
       type="button"
       className={cn(
-        "messy-day-cell relative flex min-h-[56px] flex-col overflow-visible rounded-md border border-black/8 bg-white/30 p-1 text-left shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition hover:bg-white/60 hover:shadow-[0_2px_6px_rgba(0,0,0,0.06)]",
+        "messy-day-cell relative flex min-h-[64px] flex-col overflow-visible rounded-md border border-black/8 bg-white/30 p-1.5 text-left shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition hover:bg-white/60 hover:shadow-[0_2px_6px_rgba(0,0,0,0.06)]",
         today && "today",
         hasEntry && "ring-1 ring-amber-900/20",
         isBusy && "ring-1 ring-amber-600/30"
@@ -74,10 +74,7 @@ export function MessyDayCell({
       aria-label={`${day} ${monthName}`}
     >
       <div className="relative z-[2] flex justify-end">
-        <span
-          className="text-xs font-semibold text-black/75"
-          style={{ fontFamily: "var(--font-handwriting), cursive", filter: "blur(0.2px)", opacity: 0.9 }}
-        >
+        <span className="text-xs font-semibold text-black/75 font-sans">
           {day}
         </span>
       </div>
@@ -166,13 +163,11 @@ export function MessyDayCell({
       {/* Preview: 1–2 satır çok soluk metin (text-xs, opacity 0.55) */}
       {hasEntry && textPreview && (
         <p
-          className="messy-ink-bleed absolute bottom-0.5 left-0.5 right-0.5 line-clamp-2 leading-tight text-xs -skew-x-0.5"
+          className="messy-ink-bleed absolute bottom-0.5 left-0.5 right-0.5 line-clamp-2 leading-tight text-xs -skew-x-0.5 font-sans"
           style={{
-            fontFamily: "var(--font-handwriting), cursive",
             zIndex: 2,
             color: "rgba(60,55,50,0.85)",
             opacity: 0.55,
-            filter: "blur(0.15px)",
           }}
         >
           {textPreview}
