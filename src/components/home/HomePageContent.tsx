@@ -25,7 +25,7 @@ export function HomePageContent({
           <div className="mx-auto flex w-full max-w-5xl flex-col items-center">
             <div className="w-full max-w-[280px] sm:max-w-[320px]">
               <FramedCrossfade
-                aSrc="/images/eymen.jpeg"
+                aSrc="/images/eymen.jpeg?v=2"
                 bSrc="/images/plaktakikitap.jpeg"
                 size={320}
                 variant="antiqueGold"

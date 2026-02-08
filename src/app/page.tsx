@@ -100,7 +100,7 @@ export default function IntroGate() {
       </div>
 
       {/* Mobil: başlık + alt başlık + plak / kitap alt alta */}
-      <div className="flex md:hidden w-full flex-col items-center justify-center gap-8 py-12">
+      <div className="flex md:hidden w-full flex-col items-center justify-center gap-8 py-12" lang="en">
         <div className="flex flex-col items-center gap-1">
           <h1
             className="text-center text-3xl font-semibold tracking-[0.12em] text-[#F3EBDD] uppercase"
@@ -161,7 +161,7 @@ export default function IntroGate() {
       </div>
 
       {/* Masaüstü: stage + arka plan görseli + ikonlar */}
-      <div className="relative hidden w-[min(1200px,95vw)] aspect-[16/9] md:block">
+      <div className="relative hidden w-[min(1200px,95vw)] aspect-[16/9] md:block" lang="en">
         {/* Arka plan — stage içinde */}
         <Image
           src="/images/intro/arkaplan.png"

@@ -13,8 +13,9 @@ export function IntroGate() {
         <h2
           className="mb-12 text-center font-display text-2xl font-medium tracking-tight sm:mb-16 sm:text-3xl md:text-4xl"
           style={{ fontFamily: "var(--font-display)" }}
+          lang="en"
         >
-          make your choice
+          MAKE YOUR CHOICE
         </h2>
 
         {/* Two choices - side by side on desktop, stacked on mobile */}
