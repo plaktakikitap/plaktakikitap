@@ -249,6 +249,7 @@ export default function MessyBulletJournal() {
             width={pageSize.width}
             height={pageSize.height}
             size="fixed"
+            style={{}}
             startZIndex={0}
             autoSize={false}
             minWidth={360}

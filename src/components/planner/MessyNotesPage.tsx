@@ -65,7 +65,7 @@ export function MessyNotesPage({
     return m;
   }, [canvasItems]);
 
-  const { polaroidTilts, polaroidSkews, washiRotates, noteTilts, noteSkews, attachedPositions, customFieldPositions, polaroidPositions } = useMemo(() => {
+  const { polaroidTilts, polaroidSkews, washiRotates, noteTilts, noteSkews, notePositions, attachedPositions, customFieldPositions, polaroidPositions } = useMemo(() => {
     const polaroidTilts = images.slice(0, 5).map((_, i) => seeded(i + 1, -5, 5));
     const polaroidSkews = images.slice(0, 5).map((_, i) => seeded(i + 2, -2, 2));
     const washiRotates = [12, -8, 18, -5, 22].map((v, i) => seeded(i + 10, -25, 25));
