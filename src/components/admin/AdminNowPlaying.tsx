@@ -79,13 +79,6 @@ export function AdminNowPlaying({ tracks }: AdminNowPlayingProps) {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="mb-1 block text-sm text-[var(--muted)]">Albüm kapağı (isteğe bağlı)</label>
-            <AdminImageUpload
-              name="album_art_url"
-              placeholder="Albüm kapağı yükle"
-            />
-          </div>
-          <div className="sm:col-span-2">
             <label className="mb-1 block text-sm text-[var(--muted)]">Spotify / dinleme linki (isteğe bağlı)</label>
             <input
               name="track_url"
