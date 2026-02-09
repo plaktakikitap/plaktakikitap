@@ -9,14 +9,16 @@ import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
 import { AnimatePresence } from "framer-motion";
 import { playSound, AUDIO } from "@/lib/audio";
-import { BulletJournalBook } from "./BulletJournalBook";
+import { BulletJournalBook, BOOK_PAGE_HEIGHT, BOOK_PAGE_WIDTH } from "./BulletJournalBook";
 import { MessyPaperPage } from "./MessyPaperPage";
 import { MessyCalendarGrid } from "./MessyCalendarGrid";
 import { MessyNotesPage } from "./MessyNotesPage";
 import { MessyElementsOverlay } from "./MessyElementsOverlay";
+import { ItemLayer } from "./ItemLayer";
 import { DayJournalModal } from "./DayJournalModal";
 import type { DaySmudge, PlannerCanvasItem, PlannerDaySummary, PlannerEntryWithMedia } from "@/lib/planner";
 import type { MessyElement } from "@/types/messy-elements";
+import type { PlannerItem } from "@/types/planner-items";
 
 const HTMLFlipBook = dynamic(() => import("react-pageflip"), { ssr: false });
 
@@ -25,11 +27,7 @@ const MONTH_LABELS = [
   "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık",
 ];
 
-const PAPER_BG = "#ebe0c8";
-
-/** Spread: ajanda geniş — masa defteri hissi */
-const DESKTOP_SPREAD_WIDTH = 2200;
-const DESKTOP_SPREAD_HEIGHT = 1080;
+const PAPER_BG = "#fdfaf3";
 
 /** Varsayılan overlay: sol sayfa (takvim) — ataş, washi, kahve lekesi */
 const DEFAULT_LEFT_OVERLAY: MessyElement[] = [
@@ -65,22 +63,7 @@ export default function MessyBulletJournal() {
   const lastFlipTime = useRef(0);
   const [flipInProgress, setFlipInProgress] = useState(false);
   const flipbookContainerRef = useRef<HTMLDivElement>(null);
-  const [pageSize, setPageSize] = useState({ width: 550, height: 700 });
-  useEffect(() => {
-    const el = flipbookContainerRef.current;
-    if (!el) return;
-    const update = () => {
-      const w = el.clientWidth;
-      const h = el.clientHeight;
-      if (w > 0 && h > 0) {
-        setPageSize({ width: Math.floor(w / 2), height: h });
-      }
-    };
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
+  const pageSize = { width: BOOK_PAGE_WIDTH, height: BOOK_PAGE_HEIGHT };
 
   const lastFlipStateRef = useRef<string | null>(null);
   const handleChangeState = useCallback((e: { data: string }) => {
@@ -122,6 +105,7 @@ export default function MessyBulletJournal() {
     custom_fields?: { label: string; content: string }[];
   }>>({});
   const [canvasByMonth, setCanvasByMonth] = useState<Record<string, PlannerCanvasItem[]>>({});
+  const [plannerItemsByMonth, setPlannerItemsByMonth] = useState<Record<string, PlannerItem[]>>({});
 
   useEffect(() => {
     const defaults = {
@@ -181,6 +165,23 @@ export default function MessyBulletJournal() {
     });
   }, [year]);
 
+  useEffect(() => {
+    Array.from({ length: 12 }, (_, monthIdx) => {
+      const key = `${year}-${monthIdx}`;
+      fetch(`/api/planner/items?year=${year}&month=${monthIdx + 1}`)
+        .then((r) => r.json())
+        .then((data) =>
+          setPlannerItemsByMonth((prev) => ({
+            ...prev,
+            [key]: Array.isArray(data) ? data : [],
+          }))
+        )
+        .catch(() =>
+          setPlannerItemsByMonth((prev) => ({ ...prev, [key]: [] }))
+        );
+    });
+  }, [year]);
+
   const summaryByDateFor = useCallback(
     (m: number) => {
       const arr = summaryCache[`${year}-${m}`] ?? [];
@@ -230,16 +231,14 @@ export default function MessyBulletJournal() {
 
   return (
     <section className="mx-auto w-full max-w-[2260px] px-2 pb-24 sm:px-6" style={{ minHeight: "min(95vh, 1200px)" }}>
-      <BulletJournalBook flipInProgress={flipInProgress}>
+      <BulletJournalBook>
         <div
           ref={flipbookContainerRef}
-          className="relative h-full w-full overflow-hidden rounded-xl"
+          className="relative h-full w-full overflow-hidden rounded-lg"
           style={{
-            maxWidth: DESKTOP_SPREAD_WIDTH,
-            aspectRatio: `${DESKTOP_SPREAD_WIDTH}/${DESKTOP_SPREAD_HEIGHT}`,
             width: "100%",
-            minHeight: 480,
-            backgroundColor: PAPER_BG,
+            height: "100%",
+            backgroundColor: "#fdfaf3",
             perspective: "2200px",
             transformStyle: "preserve-3d",
           }}
@@ -252,10 +251,10 @@ export default function MessyBulletJournal() {
             style={{}}
             startZIndex={0}
             autoSize={false}
-            minWidth={360}
-            maxWidth={1100}
-            minHeight={480}
-            maxHeight={1080}
+            minWidth={BOOK_PAGE_WIDTH}
+            maxWidth={BOOK_PAGE_WIDTH}
+            minHeight={BOOK_PAGE_HEIGHT}
+            maxHeight={BOOK_PAGE_HEIGHT}
             usePortrait={false}
             showCover={false}
             mobileScrollSupport
@@ -272,62 +271,31 @@ export default function MessyBulletJournal() {
             onChangeState={handleChangeState}
             className="bg-transparent ajanda-flipbook"
           >
-            {/* Ön kapak — sert, kalın defter kapağı: koyu mavi deri hissi */}
+            {/* Ön kapak (index 0) — sadece #3d2b1f + AJANDA 2026 */}
             <div
               key="front-cover-left"
               className="relative flex h-full w-full items-center justify-center overflow-hidden"
-              style={{
-                backgroundImage: `
-                  linear-gradient(145deg, #1e3a5f 0%, #0f2744 20%, #0a1f38 50%, #0d2440 80%, #153a6e 100%),
-                  radial-gradient(ellipse 80% 50% at 30% 40%, rgba(255,255,255,0.06) 0%, transparent 50%),
-                  radial-gradient(circle at 70% 60%, rgba(0,0,0,0.15) 0%, transparent 40%)
-                `,
-                boxShadow: [
-                  "inset 6px 6px 24px rgba(255,255,255,0.06)",
-                  "inset -6px -6px 24px rgba(0,0,0,0.5)",
-                  "inset 0 0 100px rgba(0,0,0,0.25)",
-                  "8px 0 32px rgba(0,0,0,0.5)",
-                  "4px 0 12px rgba(0,0,0,0.3)",
-                  "0 0 0 1px rgba(0,0,0,0.2)",
-                ].join(", "),
-                borderRight: "3px solid rgba(0,0,0,0.4)",
-              }}
+              style={{ backgroundColor: "#3d2b1f" }}
             >
-              {/* Kapak kenarı kalınlık hissi */}
-              <div
-                className="pointer-events-none absolute inset-0"
+              <span
+                className="font-display text-center"
                 style={{
-                  boxShadow: "inset 0 0 0 2px rgba(0,0,0,0.15)",
-                  borderRadius: "2px",
-                }}
-                aria-hidden
-              />
-              <div
-                className="text-center font-display"
-                style={{
-                  fontSize: "clamp(4rem, 11vw, 7rem)",
-                  fontWeight: 500,
-                  color: "#f5f0e1",
-                  letterSpacing: "0.3em",
-                  textShadow: [
-                    "0 2px 4px rgba(0,0,0,0.5)",
-                    "0 4px 12px rgba(0,0,0,0.4)",
-                    "0 0 40px rgba(255,235,180,0.15)",
-                    "0 1px 0 rgba(255,255,255,0.1)",
-                  ].join(", "),
-                  filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.6))",
+                  fontSize: "clamp(2.5rem, 6vw, 4rem)",
+                  fontWeight: 600,
+                  color: "#e8dcc8",
+                  letterSpacing: "0.2em",
+                  textShadow: "0 2px 8px rgba(0,0,0,0.5)",
                 }}
               >
-                {year}
-              </div>
+                AJANDA {year}
+              </span>
             </div>
-            {/* Sağ sayfa: kapak kapalıyken boş (kapağın içi / ilk sayfa kenarı) */}
+            {/* Sağ sayfa: kapağın içi — iç sayfa rengi */}
             <div
               key="front-cover-right"
               className="relative flex h-full w-full items-center justify-center"
               style={{
-                backgroundColor: "#e8e4dc",
-                backgroundImage: "linear-gradient(180deg, rgba(0,0,0,0.02) 0%, transparent 50%)",
+                backgroundColor: PAPER_BG,
                 boxShadow: "inset 2px 0 4px rgba(0,0,0,0.04)",
               }}
             />
@@ -405,26 +373,34 @@ export default function MessyBulletJournal() {
                       canvasItems={(canvasByMonth[`${year}-${m.index}`] ?? []).filter((it) => it.page === "right")}
                     />
                   </MessyPaperPage>
+                  <ItemLayer
+                    items={plannerItemsByMonth[m.key] ?? []}
+                    pageSide="right"
+                    pageWidth={BOOK_PAGE_WIDTH}
+                    pageHeight={BOOK_PAGE_HEIGHT}
+                  />
                   <MessyElementsOverlay elements={DEFAULT_RIGHT_OVERLAY} />
                 </div>
               </div>,
             ])}
-            {/* Arka kapak — Aralık'tan ileri çevirince */}
+            {/* Arka kapak — sadece #3d2b1f + AJANDA 2026 */}
             <div
               key="back-cover"
-              className="relative flex h-full w-full items-center justify-center"
-              style={{
-                backgroundColor: "#2a2520",
-                backgroundImage: `linear-gradient(135deg, #2a2520 0%, #1f1c18 100%)`,
-                boxShadow: "inset 0 0 60px rgba(0,0,0,0.2)",
-              }}
+              className="relative flex h-full w-full items-center justify-center overflow-hidden"
+              style={{ backgroundColor: "#3d2b1f" }}
             >
-              <div
-                className="text-center font-sans text-sm opacity-60"
-                style={{ color: "rgba(255,255,255,0.5)" }}
+              <span
+                className="font-display text-center"
+                style={{
+                  fontSize: "clamp(2rem, 5vw, 3rem)",
+                  fontWeight: 600,
+                  color: "#c8bca8",
+                  letterSpacing: "0.15em",
+                  textShadow: "0 2px 6px rgba(0,0,0,0.5)",
+                }}
               >
-                {year}
-              </div>
+                AJANDA {year}
+              </span>
             </div>
           </HTMLFlipBook>
         </div>

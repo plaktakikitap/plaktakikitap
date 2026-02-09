@@ -356,6 +356,54 @@ body::before {
   transition-duration: 0.04s !important;
 }
 
+/* Defter kapağı — plastik görüntüyü kaldırır; koyu deri, taşan kapak */
+.book-container {
+  position: relative;
+  background: #3d2b1f;
+  padding: 15px;
+  border-radius: 8px 15px 15px 8px;
+  box-shadow:
+    20px 20px 50px rgba(0, 0, 0, 0.6),
+    inset 0 0 15px rgba(0, 0, 0, 0.5);
+  display: inline-block;
+}
+
+/* Defterin ortasındaki dikişli cilt (The Spine) */
+.book-spine {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0) 20%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0) 80%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* Sayfa kenarlarındaki kağıt yığını görüntüsü */
+.page-stack-effect {
+  position: absolute;
+  right: 10px;
+  top: 15px;
+  bottom: 15px;
+  width: 5px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #ddd 0px,
+    #ddd 1px,
+    #fff 2px
+  );
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
 /* Bullet journal — mürekkep efekti: el yazısı + blur(0.2px) kağıda dağılmış hissi (başlık/notlarda kullan) */
 .planner-ink {
   font-family: var(--font-handwriting), cursive;

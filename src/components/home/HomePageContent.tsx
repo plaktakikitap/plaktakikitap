@@ -23,7 +23,7 @@ export function HomePageContent({
         {/* Hero — mobilde daha kısa, masaüstünde uzun */}
         <section className="flex min-h-[100vh] flex-col items-center justify-start px-4 pt-10 pb-6 sm:min-h-[120vh] sm:px-6 sm:pt-14 sm:pb-8 md:min-h-[140vh]">
           <div className="mx-auto flex w-full max-w-5xl flex-col items-center">
-            <div className="w-full max-w-[280px] sm:max-w-[320px]">
+            <div className="flex w-full max-w-[280px] justify-center sm:max-w-[320px]">
               <FramedCrossfade
                 aSrc="/images/eymen.jpeg?v=2"
                 bSrc="/images/plaktakikitap.jpeg"

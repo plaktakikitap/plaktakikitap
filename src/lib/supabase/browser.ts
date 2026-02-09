@@ -1,16 +1,13 @@
 import { createBrowserClient as createSupabaseBrowserClient } from "@supabase/ssr";
 
-const url =
-  process.env.NEXT_PUBLIC_SUPABASE_URL?.startsWith("http") &&
-  process.env.NEXT_PUBLIC_SUPABASE_URL !== "YOUR_SUPABASE_URL"
-    ? process.env.NEXT_PUBLIC_SUPABASE_URL
-    : "https://placeholder.supabase.co";
-const key =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY"
-    ? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDYxOTE2MDB9.placeholder";
-
 export function createBrowserClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.startsWith("http")
+    ? process.env.NEXT_PUBLIC_SUPABASE_URL
+    : null;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || url === "YOUR_SUPABASE_URL")
+    throw new Error("NEXT_PUBLIC_SUPABASE_URL is required. Set it in .env.local (see .env.example).");
+  if (!key || key === "YOUR_ANON_OR_PUBLISHABLE_KEY")
+    throw new Error("NEXT_PUBLIC_SUPABASE_ANON_KEY is required. Set it in .env.local (see .env.example).");
   return createSupabaseBrowserClient(url, key);
 }

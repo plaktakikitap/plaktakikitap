@@ -53,7 +53,7 @@ export function MessyPaperPage({
       style={{
         transformStyle: "preserve-3d",
         backfaceVisibility: "hidden",
-        backgroundColor: "#ebe0c8",
+        backgroundColor: "#fdfaf3",
         backgroundImage: [
           "repeating-linear-gradient(transparent, transparent 26px, rgba(0,0,0,0.03) 26px, rgba(0,0,0,0.03) 27px)",
           "linear-gradient(180deg, rgba(248,240,220,0.7) 0%, transparent 20%, transparent 80%, rgba(225,210,180,0.5) 100%)",
@@ -84,7 +84,7 @@ export function MessyPaperPage({
         style={{
           ...(side === "left" ? { left: 0, transform: `translateX(-55%) rotate(${paperclipEdge.rotate}deg)` } : { right: 0, transform: `translateX(55%) rotate(${paperclipEdge.rotate}deg)` }),
           top: paperclipEdge.top,
-          filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.25)) drop-shadow(0 0 0 1px rgba(0,0,0,0.06))",
+          filter: "drop-shadow(0 3px 6px rgba(0,0,0,0.35)) drop-shadow(0 1px 2px rgba(0,0,0,0.2)) drop-shadow(0 0 0 1px rgba(0,0,0,0.08))",
         }}
       >
         <AttachmentSVG style="standard_clip" size={32} />
@@ -102,25 +102,25 @@ export function MessyPaperPage({
         <GlossyWashiTape variant="pink" rotateDeg={washiEdge.rotate} className="h-full w-full opacity-90" />
       </div>
 
-      {/* Kahve lekesi — rastgele bölgelerde opacity 0.2 overlay (coffee-stain.png veya SVG fallback) */}
+      {/* Kahve lekesi — messy journal tarzı, belirgin coffee ring */}
       {showCoffeeStain && (
         <>
           <div
-            className="pointer-events-none absolute bottom-[12%] right-[8%] h-28 w-28 rounded-full opacity-20"
+            className="pointer-events-none absolute bottom-[12%] right-[8%] h-28 w-28 rounded-full opacity-[0.28]"
             style={{
               background: "radial-gradient(ellipse 50% 50%, rgba(130,90,55,0.7) 0%, transparent 65%)",
               filter: "blur(12px)",
             }}
           />
           <div
-            className="pointer-events-none absolute top-[15%] left-[10%] h-16 w-16 rounded-full opacity-20"
+            className="pointer-events-none absolute top-[15%] left-[10%] h-16 w-16 rounded-full opacity-[0.25]"
             style={{
               background: "radial-gradient(ellipse 50% 50%, rgba(140,95,60,0.6) 0%, transparent 60%)",
               filter: "blur(8px)",
             }}
           />
           <div
-            className="pointer-events-none absolute bottom-[8%] right-[4%] h-24 w-24 rounded-full opacity-20"
+            className="pointer-events-none absolute bottom-[8%] right-[4%] h-24 w-24 rounded-full opacity-[0.26]"
             style={{
               background: "radial-gradient(ellipse 60% 55% at 50% 50%, rgba(120,80,50,0.6) 0%, rgba(100,65,40,0.2) 40%, transparent 70%)",
               filter: "blur(6px)",
@@ -160,7 +160,7 @@ export function MessyPaperPage({
         />
       )}
 
-      <div className="relative z-10 h-full w-full p-5 sm:p-6 md:p-8" style={{ transformStyle: "preserve-3d" }}>{children}</div>
+      <div className="relative z-10 flex h-full min-h-0 w-full flex-col p-5 sm:p-6 md:p-8" style={{ transformStyle: "preserve-3d" }}>{children}</div>
     </div>
   );
 }

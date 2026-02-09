@@ -76,6 +76,9 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: "plaktakikitap — Film, Kitap, Proje Koleksiyonu",
   description: "Kişisel film, dizi, kitap ve proje koleksiyonum",
+  icons: {
+    icon: "/images/favicon.jpeg",
+  },
 };
 
 export const viewport = {
