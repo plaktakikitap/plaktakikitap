@@ -13,12 +13,23 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function OkumaGunlugumPage() {
-  const [books, currentReading, goal, readingCount] = await Promise.all([
-    getPublicBooks(),
-    getCurrentReading(),
-    getReadingGoal(),
-    getReadingCount(),
-  ]);
+  let books: Awaited<ReturnType<typeof getPublicBooks>> = [];
+  let currentReading: Awaited<ReturnType<typeof getCurrentReading>> = null;
+  let goal: Awaited<ReturnType<typeof getReadingGoal>> = null;
+  let readingCount = 0;
+
+  try {
+    [books, currentReading, goal, readingCount] = await Promise.all([
+      getPublicBooks(),
+      getCurrentReading(),
+      getReadingGoal(),
+      getReadingCount(),
+    ]);
+  } catch (error) {
+    // Supabase not configured or DB error — show empty state
+    console.error("Reading log data fetch error:", error);
+  }
+
   /* Rafta soldan sağa: en eskiden en yeniye */
   const booksOldestFirst = [...books].reverse();
 
