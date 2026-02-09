@@ -246,7 +246,7 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
                       });
                     }}
                     enableResizing={selectedId === it.id}
-                    onClick={(e) => {
+                    onClick={(e: React.MouseEvent) => {
                       e.stopPropagation();
                       setSelectedId(it.id);
                     }}
@@ -300,7 +300,7 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
                         });
                       }}
                       enableResizing={selectedId === it.id}
-                      onClick={(e) => {
+                      onClick={(e: React.MouseEvent) => {
                         e.stopPropagation();
                         setSelectedId(it.id);
                       }}
