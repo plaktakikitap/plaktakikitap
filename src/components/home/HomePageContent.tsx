@@ -10,12 +10,20 @@ interface HomePageContentProps {
   children?: React.ReactNode;
   latestVideo?: Video | null;
   latestVideoThumb?: string | null;
+  introTitle?: string | null;
+  introSubtitle?: string | null;
+  introPhotoEymenUrl?: string | null;
+  introPhotoPlaktakikitapUrl?: string | null;
 }
 
 export function HomePageContent({
   children,
   latestVideo,
   latestVideoThumb,
+  introTitle = "Hoş geldiniz, ben Eymen!",
+  introSubtitle = "yanii... nam-ı diğer Plaktaki Kitap",
+  introPhotoEymenUrl = "/images/eymen.jpeg",
+  introPhotoPlaktakikitapUrl = "/images/plaktakikitap.jpeg",
 }: HomePageContentProps) {
   return (
     <>
