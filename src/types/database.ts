@@ -62,6 +62,10 @@ export interface Series {
   watched_at?: string | null;
   /** Dizi yaratıcısı veya yönetmeni */
   creator_or_director?: string | null;
+  /** Ön kapak (poster) görseli */
+  poster_url?: string | null;
+  /** DVD spine (yan yüz) görseli */
+  spine_url?: string | null;
 }
 
 /** Reading log: standalone books table (id, title, author, ...) */

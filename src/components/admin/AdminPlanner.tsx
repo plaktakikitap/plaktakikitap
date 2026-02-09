@@ -57,14 +57,14 @@ export function AdminPlanner() {
         key={d}
         type="button"
         onClick={() => setSelectedDate(dateStr)}
-        className={`flex flex-col items-center justify-center rounded py-2 text-sm transition hover:bg-[var(--accent-soft)]/50 ${
-          hasEntry[dateStr] ? "bg-[var(--accent-soft)]/30 font-medium" : "text-[var(--foreground)]"
+        className={`flex flex-col items-center justify-center rounded py-2 text-sm text-white transition hover:bg-amber-500/20 ${
+          hasEntry[dateStr] ? "bg-amber-500/20 font-medium" : ""
         }`}
         aria-label={`${d} — entry ekle/düzenle`}
       >
         {d}
         {hasEntry[dateStr] && (
-          <span className="mt-0.5 h-1 w-1 rounded-full bg-[var(--accent)]" />
+          <span className="mt-0.5 h-1 w-1 rounded-full bg-amber-400" />
         )}
       </button>
     );
@@ -73,29 +73,29 @@ export function AdminPlanner() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="text-3xl font-bold text-[var(--foreground)]">Planner</h1>
-        <p className="mt-1 text-[var(--muted)]">
+        <h1 className="text-3xl font-bold text-white">Planner</h1>
+        <p className="mt-1 text-white/70">
           Takvimden gün seç, o güne entry ekle. Her entry için: summary_quote (takvimde görünen özet), attachment_type (ataşlı/yapıştırma/zımba), sticker_selection (dijital sticker&apos;lar).
         </p>
       </header>
 
-      <section className="rounded-xl border border-[var(--card-border)] bg-[var(--card)] p-4">
+      <section className="rounded-xl border border-white/20 bg-white/5 p-4">
         <div className="mb-4 flex items-center justify-between">
           <button
             type="button"
             onClick={() => setMonth((m) => (m <= 0 ? 11 : m - 1))}
-            className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)] hover:text-[var(--foreground)]"
+            className="rounded p-1.5 text-white/70 hover:bg-white/10 hover:text-white"
             aria-label="Önceki ay"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
-          <h2 className="font-medium">
+          <h2 className="font-medium text-white">
             {MONTH_NAMES_TR[month]} {year}
           </h2>
           <button
             type="button"
             onClick={() => setMonth((m) => (m >= 11 ? 0 : m + 1))}
-            className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)] hover:text-[var(--foreground)]"
+            className="rounded p-1.5 text-white/70 hover:bg-white/10 hover:text-white"
             aria-label="Sonraki ay"
           >
             <ChevronRight className="h-5 w-5" />
@@ -103,7 +103,7 @@ export function AdminPlanner() {
         </div>
         <div className="grid grid-cols-7 gap-1 text-center">
           {["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"].map((d) => (
-            <div key={d} className="py-1 text-xs font-medium text-[var(--muted)]">
+            <div key={d} className="py-1 text-xs font-medium text-white/60">
               {d}
             </div>
           ))}
@@ -149,8 +149,8 @@ export function AdminPlanner() {
   );
 }
 
-const inputClass = "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-1.5 text-sm";
-const labelClass = "block text-xs font-medium text-[var(--muted)] mt-3 first:mt-0";
+const inputClass = "w-full rounded-lg border border-[var(--card-border)] bg-white px-3 py-1.5 text-sm text-neutral-900 placeholder:text-neutral-500";
+const labelClass = "block text-xs font-medium text-white/80 mt-3 first:mt-0";
 
 const ATTACHMENT_OPTIONS = [
   { value: "", label: "Yok" },
@@ -233,7 +233,7 @@ function PlannerDateModal({
   if (loading) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
-        <div className="rounded-xl bg-[var(--card)] px-8 py-4" onClick={(e) => e.stopPropagation()}>
+        <div className="rounded-xl bg-white/10 px-8 py-4 text-white" onClick={(e) => e.stopPropagation()}>
           Yükleniyor…
         </div>
       </div>
@@ -292,11 +292,11 @@ function PlannerDateModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
       <div
-        className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-xl border border-[var(--card-border)] bg-[var(--card)] shadow-xl"
+        className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-xl border border-white/20 bg-[#1a1f2e] shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 flex items-center justify-between border-b border-[var(--card-border)] bg-[var(--card)] px-4 py-3">
-          <h3 className="font-medium">{display} — Kayıtlar</h3>
+        <div className="sticky top-0 flex items-center justify-between border-b border-white/20 bg-[#1a1f2e] px-4 py-3">
+          <h3 className="font-medium text-white">{display} — Kayıtlar</h3>
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -304,7 +304,7 @@ function PlannerDateModal({
               disabled={smudgeLoading}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm ${
                 hasSmudge
-                  ? "border border-[var(--card-border)] text-[var(--muted)] hover:bg-[var(--background)]"
+                  ? "border border-white/20 text-white/70 hover:bg-white/10"
                   : "bg-[#36454F] text-white hover:bg-[#2a3640]"
               }`}
               title={hasSmudge ? "Lekeyi kaldır" : "Yazıyı dağıt (mürekkep lekesi ekle)"}
@@ -318,7 +318,7 @@ function PlannerDateModal({
                 setEditingEntry(null);
                 setMode("create");
               }}
-              className="flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-3 py-1.5 text-sm text-white"
+              className="flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-1.5 text-sm text-white hover:bg-amber-600"
             >
               <Plus className="h-4 w-4" />
               Yeni
@@ -326,30 +326,30 @@ function PlannerDateModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)]"
+              className="rounded p-1.5 text-white/70 hover:bg-white/10 hover:text-white"
             >
               <X className="h-5 w-5" />
             </button>
           </div>
         </div>
         <div className="p-4 space-y-3">
-          <div className="rounded-lg border border-[var(--card-border)] bg-[var(--background)]/50 p-3">
+          <div className="rounded-lg border border-white/20 bg-white/5 p-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-[var(--muted)]">Gün notu</span>
+              <span className="text-sm font-medium text-white/80">Gün notu</span>
               <button
                 type="button"
                 onClick={() => setMode("day-entry")}
-                className="text-sm text-[var(--accent)] hover:underline"
+                className="text-sm text-amber-400 hover:underline"
               >
                 {dayEntry ? "Düzenle" : "Ekle"}
               </button>
             </div>
             {dayEntry && (
-              <div className="mt-2 text-sm">
+              <div className="mt-2 text-sm text-white/90">
                 {dayEntry.title && <p className="font-medium line-clamp-1">{dayEntry.title}</p>}
-                {dayEntry.content && <p className="mt-0.5 line-clamp-2 text-[var(--muted)]">{dayEntry.content}</p>}
+                {dayEntry.content && <p className="mt-0.5 line-clamp-2 text-white/70">{dayEntry.content}</p>}
                 {(dayEntry.tags?.length ?? 0) > 0 && (
-                  <p className="mt-1 text-xs text-[var(--muted)]">{dayEntry.tags.join(", ")}</p>
+                  <p className="mt-1 text-xs text-white/60">{dayEntry.tags.join(", ")}</p>
                 )}
               </div>
             )}
@@ -357,15 +357,15 @@ function PlannerDateModal({
           {entries.map((entry) => (
             <div
               key={entry.id}
-              className="rounded-lg border border-[var(--card-border)] p-4"
+              className="rounded-lg border border-white/20 p-4 text-white/90"
             >
               <h4 className="font-medium line-clamp-1">{entry.title || "(Başlıksız)"}</h4>
               {entry.summaryQuote && (
-                <p className="mt-1 text-xs text-[var(--muted)] line-clamp-2">{entry.summaryQuote}</p>
+                <p className="mt-1 text-xs text-white/60 line-clamp-2">{entry.summaryQuote}</p>
               )}
               <div className="mt-2 flex items-center gap-2">
                 {entry.media.some((mm) => mm.attachmentType === "paperclip" || mm.attachmentType === "paste" || mm.attachmentType === "staple" || mm.attachmentStyle) && (
-                  <span className="flex items-center gap-1 text-xs text-[var(--muted)]">
+                  <span className="flex items-center gap-1 text-xs text-white/60">
                     <Paperclip className="h-3 w-3" /> Ataşlı
                   </span>
                 )}
@@ -375,7 +375,7 @@ function PlannerDateModal({
                     setEditingEntry(entry);
                     setMode("edit");
                   }}
-                  className="text-sm text-[var(--accent)] hover:underline"
+                  className="text-sm text-amber-400 hover:underline"
                 >
                   Düzenle
                 </button>
@@ -460,12 +460,12 @@ function DayEntryFormModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
       <div
-        className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-xl border border-[var(--card-border)] bg-[var(--card)] shadow-xl"
+        className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-xl border border-white/20 bg-[#1a1f2e] shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 flex items-center justify-between border-b border-[var(--card-border)] bg-[var(--card)] px-4 py-3">
-          <h3 className="font-medium">Gün notu — {display}</h3>
-          <button type="button" onClick={onClose} className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)]">
+        <div className="sticky top-0 flex items-center justify-between border-b border-white/20 bg-[#1a1f2e] px-4 py-3">
+          <h3 className="font-medium text-white">Gün notu — {display}</h3>
+          <button type="button" onClick={onClose} className="rounded p-1.5 text-white/70 hover:bg-white/10 hover:text-white">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -477,7 +477,7 @@ function DayEntryFormModal({
           <div>
             <label className={labelClass}>Fotoğraflar</label>
             <input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handlePhotoUpload} />
-            <button type="button" disabled={photoUploading} className="rounded border border-[var(--card-border)] px-2 py-1 text-sm hover:bg-[var(--background)]" onClick={() => fileInputRef.current?.click()}>
+            <button type="button" disabled={photoUploading} className="rounded border border-white/20 px-2 py-1 text-sm text-white/90 hover:bg-white/10" onClick={() => fileInputRef.current?.click()}>
               {photoUploading ? "Yükleniyor…" : "Yükle"}
             </button>
             {photos.length > 0 && (
@@ -497,7 +497,7 @@ function DayEntryFormModal({
             <button type="submit" disabled={submitting} className="rounded-lg bg-[var(--accent)] px-4 py-2 text-sm text-white disabled:opacity-50">
               {submitting ? "Kaydediliyor…" : "Kaydet"}
             </button>
-            <button type="button" onClick={onClose} className="rounded-lg border border-[var(--card-border)] px-4 py-2 text-sm hover:bg-[var(--background)]">
+            <button type="button" onClick={onClose} className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/90 hover:bg-white/10">
               İptal
             </button>
           </div>
@@ -639,12 +639,12 @@ function EntryFormModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
       <div
-        className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-xl border border-[var(--card-border)] bg-[var(--card)] shadow-xl"
+        className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-xl border border-white/20 bg-[#1a1f2e] shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 flex items-center justify-between border-b border-[var(--card-border)] bg-[var(--card)] px-4 py-3">
-          <h3 className="font-medium">{isEdit ? "Entry düzenle" : "Entry ekle"} — {display}</h3>
-          <button type="button" onClick={onClose} className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)]">
+        <div className="sticky top-0 flex items-center justify-between border-b border-white/20 bg-[#1a1f2e] px-4 py-3">
+          <h3 className="font-medium text-white">{isEdit ? "Entry düzenle" : "Entry ekle"} — {display}</h3>
+          <button type="button" onClick={onClose} className="rounded p-1.5 text-white/70 hover:bg-white/10 hover:text-white">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -678,17 +678,17 @@ function EntryFormModal({
           <label className={labelClass}>Medya (foto / video)</label>
           <input type="file" accept="image/*,video/*" multiple className={inputClass} onChange={(e) => setFiles(Array.from(e.target.files ?? []))} />
           {files.length > 0 && (
-            <p className="mt-1 text-xs text-[var(--muted)]">{files.length} dosya seçildi</p>
+            <p className="mt-1 text-xs text-white/60">{files.length} dosya seçildi</p>
           )}
 
-          <label className="mt-3 flex cursor-pointer items-center gap-2 text-sm">
+          <label className="mt-3 flex cursor-pointer items-center gap-2 text-sm text-white/90">
             <input
               type="checkbox"
               checked={firstImagePaperclip}
               onChange={(e) => setFirstImagePaperclip(e.target.checked)}
               className="h-4 w-4 rounded"
             />
-            <Paperclip className="h-4 w-4 text-[var(--muted)]" />
+            <Paperclip className="h-4 w-4 text-white/60" />
             İlk fotoğrafa ataş ekle (Metalik)
           </label>
 
@@ -697,7 +697,7 @@ function EntryFormModal({
               <p className={labelClass}>
                 attachment_style — Ekleme tipi (mevcut medya)
               </p>
-              <p className="text-[10px] text-[var(--muted)] -mt-1">
+              <p className="text-[10px] text-white/60 -mt-1">
                 standard_clip (metalik), colorful_clip (neon), binder_clip (siyah mandal), staple (zımba teli)
               </p>
               {entry.media.map((m) => (
@@ -727,7 +727,7 @@ function EntryFormModal({
               <Upload className="h-4 w-4" />
               {submitting ? "Kaydediliyor…" : "Kaydet"}
             </button>
-            <button type="button" onClick={onClose} className="rounded-lg border border-[var(--card-border)] px-4 py-2 text-sm">İptal</button>
+            <button type="button" onClick={onClose} className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/90 hover:bg-white/10">İptal</button>
           </div>
         </form>
       </div>

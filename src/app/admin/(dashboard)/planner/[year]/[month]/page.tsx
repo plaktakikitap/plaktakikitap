@@ -27,7 +27,7 @@ export default async function AdminPlannerMonthPage({
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-[var(--foreground)]">
+      <h1 className="text-2xl font-bold text-white">
         Ajanda — {monthName} {y}
       </h1>
       <AdminPlannerCanvasEditor year={y} month={m} monthName={monthName} />

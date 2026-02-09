@@ -1,8 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { Plus, Trash2, GripVertical, Pencil, Star } from "lucide-react";
+import { useState, useRef } from "react";
+import Image from "next/image";
+import { Plus, Trash2, GripVertical, Pencil, Star, Upload, Loader2 } from "lucide-react";
 
 export type TimelineImage = { url: string; caption?: string };
 
@@ -16,8 +17,112 @@ export type TimelineEntry = {
 };
 
 const inputClass =
-  "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm";
+  "w-full rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-500";
 const labelClass = "mb-1 block text-sm font-medium text-[var(--muted)]";
+
+/** Cihazdan fotoğraf yükleme — dosya seçici ile. */
+function AboutTimelineImageUpload({
+  value,
+  onChange,
+  disabled,
+}: {
+  value: TimelineImage[];
+  onChange: (images: TimelineImage[]) => void;
+  disabled?: boolean;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  async function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (!files?.length) return;
+    setUploadError(null);
+    setUploading(true);
+    const next = [...value];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (!file.type.startsWith("image/")) continue;
+      const form = new FormData();
+      form.set("file", file);
+      form.set("folder", "about");
+      const res = await fetch("/api/admin/upload/image", { method: "POST", body: form });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.url) {
+        next.push({ url: data.url, caption: "" });
+      } else {
+        setUploadError(data.error ?? "Yükleme başarısız");
+      }
+    }
+    onChange(next);
+    setUploading(false);
+    e.target.value = "";
+  }
+
+  function removeAt(i: number) {
+    onChange(value.filter((_, idx) => idx !== i));
+  }
+
+  function setCaption(i: number, caption: string) {
+    const next = value.slice();
+    next[i] = { ...next[i], caption: caption || undefined };
+    onChange(next);
+  }
+
+  return (
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          onChange={handleFileSelect}
+          disabled={disabled || uploading}
+        />
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          disabled={disabled || uploading}
+          className="inline-flex items-center gap-2 rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-50 disabled:opacity-50"
+        >
+          {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+          {uploading ? "Yükleniyor…" : "Bilgisayardan veya telefondan görsel ekle"}
+        </button>
+        {uploadError && <span className="text-xs text-red-500">{uploadError}</span>}
+      </div>
+      {value.length > 0 && (
+        <ul className="space-y-3">
+          {value.map((img, i) => (
+            <li key={i} className="flex gap-3 rounded-lg border border-[var(--card-border)] bg-white/80 p-2">
+              <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded bg-neutral-100">
+                <Image src={img.url} alt="" width={80} height={80} className="h-full w-full object-cover" unoptimized />
+              </div>
+              <div className="min-w-0 flex-1">
+                <input
+                  type="text"
+                  value={img.caption ?? ""}
+                  onChange={(e) => setCaption(i, e.target.value)}
+                  className="w-full rounded border border-[var(--card-border)] bg-white px-2 py-1.5 text-sm text-neutral-900 placeholder:text-neutral-400"
+                  placeholder="Görsel açıklaması (isteğe bağlı)"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => removeAt(i)}
+                className="shrink-0 rounded p-1.5 text-red-500 hover:bg-red-500/10"
+                title="Kaldır"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 export function AdminAboutTimelineForm({ entries }: { entries: TimelineEntry[] }) {
   const router = useRouter();
@@ -26,6 +131,7 @@ export function AdminAboutTimelineForm({ entries }: { entries: TimelineEntry[] }
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const [ordered, setOrdered] = useState(entries);
+  const [newEntryImages, setNewEntryImages] = useState<TimelineImage[]>([]);
   const sorted = [...ordered].sort((a, b) => a.order_index - b.order_index);
 
   async function handleCreate(e: React.FormEvent<HTMLFormElement>) {
@@ -35,17 +141,6 @@ export function AdminAboutTimelineForm({ entries }: { entries: TimelineEntry[] }
     const form = e.currentTarget;
     const year = (form.querySelector('[name="year_or_period"]') as HTMLInputElement)?.value ?? "";
     const text = (form.querySelector('[name="paragraph_text"]') as HTMLTextAreaElement)?.value ?? "";
-    const imagesStr = (form.querySelector('[name="associated_images"]') as HTMLTextAreaElement)?.value ?? "[]";
-    let images: TimelineImage[] = [];
-    try {
-      const parsed = JSON.parse(imagesStr);
-      images = Array.isArray(parsed) ? parsed.map((x: unknown) => ({
-        url: typeof x === "object" && x !== null && "url" in x ? String((x as { url: string }).url) : "",
-        caption: typeof x === "object" && x !== null && "caption" in x ? String((x as { caption?: string }).caption ?? "") : undefined,
-      })).filter((x) => x.url) : [];
-    } catch {
-      images = [];
-    }
 
     const res = await fetch("/api/admin/about", {
       method: "POST",
@@ -53,7 +148,7 @@ export function AdminAboutTimelineForm({ entries }: { entries: TimelineEntry[] }
       body: JSON.stringify({
         year_or_period: year.trim(),
         paragraph_text: text.trim(),
-        associated_images: images,
+        associated_images: newEntryImages,
         order_index: sorted.length,
         is_highlight: false,
       }),
@@ -65,6 +160,7 @@ export function AdminAboutTimelineForm({ entries }: { entries: TimelineEntry[] }
       return;
     }
     form.reset();
+    setNewEntryImages([]);
     router.refresh();
   }
 
@@ -133,18 +229,15 @@ export function AdminAboutTimelineForm({ entries }: { entries: TimelineEntry[] }
         </h2>
         {error && <p className="mb-3 text-sm text-red-500">{error}</p>}
         <div className="grid gap-3">
-          <label className={labelClass}>Dönem (year_or_period)</label>
+          <label className={labelClass}>Dönem</label>
           <input name="year_or_period" className={inputClass} placeholder="2015-2018 Üniversite Yılları" required />
-          <label className={labelClass}>Paragraf metni (paragraph_text)</label>
+          <label className={labelClass}>Paragraf metni</label>
           <textarea name="paragraph_text" className={inputClass} rows={4} placeholder="O döneme ait hikaye..." />
-          <label className={labelClass}>
-            Görseller (JSON: [&#123;&quot;url&quot;: &quot;...&quot;, &quot;caption&quot;: &quot;...&quot;&#125;])
-          </label>
-          <textarea
-            name="associated_images"
-            className={`${inputClass} font-mono text-xs`}
-            rows={3}
-            placeholder='[{"url":"https://...","caption":"Polaroid notu"}]'
+          <label className={labelClass}>Görseller</label>
+          <AboutTimelineImageUpload
+            value={newEntryImages}
+            onChange={setNewEntryImages}
+            disabled={loading}
           />
         </div>
         <button type="submit" disabled={loading} className="mt-4 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm text-white hover:opacity-90 disabled:opacity-50">
@@ -232,24 +325,10 @@ function EditForm({
 }) {
   const [year, setYear] = useState(entry.year_or_period);
   const [text, setText] = useState(entry.paragraph_text);
-  const [imagesStr, setImagesStr] = useState(JSON.stringify(entry.associated_images ?? [], null, 2));
+  const [images, setImages] = useState<TimelineImage[]>(entry.associated_images ?? []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    let images: TimelineImage[] = [];
-    try {
-      const parsed = JSON.parse(imagesStr);
-      images = Array.isArray(parsed)
-        ? parsed
-            .map((x: unknown) => ({
-              url: typeof x === "object" && x !== null && "url" in x ? String((x as { url: string }).url) : "",
-              caption: typeof x === "object" && x !== null && "caption" in x ? String((x as { caption?: string }).caption ?? "") : undefined,
-            }))
-            .filter((x) => x.url)
-        : [];
-    } catch {
-      images = [];
-    }
     onSave({ year_or_period: year.trim(), paragraph_text: text.trim(), associated_images: images });
   };
 
@@ -269,11 +348,11 @@ function EditForm({
         rows={3}
         placeholder="Paragraf"
       />
-      <textarea
-        value={imagesStr}
-        onChange={(e) => setImagesStr(e.target.value)}
-        className={`${inputClass} font-mono text-xs`}
-        rows={4}
+      <label className={labelClass}>Görseller</label>
+      <AboutTimelineImageUpload
+        value={images}
+        onChange={setImages}
+        disabled={loading}
       />
       <div className="flex gap-2">
         <button type="submit" disabled={loading} className="rounded bg-[var(--accent)] px-3 py-1.5 text-sm text-white">

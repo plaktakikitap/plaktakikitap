@@ -15,11 +15,6 @@ import {
   deletePlannerEntry,
   addPlannerMedia,
   deletePlannerMedia,
-  createArt,
-  updateArt,
-  deleteArt,
-  addArtMedia,
-  deleteArtMedia,
   createManualTrack,
   updateManualTrack,
   deleteManualTrack,
@@ -204,47 +199,6 @@ export async function adminCreatePlannerDecor(formData: FormData) {
 
 export async function adminDeletePlannerDecor(id: string) {
   return deletePlannerDecorAdmin(id);
-}
-
-// Art
-export async function adminCreateArt(formData: FormData) {
-  const title = (formData.get("title") as string)?.trim();
-  if (!title) return { error: "Title is required" };
-  return createArt({
-    title,
-    slug: (formData.get("slug") as string)?.trim() || null,
-    description: (formData.get("description") as string)?.trim() || null,
-    visibility: (formData.get("visibility") as "public" | "unlisted" | "private") || "public",
-  });
-}
-
-export async function adminUpdateArt(id: string, formData: FormData) {
-  return updateArt(id, {
-    title: (formData.get("title") as string)?.trim(),
-    slug: (formData.get("slug") as string)?.trim() || null,
-    description: (formData.get("description") as string)?.trim() || null,
-    visibility: (formData.get("visibility") as "public" | "unlisted" | "private") || undefined,
-  });
-}
-
-export async function adminDeleteArt(id: string) {
-  return deleteArt(id);
-}
-
-export async function adminAddArtMedia(formData: FormData) {
-  const content_id = formData.get("content_id") as string;
-  const url = (formData.get("url") as string)?.trim();
-  if (!content_id || !url) return { error: "Content and URL required" };
-  return addArtMedia({
-    content_id,
-    kind: (formData.get("kind") as "image" | "video" | "link") || "link",
-    url,
-    caption: (formData.get("caption") as string)?.trim() || null,
-  });
-}
-
-export async function adminDeleteArtMedia(id: string) {
-  return deleteArtMedia(id);
 }
 
 // Manual Now Playing (Spotify fallback)

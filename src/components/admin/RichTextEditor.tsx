@@ -22,6 +22,7 @@ export function RichTextEditor({ value, onChange, placeholder = "İçerik yazın
   const [showLinkInput, setShowLinkInput] = useState(false);
 
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         heading: { levels: [2, 3] },
@@ -38,7 +39,7 @@ export function RichTextEditor({ value, onChange, placeholder = "İçerik yazın
     },
     editorProps: {
       attributes: {
-        class: "yazilarim-editor min-h-[8rem] px-3 py-2 text-sm focus:outline-none",
+        class: "yazilarim-editor min-h-[8rem] px-3 py-2 text-sm text-neutral-900 focus:outline-none",
       },
     },
   });
@@ -76,7 +77,7 @@ export function RichTextEditor({ value, onChange, placeholder = "İçerik yazın
   if (!editor) return null;
 
   return (
-    <div className="rounded-lg border border-[var(--card-border)] bg-[var(--background)]">
+    <div className="rounded-lg border border-[var(--card-border)] bg-white">
       <div className="flex flex-wrap items-center gap-1 border-b border-[var(--card-border)] p-2">
         <button
           type="button"
@@ -143,7 +144,7 @@ export function RichTextEditor({ value, onChange, placeholder = "İçerik yazın
               onChange={(e) => setLinkUrl(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), setLink())}
               placeholder="https://..."
-              className="h-8 w-40 rounded border border-[var(--card-border)] px-2 text-sm"
+              className="h-8 w-40 rounded border border-[var(--card-border)] bg-white px-2 text-sm text-neutral-900 placeholder:text-neutral-500"
               autoFocus
             />
             <button type="button" onClick={setLink} className="rounded bg-[var(--primary)] px-2 py-1 text-xs text-[var(--primary-foreground)]">
@@ -168,7 +169,7 @@ export function RichTextEditor({ value, onChange, placeholder = "İçerik yazın
       <EditorContent
         editor={editor}
         style={{ minHeight }}
-        className="yazilarim-editor-wrap [&_.ProseMirror]:min-h-[8rem] [&_.ProseMirror]:px-3 [&_.ProseMirror]:py-2 [&_.ProseMirror]:outline-none [&_.ProseMirror.p-is-empty:before]:pointer-events-none [&_.ProseMirror.p-is-empty:before]:float-left [&_.ProseMirror.p-is-empty:before]:h-0 [&_.ProseMirror.p-is-empty:before]:text-[var(--muted)] [&_.ProseMirror.p-is-empty:before]:content-[attr(data-placeholder)]"
+        className="yazilarim-editor-wrap [&_.ProseMirror]:min-h-[8rem] [&_.ProseMirror]:px-3 [&_.ProseMirror]:py-2 [&_.ProseMirror]:outline-none [&_.ProseMirror]:text-neutral-900 [&_.ProseMirror.p-is-empty:before]:pointer-events-none [&_.ProseMirror.p-is-empty:before]:float-left [&_.ProseMirror.p-is-empty:before]:h-0 [&_.ProseMirror.p-is-empty:before]:text-neutral-500 [&_.ProseMirror.p-is-empty:before]:content-[attr(data-placeholder)]"
       />
     </div>
   );

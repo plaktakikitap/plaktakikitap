@@ -10,7 +10,7 @@ const RichTextEditor = dynamic(
 );
 
 const inputClass =
-  "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm";
+  "w-full rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-500";
 const labelClass = "mb-1 block text-sm font-medium text-[var(--muted)]";
 
 const CATEGORIES = [
@@ -77,7 +77,7 @@ export function AdminYazilarimForm() {
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={labelClass}>Kategori</label>
-          <select name="category" className={inputClass} defaultValue="denemeler">
+          <select name="category" className={inputClass + " text-neutral-900"} defaultValue="denemeler">
             {CATEGORIES.map((c) => (
               <option key={c.value} value={c.value}>{c.label}</option>
             ))}

@@ -100,19 +100,19 @@ export function AdminPlannerMessySettings({ year, month }: AdminPlannerMessySett
   if (!loaded) return null;
 
   return (
-    <section className="rounded-xl border border-[var(--card-border)] bg-[var(--card)] p-4">
-      <h2 className="mb-3 flex items-center gap-2 font-medium">
+    <section className="rounded-xl border border-white/20 bg-white/5 p-4">
+      <h2 className="mb-3 flex items-center gap-2 font-medium text-white">
         <Sparkles className="h-4 w-4" />
         Bullet Journal — Messy görünüm
       </h2>
-      <p className="mb-4 text-sm text-[var(--muted)]">
+      <p className="mb-4 text-sm text-white/60">
         Messy görünümü kontrol et — evet/hayır ile her öğeyi açıp kapat
       </p>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {toggles.map(({ key, label, icon }) => (
           <label
             key={key}
-            className="flex cursor-pointer items-center gap-3 rounded-lg border border-[var(--card-border)] px-4 py-3 transition hover:bg-[var(--background)]"
+            className="flex cursor-pointer items-center gap-3 rounded-lg border border-white/20 px-4 py-3 transition hover:bg-white/10"
           >
             <input
               type="checkbox"
@@ -122,25 +122,24 @@ export function AdminPlannerMessySettings({ year, month }: AdminPlannerMessySett
               }
               className="h-4 w-4 rounded"
             />
-            <span className="flex shrink-0 text-[var(--muted)]">{icon}</span>
-            <span className="text-sm font-medium">{label}</span>
+            <span className="flex shrink-0 text-white/60">{icon}</span>
+            <span className="text-sm font-medium text-white/90">{label}</span>
           </label>
         ))}
       </div>
 
-      {/* Özel alanlar — sağ sayfa (Hayatımın Film Müziği vb.) */}
-      <div className="mt-6 border-t border-[var(--card-border)] pt-4">
-        <h3 className="mb-2 flex items-center gap-2 text-sm font-medium">
+      <div className="mt-6 border-t border-white/20 pt-4">
+        <h3 className="mb-2 flex items-center gap-2 text-sm font-medium text-white">
           <Music2 className="h-4 w-4" />
           Özel alanlar (sağ sayfa)
         </h3>
-        <p className="mb-3 text-xs text-[var(--muted)]">
+        <p className="mb-3 text-xs text-white/60">
           Örneğin &quot;Hayatımın Film Müziği&quot; — bu ayın öne çıkan notları
         </p>
         {settings.custom_fields.map((f, i) => (
           <div
             key={i}
-            className="mb-3 flex flex-col gap-2 rounded-lg border border-[var(--card-border)] p-3"
+            className="mb-3 flex flex-col gap-2 rounded-lg border border-white/20 p-3"
           >
             <div className="flex items-center justify-between gap-2">
               <input
@@ -148,12 +147,12 @@ export function AdminPlannerMessySettings({ year, month }: AdminPlannerMessySett
                 placeholder="Başlık (örn: Hayatımın Film Müziği)"
                 value={f.label}
                 onChange={(e) => updateCustomField(i, "label", e.target.value)}
-                className="flex-1 rounded border border-[var(--input)] bg-[var(--background)] px-2 py-1.5 text-sm"
+                className="flex-1 rounded border border-[var(--card-border)] bg-white px-2 py-1.5 text-sm text-neutral-900 placeholder:text-neutral-500"
               />
               <button
                 type="button"
                 onClick={() => removeCustomField(i)}
-                className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--destructive)]/10 hover:text-[var(--destructive)]"
+                className="rounded p-1.5 text-white/60 hover:bg-red-500/10 hover:text-red-400"
                 aria-label="Kaldır"
               >
                 <Trash2 className="h-4 w-4" />
@@ -164,14 +163,14 @@ export function AdminPlannerMessySettings({ year, month }: AdminPlannerMessySett
               value={f.content}
               onChange={(e) => updateCustomField(i, "content", e.target.value)}
               rows={2}
-              className="rounded border border-[var(--input)] bg-[var(--background)] px-2 py-1.5 text-sm"
+              className="rounded border border-[var(--card-border)] bg-white px-2 py-1.5 text-sm text-neutral-900 placeholder:text-neutral-500"
             />
           </div>
         ))}
         <button
           type="button"
           onClick={addCustomField}
-          className="flex items-center gap-2 rounded-lg border border-dashed border-[var(--card-border)] px-3 py-2 text-sm text-[var(--muted)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          className="flex items-center gap-2 rounded-lg border border-dashed border-white/30 px-3 py-2 text-sm text-white/70 transition hover:border-amber-400/50 hover:text-amber-400"
         >
           <Plus className="h-4 w-4" />
           Alan ekle
@@ -182,7 +181,7 @@ export function AdminPlannerMessySettings({ year, month }: AdminPlannerMessySett
         type="button"
         onClick={handleSave}
         disabled={saving}
-        className="mt-4 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-50"
+        className="mt-4 rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-50"
       >
         {saving ? "Kaydediliyor…" : "Kaydet"}
       </button>

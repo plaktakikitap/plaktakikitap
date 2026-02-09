@@ -171,7 +171,7 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
 
   if (loading) {
     return (
-      <div className="rounded-lg border border-[var(--card-border)] bg-[var(--card)] p-8 text-center text-[var(--muted)]">
+      <div className="rounded-lg border border-white/20 bg-white/5 p-8 text-center text-white/70">
         Yükleniyor…
       </div>
     );
@@ -191,7 +191,7 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
         <div className="mb-2 flex items-center gap-2">
           <Link
             href="/admin/planner"
-            className="inline-flex items-center gap-1 rounded-lg border border-[var(--card-border)] px-3 py-1.5 text-sm hover:bg-[var(--background)]"
+            className="inline-flex items-center gap-1 rounded-lg border border-white/20 px-3 py-1.5 text-sm text-white/90 hover:bg-white/10"
           >
             <ChevronLeft className="h-4 w-4" />
             Listeye dön
@@ -329,20 +329,20 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
       </div>
 
       {/* Sidebar */}
-      <div className="w-full rounded-xl border border-[var(--card-border)] bg-[var(--card)] p-4 lg:w-72">
-        <h2 className="mb-3 font-medium">Öğe ekle</h2>
+      <div className="w-full rounded-xl border border-white/20 bg-white/5 p-4 lg:w-72">
+        <h2 className="mb-3 font-medium text-white">Öğe ekle</h2>
         <div className="mb-2 flex gap-2">
           <button
             type="button"
             onClick={() => setAddSide("left")}
-            className={`flex-1 rounded px-2 py-1.5 text-sm ${addSide === "left" ? "bg-[var(--accent)] text-white" : "bg-[var(--background)]"}`}
+            className={`flex-1 rounded px-2 py-1.5 text-sm ${addSide === "left" ? "bg-amber-500 text-white" : "bg-white/10 text-white/90 hover:bg-white/20"}`}
           >
             Sol
           </button>
           <button
             type="button"
             onClick={() => setAddSide("right")}
-            className={`flex-1 rounded px-2 py-1.5 text-sm ${addSide === "right" ? "bg-[var(--accent)] text-white" : "bg-[var(--background)]"}`}
+            className={`flex-1 rounded px-2 py-1.5 text-sm ${addSide === "right" ? "bg-amber-500 text-white" : "bg-white/10 text-white/90 hover:bg-white/20"}`}
           >
             Sağ
           </button>
@@ -359,7 +359,7 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
             type="button"
             disabled={uploading}
             onClick={() => fileInputRef.current?.click()}
-            className="inline-flex items-center gap-1 rounded-lg border border-[var(--card-border)] px-3 py-1.5 text-sm hover:bg-[var(--background)]"
+            className="inline-flex items-center gap-1 rounded-lg border border-white/20 px-3 py-1.5 text-sm text-white/90 hover:bg-white/10"
           >
             <Upload className="h-4 w-4" />
             Fotoğraf yükle
@@ -369,7 +369,7 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
               key={type}
               type="button"
               onClick={() => addItem(type, type === "postit" ? { text_content: "Not" } : undefined)}
-              className="inline-flex items-center gap-1 rounded-lg border border-[var(--card-border)] px-2 py-1.5 text-sm hover:bg-[var(--background)]"
+              className="inline-flex items-center gap-1 rounded-lg border border-white/20 px-2 py-1.5 text-sm text-white/90 hover:bg-white/10"
             >
               {label}
             </button>
@@ -378,9 +378,9 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
 
         {selected && (
           <>
-            <hr className="my-4 border-[var(--card-border)]" />
-            <h2 className="mb-2 font-medium">Seçili öğe</h2>
-            <div className="space-y-2 text-sm">
+            <hr className="my-4 border-white/20" />
+            <h2 className="mb-2 font-medium text-white">Seçili öğe</h2>
+            <div className="space-y-2 text-sm text-white/90">
               <label className="flex items-center gap-2">
                 <span className="w-16">Döndür</span>
                 <input
@@ -389,7 +389,7 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
                   max={180}
                   value={selected.rotation}
                   onChange={(e) => updateItem(selected.id, { rotation: Number(e.target.value) })}
-                  className="flex-1"
+                  className="flex-1 accent-amber-500"
                 />
                 <span>{selected.rotation}°</span>
               </label>
@@ -402,7 +402,7 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
                   step={0.1}
                   value={selected.scale}
                   onChange={(e) => updateItem(selected.id, { scale: Number(e.target.value) })}
-                  className="flex-1"
+                  className="flex-1 accent-amber-500"
                 />
                 <span>{selected.scale.toFixed(1)}</span>
               </label>
@@ -412,14 +412,14 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
                   onClick={() =>
                     updateItem(selected.id, { z_index: Math.max(0, selected.z_index - 1) })
                   }
-                  className="rounded border border-[var(--card-border)] px-2 py-1 text-xs hover:bg-[var(--background)]"
+                  className="rounded border border-white/20 px-2 py-1 text-xs text-white/90 hover:bg-white/10"
                 >
                   Geri
                 </button>
                 <button
                   type="button"
                   onClick={() => updateItem(selected.id, { z_index: selected.z_index + 1 })}
-                  className="rounded border border-[var(--card-border)] px-2 py-1 text-xs hover:bg-[var(--background)]"
+                  className="rounded border border-white/20 px-2 py-1 text-xs text-white/90 hover:bg-white/10"
                 >
                   Öne
                 </button>
@@ -433,7 +433,7 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
                     );
                   }
                 }}
-                className="flex items-center gap-1 rounded border border-red-500/50 bg-red-500/10 px-2 py-1 text-red-600 hover:bg-red-500/20"
+                className="flex items-center gap-1 rounded border border-red-400/50 bg-red-500/20 px-2 py-1 text-red-300 hover:bg-red-500/30"
               >
                 <Trash2 className="h-4 w-4" />
                 Sil
@@ -442,12 +442,12 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
           </>
         )}
 
-        <hr className="my-4 border-[var(--card-border)]" />
+        <hr className="my-4 border-white/20" />
         <button
           type="button"
           disabled={saving}
           onClick={saveAll}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white hover:bg-amber-600 disabled:opacity-50"
         >
           <Save className="h-4 w-4" />
           {saving ? "Kaydediliyor…" : "Kaydet"}

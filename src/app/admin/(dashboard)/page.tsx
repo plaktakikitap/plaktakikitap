@@ -1,15 +1,13 @@
-import { createAdminClient } from "@/lib/supabase/admin";
-import { getAdminRecentItems, getCinemaStats, getTotalBooksCount, getBooksReadThisMonth } from "@/lib/db/queries";
-import { AdminDashboard } from "@/components/admin/AdminDashboard";
-import { AdminStatsStrip } from "@/components/admin/AdminStatsStrip";
-import { AdminMiniPreview } from "@/components/admin/AdminMiniPreview";
+import {
+  getCinemaStats,
+  getBooksReadThisMonth,
+  getFilmsWatchedThisMonthList,
+  getSeriesWatchedThisMonthList,
+  getBooksReadThisMonthList,
+} from "@/lib/db/queries";
+import { AdminDashboardThisMonth } from "@/components/admin/AdminDashboardThisMonth";
 import { AdminSetupRequired } from "@/components/admin/AdminSetupRequired";
 import { AdminSiteSounds } from "@/components/admin/AdminSiteSounds";
-import { AdminSection } from "@/components/admin/AdminSection";
-import { AdminBentoCard } from "@/components/admin/AdminBentoCard";
-import { AdminReadingCard } from "@/components/admin/AdminReadingCard";
-import { AdminLinksCard } from "@/components/admin/AdminLinksCard";
-import { AdminTracksCard } from "@/components/admin/AdminTracksCard";
 
 export default async function AdminDashboardPage() {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -22,92 +20,24 @@ export default async function AdminDashboardPage() {
     );
   }
 
-  const supabase = createAdminClient();
-  const [
-    recentItems,
-    readingResult,
-    linksResult,
-    tracksResult,
-    cinemaStats,
-    totalBooks,
-    booksReadThisMonth,
-  ] = await Promise.all([
-    getAdminRecentItems(),
-      supabase
-        .from("reading_status")
-        .select("*")
-        .order("updated_at", { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-      supabase
-        .from("site_links")
-        .select("*")
-        .order("sort_order", { ascending: true }),
-      supabase
-        .from("now_tracks")
-        .select("*")
-        .order("sort_order", { ascending: true }),
-      getCinemaStats(),
-      getTotalBooksCount(),
-      getBooksReadThisMonth(),
-    ]);
-
-  const reading = readingResult.data ?? null;
-  const links = linksResult.data ?? [];
-  const tracks = tracksResult.data ?? [];
+  const [cinemaStats, booksReadThisMonth, filmsList, seriesList, booksList] = await Promise.all([
+    getCinemaStats(),
+    getBooksReadThisMonth(),
+    getFilmsWatchedThisMonthList(),
+    getSeriesWatchedThisMonthList(),
+    getBooksReadThisMonthList(),
+  ]);
 
   return (
-    <div className="space-y-16">
-      {/* Hızlı İstatistikler */}
-      <AdminSection
-        title="Site Özeti"
-        description="İçerik ve kanal istatistikleri — anlık sayılar."
-      >
-        <AdminStatsStrip
-          totalBooks={totalBooks}
-          totalFilms={cinemaStats.totalFilms}
-          totalSeries={cinemaStats.totalSeries}
-          filmWatchedThisMonth={cinemaStats.filmWatchedThisMonth}
-          seriesWatchedThisMonth={cinemaStats.seriesWatchedThisMonth}
-          booksReadThisMonth={booksReadThisMonth}
-        />
-      </AdminSection>
-
-      {/* İçerik Yönetimi — bento grid */}
-      <AdminDashboard recentItems={recentItems} />
-
-      {/* Medya & Widget'lar */}
-      <AdminSection
-        title="Medya & Widget'lar"
-        description="Şu an okuyorum, şarkılar, site sesleri ve canlı önizleme."
-      >
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:auto-rows-[minmax(200px,auto)]">
-          <AdminBentoCard colSpan={2} rowSpan={1}>
-            <AdminReadingCard reading={reading} />
-          </AdminBentoCard>
-          <AdminBentoCard colSpan={2} rowSpan={2} className="min-h-[280px]">
-            <AdminTracksCard tracks={tracks} />
-          </AdminBentoCard>
-          <AdminBentoCard colSpan={1} rowSpan={1}>
-            <AdminSiteSounds />
-          </AdminBentoCard>
-        </div>
-        <AdminBentoCard colSpan={4} rowSpan={1} className="mt-6">
-          <AdminMiniPreview />
-        </AdminBentoCard>
-      </AdminSection>
-
-      {/* Site Ayarları */}
-      <AdminSection
-        title="Site Ayarları"
-        description="Footer linkleri ve diğer site genel ayarları."
-      >
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <AdminBentoCard colSpan={2} rowSpan={1}>
-            <AdminLinksCard links={links} />
-          </AdminBentoCard>
-        </div>
-      </AdminSection>
+    <div>
+      <AdminDashboardThisMonth
+        filmCount={cinemaStats.filmWatchedThisMonth}
+        seriesCount={cinemaStats.seriesWatchedThisMonth}
+        booksCount={booksReadThisMonth}
+        films={filmsList}
+        series={seriesList}
+        books={booksList}
+      />
     </div>
   );
 }

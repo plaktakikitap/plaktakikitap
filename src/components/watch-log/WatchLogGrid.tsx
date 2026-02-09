@@ -67,7 +67,10 @@ export function WatchLogGrid({ films, onSelectFilm }: WatchLogGridProps) {
             {films.map((item, i) => {
               const film = getFilm(item);
               if (!film) return null;
-              const spineImage = film.spine_url ?? film.poster_url;
+              const spineImage =
+                film.spine_url ??
+                film.poster_url ??
+                `/api/watch-log/default-spine?title=${encodeURIComponent(item.title)}`;
               const micro = getSpineMicro(item.id);
 
               return (

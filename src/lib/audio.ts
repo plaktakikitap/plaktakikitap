@@ -22,6 +22,20 @@ export function setSoundsEnabled(enabled: boolean): void {
   window.dispatchEvent(new CustomEvent("sounds-enabled-changed", { detail: enabled }));
 }
 
+/** Global ses seviyesi 0–1 (site_settings.sound_volume / 100). Client'ta set edilir. */
+declare global {
+  interface Window {
+    __SITE_SOUND_VOLUME__?: number;
+  }
+}
+
+function getGlobalVolume(): number {
+  if (typeof window === "undefined") return 1;
+  const v = window.__SITE_SOUND_VOLUME__;
+  if (v === undefined) return 1;
+  return Math.min(1, Math.max(0, v));
+}
+
 /**
  * Ses çal — HTML5 Audio API.
  * Birden fazla format verilirse (örn. [.webm, .mp3]) sırayla dener; ilk yüklenen çalar.
@@ -36,12 +50,14 @@ export function playSound(
 ): HTMLAudioElement | null {
   if (!areSoundsEnabled()) return null;
   const list = Array.isArray(sources) ? sources : [sources];
+  const globalVol = getGlobalVolume();
+  const baseVol = options?.volume ?? 1;
 
   const attempt = (idx: number): HTMLAudioElement | null => {
     if (idx >= list.length) return null;
     try {
       const audio = new Audio(list[idx]);
-      audio.volume = Math.min(1, Math.max(0, options?.volume ?? 1));
+      audio.volume = Math.min(1, Math.max(0, baseVol * globalVol));
       audio.playbackRate = options?.playbackRate ?? 1;
       if (options?.onEnded) audio.addEventListener("ended", options.onEnded);
 

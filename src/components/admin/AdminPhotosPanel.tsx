@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Trash2, Upload, Image as ImageIcon } from "lucide-react";
-import { AdminImageUpload } from "./AdminImageUpload";
+import { Plus, Trash2, Image as ImageIcon } from "lucide-react";
 import type { Photo } from "@/types/photos";
 
 export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) {
@@ -11,7 +10,6 @@ export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) 
   const [photos, setPhotos] = useState<Photo[]>(initialPhotos);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [uploadPath, setUploadPath] = useState("");
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -39,82 +37,6 @@ export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) 
     router.refresh();
   }
 
-  const handleFileUpload = useCallback(
-    async (file: File, path?: string, caption?: string) => {
-      if (!file?.size) {
-        setError("Dosya seçin.");
-        return;
-      }
-      setError(null);
-      setLoading(true);
-      setUploadProgress(0);
-
-      try {
-        const uploadFd = new FormData();
-        uploadFd.set("file", file);
-        if (path?.trim()) uploadFd.set("path", path.trim());
-
-        // Use XMLHttpRequest for progress tracking
-        const xhr = new XMLHttpRequest();
-        const promise = new Promise<{ path: string }>((resolve, reject) => {
-          xhr.upload.addEventListener("progress", (e) => {
-            if (e.lengthComputable) {
-              const percent = Math.round((e.loaded / e.total) * 100);
-              setUploadProgress(percent);
-            }
-          });
-
-          xhr.addEventListener("load", () => {
-            if (xhr.status >= 200 && xhr.status < 300) {
-              try {
-                const data = JSON.parse(xhr.responseText);
-                resolve(data);
-              } catch {
-                reject(new Error("Invalid response"));
-              }
-            } else {
-              try {
-                const error = JSON.parse(xhr.responseText);
-                reject(new Error(error.error || "Upload failed"));
-              } catch {
-                reject(new Error(`Upload failed: ${xhr.statusText}`));
-              }
-            }
-          });
-
-          xhr.addEventListener("error", () => reject(new Error("Network error")));
-          xhr.addEventListener("abort", () => reject(new Error("Upload cancelled")));
-
-          xhr.open("POST", "/api/admin/photos/upload");
-          xhr.send(uploadFd);
-        });
-
-        const data = await promise;
-        setUploadPath(data.path);
-        setForm((f) => ({ ...f, image_url: data.path, caption: caption || f.caption }));
-        setUploadProgress(null);
-        await fetchPhotos();
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Yükleme başarısız.");
-        setUploadProgress(null);
-      } finally {
-        setLoading(false);
-      }
-    },
-    []
-  );
-
-  async function handleUpload(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const file = fd.get("file") as File | null;
-    const path = fd.get("path") as string;
-    const caption = (fd.get("caption") as string)?.trim() ?? "";
-    if (file) {
-      await handleFileUpload(file, path?.trim() || undefined, caption);
-    }
-  }
-
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -126,32 +48,6 @@ export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) 
     e.stopPropagation();
     setIsDragging(false);
   }, []);
-
-  const handleDrop = useCallback(
-    async (e: React.DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setIsDragging(false);
-
-      const files = Array.from(e.dataTransfer.files).filter((f) =>
-        f.type.startsWith("image/")
-      );
-      if (files.length > 0) {
-        await handleFileUpload(files[0]);
-      }
-    },
-    [handleFileUpload]
-  );
-
-  const handleFileSelect = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (file) {
-        handleFileUpload(file);
-      }
-    },
-    [handleFileUpload]
-  );
 
   async function handleCreate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -191,7 +87,6 @@ export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) 
         return;
       }
       setForm({ image_url: "", caption: "", shot_at: "", type: "", tags: "", camera: "", year: "" });
-      setUploadPath("");
       await fetchPhotos();
     } finally {
       setLoading(false);
@@ -214,158 +109,177 @@ export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) 
     new Set(photos.map((p) => p.camera).filter(Boolean)) as Set<string>
   ).sort();
 
+  const handleFileUploadThenCreate = useCallback(
+    async (file: File, path?: string) => {
+      if (!file?.size) {
+        setError("Dosya seçin.");
+        return;
+      }
+      setError(null);
+      setLoading(true);
+      setUploadProgress(0);
+      try {
+        const uploadFd = new FormData();
+        uploadFd.set("file", file);
+        if (path?.trim()) uploadFd.set("path", path.trim());
+        const xhr = new XMLHttpRequest();
+        const promise = new Promise<{ path: string }>((resolve, reject) => {
+          xhr.upload.addEventListener("progress", (e) => {
+            if (e.lengthComputable) setUploadProgress(Math.round((e.loaded / e.total) * 100));
+          });
+          xhr.addEventListener("load", () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              try {
+                resolve(JSON.parse(xhr.responseText));
+              } catch {
+                reject(new Error("Invalid response"));
+              }
+            } else {
+              try {
+                const err = JSON.parse(xhr.responseText);
+                reject(new Error(err.error || "Yükleme başarısız"));
+              } catch {
+                reject(new Error(`Yükleme başarısız: ${xhr.statusText}`));
+              }
+            }
+          });
+          xhr.addEventListener("error", () => reject(new Error("Ağ hatası")));
+          xhr.open("POST", "/api/admin/photos/upload");
+          xhr.send(uploadFd);
+        });
+        const data = await promise;
+        setForm((f) => ({ ...f, image_url: data.path }));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Yükleme başarısız.");
+      } finally {
+        setUploadProgress(null);
+        setLoading(false);
+      }
+    },
+    []
+  );
+
   return (
     <div className="mt-6 space-y-8">
       <section className="rounded-xl border border-[var(--card-border)] bg-[var(--card)]/50 p-6">
-        <h2 className="mb-4 flex items-center gap-2 font-medium">
-          <Upload className="h-4 w-4" />
-          Görsel yükle (photos-media)
-        </h2>
-        {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
-        <form onSubmit={handleUpload} className="space-y-4">
-          <div
-            ref={dropZoneRef}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            className={`relative rounded-xl border-2 border-dashed transition-all duration-200 backdrop-blur-sm ${
-              isDragging
-                ? "border-[var(--primary)] bg-[var(--primary)]/10"
-                : "border-[var(--card-border)] bg-[var(--card)]/20"
-            }`}
-          >
-            <input
-              ref={fileInputRef}
-              name="file"
-              type="file"
-              accept="image/*"
-              onChange={handleFileSelect}
-              className="absolute inset-0 w-full cursor-pointer opacity-0"
-            />
-            <div className="flex flex-col items-center justify-center px-6 py-12 text-center">
-              <ImageIcon className="mb-3 h-10 w-10 text-[var(--muted)]" />
-              <p className="mb-1 text-sm font-medium text-[var(--foreground)]">
-                {isDragging ? "Dosyayı buraya bırakın" : "Dosyayı sürükleyin veya tıklayın"}
-              </p>
-              <p className="text-xs text-[var(--muted)]">
-                PNG, JPG, WEBP, GIF (max 10MB)
-              </p>
-            </div>
-            {uploadProgress !== null && (
-              <div className="absolute inset-x-0 bottom-0 px-4 pb-4">
-                <div className="h-1.5 overflow-hidden rounded-full bg-[var(--muted)]/20">
-                  <div
-                    className="h-full rounded-full bg-[var(--primary)] transition-all duration-300"
-                    style={{ width: `${uploadProgress}%` }}
-                  />
-                </div>
-                <p className="mt-1.5 text-center text-xs text-[var(--muted)]">
-                  {uploadProgress}%
-                </p>
-              </div>
-            )}
-          </div>
-          <div className="flex flex-wrap items-end gap-4">
-            <div className="flex-1 min-w-[200px]">
-              <label className="mb-1 block text-sm text-[var(--muted)]">Path (opsiyonel)</label>
-              <input
-                name="path"
-                type="text"
-                placeholder="2024/ocak-01.jpg"
-                className="w-full rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
-              />
-            </div>
-            <div className="flex-1 min-w-[200px]">
-              <label className="mb-1 block text-xs text-[var(--muted)]">Açıklama (opsiyonel)</label>
-              <input
-                name="caption"
-                type="text"
-                placeholder="Kısa açıklama..."
-                className="w-full rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm placeholder:text-[var(--muted)]/70"
-              />
-            </div>
-          </div>
-        </form>
-        {uploadPath && (
-          <p className="mt-2 text-xs text-[var(--muted)]">
-            Path: <code className="rounded bg-black/10 px-1">{uploadPath}</code> (aşağıdaki forma kopyalandı)
-          </p>
-        )}
-      </section>
-
-      <section className="rounded-xl border border-[var(--card-border)] bg-[var(--card)]/50 p-6">
-        <h2 className="mb-4 flex items-center gap-2 font-medium">
+        <h2 className="mb-4 flex items-center gap-2 font-medium text-white">
           <Plus className="h-4 w-4" />
-          Yeni fotoğraf ekle
+          Fotoğraf ekle
         </h2>
+        {error && <p className="mb-4 text-sm text-red-500">{error}</p>}
         <form onSubmit={handleCreate} className="space-y-4">
           <div>
-            <label className="mb-1 block text-sm text-[var(--muted)]">Görsel *</label>
-            <AdminImageUpload
-              name="image_url"
-              value={form.image_url}
-              onChange={(url) => setForm((f) => ({ ...f, image_url: url }))}
-              placeholder="Fotoğraf yükle"
-              required
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-xs text-[var(--muted)]">Açıklama (opsiyonel)</label>
-            <input
-              value={form.caption}
-              onChange={(e) => setForm((f) => ({ ...f, caption: e.target.value }))}
-              type="text"
-              placeholder="Kısa açıklama..."
-              className="w-full rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm placeholder:text-[var(--muted)]/70"
-            />
+            <label className="mb-1 block text-sm text-white/80">Görsel *</label>
+            <div
+              ref={dropZoneRef}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsDragging(false);
+                const files = Array.from(e.dataTransfer.files).filter((f) => f.type.startsWith("image/"));
+                if (files[0]) handleFileUploadThenCreate(files[0]);
+              }}
+              className={`relative cursor-pointer rounded-xl border-2 border-dashed transition-all duration-200 ${
+                isDragging ? "border-amber-400/60 bg-amber-500/10" : "border-white/20 bg-white/5"
+              }`}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="absolute inset-0 w-full cursor-pointer opacity-0"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleFileUploadThenCreate(file);
+                  e.target.value = "";
+                }}
+              />
+              {form.image_url ? (
+                <div className="flex flex-col items-center justify-center px-6 py-8 text-center">
+                  <p className="text-sm font-medium text-white/90">Görsel seçildi. Aşağıyı doldurup Ekle diyebilirsiniz.</p>
+                  <p className="mt-1 text-xs text-white/60">Yeniden seçmek için tıklayın veya sürükleyin</p>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center px-6 py-12 text-center">
+                  <ImageIcon className="mb-3 h-10 w-10 text-white/50" />
+                  <p className="mb-1 text-sm font-medium text-white/90">
+                    {isDragging ? "Dosyayı buraya bırakın" : "Dosyayı sürükleyin veya tıklayın"}
+                  </p>
+                  <p className="text-xs text-white/50">PNG, JPG, WEBP, GIF (max 10MB)</p>
+                </div>
+              )}
+              {uploadProgress !== null && (
+                <div className="absolute inset-x-0 bottom-0 px-4 pb-4">
+                  <div className="h-1.5 overflow-hidden rounded-full bg-white/20">
+                    <div
+                      className="h-full rounded-full bg-amber-500 transition-all duration-300"
+                      style={{ width: `${uploadProgress}%` }}
+                    />
+                  </div>
+                  <p className="mt-1.5 text-center text-xs text-white/60">{uploadProgress}%</p>
+                </div>
+              )}
+            </div>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-sm text-[var(--muted)]">Çekim tarihi (shot_at)</label>
+              <label className="mb-1 block text-sm text-white/80">Açıklama (opsiyonel)</label>
+              <input
+                value={form.caption}
+                onChange={(e) => setForm((f) => ({ ...f, caption: e.target.value }))}
+                type="text"
+                placeholder="Kısa açıklama..."
+                className="w-full rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-500"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm text-white/80">Çekim tarihi</label>
               <input
                 value={form.shot_at}
                 onChange={(e) => setForm((f) => ({ ...f, shot_at: e.target.value }))}
                 type="date"
-                className="w-full rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
+                className="w-full rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-900"
               />
             </div>
-            <div>
-              <label className="mb-1 block text-sm text-[var(--muted)]">Tip (filtre)</label>
-              <select
-                value={form.type}
-                onChange={(e) => setForm((f) => ({ ...f, type: e.target.value as typeof form.type }))}
-                className="w-full rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
-              >
-                <option value="">Seçin</option>
-                <option value="analog">Analog</option>
-                <option value="digital">Dijital</option>
-                <option value="other">Diğer</option>
-              </select>
-            </div>
+          </div>
+          <div>
+            <label className="mb-1 block text-sm text-white/80">Tip</label>
+            <select
+              value={form.type}
+              onChange={(e) => setForm((f) => ({ ...f, type: e.target.value as typeof form.type }))}
+              className="w-full rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-900"
+            >
+              <option value="">Seçin</option>
+              <option value="analog">Analog</option>
+              <option value="digital">Dijital</option>
+              <option value="other">Diğer</option>
+            </select>
           </div>
           <details className="text-sm">
-            <summary className="cursor-pointer text-[var(--muted)]">Etiketler, kamera, yıl (opsiyonel)</summary>
+            <summary className="cursor-pointer text-white/70">Etiketler, kamera, yıl (opsiyonel)</summary>
             <div className="mt-3 space-y-3">
               <div>
-                <label className="mb-1 block text-xs text-[var(--muted)]">Etiketler (virgül veya boşluk)</label>
+                <label className="mb-1 block text-xs text-white/70">Etiketler (virgül veya boşluk)</label>
                 <input
                   value={form.tags}
                   onChange={(e) => setForm((f) => ({ ...f, tags: e.target.value }))}
                   type="text"
                   placeholder="street, istanbul"
-                  className="w-full rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-900"
                 />
               </div>
               <div className="flex flex-wrap gap-4">
                 <div>
-                  <label className="mb-1 block text-xs text-[var(--muted)]">Kamera</label>
+                  <label className="mb-1 block text-xs text-white/70">Kamera</label>
                   <input
                     list="cameras"
                     value={form.camera}
                     onChange={(e) => setForm((f) => ({ ...f, camera: e.target.value }))}
                     type="text"
                     placeholder="Minolta, Canon..."
-                    className="w-48 rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
+                    className="w-48 rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-900"
                   />
                   <datalist id="cameras">
                     {cameraOptions.map((c) => (
@@ -374,15 +288,15 @@ export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) 
                   </datalist>
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-[var(--muted)]">Yıl</label>
+                  <label className="mb-1 block text-xs text-white/70">Yıl</label>
                   <input
                     value={form.year}
                     onChange={(e) => setForm((f) => ({ ...f, year: e.target.value }))}
                     type="number"
-                    min="1900"
-                    max="2100"
+                    min={1900}
+                    max={2100}
                     placeholder="2024"
-                    className="w-24 rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
+                    className="w-24 rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-900"
                   />
                 </div>
               </div>
@@ -390,8 +304,8 @@ export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) 
           </details>
           <button
             type="submit"
-            disabled={loading}
-            className="rounded bg-[var(--primary)] px-4 py-2 text-sm text-[var(--primary-foreground)] disabled:opacity-50"
+            disabled={loading || !form.image_url.trim()}
+            className="rounded-lg bg-[var(--primary)] px-4 py-2 text-sm text-[var(--primary-foreground)] disabled:opacity-50"
           >
             Ekle
           </button>
@@ -399,9 +313,9 @@ export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) 
       </section>
 
       <section>
-        <h2 className="mb-4 font-medium">Fotoğraflar ({photos.length}) — en yeniler üstte</h2>
+        <h2 className="mb-4 font-medium text-white">Fotoğraflar ({photos.length}) — en yeniler üstte</h2>
         {photos.length === 0 ? (
-          <p className="text-sm text-[var(--muted)]">Henüz fotoğraf yok.</p>
+          <p className="text-sm text-white/60">Henüz fotoğraf yok.</p>
         ) : (
           <div className="grid grid-cols-2 gap-2 sm:gap-4">
             {photos.map((p) => (

@@ -7,7 +7,6 @@ import {
   adminSetActiveManualTrack,
 } from "@/app/admin/actions";
 import type { ManualNowPlayingItem } from "@/lib/db/queries";
-import { AdminImageUpload } from "./AdminImageUpload";
 import { Music, Plus, Trash2, Star } from "lucide-react";
 import { useState } from "react";
 
@@ -134,13 +133,9 @@ export function AdminNowPlaying({ tracks }: AdminNowPlayingProps) {
                   t.is_active ? "border-[var(--accent)] bg-[var(--accent-soft)]/20" : "border-[var(--card-border)] bg-[var(--card)]/50"
                 }`}
               >
-                {t.album_art_url ? (
-                  <img src={t.album_art_url} alt="" className="h-14 w-14 rounded object-cover" />
-                ) : (
-                  <div className="flex h-14 w-14 items-center justify-center rounded bg-[var(--muted)]/30">
-                    <Music className="h-6 w-6 text-[var(--muted)]" />
-                  </div>
-                )}
+                <div className="flex h-14 w-14 items-center justify-center rounded bg-[var(--muted)]/30">
+                  <Music className="h-6 w-6 text-[var(--muted)]" />
+                </div>
                 <div className="min-w-0 flex-1">
                   <div className="font-medium">{t.title}</div>
                   <div className="text-sm text-[var(--muted)]">{t.artist}</div>

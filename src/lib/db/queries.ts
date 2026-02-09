@@ -655,6 +655,108 @@ export async function getCinemaStats(): Promise<CinemaStats> {
   }
 }
 
+/** Bu ay izlenen filmler listesi (admin dashboard). */
+export async function getFilmsWatchedThisMonthList(): Promise<
+  { id: string; title: string; duration_min: number; watched_at: string }[]
+> {
+  const supabase = await createServerClient();
+  const now = new Date();
+  const start = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const end = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+
+  const { data: items } = await supabase
+    .from("content_items")
+    .select("id, title")
+    .eq("type", "film");
+
+  if (!items?.length) return [];
+
+  const out: { id: string; title: string; duration_min: number; watched_at: string }[] = [];
+  for (const item of items) {
+    const { data: film } = await supabase
+      .from("films")
+      .select("duration_min, watched_at")
+      .eq("content_id", item.id)
+      .gte("watched_at", start)
+      .lte("watched_at", end + "T23:59:59")
+      .maybeSingle();
+    if (film?.watched_at)
+      out.push({
+        id: item.id,
+        title: item.title || "",
+        duration_min: film.duration_min ?? 0,
+        watched_at: film.watched_at,
+      });
+  }
+  out.sort((a, b) => new Date(b.watched_at).getTime() - new Date(a.watched_at).getTime());
+  return out;
+}
+
+/** Bu ay izlenen diziler listesi (admin dashboard). */
+export async function getSeriesWatchedThisMonthList(): Promise<
+  { id: string; title: string; episodes_watched: number; watched_at: string }[]
+> {
+  const supabase = await createServerClient();
+  const now = new Date();
+  const start = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const end = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+
+  const { data: items } = await supabase
+    .from("content_items")
+    .select("id, title")
+    .eq("type", "series");
+
+  if (!items?.length) return [];
+
+  const out: { id: string; title: string; episodes_watched: number; watched_at: string }[] = [];
+  for (const item of items) {
+    const { data: ser } = await supabase
+      .from("series")
+      .select("episodes_watched, watched_at")
+      .eq("content_id", item.id)
+      .gte("watched_at", start)
+      .lte("watched_at", end + "T23:59:59")
+      .maybeSingle();
+    if (ser?.watched_at)
+      out.push({
+        id: item.id,
+        title: item.title || "",
+        episodes_watched: ser.episodes_watched ?? 0,
+        watched_at: ser.watched_at,
+      });
+  }
+  out.sort((a, b) => new Date(b.watched_at).getTime() - new Date(a.watched_at).getTime());
+  return out;
+}
+
+/** Bu ay bitirilen kitaplar listesi (admin dashboard). */
+export async function getBooksReadThisMonthList(): Promise<
+  { id: string; title: string; author: string | null; end_date: string }[]
+> {
+  const supabase = await createServerClient();
+  const now = new Date();
+  const start = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const end = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+
+  const { data: books } = await supabase
+    .from("books")
+    .select("id, title, author, end_date")
+    .eq("status", "finished")
+    .gte("end_date", start)
+    .lte("end_date", end)
+    .order("end_date", { ascending: false });
+
+  return (books ?? []).map((b) => ({
+    id: b.id,
+    title: b.title || "",
+    author: b.author ?? null,
+    end_date: b.end_date || "",
+  }));
+}
+
 // --- Admin mutations ---
 
 export async function createFilm(

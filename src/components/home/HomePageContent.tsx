@@ -25,8 +25,8 @@ export function HomePageContent({
           <div className="mx-auto flex w-full max-w-5xl flex-col items-center">
             <div className="flex w-full max-w-[280px] justify-center sm:max-w-[320px]">
               <FramedCrossfade
-                aSrc="/images/eymen.jpeg?v=2"
-                bSrc="/images/plaktakikitap.jpeg"
+                aSrc={introPhotoEymenUrl}
+                bSrc={introPhotoPlaktakikitapUrl}
                 size={320}
                 variant="antiqueGold"
                 intervalMs={4200}
@@ -44,14 +44,14 @@ export function HomePageContent({
               <h1
                 className="home-hero-h1 shrink-0 px-2 text-center font-display text-[28px] font-medium leading-[1.1] tracking-[-0.02em] text-[#F3EBDD] min-[400px]:text-[34px] sm:px-8 sm:text-[52px] md:text-[72px] lg:text-[80px]"
               >
-                Hoş geldiniz, ben Eymen!
+                {introTitle}
               </h1>
               <div className="hidden flex-1 justify-end sm:flex">
                 <ScrollIndicator />
               </div>
             </div>
             <p className="mt-3 text-center font-sans text-xs font-normal tracking-[0.02em] text-[#F3EBDD]/85 sm:mt-5 sm:text-sm md:text-base">
-              yanii... nam-ı diğer Plaktaki Kitap
+              {introSubtitle}
             </p>
 
             {/* Kart grid */}

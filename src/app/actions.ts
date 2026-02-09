@@ -46,12 +46,14 @@ export async function createFilm(formData: FormData) {
   const rating_5Raw = formData.get("rating_5") as string | null;
   const rating_5 = rating_5Raw ? parseFloat(rating_5Raw) : null;
   const watchedAtRaw = (formData.get("watched_at") as string)?.trim() || null;
+  const is_favorite = formData.get("is_favorite") === "on" || formData.get("is_favorite") === "true";
 
   if (!watchedAtRaw) return { error: "İzlenme tarihi (watched_at) zorunludur." };
   if (Number.isNaN(duration_min) || duration_min < 1) return { error: "Süre (dk) 1 veya daha büyük olmalıdır." };
   if (rating_5 != null && !Number.isNaN(rating_5) && (rating_5 < 0 || rating_5 > 5)) return { error: "Puan 0 ile 5 arasında olmalıdır." };
 
   const watched_at = new Date(watchedAtRaw).toISOString();
+  const favorite_order = is_favorite ? Date.now() : null;
 
   const { data: content, error: contentError } = await supabase
     .from("content_items")
@@ -80,6 +82,8 @@ export async function createFilm(formData: FormData) {
     genre_tags: genre_tags.length ? genre_tags : null,
     rating_5: rating_5 != null && !Number.isNaN(rating_5) ? rating_5 : null,
     watched_at,
+    is_favorite: is_favorite ?? false,
+    favorite_order,
   });
 
   if (filmError) return { error: filmError.message };
@@ -113,6 +117,10 @@ export async function createSeries(formData: FormData) {
   const creator_or_director = (formData.get("creator_or_director") as string)?.trim() || null;
   const watchedAtRaw = (formData.get("watched_at") as string)?.trim() || null;
   const watched_at = watchedAtRaw ? new Date(watchedAtRaw).toISOString() : new Date().toISOString();
+  const poster_url = (formData.get("poster_url") as string)?.trim() || null;
+  const spine_url = (formData.get("spine_url") as string)?.trim() || null;
+  const is_favorite = formData.get("is_favorite") === "on" || formData.get("is_favorite") === "true";
+  const favorite_order = is_favorite ? Date.now() : null;
 
   const { data: content, error: contentError } = await supabase
     .from("content_items")
@@ -140,6 +148,10 @@ export async function createSeries(formData: FormData) {
     review,
     creator_or_director: creator_or_director || null,
     watched_at,
+    poster_url: poster_url || null,
+    spine_url: spine_url || null,
+    is_favorite: is_favorite ?? false,
+    favorite_order,
   });
 
   if (seriesError) return { error: seriesError.message };

@@ -8,12 +8,9 @@ import type { User } from "@supabase/supabase-js";
 import {
   LayoutDashboard,
   LogOut,
-  ImageIcon,
   Calendar,
-  Palette,
   Music,
   BookOpen,
-  Link2,
   Share2,
   UserCircle,
   Briefcase,
@@ -25,6 +22,8 @@ import {
   Menu,
   X,
   BookMarked,
+  Film,
+  Tv,
 } from "lucide-react";
 
 const adminLinks = [
@@ -33,16 +32,14 @@ const adminLinks = [
   { href: "/admin/works", label: "Yaptıklarım", icon: Briefcase },
   { href: "/admin/yazilarim", label: "Yazılarım", icon: FileText },
   { href: "/admin/photos", label: "Fotoğraf", icon: Camera },
-  { href: "/admin/videos", label: "Videolar", icon: Video },
   { href: "/admin/plaktaki-kitap", label: "Plaktaki Kitap", icon: Video },
-  { href: "/admin/media", label: "Media", icon: ImageIcon },
   { href: "/admin/planner", label: "Planner", icon: Calendar },
-  { href: "/admin/art", label: "Art", icon: Palette },
+  { href: "/admin/movie-watch-log", label: "Film izleme günlüğü", icon: Film },
+  { href: "/admin/series-watch-log", label: "Dizi izleme günlüğü", icon: Tv },
   { href: "/admin/now-playing", label: "Şu an dinliyorum", icon: Music },
   { href: "/admin/reading", label: "Şu an okuyorum", icon: BookOpen },
   { href: "/admin/reading-log", label: "Okuma günlüğü", icon: BookMarked },
   { href: "/admin/translations", label: "Çeviriler", icon: Languages },
-  { href: "/admin/site-links", label: "Site linkleri", icon: Link2 },
   { href: "/admin/socials", label: "Bana Ulaşın", icon: Share2 },
   { href: "/admin/settings", label: "Ayarlar", icon: Settings },
 ];

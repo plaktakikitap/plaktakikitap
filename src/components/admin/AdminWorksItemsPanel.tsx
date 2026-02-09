@@ -1,17 +1,17 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import type { WorksItem, WorksItemType } from "@/types/works";
 import { AdminImageUpload } from "./AdminImageUpload";
+import { FileText, Loader2 } from "lucide-react";
 
-const inputClass = "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm";
+const inputClass = "w-full rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-500";
 const labelClass = "mb-1 block text-sm font-medium text-[var(--muted)]";
 const btnClass = "rounded-lg bg-[var(--accent)] px-3 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50";
 
 const TABS: { id: WorksItemType | "cv"; label: string }[] = [
   { id: "youtube", label: "Videolar" },
-  { id: "art", label: "Sanat / Resim" },
   { id: "photo", label: "Fotoğraf" },
   { id: "experience", label: "Deneyim" },
   { id: "project", label: "Projeler" },
@@ -33,9 +33,12 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [cvUrl, setCvUrl] = useState(cvDownloadUrl);
+  const [certificatePdfUrl, setCertificatePdfUrl] = useState<string | null>(null);
+  const [pdfUploading, setPdfUploading] = useState(false);
+  const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const filtered =
-    tab === "cv" ? [] : items.filter((i) => (tab === "art" || tab === "photo" ? i.type === tab : i.type === tab));
+    tab === "cv" ? [] : items.filter((i) => (tab === "photo" ? i.type === tab : i.type === tab));
 
   async function refetch() {
     const res = await fetch("/api/admin/works/items");
@@ -58,7 +61,7 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
       subtitle: fd.get("subtitle") || null,
       description: fd.get("description") || null,
       tags: [],
-      url: fd.get("url") || null,
+      url: tab === "certificate" && certificatePdfUrl ? certificatePdfUrl : (fd.get("url") || null),
       external_url: fd.get("external_url") || null,
       image_url: fd.get("image_url") || null,
       meta: {},
@@ -94,7 +97,24 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
       return;
     }
     form.reset();
+    if (tab === "certificate") setCertificatePdfUrl(null);
     await refetch();
+  }
+
+  async function handleCertificatePdfSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || file.type !== "application/pdf") return;
+    setPdfUploading(true);
+    setError(null);
+    const formData = new FormData();
+    formData.set("file", file);
+    formData.set("folder", "certificates");
+    const res = await fetch("/api/admin/upload/file", { method: "POST", body: formData });
+    const data = await res.json().catch(() => ({}));
+    setPdfUploading(false);
+    e.target.value = "";
+    if (res.ok && data.url) setCertificatePdfUrl(data.url);
+    else setError(data.error ?? "PDF yükleme başarısız");
   }
 
   async function handleDelete(id: string) {
@@ -189,17 +209,47 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
               <label className={labelClass}>Alt başlık</label>
               <input name="subtitle" type="text" className={inputClass} />
             </div>
-            {(tab === "youtube" || tab === "project" || tab === "experience" || tab === "software" || tab === "certificate") && (
+            {(tab === "youtube" || tab === "project" || tab === "experience" || tab === "software") && (
               <div>
                 <label className={labelClass}>URL</label>
                 <input name="url" type="url" className={inputClass} />
               </div>
             )}
-            {(tab === "art" || tab === "photo" || tab === "certificate") && (
+            {tab === "certificate" && (
               <div>
-                <label className={labelClass}>Görsel</label>
-                <AdminImageUpload name="image_url" placeholder="Görsel yükle" />
+                <label className={labelClass}>URL (manuel link, isteğe bağlı)</label>
+                <input name="url" type="url" className={inputClass} placeholder="https://..." disabled={!!certificatePdfUrl} />
               </div>
+            )}
+            {tab === "photo" && (
+              <div>
+                <label className={labelClass}>Görsel (fotoğraf / çizim)</label>
+                <AdminImageUpload name="image_url" placeholder="Bilgisayar veya telefondan fotoğraf / çizim yükle" />
+              </div>
+            )}
+            {tab === "certificate" && (
+              <>
+                <div>
+                  <label className={labelClass}>Görsel (sertifika fotoğrafı veya rozet)</label>
+                  <AdminImageUpload name="image_url" placeholder="Bilgisayar veya telefondan fotoğraf yükle" />
+                </div>
+                <div>
+                  <label className={labelClass}>PDF sertifika (isteğe bağlı)</label>
+                  <input type="file" ref={pdfInputRef} accept="application/pdf" className="hidden" onChange={handleCertificatePdfSelect} />
+                  <button
+                    type="button"
+                    onClick={() => pdfInputRef.current?.click()}
+                    disabled={loading || pdfUploading}
+                    className="flex items-center gap-2 rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-50 disabled:opacity-50"
+                  >
+                    {pdfUploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileText className="h-4 w-4" />}
+                    {pdfUploading ? "Yükleniyor…" : certificatePdfUrl ? "PDF yüklendi ✓" : "Bilgisayar veya telefondan PDF yükle"}
+                  </button>
+                  {certificatePdfUrl && (
+                    <p className="mt-1 text-xs text-[var(--muted)]">Eklediğinizde bu link kaydedilecek. İsterseniz yeni PDF seçebilirsiniz.</p>
+                  )}
+                </div>
+              </>
             )}
             {(tab === "project" || tab === "experience") && (
               <>

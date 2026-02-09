@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import { requireAdmin } from "@/lib/supabase/auth";
 import { AdminNav } from "@/components/admin/AdminNav";
 import { AdminToast } from "@/components/admin/AdminToast";
-import { AdminQuickAdd } from "@/components/admin/AdminQuickAdd";
 
 export default async function AdminDashboardLayout({
   children,
@@ -19,7 +18,6 @@ export default async function AdminDashboardLayout({
           {children}
         </div>
       </main>
-      <AdminQuickAdd />
       <Suspense fallback={null}>
         <AdminToast />
       </Suspense>

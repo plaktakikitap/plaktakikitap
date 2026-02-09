@@ -31,8 +31,8 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 const CATEGORY_ORDER = ["denemeler", "siirler", "diger"];
 
-const inputClass = "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm";
-const labelClass = "mb-1 block text-sm font-medium text-[var(--muted)]";
+const inputClass = "w-full rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-500";
+const labelClass = "mb-1 block text-sm font-medium text-white/80";
 
 export function AdminYazilarimList({ initialWritings }: { initialWritings: Writing[] }) {
   const router = useRouter();
@@ -104,9 +104,9 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
       {error && <p className="text-sm text-red-600">{error}</p>}
       {byCategory.map(({ category, label, items }) => (
         <div key={category} className="rounded-xl border border-[var(--card-border)] bg-[var(--card)]/50 p-4">
-          <h3 className="mb-3 font-medium text-[var(--foreground)]">{label}</h3>
+          <h3 className="mb-3 font-medium text-white">{label}</h3>
           {items.length === 0 ? (
-            <p className="text-sm text-[var(--muted)]">Bu kategoride yazı yok.</p>
+            <p className="text-sm text-white/60">Bu kategoride yazı yok.</p>
           ) : (
             <ul className="space-y-2">
               {items.map((w) => (
@@ -121,16 +121,16 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
                   ) : (
                     <>
                       <div className="min-w-0 flex-1">
-                        <Link href={`/yazilarim/${w.id}`} target="_blank" className="font-medium text-[var(--accent)] hover:underline">
+                        <Link href={`/yazilarim/${w.id}`} target="_blank" className="font-medium text-amber-400 hover:text-amber-300 hover:underline">
                           {w.title || "—"}
                         </Link>
-                        <span className="ml-2 text-sm text-[var(--muted)]">{formatDate(w.published_at)}</span>
+                        <span className="ml-2 text-sm text-white/60">{formatDate(w.published_at)}</span>
                       </div>
                       <div className="flex gap-1">
-                        <button type="button" onClick={() => setEditingId(w.id)} className="rounded p-2 text-[var(--muted)] hover:bg-[var(--card)] hover:text-[var(--foreground)]" aria-label="Düzenle">
+                        <button type="button" onClick={() => setEditingId(w.id)} className="rounded p-2 text-white/60 hover:bg-white/10 hover:text-white" aria-label="Düzenle">
                           <Pencil className="h-4 w-4" />
                         </button>
-                        <button type="button" onClick={() => handleDelete(w.id)} className="rounded p-2 text-[var(--muted)] hover:bg-red-500/20 hover:text-red-600" aria-label="Sil">
+                        <button type="button" onClick={() => handleDelete(w.id)} className="rounded p-2 text-white/60 hover:bg-red-500/20 hover:text-red-400" aria-label="Sil">
                           <Trash2 className="h-4 w-4" />
                         </button>
                       </div>

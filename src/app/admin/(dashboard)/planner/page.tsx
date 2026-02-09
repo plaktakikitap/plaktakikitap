@@ -23,7 +23,7 @@ export default function AdminPlannerPage() {
               <Link
                 key={i}
                 href={`/admin/planner/${year}/${i + 1}`}
-                className="rounded-lg border border-[var(--card-border)] bg-[var(--card)] px-4 py-3 text-center font-medium transition hover:bg-[var(--background)] hover:border-[var(--accent)]"
+                className="rounded-lg border border-white/20 bg-white/10 px-4 py-3 text-center font-medium text-white transition hover:bg-white/20 hover:border-amber-400/50"
               >
                 {label}
               </Link>

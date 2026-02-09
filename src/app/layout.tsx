@@ -4,6 +4,8 @@ import { Nav } from "@/components/layout/Nav";
 import { MainWrapper } from "@/components/layout/MainWrapper";
 import { MotionLayout } from "@/components/layout/MotionLayout";
 import SiteBackground from "@/components/SiteBackground";
+import { MaintenanceGate } from "@/components/MaintenanceGate";
+import { SiteSoundVolumeHydrate } from "@/components/SiteSoundVolumeHydrate";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -73,13 +75,31 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "plaktakikitap — Film, Kitap, Proje Koleksiyonu",
-  description: "Kişisel film, dizi, kitap ve proje koleksiyonum",
-  icons: {
-    icon: "/images/favicon.jpeg",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const { getSiteSettings } = await import("@/lib/site-settings");
+    const s = await getSiteSettings();
+    const title = s.seo_title ?? "plaktakikitap — Film, Kitap, Proje Koleksiyonu";
+    const description = s.seo_description ?? "Kişisel film, dizi, kitap ve proje koleksiyonum";
+    const favicon = s.favicon_url ?? "/images/favicon.png";
+    const openGraph = s.og_image_url
+      ? { images: [{ url: s.og_image_url, width: 1200, height: 630, alt: title }] }
+      : undefined;
+    return {
+      title,
+      description,
+      keywords: s.seo_keywords ? s.seo_keywords.split(",").map((k) => k.trim()).filter(Boolean) : undefined,
+      icons: { icon: { url: favicon, type: "image/png" }, apple: favicon },
+      openGraph,
+    };
+  } catch {
+    return {
+      title: "plaktakikitap — Film, Kitap, Proje Koleksiyonu",
+      description: "Kişisel film, dizi, kitap ve proje koleksiyonum",
+      icons: { icon: { url: "/images/favicon.png", type: "image/png" }, apple: "/images/favicon.png" },
+    };
+  }
+}
 
 export const viewport = {
   width: "device-width",
@@ -98,6 +118,8 @@ export default function RootLayout({
       <body
         className={`${cormorant.variable} ${sourceSerif.variable} ${dmSans.variable} ${cinzel.variable} ${inter.variable} ${caveat.variable} ${permanentMarker.variable} ${patrickHand.variable} ${nothingYouCouldDo.variable} ${playfair.variable} min-h-screen antialiased`}
       >
+        <MaintenanceGate />
+        <SiteSoundVolumeHydrate />
         <SiteBackground />
         <Nav />
         <MainWrapper>
