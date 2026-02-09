@@ -33,8 +33,8 @@ export function HomePageContent({
           <div className="mx-auto flex w-full max-w-5xl flex-col items-center">
             <div className="flex w-full max-w-[280px] justify-center sm:max-w-[320px]">
               <FramedCrossfade
-                aSrc={introPhotoEymenUrl}
-                bSrc={introPhotoPlaktakikitapUrl}
+                aSrc={introPhotoEymenUrl ?? "/images/eymen.jpeg"}
+                bSrc={introPhotoPlaktakikitapUrl ?? "/images/plaktakikitap.jpeg"}
                 size={320}
                 variant="antiqueGold"
                 intervalMs={4200}
