@@ -94,7 +94,7 @@ export async function fetchPlannerMonthSummary(
   async function signUrl(path: string): Promise<string> {
     if (!path || path.startsWith("http")) return path;
     const { data } = await supabase.storage
-      .from("planner-media")
+      .from("planner_media")
       .createSignedUrl(path, 3600);
     return data?.signedUrl ?? path;
   }
@@ -249,13 +249,13 @@ export async function fetchPlannerDayDetail(
       let thumbUrl = m.thumb_url;
       if (!m.url.startsWith("http")) {
         const { data: signed } = await supabase.storage
-          .from("planner-media")
+          .from("planner_media")
           .createSignedUrl(m.url, 3600);
         url = signed?.signedUrl ?? m.url;
       }
       if (m.thumb_url && !m.thumb_url.startsWith("http")) {
         const { data: signedThumb } = await supabase.storage
-          .from("planner-media")
+          .from("planner_media")
           .createSignedUrl(m.thumb_url, 3600);
         thumbUrl = signedThumb?.signedUrl ?? m.thumb_url;
       }

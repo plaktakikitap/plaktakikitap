@@ -10,10 +10,15 @@ CREATE TABLE IF NOT EXISTS photos (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
-CREATE INDEX idx_photos_created_at ON photos (created_at DESC);
-CREATE INDEX idx_photos_tags ON photos USING GIN (tags);
-CREATE INDEX idx_photos_camera ON photos (camera) WHERE camera IS NOT NULL;
-CREATE INDEX idx_photos_year ON photos (year) WHERE year IS NOT NULL;
+-- Ensure columns exist if table was created earlier with different schema
+ALTER TABLE photos ADD COLUMN IF NOT EXISTS tags TEXT[] DEFAULT '{}';
+ALTER TABLE photos ADD COLUMN IF NOT EXISTS camera TEXT;
+ALTER TABLE photos ADD COLUMN IF NOT EXISTS year INT;
+
+CREATE INDEX IF NOT EXISTS idx_photos_created_at ON photos (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_photos_tags ON photos USING GIN (tags);
+CREATE INDEX IF NOT EXISTS idx_photos_camera ON photos (camera) WHERE camera IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_photos_year ON photos (year) WHERE year IS NOT NULL;
 
 COMMENT ON TABLE photos IS 'Personal photography archive; image_url can be storage path or external URL';
 
