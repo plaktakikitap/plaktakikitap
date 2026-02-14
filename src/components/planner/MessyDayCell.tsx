@@ -55,8 +55,6 @@ export function MessyDayCell({
   const isBusy = !!summary?.isBusy;
   const firstImageUrl = summary?.firstImageUrl ?? summary?.imageUrls?.[0];
   const smudge = summary?.smudge;
-  const textPreview = summary?.summaryQuote ?? summary?.firstEntryTitle ?? summary?.firstEntryContent ?? null;
-
   return (
     <button
       type="button"
@@ -158,20 +156,6 @@ export function MessyDayCell({
             />
           </div>
         </div>
-      )}
-
-      {/* Preview: 1–2 satır çok soluk metin (text-xs, opacity 0.55) */}
-      {hasEntry && textPreview && (
-        <p
-          className="messy-ink-bleed absolute bottom-0.5 left-0.5 right-0.5 line-clamp-2 leading-tight text-xs -skew-x-0.5 font-sans"
-          style={{
-            zIndex: 2,
-            color: "rgba(60,55,50,0.85)",
-            opacity: 0.55,
-          }}
-        >
-          {textPreview}
-        </p>
       )}
 
       {smudge?.preset && (

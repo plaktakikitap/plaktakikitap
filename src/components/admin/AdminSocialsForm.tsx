@@ -11,6 +11,15 @@ import {
 import { Plus, Trash2, GripVertical } from "lucide-react";
 import { getLucideIcon, LUCIDE_ICON_NAMES } from "@/lib/lucide-icons";
 
+/** X (Twitter) — Lucide'da yok */
+function XIcon({ className, size = 16 }: { className?: string; size?: number }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="currentColor" aria-hidden>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
+
 const PLATFORMS = [
   "instagram",
   "youtube",
@@ -201,7 +210,9 @@ export function AdminSocialsForm({ links }: { links: SocialLinkRow[] }) {
         ) : (
           <div className="space-y-2">
             {orderedLinks.map((link) => {
-              const Icon = getLucideIcon(link.icon_name ?? link.platform);
+              const key = (link.icon_name ?? link.platform ?? "").toLowerCase().trim();
+              const isX = key === "x" || key === "twitter" || key === "x.com";
+              const Icon = isX ? XIcon : getLucideIcon(link.icon_name ?? link.platform);
               return (
                 <div
                   key={link.id}

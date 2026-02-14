@@ -13,10 +13,17 @@ import {
 import { getLucideIcon } from "@/lib/lucide-icons";
 import { ContactModal } from "./ContactModal";
 
-/** X (Twitter) SVG — Lucide'da marka ikonu yok */
+/** X (Twitter) marka ikonu — Lucide'da yok, kendi SVG */
 function XIcon({ className, size = 20 }: { className?: string; size?: number }) {
   return (
-    <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="currentColor" aria-hidden>
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      className={className}
+      fill="currentColor"
+      aria-label="X (Twitter)"
+    >
       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
     </svg>
   );
@@ -128,8 +135,9 @@ export function SocialLinksSection({ links }: SocialLinksSectionProps) {
       }))
     : activeLinks.map((link) => {
         const iconOrName = link.icon_name ?? link.platform;
-        const key = iconOrName.toLowerCase();
-        const Icon = key === "x" || key === "twitter" ? XIcon : getLucideIcon(iconOrName);
+        const key = (iconOrName ?? "").toLowerCase().trim();
+        const isX = key === "x" || key === "twitter" || key === "x.com" || key.replace(/[^a-z]/g, "") === "x";
+        const Icon = isX ? XIcon : getLucideIcon(iconOrName);
         const isMail = link.platform.toLowerCase() === "mail";
         const isSpotify = link.platform.toLowerCase() === "spotify";
 
