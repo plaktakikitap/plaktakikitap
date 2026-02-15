@@ -334,11 +334,16 @@ body::before {
 .ajanda-flipbook .stf__block,
 .ajanda-flipbook .stf__parent {
   background: transparent !important;
+  pointer-events: auto !important;
 }
-/* Sayfa öğesi: 3D bağlamı — Polaroid, ataş, not sayfa ile birlikte bükülerek döner */
+/* Sayfa öğesi: 3D bağlamı; tıklama flip için geçmeli (kapak dahil) */
 .ajanda-flipbook .stf__item {
   transform-style: preserve-3d !important;
   backface-visibility: hidden;
+  pointer-events: auto !important;
+}
+.ajanda-flipbook .stf__item > * {
+  pointer-events: auto !important;
 }
 .ajanda-flipbook .stf__item > *,
 .ajanda-flipbook .stf__item > * > *,
@@ -356,34 +361,38 @@ body::before {
   transition-duration: 0.04s !important;
 }
 
-/* Defter kapağı — plastik görüntüyü kaldırır; koyu deri, taşan kapak */
+/* Defter çerçevesi — kahverengi çıkıntı; sayfalar bu çerçevenin içinde */
 .book-container {
   position: relative;
   background: #3d2b1f;
-  padding: 15px;
-  border-radius: 8px 15px 15px 8px;
-  box-shadow:
-    20px 20px 50px rgba(0, 0, 0, 0.6),
-    inset 0 0 15px rgba(0, 0, 0, 0.5);
+  background-image: linear-gradient(165deg, #3d362f 0%, #302b26 40%, #26221e 70%, #2c2723 100%);
+  padding: 28px;
+  border-radius: 8px;
   display: inline-block;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.15),
+    20px 25px 50px rgba(0, 0, 0, 0.55);
 }
 
-/* Defterin ortasındaki dikişli cilt (The Spine) */
+/* Ortadaki spine — yumuşak gradient gölge (çirkin çizgi değil) */
 .book-spine {
   position: absolute;
   left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 40px;
+  top: 28px;
+  bottom: 28px;
+  width: 56px;
   transform: translateX(-50%);
   background: linear-gradient(
     to right,
-    rgba(0, 0, 0, 0.3) 0%,
-    rgba(0, 0, 0, 0) 20%,
-    rgba(0, 0, 0, 0.1) 50%,
-    rgba(0, 0, 0, 0) 80%,
-    rgba(0, 0, 0, 0.3) 100%
+    rgba(0, 0, 0, 0.22) 0%,
+    rgba(0, 0, 0, 0.04) 35%,
+    rgba(0, 0, 0, 0) 50%,
+    rgba(0, 0, 0, 0.04) 65%,
+    rgba(0, 0, 0, 0.22) 100%
   );
+  border-radius: 20px;
+  mix-blend-mode: multiply;
+  opacity: 0.55;
   z-index: 20;
   pointer-events: none;
 }

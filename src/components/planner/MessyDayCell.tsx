@@ -52,7 +52,6 @@ export function MessyDayCell({
 
   const hasEntry = !!summary && summary.entryCount > 0;
   const today = isTodayCell(dateStr);
-  const isBusy = !!summary?.isBusy;
   const firstImageUrl = summary?.firstImageUrl ?? summary?.imageUrls?.[0];
   const smudge = summary?.smudge;
   return (
@@ -60,9 +59,7 @@ export function MessyDayCell({
       type="button"
       className={cn(
         "messy-day-cell relative flex min-h-[88px] flex-col overflow-visible rounded-md border border-black/8 bg-white/30 p-1.5 text-left shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition hover:bg-white/60 hover:shadow-[0_2px_6px_rgba(0,0,0,0.06)]",
-        today && "today",
-        hasEntry && "ring-1 ring-amber-900/20",
-        isBusy && "ring-1 ring-amber-600/30"
+        today && "today"
       )}
       style={{
         transformStyle: "preserve-3d",
@@ -79,57 +76,6 @@ export function MessyDayCell({
 
       {/* Sticker / entry göstergesi — minik ikon */}
       {hasEntry && <StickerChip />}
-
-      {/* El çizimi daire — giriş varsa */}
-      {hasEntry && !isBusy && (
-        <div
-          className="pointer-events-none absolute inset-0 flex items-center justify-center"
-          style={{ zIndex: 0 }}
-        >
-          <svg
-            viewBox="0 0 40 40"
-            className="h-[70%] w-[70%] opacity-30"
-            style={{ transform: `rotate(${day % 3 === 0 ? -1.5 : day % 3 === 1 ? 2 : -3}deg)` }}
-          >
-            <ellipse
-              cx="20"
-              cy="20"
-              rx="15.5"
-              ry="16.5"
-              fill="none"
-              stroke="rgba(100,75,50,0.55)"
-              strokeWidth="1.4"
-              strokeDasharray="2.5 1.2"
-              strokeLinecap="round"
-            />
-          </svg>
-        </div>
-      )}
-
-      {hasEntry && isBusy && (
-        <div
-          className="pointer-events-none absolute inset-0 flex items-center justify-center"
-          style={{ zIndex: 0 }}
-        >
-          <svg
-            viewBox="0 0 100 100"
-            className="absolute inset-0 h-full w-full opacity-40"
-            style={{ transform: `rotate(${day % 3 === 0 ? -2 : day % 3 === 1 ? 3 : -4}deg)` }}
-          >
-            <ellipse
-              cx="50"
-              cy="50"
-              rx="46"
-              ry="48"
-              fill="none"
-              stroke="rgba(100,75,50,0.45)"
-              strokeWidth="1.2"
-              strokeDasharray="3 2 1 2"
-              strokeLinecap="round"
-            />
-          </svg>
-        </div>
-      )}
 
       {/* Preview: 1 küçük polaroid thumbnail, 45deg rotate, köşeden taşabilir */}
       {hasEntry && firstImageUrl && (

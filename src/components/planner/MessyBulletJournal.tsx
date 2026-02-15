@@ -10,6 +10,8 @@ import dynamic from "next/dynamic";
 import { AnimatePresence } from "framer-motion";
 import { playSound, AUDIO } from "@/lib/audio";
 import { BulletJournalBook, BOOK_PAGE_HEIGHT, BOOK_PAGE_WIDTH } from "./BulletJournalBook";
+import { FrontCover } from "./covers/FrontCover";
+import { BackCover } from "./covers/BackCover";
 import { MessyPaperPage } from "./MessyPaperPage";
 import { MessyCalendarGrid } from "./MessyCalendarGrid";
 import { MessyNotesPage } from "./MessyNotesPage";
@@ -59,7 +61,8 @@ export default function MessyBulletJournal() {
   const [modalSmudge, setModalSmudge] = useState<DaySmudge | null | undefined>(undefined);
   const [modalLoading, setModalLoading] = useState(false);
 
-  const startPage = 2 + monthIndex * 2;
+  /* Kapak yok: 0=Ocak takvim, 1=Ocak notlar, 2=Şubat takvim, 3=Şubat notlar, ... — her ay takvim+notlar yan yana */
+  const startPage = monthIndex * 2;
   const lastFlipTime = useRef(0);
   const [flipInProgress, setFlipInProgress] = useState(false);
   const flipbookContainerRef = useRef<HTMLDivElement>(null);
@@ -79,7 +82,7 @@ export default function MessyBulletJournal() {
 
   const handleFlip = useCallback((e: { data: number }) => {
     const pageIdx = e.data;
-    const newIdx = pageIdx <= 1 ? 0 : pageIdx >= 25 ? 11 : Math.max(0, Math.min(11, Math.floor((pageIdx - 2) / 2)));
+    const newIdx = Math.max(0, Math.min(11, Math.floor(pageIdx / 2)));
     const prevIdx = monthIndex;
     setMonthIndex(newIdx);
     const now = Date.now();
@@ -271,35 +274,7 @@ export default function MessyBulletJournal() {
             onChangeState={handleChangeState}
             className="bg-transparent ajanda-flipbook"
           >
-            {/* Ön kapak (index 0) — sadece #3d2b1f + AJANDA 2026 */}
-            <div
-              key="front-cover-left"
-              className="relative flex h-full w-full items-center justify-center overflow-hidden"
-              style={{ backgroundColor: "#3d2b1f" }}
-            >
-              <span
-                className="font-display text-center"
-                style={{
-                  fontSize: "clamp(2.5rem, 6vw, 4rem)",
-                  fontWeight: 600,
-                  color: "#e8dcc8",
-                  letterSpacing: "0.2em",
-                  textShadow: "0 2px 8px rgba(0,0,0,0.5)",
-                }}
-              >
-                AJANDA {year}
-              </span>
-            </div>
-            {/* Sağ sayfa: kapağın içi — iç sayfa rengi */}
-            <div
-              key="front-cover-right"
-              className="relative flex h-full w-full items-center justify-center"
-              style={{
-                backgroundColor: PAPER_BG,
-                boxShadow: "inset 2px 0 4px rgba(0,0,0,0.04)",
-              }}
-            />
-            {/* Her ay = 1 spread: sol takvim, sağ notlar */}
+            {/* 0–1 Ocak, 2–3 Şubat, ... — her ay takvim (sol) + notlar (sağ) yan yana */}
             {months.flatMap((m) => [
               <div
                 key={`${m.key}-cal`}
@@ -383,25 +358,6 @@ export default function MessyBulletJournal() {
                 </div>
               </div>,
             ])}
-            {/* Arka kapak — sadece #3d2b1f + AJANDA 2026 */}
-            <div
-              key="back-cover"
-              className="relative flex h-full w-full items-center justify-center overflow-hidden"
-              style={{ backgroundColor: "#3d2b1f" }}
-            >
-              <span
-                className="font-display text-center"
-                style={{
-                  fontSize: "clamp(2rem, 5vw, 3rem)",
-                  fontWeight: 600,
-                  color: "#c8bca8",
-                  letterSpacing: "0.15em",
-                  textShadow: "0 2px 6px rgba(0,0,0,0.5)",
-                }}
-              >
-                AJANDA {year}
-              </span>
-            </div>
           </HTMLFlipBook>
         </div>
       </BulletJournalBook>

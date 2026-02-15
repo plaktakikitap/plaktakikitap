@@ -12,8 +12,7 @@ interface BulletJournalBookProps {
 
 /**
  * Wrapper: HTMLPageFlip .book-container içinde.
- * Dış div iç sayfalardan her yönden 15px büyük (padding 15px = cover overhang).
- * index === 0: sadece #3d2b1f + "AJANDA 2026". İç sayfalar #fdfaf3.
+ * Kapak yok; tüm sayfalar takvim/notlar (#fdfaf3).
  */
 export function BulletJournalBook({ children }: BulletJournalBookProps) {
   const spreadWidth = PAGE_WIDTH * 2;
@@ -28,7 +27,7 @@ export function BulletJournalBook({ children }: BulletJournalBookProps) {
     >
       <div className="book-container">
         <div
-          className="relative overflow-hidden rounded-lg bg-[#fdfaf3]"
+          className="relative overflow-hidden rounded-lg bg-transparent"
           style={{
             width: spreadWidth,
             height: spreadHeight,
