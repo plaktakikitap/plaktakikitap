@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   let user = (await supabase.auth.getUser()).data.user;
   if (!user && token) {
     const { data: { user: userFromToken } } = await supabase.auth.getUser(token);
-    user = userFromToken ?? undefined;
+    user = userFromToken ?? null;
   }
 
   const allowed = getAdminAllowedEmails();
