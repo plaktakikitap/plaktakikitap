@@ -29,7 +29,7 @@ export function MaintenanceGate() {
           Site şu an güncelleniyor. Kısa süre sonra tekrar ziyaret edebilirsiniz.
         </p>
         <a
-          href="/admin/login"
+          href="/secretgate/login"
           className="mt-6 inline-block rounded-xl bg-amber-500/20 px-4 py-2 text-sm text-amber-400 hover:bg-amber-500/30"
         >
           Yönetici girişi

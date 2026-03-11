@@ -33,7 +33,7 @@ supabase db push
 
 ## Admin girişi
 
-1. `/admin/login` adresine gidin (navbar'da link yok)
+1. `/secretgate/login` adresine gidin (navbar'da link yok)
 2. `ADMIN_PASSWORD` ile giriş yapın
 3. Cookie tabanlı httpOnly oturum (7 gün)
 
@@ -46,8 +46,8 @@ supabase db push
 
 ### Admin sayfaları
 
-- `/admin/reading` – Okuma durumu (kitap adı, yazar, kapak, not, status)
-- `/admin/site-links` – Footer linkleri (tip, etiket, url, sıra, aktif)
+- `/secretgate/reading` – Okuma durumu (kitap adı, yazar, kapak, not, status)
+- `/secretgate/site-links` – Footer linkleri (tip, etiket, url, sıra, aktif)
 
 ### Footer
 

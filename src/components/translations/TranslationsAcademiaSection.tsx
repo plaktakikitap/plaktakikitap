@@ -37,7 +37,7 @@ export function TranslationsAcademiaSection({
           rel="noopener noreferrer"
           className="mb-6 flex items-center gap-3 rounded-xl border border-amber-400/20 bg-white/5 px-5 py-4 backdrop-blur-sm transition-all hover:border-amber-400/35 hover:shadow-[0_0_24px_-6px_rgba(212,182,90,0.15)]"
         >
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/20 text-white">
             <GraduationCap className="h-5 w-5" />
           </span>
           <span className="font-medium text-white">Academia.edu</span>

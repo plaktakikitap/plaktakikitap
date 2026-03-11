@@ -7,7 +7,7 @@ import {
   adminCreateSeries,
   adminCreateBook,
   adminDeleteContent,
-} from "@/app/admin/actions";
+} from "@/app/secretgate/actions";
 import type { RecentItem } from "@/lib/db/queries";
 import { AdminSection } from "./AdminSection";
 import { AdminBentoCard } from "./AdminBentoCard";
@@ -66,7 +66,7 @@ export function AdminDashboard({ recentItems }: AdminDashboardProps) {
   async function handleDelete(id: string, type: "film" | "series" | "book") {
     setDeleting(id);
     await adminDeleteContent(id, type);
-    router.replace("/admin?toast=saved");
+    router.replace("/secretgate?toast=saved");
     router.refresh();
     setDeleting(null);
   }

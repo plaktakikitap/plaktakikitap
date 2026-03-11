@@ -70,7 +70,7 @@ const CARDS: {
     isVideos: true,
   },
   {
-    href: "/yazilarim",
+    href: "/writings",
     label: "Yazılarım",
     subtitle: "düşünceler, denemeler, parçalar",
     Icon: FileText,

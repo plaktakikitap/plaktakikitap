@@ -71,7 +71,7 @@ function IndependentCard({
                   {item.tags!.map((t) => (
                     <span
                       key={t}
-                      className="rounded-full bg-amber-500/10 px-2 py-0.5 text-xs text-amber-700 dark:text-amber-300"
+                      className="rounded-full bg-amber-500/15 px-2 py-0.5 text-xs text-white"
                     >
                       {t}
                     </span>
@@ -102,10 +102,10 @@ function IndependentCard({
               href={item.external_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-amber-400/30 bg-amber-500/10 px-3 py-1.5 text-sm font-medium text-amber-800 dark:text-amber-200 hover:bg-amber-500/20 transition"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-amber-400/30 bg-amber-500/15 px-3 py-1.5 text-sm font-medium text-white hover:bg-amber-500/25 transition"
             >
               <ExternalLink className="h-3.5 w-3.5" />
-              Oku
+              Okumak için
             </a>
           )}
           {item.file_url && (

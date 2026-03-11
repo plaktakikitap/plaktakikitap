@@ -380,7 +380,7 @@ export function AdminPlannerCanvas({ year, monthIndex }: AdminPlannerCanvasProps
         body: JSON.stringify({ elements: payload }),
       });
       if (res.ok) {
-        router.push(`/admin/planner?toast=saved&msg=${encodeURIComponent("Notun ajandaya iğnelendi! ✨")}`);
+        router.push(`/secretgate/planner?toast=saved&msg=${encodeURIComponent("Notun ajandaya iğnelendi! ✨")}`);
         router.refresh();
         const list = await fetch(`/api/planner/spreads/${spreadId}/elements`).then((r) => r.json());
         if (Array.isArray(list)) {

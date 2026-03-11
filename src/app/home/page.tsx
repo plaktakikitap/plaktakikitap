@@ -5,8 +5,6 @@ import type { Video } from "@/types/videos";
 import { HomePageContent } from "@/components/home/HomePageContent";
 import { EntrySeedHandler } from "@/components/home/EntrySeedHandler";
 import NowPanel from "@/components/NowPanel";
-import Footer from "@/components/Footer";
-
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
@@ -39,8 +37,6 @@ export default async function HomePage() {
       >
         <NowPanel />
       </HomePageContent>
-
-      <Footer />
     </>
   );
 }

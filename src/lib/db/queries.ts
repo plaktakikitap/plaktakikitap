@@ -558,8 +558,8 @@ export async function deleteContentItem(
   revalidatePath("/cinema");
   revalidatePath("/books");
   revalidatePath("/okuma-gunlugum");
-  revalidatePath("/admin");
-  revalidatePath(`/admin/${type}s`);
+  revalidatePath("/secretgate");
+  revalidatePath(`/secretgate/${type}s`);
   return { success: true };
 }
 
@@ -805,8 +805,8 @@ export async function createFilm(
 
   revalidatePath("/");
   revalidatePath("/cinema");
-  revalidatePath("/admin");
-  revalidatePath("/admin/films");
+  revalidatePath("/secretgate");
+  revalidatePath("/secretgate/films");
   return { success: true, id: content.id };
 }
 
@@ -858,7 +858,7 @@ export async function createSeries(
 
   revalidatePath("/");
   revalidatePath("/cinema");
-  revalidatePath("/admin");
+  revalidatePath("/secretgate");
   revalidatePath("/admin/series");
   return { success: true, id: content.id };
 }
@@ -898,8 +898,8 @@ export async function createBook(
   revalidatePath("/");
   revalidatePath("/books");
   revalidatePath("/okuma-gunlugum");
-  revalidatePath("/admin");
-  revalidatePath("/admin/books");
+  revalidatePath("/secretgate");
+  revalidatePath("/secretgate/books");
   return { success: true, id: book.id };
 }
 
@@ -924,7 +924,7 @@ export async function createPlannerEntry(input: {
     .single();
   if (error) return { error: error.message };
   revalidatePath("/planner");
-  revalidatePath("/admin/planner");
+  revalidatePath("/secretgate/planner");
   return { success: true, id: data.id };
 }
 
@@ -949,7 +949,7 @@ export async function updatePlannerEntry(
     .eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/planner");
-  revalidatePath("/admin/planner");
+  revalidatePath("/secretgate/planner");
   return { success: true };
 }
 
@@ -958,7 +958,7 @@ export async function deletePlannerEntry(id: string) {
   const { error } = await supabase.from("planner_entries").delete().eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/planner");
-  revalidatePath("/admin/planner");
+  revalidatePath("/secretgate/planner");
   return { success: true };
 }
 
@@ -977,7 +977,7 @@ export async function addPlannerMedia(input: {
   });
   if (error) return { error: error.message };
   revalidatePath("/planner");
-  revalidatePath("/admin/planner");
+  revalidatePath("/secretgate/planner");
   return { success: true };
 }
 
@@ -986,7 +986,7 @@ export async function deletePlannerMedia(id: string) {
   const { error } = await supabase.from("planner_media").delete().eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/planner");
-  revalidatePath("/admin/planner");
+  revalidatePath("/secretgate/planner");
   return { success: true };
 }
 
@@ -1015,7 +1015,7 @@ export async function createArt(input: {
     .single();
   if (error) return { error: error.message };
   revalidatePath("/art");
-  revalidatePath("/admin/art");
+  revalidatePath("/secretgate/art");
   return { success: true, id: data.id };
 }
 
@@ -1060,7 +1060,7 @@ export async function updateArt(
   const { error } = await supabase.from("content_items").update(updates).eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/art");
-  revalidatePath("/admin/art");
+  revalidatePath("/secretgate/art");
   return { success: true };
 }
 
@@ -1069,7 +1069,7 @@ export async function deleteArt(id: string) {
   const { error } = await supabase.from("content_items").delete().eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/art");
-  revalidatePath("/admin/art");
+  revalidatePath("/secretgate/art");
   return { success: true };
 }
 
@@ -1088,7 +1088,7 @@ export async function addArtMedia(input: {
   });
   if (error) return { error: error.message };
   revalidatePath("/art");
-  revalidatePath("/admin/art");
+  revalidatePath("/secretgate/art");
   return { success: true };
 }
 
@@ -1097,7 +1097,7 @@ export async function deleteArtMedia(id: string) {
   const { error } = await supabase.from("media_assets").delete().eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/art");
-  revalidatePath("/admin/art");
+  revalidatePath("/secretgate/art");
   return { success: true };
 }
 

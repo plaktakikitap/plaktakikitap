@@ -6,7 +6,7 @@ import type { User } from "@supabase/supabase-js";
 import { verifyAdminSession } from "@/lib/admin-auth";
 
 /**
- * Requires an authenticated session for /admin routes.
+ * Requires an authenticated session for /secretgate routes.
  * Local'de (NODE_ENV=development) giriş atlanır; production'da pk_admin, admin_session veya Supabase gerekli.
  */
 export async function requireAdmin(): Promise<User | { isSimpleAuth: true }> {
@@ -20,11 +20,11 @@ export async function requireAdmin(): Promise<User | { isSimpleAuth: true }> {
   if (process.env.ADMIN_PASSWORD) {
     const valid = await verifyAdminSession();
     if (valid) return { isSimpleAuth: true } as User & { isSimpleAuth: true };
-    redirect("/admin/login");
+    redirect("/secretgate/login");
   }
 
   const supabase = await createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/admin/login");
+  if (!user) redirect("/secretgate/login");
   return user;
 }

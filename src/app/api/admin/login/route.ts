@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
   const form = await req.formData();
   const password = String(form.get("password") ?? "").trim();
   if (!password) {
-    return NextResponse.redirect(new URL("/admin/login?err=1", req.url));
+    return NextResponse.redirect(new URL("/secretgate/login?err=1", req.url));
   }
 
   let ok = false;
@@ -29,10 +29,10 @@ export async function POST(req: NextRequest) {
   }
 
   if (!ok) {
-    return NextResponse.redirect(new URL("/admin/login?err=1", req.url));
+    return NextResponse.redirect(new URL("/secretgate/login?err=1", req.url));
   }
 
-  const res = NextResponse.redirect(new URL("/admin", req.url));
+  const res = NextResponse.redirect(new URL("/secretgate", req.url));
   res.cookies.set("pk_admin", "1", {
     httpOnly: true,
     sameSite: "lax",

@@ -52,6 +52,6 @@ export async function clearAdminSession(): Promise<void> {
 export async function requireAdminOrRedirect(): Promise<void> {
   const valid = await verifyAdminSession();
   if (!valid) {
-    redirect("/admin/login");
+    redirect("/secretgate/login");
   }
 }

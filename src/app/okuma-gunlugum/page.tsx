@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 import { PageHeader } from "@/components/layout/PageHeader";
-import Footer from "@/components/Footer";
 import { ReadingLogContent } from "@/components/reading/ReadingLogContent";
 import {
   getPublicBooks,
@@ -60,7 +59,6 @@ export default async function OkumaGunlugumPage() {
             goal={goal}
           />
         </div>
-        <Footer />
       </main>
     </PageTransitionTarget>
   );

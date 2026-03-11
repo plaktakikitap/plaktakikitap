@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { adminUpsertTranslationAcademia } from "@/app/admin/actions";
+import { adminUpsertTranslationAcademia } from "@/app/secretgate/actions";
 import type { TranslationAcademia } from "@/lib/db/queries";
 import { Plus, Trash2 } from "lucide-react";
 

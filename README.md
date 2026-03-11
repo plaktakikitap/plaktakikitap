@@ -59,8 +59,8 @@ npm start
 | `/` | Ana sayfa, animasyonlu stage, istatistikler |
 | `/cinema` | Film ve dizi listesi |
 | `/books` | Kitap listesi |
-| `/admin` | Admin dashboard (giriş gerekli) |
-| `/admin/login` | Giriş sayfası |
-| `/admin/films` | Film yönetimi |
-| `/admin/series` | Dizi yönetimi |
-| `/admin/books` | Kitap yönetimi |
+| `/secretgate` | Admin dashboard (giriş gerekli) |
+| `/secretgate/login` | Giriş sayfası |
+| `/secretgate/films` | Film yönetimi |
+| `/secretgate/series` | Dizi yönetimi |
+| `/secretgate/books` | Kitap yönetimi |

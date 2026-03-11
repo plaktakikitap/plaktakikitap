@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { adminUpsertReadingGoal } from "@/app/admin/actions";
+import { adminUpsertReadingGoal } from "@/app/secretgate/actions";
 import { useState } from "react";
 
 interface AdminReadingGoalFormProps {

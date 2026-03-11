@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { adminUpdatePublishedBook } from "@/app/admin/actions";
+import { adminUpdatePublishedBook } from "@/app/secretgate/actions";
 import type { PublishedBook } from "@/types/database";
 import { AdminImageUpload } from "./AdminImageUpload";
 
@@ -26,7 +26,7 @@ export function AdminPublishedBookForm({ book }: { book: PublishedBook }) {
       setError(result.error);
       return;
     }
-    router.push("/admin/translations");
+    router.push("/secretgate/translations");
     router.refresh();
   }
 

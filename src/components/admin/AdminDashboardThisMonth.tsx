@@ -70,7 +70,7 @@ export function AdminDashboardThisMonth({
       {/* Özet kartlar */}
       <div className="grid grid-cols-3 gap-4">
         <Link
-          href="/admin/films"
+          href="/secretgate/films"
           className="flex flex-col rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors hover:bg-white/10"
         >
           <div className="flex items-center gap-3">
@@ -92,7 +92,7 @@ export function AdminDashboardThisMonth({
           </div>
         </Link>
         <Link
-          href="/admin/series"
+          href="/secretgate/series"
           className="flex flex-col rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors hover:bg-white/10"
         >
           <div className="flex items-center gap-3">
@@ -114,7 +114,7 @@ export function AdminDashboardThisMonth({
           </div>
         </Link>
         <Link
-          href="/admin/books"
+          href="/secretgate/books"
           className="flex flex-col rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors hover:bg-white/10"
         >
           <div className="flex items-center gap-3">
@@ -235,11 +235,11 @@ export function AdminDashboardThisMonth({
 
       <p className="text-xs text-white/40">
         Film ve dizi eklemek için{" "}
-        <Link href="/admin/films/new" className="text-amber-400/90 hover:underline">Film Ekle</Link>
+        <Link href="/secretgate/films/new" className="text-amber-400/90 hover:underline">Film Ekle</Link>
         ,{" "}
-        <Link href="/admin/series/new" className="text-amber-400/90 hover:underline">Dizi Ekle</Link>
+        <Link href="/secretgate/series/new" className="text-amber-400/90 hover:underline">Dizi Ekle</Link>
         ,{" "}
-        <Link href="/admin/books/new" className="text-amber-400/90 hover:underline">Kitap Ekle</Link>
+        <Link href="/secretgate/books/new" className="text-amber-400/90 hover:underline">Kitap Ekle</Link>
         sayfalarını kullanın.
       </p>
     </div>

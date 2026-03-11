@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { adminUpsertReadingStatus } from "@/app/admin/actions";
+import { adminUpsertReadingStatus } from "@/app/secretgate/actions";
 import { AdminImageUpload } from "./AdminImageUpload";
 import { useState } from "react";
 

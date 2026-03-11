@@ -5,7 +5,7 @@ import {
   adminCreateManualTrack,
   adminDeleteManualTrack,
   adminSetActiveManualTrack,
-} from "@/app/admin/actions";
+} from "@/app/secretgate/actions";
 import type { ManualNowPlayingItem } from "@/lib/db/queries";
 import { Music, Plus, Trash2, Star } from "lucide-react";
 import { useState } from "react";

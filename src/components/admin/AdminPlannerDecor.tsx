@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   adminCreatePlannerDecor,
   adminDeletePlannerDecor,
-} from "@/app/admin/actions";
+} from "@/app/secretgate/actions";
 import type { PlannerDecor } from "@/lib/planner";
 import { Plus, Trash2 } from "lucide-react";
 

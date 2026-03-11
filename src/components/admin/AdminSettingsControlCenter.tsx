@@ -255,7 +255,7 @@ export function AdminSettingsControlCenter() {
         </h2>
         <p className="text-sm text-white/70">
           Footer sosyal linklerini (Instagram, Twitter, Academia vb.){" "}
-          <a href="/admin/socials" className="text-amber-400 underline hover:no-underline">
+          <a href="/secretgate/socials" className="text-amber-400 underline hover:no-underline">
             Bana Ulaşın
           </a>{" "}
           sayfasından yönetebilirsiniz.

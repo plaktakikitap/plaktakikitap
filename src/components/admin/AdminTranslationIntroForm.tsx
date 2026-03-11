@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { adminUpsertTranslationIntro } from "@/app/admin/actions";
+import { adminUpsertTranslationIntro } from "@/app/secretgate/actions";
 
 interface AdminTranslationIntroFormProps {
   initialText: string;

@@ -91,8 +91,8 @@ export async function createFilm(formData: FormData) {
   revalidatePath("/cinema");
   revalidatePath("/izleme-gunlugum");
   revalidatePath("/izleme-gunlugum/filmler");
-  revalidatePath("/admin");
-  revalidatePath("/admin/films");
+  revalidatePath("/secretgate");
+  revalidatePath("/secretgate/films");
   return { success: true };
 }
 
@@ -159,8 +159,8 @@ export async function createSeries(formData: FormData) {
   revalidatePath("/cinema");
   revalidatePath("/izleme-gunlugum");
   revalidatePath("/izleme-gunlugum/diziler");
-  revalidatePath("/admin");
-  revalidatePath("/admin/series");
+  revalidatePath("/secretgate");
+  revalidatePath("/secretgate/series");
   return { success: true };
 }
 
@@ -223,9 +223,9 @@ export async function createBook(formData: FormData) {
   revalidatePath("/");
   revalidatePath("/books");
   revalidatePath("/okuma-gunlugum");
-  revalidatePath("/admin");
-  revalidatePath("/admin/books");
-  revalidatePath("/admin/reading-log");
+  revalidatePath("/secretgate");
+  revalidatePath("/secretgate/books");
+  revalidatePath("/secretgate/reading-log");
   return { success: true };
 }
 
@@ -292,9 +292,9 @@ export async function updateBook(id: string, formData: FormData) {
   revalidatePath("/");
   revalidatePath("/books");
   revalidatePath("/okuma-gunlugum");
-  revalidatePath("/admin");
-  revalidatePath("/admin/books");
-  revalidatePath("/admin/reading-log");
+  revalidatePath("/secretgate");
+  revalidatePath("/secretgate/books");
+  revalidatePath("/secretgate/reading-log");
   return { success: true };
 }
 
@@ -303,7 +303,7 @@ export async function deleteContent(id: string, type: "film" | "series" | "book"
   if (type === "book") {
     const { error } = await supabase.from("books").delete().eq("id", id);
     if (error) return { error: error.message };
-    revalidatePath("/admin/reading-log");
+    revalidatePath("/secretgate/reading-log");
   } else {
     const { error } = await supabase.from("content_items").delete().eq("id", id);
     if (error) return { error: error.message };
@@ -312,8 +312,8 @@ export async function deleteContent(id: string, type: "film" | "series" | "book"
   revalidatePath("/cinema");
   revalidatePath("/books");
   revalidatePath("/okuma-gunlugum");
-  revalidatePath("/admin");
-  revalidatePath(`/admin/${type}s`);
+  revalidatePath("/secretgate");
+  revalidatePath(`/secretgate/${type}s`);
   return { success: true };
 }
 
@@ -340,7 +340,7 @@ export async function setFilmFavorite(contentId: string, isFavorite: boolean) {
       .eq("content_id", contentId);
     if (error) return { error: error.message };
   }
-  revalidatePath("/admin/films");
+  revalidatePath("/secretgate/films");
   revalidatePath("/izleme-gunlugum/filmler");
   return { success: true };
 }
@@ -368,7 +368,7 @@ export async function setSeriesFavorite(contentId: string, isFavorite: boolean) 
       .eq("content_id", contentId);
     if (error) return { error: error.message };
   }
-  revalidatePath("/admin/series");
+  revalidatePath("/secretgate/series");
   revalidatePath("/izleme-gunlugum/diziler");
   return { success: true };
 }

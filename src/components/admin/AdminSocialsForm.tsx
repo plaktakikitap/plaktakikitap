@@ -7,7 +7,7 @@ import {
   adminUpdateSocialLink,
   adminDeleteSocialLink,
   adminReorderSocialLinks,
-} from "@/app/admin/actions";
+} from "@/app/secretgate/actions";
 import { Plus, Trash2, GripVertical } from "lucide-react";
 import { getLucideIcon, LUCIDE_ICON_NAMES } from "@/lib/lucide-icons";
 

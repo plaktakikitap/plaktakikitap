@@ -9,7 +9,7 @@ import {
   adminCreateTranslationVolunteer,
   adminDeleteTranslationVolunteer,
   adminReorderTranslationVolunteer,
-} from "@/app/admin/actions";
+} from "@/app/secretgate/actions";
 
 const inputClass =
   "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm";
@@ -180,7 +180,7 @@ export function AdminTranslationVolunteerPanel({
                   <p className="text-sm text-[var(--muted)]">{p.role_title || p.years || "—"}</p>
                 </div>
                 <div className="flex gap-2">
-                  <Link href={`/admin/translations/volunteer/${p.id}/edit`} className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)]" aria-label="Düzenle">
+                  <Link href={`/secretgate/translations/volunteer/${p.id}/edit`} className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)]" aria-label="Düzenle">
                     <Pencil className="h-4 w-4" />
                   </Link>
                   <button type="button" onClick={() => handleDelete(p.id)} disabled={loading} className="rounded p-1.5 text-red-600 hover:bg-red-500/10" aria-label="Sil">

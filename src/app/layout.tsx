@@ -6,6 +6,7 @@ import { MotionLayout } from "@/components/layout/MotionLayout";
 import SiteBackground from "@/components/SiteBackground";
 import { MaintenanceGate } from "@/components/MaintenanceGate";
 import { SiteSoundVolumeHydrate } from "@/components/SiteSoundVolumeHydrate";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -124,6 +125,7 @@ export default function RootLayout({
         <Nav />
         <MainWrapper>
           <MotionLayout>{children}</MotionLayout>
+          <Footer />
         </MainWrapper>
       </body>
     </html>

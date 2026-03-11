@@ -38,21 +38,24 @@ export default async function TranslationsPage({
     getTranslationVolunteerPublic(),
   ]);
 
-  const tab = (await searchParams).tab as "books" | "independent" | "volunteer" | undefined;
-  const showBooks = !tab || tab === "books";
-  const showIndependent = !tab || tab === "independent";
-  const showVolunteer = !tab || tab === "volunteer";
+  const tab = (await searchParams).tab as "all" | "books" | "independent" | "volunteer" | undefined;
+  const showAll = !tab || tab === "all";
+  const showBooks = showAll || tab === "books";
+  const showIndependent = showAll || tab === "independent";
+  const showVolunteer = showAll || tab === "volunteer";
 
   return (
     <PageTransitionTarget layoutId="card-/translations">
       <div className="mx-auto max-w-6xl px-4 py-10">
-        <PageHeader
-          layoutId="nav-/translations"
-          title="Çevirilerim"
-          subtitle="Kitap çevirileri ve projeler"
-          titleClassName="text-white"
-          subtitleClassName="text-white/80"
-        />
+        <div className="text-center">
+          <PageHeader
+            layoutId="nav-/translations"
+            title="Çevirilerim"
+            subtitle="Kitap çevirileri ve projeler"
+            titleClassName="text-white"
+            subtitleClassName="text-white/80"
+          />
+        </div>
         <Suspense fallback={null}>
           <TranslationsTabBar />
         </Suspense>

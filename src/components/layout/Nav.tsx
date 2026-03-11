@@ -6,10 +6,9 @@ import { ArrowLeft } from "lucide-react";
 
 export function Nav() {
   const pathname = usePathname();
-  const isHome = pathname === "/" || pathname === "/home";
 
-  // No navbar on intro gate or main homepage
-  if (isHome) return null;
+  // Giriş sayfasında (Plak/Kitap seçimi) navbar gösterme; diğer tüm sayfalarda "Ana Sayfa" çıksın
+  if (pathname === "/") return null;
 
   return (
     <nav

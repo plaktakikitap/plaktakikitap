@@ -5,7 +5,7 @@ import {
   adminCreateSiteLink,
   adminUpdateSiteLink,
   adminDeleteSiteLink,
-} from "@/app/admin/actions";
+} from "@/app/secretgate/actions";
 import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 

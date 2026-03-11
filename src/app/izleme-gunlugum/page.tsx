@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 import { PageHeader } from "@/components/layout/PageHeader";
-import Footer from "@/components/Footer";
 import { Film, Tv } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -55,7 +54,6 @@ export default function IzlemeGunlugumSelectionPage() {
             </Link>
           </div>
         </div>
-        <Footer />
       </main>
     </PageTransitionTarget>
   );

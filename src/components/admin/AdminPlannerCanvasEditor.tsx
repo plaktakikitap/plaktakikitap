@@ -190,7 +190,7 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
       <div className="flex-1">
         <div className="mb-2 flex items-center gap-2">
           <Link
-            href="/admin/planner"
+            href="/secretgate/planner"
             className="inline-flex items-center gap-1 rounded-lg border border-white/20 px-3 py-1.5 text-sm text-white/90 hover:bg-white/10"
           >
             <ChevronLeft className="h-4 w-4" />

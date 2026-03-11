@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/supabase/secretgate";
 
 export async function POST(req: NextRequest) {
   const form = await req.formData();
   const book_title = String(form.get("book_title") ?? "").trim();
   if (!book_title) {
-    return NextResponse.redirect(new URL("/admin?err=reading_required", req.url));
+    return NextResponse.redirect(new URL("/secretgate?err=reading_required", req.url));
   }
   const payload = {
     status: String(form.get("status") ?? "reading"),
@@ -20,14 +20,14 @@ export async function POST(req: NextRequest) {
     supabase = createAdminClient();
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Veritabanı bağlantısı yapılamadı.";
-    return NextResponse.redirect(new URL("/admin?err=reading&msg=" + encodeURIComponent(msg), req.url));
+    return NextResponse.redirect(new URL("/secretgate?err=reading&msg=" + encodeURIComponent(msg), req.url));
   }
   // Tek satır tut: eski kayıtları sil, yeni ekle
   await supabase.from("reading_status").delete().neq("id", "00000000-0000-0000-0000-000000000000");
   const { error } = await supabase.from("reading_status").insert(payload);
 
   if (error) {
-    return NextResponse.redirect(new URL("/admin?err=reading&msg=" + encodeURIComponent(error.message), req.url));
+    return NextResponse.redirect(new URL("/secretgate?err=reading&msg=" + encodeURIComponent(error.message), req.url));
   }
-  return NextResponse.redirect(new URL("/admin?toast=saved", req.url));
+  return NextResponse.redirect(new URL("/secretgate?toast=saved", req.url));
 }

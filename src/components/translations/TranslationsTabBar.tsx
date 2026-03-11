@@ -2,11 +2,12 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
-import { BookOpen, FileText, Heart } from "lucide-react";
+import { BookOpen, FileText, Heart, LayoutGrid } from "lucide-react";
 
-export type TranslationsTab = "books" | "independent" | "volunteer";
+export type TranslationsTab = "all" | "books" | "independent" | "volunteer";
 
-const TABS: { value: TranslationsTab; label: string; icon: typeof BookOpen }[] = [
+const TABS: { value: TranslationsTab; label: string; icon: typeof LayoutGrid }[] = [
+  { value: "all", label: "Tümü", icon: LayoutGrid },
   { value: "books", label: "Kitaplar", icon: BookOpen },
   { value: "independent", label: "Bağımsız", icon: FileText },
   { value: "volunteer", label: "Gönüllü", icon: Heart },
@@ -15,7 +16,7 @@ const TABS: { value: TranslationsTab; label: string; icon: typeof BookOpen }[] =
 export function useTranslationsTab(): [TranslationsTab, (tab: TranslationsTab) => void] {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const tab = (searchParams.get("tab") as TranslationsTab) || "books";
+  const tab = (searchParams.get("tab") as TranslationsTab) || "all";
   const setTab = useCallback(
     (t: TranslationsTab) => {
       const next = new URLSearchParams(searchParams.toString());
@@ -44,8 +45,8 @@ export function TranslationsTabBar() {
           onClick={() => setTab(value)}
           className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
             tab === value
-              ? "bg-amber-500/20 text-amber-800 dark:text-amber-200"
-              : "text-[var(--muted)] hover:bg-white/5 hover:text-[var(--foreground)]"
+              ? "bg-amber-500/25 text-white"
+              : "text-white/70 hover:bg-white/5 hover:text-white"
           }`}
         >
           <Icon className="h-4 w-4" />

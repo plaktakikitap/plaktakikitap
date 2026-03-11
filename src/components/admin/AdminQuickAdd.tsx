@@ -15,7 +15,7 @@ export function AdminQuickAdd() {
         }`}
       >
         <Link
-          href="/admin/films/new"
+          href="/secretgate/films/new"
           className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-white/90 transition-colors hover:bg-white/10"
           onClick={() => setOpen(false)}
         >
@@ -23,7 +23,7 @@ export function AdminQuickAdd() {
           Film Ekle
         </Link>
         <Link
-          href="/admin/series/new"
+          href="/secretgate/series/new"
           className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-white/90 transition-colors hover:bg-white/10"
           onClick={() => setOpen(false)}
         >
@@ -31,7 +31,7 @@ export function AdminQuickAdd() {
           Dizi Ekle
         </Link>
         <Link
-          href="/admin/books/new"
+          href="/secretgate/books/new"
           className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-white/90 transition-colors hover:bg-white/10"
           onClick={() => setOpen(false)}
         >

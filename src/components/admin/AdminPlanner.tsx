@@ -125,7 +125,7 @@ export function AdminPlanner() {
           onSaved={() => {
             setSelectedDate(null);
             setError(null);
-            router.push(`/admin/planner?toast=saved&msg=${encodeURIComponent("Notun ajandaya iğnelendi! ✨")}`);
+            router.push(`/secretgate/planner?toast=saved&msg=${encodeURIComponent("Notun ajandaya iğnelendi! ✨")}`);
             router.refresh();
             fetch(`/api/planner/entries?year=${year}&month=${month}`)
               .then((r) => r.json())
@@ -133,7 +133,7 @@ export function AdminPlanner() {
               .catch(() => {});
           }}
           onShowToast={() => {
-            router.push(`/admin/planner?toast=saved&msg=${encodeURIComponent("Notun ajandaya iğnelendi! ✨")}`);
+            router.push(`/secretgate/planner?toast=saved&msg=${encodeURIComponent("Notun ajandaya iğnelendi! ✨")}`);
             router.refresh();
           }}
           onError={setError}

@@ -59,7 +59,7 @@ export function AdminPlannerMessySettings({ year, month }: AdminPlannerMessySett
         body: JSON.stringify({ year, month, ...settings }),
       });
       if (res.ok) {
-        router.push(`/admin/planner?toast=saved&msg=${encodeURIComponent("Notun ajandaya iğnelendi! ✨")}`);
+        router.push(`/secretgate/planner?toast=saved&msg=${encodeURIComponent("Notun ajandaya iğnelendi! ✨")}`);
         router.refresh();
       }
     } finally {

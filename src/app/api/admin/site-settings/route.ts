@@ -49,7 +49,7 @@ export async function PATCH(req: NextRequest) {
 
     revalidateTag("site-settings", "max");
     revalidatePath("/", "layout");
-    revalidatePath("/admin/settings");
+    revalidatePath("/secretgate/settings");
     revalidatePath("/home");
 
     return NextResponse.json({ ok: true });

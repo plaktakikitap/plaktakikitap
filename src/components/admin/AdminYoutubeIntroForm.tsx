@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { adminUpsertYoutubeIntro } from "@/app/admin/actions";
+import { adminUpsertYoutubeIntro } from "@/app/secretgate/actions";
 
 const inputClass =
   "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm";

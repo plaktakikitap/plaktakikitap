@@ -121,7 +121,7 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
                   ) : (
                     <>
                       <div className="min-w-0 flex-1">
-                        <Link href={`/yazilarim/${w.id}`} target="_blank" className="font-medium text-amber-400 hover:text-amber-300 hover:underline">
+                        <Link href={`/writings/${w.id}`} target="_blank" className="font-medium text-amber-400 hover:text-amber-300 hover:underline">
                           {w.title || "—"}
                         </Link>
                         <span className="ml-2 text-sm text-white/60">{formatDate(w.published_at)}</span>

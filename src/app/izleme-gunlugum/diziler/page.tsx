@@ -1,7 +1,6 @@
 import { getPublicSeries, getPublicFavoriteSeries, getCinemaStats } from "@/lib/db/queries";
 import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 import { PageHeader } from "@/components/layout/PageHeader";
-import Footer from "@/components/Footer";
 import { WatchLogStats } from "@/components/watch-log/WatchLogStats";
 import { FavoriteVitrinSeries } from "@/components/watch-log/FavoriteVitrinSeries";
 import { SeriesFilterableSection } from "@/components/watch-log/SeriesFilterableSection";
@@ -69,7 +68,6 @@ export default async function IzlemeGunlugumDizilerPage() {
 
           <SeriesFilterableSection seriesList={seriesList} />
         </div>
-        <Footer />
       </main>
     </PageTransitionTarget>
   );

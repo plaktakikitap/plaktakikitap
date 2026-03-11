@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/supabase/secretgate";
 
 export async function POST(req: NextRequest) {
   const form = await req.formData();
@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   const sort_order = Number(form.get("sort_order") ?? 0) || 0;
 
   if (!title || !artist) {
-    return NextResponse.redirect(new URL("/admin?err=tracks_required", req.url));
+    return NextResponse.redirect(new URL("/secretgate?err=tracks_required", req.url));
   }
 
   let supabase;
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     supabase = createAdminClient();
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Veritabanı bağlantısı yapılamadı.";
-    return NextResponse.redirect(new URL("/admin?err=tracks&msg=" + encodeURIComponent(msg), req.url));
+    return NextResponse.redirect(new URL("/secretgate?err=tracks&msg=" + encodeURIComponent(msg), req.url));
   }
   const { error } = await supabase.from("now_tracks").insert({
     title,
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
   });
 
   if (error) {
-    return NextResponse.redirect(new URL("/admin?err=tracks&msg=" + encodeURIComponent(error.message), req.url));
+    return NextResponse.redirect(new URL("/secretgate?err=tracks&msg=" + encodeURIComponent(error.message), req.url));
   }
-  return NextResponse.redirect(new URL("/admin?toast=saved", req.url));
+  return NextResponse.redirect(new URL("/secretgate?toast=saved", req.url));
 }

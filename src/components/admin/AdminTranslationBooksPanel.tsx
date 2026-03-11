@@ -10,7 +10,7 @@ import {
   adminCreateTranslationBook,
   adminDeleteTranslationBook,
   adminReorderTranslationBooks,
-} from "@/app/admin/actions";
+} from "@/app/secretgate/actions";
 
 const inputClass =
   "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm";
@@ -191,7 +191,7 @@ export function AdminTranslationBooksPanel({ books }: { books: TranslationBookRo
                 </div>
                 <div className="flex gap-2">
                   <Link
-                    href={`/admin/translations/books/${b.id}/edit`}
+                    href={`/secretgate/translations/books/${b.id}/edit`}
                     className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)] hover:text-[var(--foreground)]"
                     aria-label="Düzenle"
                   >

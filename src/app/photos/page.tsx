@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { getPhotosPublic } from "@/lib/photos";
 import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
-import Footer from "@/components/Footer";
 import SiteBackground from "@/components/SiteBackground";
 import { PhotosContent } from "@/components/photos/PhotosContent";
 
@@ -22,7 +21,6 @@ export default async function PhotosPage() {
         <Suspense fallback={<div className="mx-auto max-w-6xl px-4 py-16 text-center text-white/60">Yükleniyor…</div>}>
           <PhotosContent photos={photos} />
         </Suspense>
-        <Footer />
       </main>
     </PageTransitionTarget>
   );

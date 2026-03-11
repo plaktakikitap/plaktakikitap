@@ -27,11 +27,6 @@ export function TranslationsHero({ settings }: { settings: TranslationsSettingsR
       >
         <div className="absolute inset-0 pointer-events-none rounded-xl border border-amber-400/20" aria-hidden />
         <div className="relative">
-          {settings.intro_title && (
-            <h2 className="font-editorial text-xl font-medium text-white sm:text-2xl mb-4">
-              {settings.intro_title}
-            </h2>
-          )}
           <div className="font-serif text-base leading-relaxed text-white/95 sm:text-lg max-w-none">
             {settings.intro_body.split("\n").map((p, i) => (
               <p key={i} className={i > 0 ? "mt-4" : ""}>

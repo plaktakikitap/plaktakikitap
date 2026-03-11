@@ -1,6 +1,5 @@
 import { supabaseServer } from "@/lib/supabase-server";
 import { AboutTimeline } from "@/components/about/AboutTimeline";
-import Footer from "@/components/Footer";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 
@@ -33,7 +32,6 @@ export default async function BeniTaniyinPage() {
           />
           <AboutTimeline entries={entries} />
         </div>
-        <Footer />
       </main>
     </PageTransitionTarget>
   );

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { adminUpdateTranslationsSettings } from "@/app/admin/actions";
+import { adminUpdateTranslationsSettings } from "@/app/secretgate/actions";
 import type { TranslationsSettingsRow } from "@/types/database";
 
 const inputClass =

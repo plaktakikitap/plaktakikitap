@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { adminUpdateTranslationVolunteer } from "@/app/admin/actions";
+import { adminUpdateTranslationVolunteer } from "@/app/secretgate/actions";
 import type { TranslationVolunteerProjectRow } from "@/types/database";
 
 const inputClass =
@@ -24,7 +24,7 @@ export function AdminTranslationVolunteerForm({ project }: { project: Translatio
       setError(result.error);
       return;
     }
-    router.push("/admin/translations");
+    router.push("/secretgate/translations");
     router.refresh();
   }
 

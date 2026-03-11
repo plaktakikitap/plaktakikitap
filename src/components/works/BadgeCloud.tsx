@@ -4,6 +4,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import type { WorksItem } from "@/types/works";
 
+const CARD_MIN_HEIGHT = 320;
+
 interface BadgeCloudProps {
   items: WorksItem[];
 }
@@ -16,50 +18,68 @@ export function BadgeCloud({ items }: BadgeCloudProps) {
       <h2 className="mb-6 font-editorial text-2xl font-medium text-white sm:text-3xl">
         Sertifikalar
       </h2>
-      <div className="flex flex-wrap items-center justify-center gap-6">
-        {items.map((item) => (
-          <BadgeItem key={item.id} item={item} />
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((item, i) => (
+          <BadgeItem key={item.id} item={item} index={i} />
         ))}
       </div>
     </section>
   );
 }
 
-function BadgeItem({ item }: { item: WorksItem }) {
+function BadgeItem({ item, index }: { item: WorksItem; index: number }) {
   const [showTooltip, setShowTooltip] = useState(false);
   const issuer = item.meta && typeof item.meta.issuer === "string" ? item.meta.issuer : null;
   const year = item.meta && typeof item.meta.year !== "undefined" ? String(item.meta.year) : null;
   const tooltip = [issuer, year].filter(Boolean).join(" · ") || item.title;
   const linkUrl = item.url || item.external_url;
+  const description = item.description?.trim() ?? "";
 
   const content = (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.05 }}
       whileHover={{
-        scale: 1.08,
         boxShadow: "0 0 20px rgba(212,175,55,0.35), 0 0 40px rgba(212,175,55,0.15)",
       }}
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
-      className="relative flex flex-col items-center gap-2 rounded-2xl border border-white/15 bg-white/5 p-4 backdrop-blur-sm"
+      className="relative flex h-full min-h-[320px] flex-col rounded-2xl" border border-white/15 bg-white/5 backdrop-blur-sm overflow-hidden"
     >
-      {item.image_url ? (
-        <img
-          src={item.image_url}
-          alt={item.title}
-          className="h-14 w-14 object-contain sm:h-16 sm:w-16"
-        />
-      ) : (
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-amber-500/20 text-2xl sm:h-16 sm:w-16">
-          🏆
-        </div>
-      )}
-      <span className="max-w-[100px] text-center text-xs font-medium text-white/90">
-        {item.title}
-      </span>
+      {/* Görsel alanı: dikey ve yatay görseller aynı kutuda, okunaklı boyutta */}
+      <div className="flex h-44 w-full shrink-0 items-center justify-center rounded-t-2xl bg-white/5 p-3">
+        {item.image_url ? (
+          <img
+            src={item.image_url}
+            alt={item.title}
+            className="max-h-full max-w-full object-contain"
+            style={{ maxHeight: "11rem", maxWidth: "100%" }}
+          />
+        ) : (
+          <div className="flex h-full min-h-[8rem] w-full items-center justify-center rounded-lg bg-amber-500/10 text-4xl">
+            🏆
+          </div>
+        )}
+      </div>
+
+      {/* Başlık + açıklama: sabit yükseklik, açıklama üç nokta ile kısaltılır */}
+      <div className="flex flex-1 flex-col gap-2 p-4">
+        <h3 className="line-clamp-1 font-medium text-white">
+          {item.title}
+        </h3>
+        {description ? (
+          <p
+            className="line-clamp-3 text-sm text-white/80"
+            title={description}
+          >
+            {description}
+          </p>
+        ) : null}
+      </div>
+
       {showTooltip && tooltip && (
-        <span className="absolute -top-10 left-1/2 z-10 -translate-x-1/2 rounded bg-black/90 px-2 py-1 text-xs text-white whitespace-nowrap">
+        <span className="absolute left-1/2 top-2 z-10 -translate-x-1/2 rounded bg-black/90 px-2 py-1 text-xs text-white whitespace-nowrap">
           {tooltip}
         </span>
       )}
@@ -72,11 +92,11 @@ function BadgeItem({ item }: { item: WorksItem }) {
         href={linkUrl}
         target="_blank"
         rel="noreferrer"
-        className="focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050A14]"
+        className="block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050A14]"
       >
         {content}
       </a>
     );
   }
-  return <div>{content}</div>;
+  return <div className="h-full">{content}</div>;
 }

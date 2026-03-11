@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/supabase/secretgate";
 
 export async function POST(req: NextRequest) {
   const form = await req.formData();
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     if (!Array.isArray(parsed)) throw new Error("not array");
     arr = parsed;
   } catch {
-    return NextResponse.redirect(new URL("/admin?err=links_json", req.url));
+    return NextResponse.redirect(new URL("/secretgate?err=links_json", req.url));
   }
 
   let supabase;
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     supabase = createAdminClient();
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Veritabanı bağlantısı yapılamadı.";
-    return NextResponse.redirect(new URL("/admin?err=links&msg=" + encodeURIComponent(msg), req.url));
+    return NextResponse.redirect(new URL("/secretgate?err=links&msg=" + encodeURIComponent(msg), req.url));
   }
 
   // Delete all existing links (match all UUIDs via neq to nil)
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
   const { error } = await supabase.from("site_links").insert(cleaned);
 
   if (error) {
-    return NextResponse.redirect(new URL("/admin?err=links&msg=" + encodeURIComponent(error.message), req.url));
+    return NextResponse.redirect(new URL("/secretgate?err=links&msg=" + encodeURIComponent(error.message), req.url));
   }
-  return NextResponse.redirect(new URL("/admin?toast=saved", req.url));
+  return NextResponse.redirect(new URL("/secretgate?toast=saved", req.url));
 }

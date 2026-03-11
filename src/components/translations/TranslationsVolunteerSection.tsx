@@ -41,7 +41,7 @@ export function TranslationsVolunteerSection({
               )}
             </div>
             {project.role_title && (
-              <p className="mt-1 text-sm text-amber-700 dark:text-amber-300">
+              <p className="mt-1 text-sm text-white/80">
                 {project.role_title}
               </p>
             )}
@@ -66,7 +66,7 @@ export function TranslationsVolunteerSection({
                   href={project.website_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm text-amber-700 dark:text-amber-300 hover:underline"
+                  className="inline-flex items-center gap-1.5 text-sm text-white/90 hover:text-white hover:underline"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
                   Website
@@ -77,7 +77,7 @@ export function TranslationsVolunteerSection({
                   href={project.instagram_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm text-amber-700 dark:text-amber-300 hover:underline"
+                  className="inline-flex items-center gap-1.5 text-sm text-white/90 hover:text-white hover:underline"
                 >
                   <Instagram className="h-3.5 w-3.5" />
                   Instagram
@@ -88,7 +88,7 @@ export function TranslationsVolunteerSection({
                   href={project.x_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm text-amber-700 dark:text-amber-300 hover:underline"
+                  className="inline-flex items-center gap-1.5 text-sm text-white/90 hover:text-white hover:underline"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
                   X

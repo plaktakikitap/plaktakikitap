@@ -1,7 +1,6 @@
 import { getPublicFilms, getPublicFavoriteFilms, getCinemaStats } from "@/lib/db/queries";
 import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 import { PageHeader } from "@/components/layout/PageHeader";
-import Footer from "@/components/Footer";
 import { WatchLogStats } from "@/components/watch-log/WatchLogStats";
 import { FilmlerPageContent } from "@/components/watch-log/FilmlerPageContent";
 import Link from "next/link";
@@ -63,7 +62,6 @@ export default async function IzlemeGunlugumFilmlerPage() {
 
           <FilmlerPageContent films={films} favoriteFilms={favoriteFilms} />
         </div>
-        <Footer />
       </main>
     </PageTransitionTarget>
   );

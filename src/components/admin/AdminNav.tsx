@@ -27,25 +27,25 @@ import {
 } from "lucide-react";
 
 const adminLinks = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/about", label: "Beni Tanıyın", icon: UserCircle },
-  { href: "/admin/works", label: "Yaptıklarım", icon: Briefcase },
-  { href: "/admin/yazilarim", label: "Yazılarım", icon: FileText },
-  { href: "/admin/photos", label: "Fotoğraf", icon: Camera },
-  { href: "/admin/plaktaki-kitap", label: "Plaktaki Kitap", icon: Video },
-  { href: "/admin/planner", label: "Planner", icon: Calendar },
-  { href: "/admin/movie-watch-log", label: "Film izleme günlüğü", icon: Film },
-  { href: "/admin/series-watch-log", label: "Dizi izleme günlüğü", icon: Tv },
-  { href: "/admin/now-playing", label: "Şu an dinliyorum", icon: Music },
-  { href: "/admin/reading", label: "Şu an okuyorum", icon: BookOpen },
-  { href: "/admin/reading-log", label: "Okuma günlüğü", icon: BookMarked },
-  { href: "/admin/translations", label: "Çeviriler", icon: Languages },
-  { href: "/admin/socials", label: "Bana Ulaşın", icon: Share2 },
-  { href: "/admin/settings", label: "Ayarlar", icon: Settings },
+  { href: "/secretgate", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/secretgate/about", label: "Beni Tanıyın", icon: UserCircle },
+  { href: "/secretgate/works", label: "Yaptıklarım", icon: Briefcase },
+  { href: "/secretgate/yazilarim", label: "Yazılarım", icon: FileText },
+  { href: "/secretgate/photos", label: "Fotoğraf", icon: Camera },
+  { href: "/secretgate/plaktaki-kitap", label: "Plaktaki Kitap", icon: Video },
+  { href: "/secretgate/planner", label: "Planner", icon: Calendar },
+  { href: "/secretgate/movie-watch-log", label: "Film izleme günlüğü", icon: Film },
+  { href: "/secretgate/series-watch-log", label: "Dizi izleme günlüğü", icon: Tv },
+  { href: "/secretgate/now-playing", label: "Şu an dinliyorum", icon: Music },
+  { href: "/secretgate/reading", label: "Şu an okuyorum", icon: BookOpen },
+  { href: "/secretgate/reading-log", label: "Okuma günlüğü", icon: BookMarked },
+  { href: "/secretgate/translations", label: "Çeviriler", icon: Languages },
+  { href: "/secretgate/socials", label: "Bana Ulaşın", icon: Share2 },
+  { href: "/secretgate/settings", label: "Ayarlar", icon: Settings },
 ];
 
 function isActive(pathname: string, href: string) {
-  if (href === "/admin") return pathname === "/admin";
+  if (href === "/secretgate") return pathname === "/secretgate";
   return pathname === href || pathname.startsWith(href + "/");
 }
 
@@ -83,7 +83,7 @@ export function AdminNav({
       const supabase = createBrowserClient();
       await supabase.auth.signOut();
     }
-    router.push("/admin/login");
+    router.push("/secretgate/login");
     router.refresh();
   }
 
@@ -123,7 +123,7 @@ export function AdminNav({
     <>
       <div className="flex items-center justify-between border-b border-white/10 px-3 py-4">
         <Link
-          href="/admin"
+          href="/secretgate"
           className="admin-heading font-semibold tracking-tight text-white"
         >
           <span className="hidden xl:inline">Command Center</span>
@@ -179,7 +179,7 @@ export function AdminNav({
         >
           <Menu className="h-5 w-5" />
         </button>
-        <Link href="/admin" className="admin-heading font-semibold text-white">
+        <Link href="/secretgate" className="admin-heading font-semibold text-white">
           Command Center
         </Link>
         <button

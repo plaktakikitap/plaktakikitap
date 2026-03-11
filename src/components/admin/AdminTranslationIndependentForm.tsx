@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { adminUpdateTranslationIndependent } from "@/app/admin/actions";
+import { adminUpdateTranslationIndependent } from "@/app/secretgate/actions";
 import type { TranslationIndependentRow } from "@/types/database";
 
 const inputClass =
@@ -24,7 +24,7 @@ export function AdminTranslationIndependentForm({ item }: { item: TranslationInd
       setError(result.error);
       return;
     }
-    router.push("/admin/translations");
+    router.push("/secretgate/translations");
     router.refresh();
   }
 

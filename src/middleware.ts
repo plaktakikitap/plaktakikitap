@@ -12,9 +12,9 @@ export async function middleware(request: NextRequest) {
 
   const { response, user } = await updateSession(request);
 
-  // Admin: local'de (development) giriş atlanır; production'da pk_admin veya Supabase gerekli
-  if (pathname.startsWith("/admin")) {
-    if (pathname === "/admin/login") {
+  // Secretgate (admin): local'de (development) giriş atlanır; production'da pk_admin veya Supabase gerekli
+  if (pathname.startsWith("/secretgate")) {
+    if (pathname === "/secretgate/login") {
       return response;
     }
     if (process.env.NODE_ENV === "development") {
@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
       return response;
     }
     const url = request.nextUrl.clone();
-    url.pathname = "/admin/login";
+    url.pathname = "/secretgate/login";
     return NextResponse.redirect(url);
   }
 
