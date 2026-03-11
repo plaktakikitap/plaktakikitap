@@ -4,7 +4,7 @@ import { updateSession } from "@/lib/supabase/middleware";
 const getAdminAllowedEmails = (): string[] =>
   (process.env.ADMIN_ALLOWED_EMAIL ?? "")
     .split(",")
-    .map((e) => e.trim().toLowerCase())
+    .map((e) => e.trim().replace(/^["']|["']$/g, "").toLowerCase())
     .filter(Boolean);
 
 export async function middleware(request: NextRequest) {
@@ -22,8 +22,9 @@ export async function middleware(request: NextRequest) {
     }
     const isCookieAuth = request.cookies.get("pk_admin")?.value === "1";
     const allowedEmails = getAdminAllowedEmails();
+    const userEmail = user?.email?.trim().toLowerCase();
     const isSupabaseAdmin =
-      user?.email && allowedEmails.includes(user.email.toLowerCase());
+      !!userEmail && allowedEmails.length > 0 && allowedEmails.includes(userEmail);
     if (isCookieAuth || isSupabaseAdmin) {
       return response;
     }
