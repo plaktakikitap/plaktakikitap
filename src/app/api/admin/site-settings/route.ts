@@ -47,7 +47,7 @@ export async function PATCH(req: NextRequest) {
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    revalidateTag("site-settings");
+    revalidateTag("site-settings", "max");
     revalidatePath("/", "layout");
     revalidatePath("/admin/settings");
     revalidatePath("/home");
