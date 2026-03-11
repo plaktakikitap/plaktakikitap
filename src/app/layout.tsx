@@ -124,7 +124,9 @@ export default function RootLayout({
         <SiteBackground />
         <Nav />
         <MainWrapper>
-          <MotionLayout>{children}</MotionLayout>
+          <div className="min-h-0 flex-1 flex flex-col">
+            <MotionLayout>{children}</MotionLayout>
+          </div>
           <Footer />
         </MainWrapper>
       </body>

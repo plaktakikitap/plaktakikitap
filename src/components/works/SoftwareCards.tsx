@@ -63,7 +63,7 @@ function SoftwareCard({ item }: { item: WorksItem }) {
             rel="noreferrer"
             className="inline-flex items-center gap-2 rounded-xl border border-amber-400/40 bg-amber-400/10 px-3 py-2 text-sm font-medium text-amber-200 transition hover:bg-amber-400/20"
           >
-            <ExternalLink className="h-4 w-4" /> Canlı
+            <ExternalLink className="h-4 w-4" /> Siteye gitmek için tıklayın
           </Link>
         )}
         {githubUrl && (

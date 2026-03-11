@@ -10,8 +10,8 @@ export function MainWrapper({ children }: { children: React.ReactNode }) {
     <main
       className={
         isHome
-          ? ""
-          : "pt-12 md:pt-14 min-h-screen"
+          ? "flex min-h-screen flex-col"
+          : "flex min-h-screen flex-col pt-12 md:pt-14"
       }
       style={
         isHome

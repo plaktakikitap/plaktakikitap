@@ -38,16 +38,23 @@ function isTefrika(w: Writing): boolean {
   return Boolean(w.tefrika_issue?.trim());
 }
 
+/** En yeni yazı en üstte: published_at tarihine göre azalan sıra */
+function sortByNewest(items: Writing[]): Writing[] {
+  return [...items].sort(
+    (a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
+  );
+}
+
 export default async function WritingsPage() {
   const writings = await getWritingsPublic();
   const digerItems = writings.filter((w) => w.category === "diger");
   const digerNormal = digerItems.filter((w) => !isTefrika(w));
-  const tefrikaItems = digerItems.filter(isTefrika);
+  const tefrikaItems = sortByNewest(digerItems.filter(isTefrika));
 
   const sections: { category: WritingCategory; label: string; items: Writing[]; isTefrikaSection?: boolean }[] = [
-    { category: "denemeler", label: CATEGORY_LABELS.denemeler, items: writings.filter((w) => w.category === "denemeler") },
-    { category: "siirler", label: CATEGORY_LABELS.siirler, items: writings.filter((w) => w.category === "siirler") },
-    { category: "diger", label: CATEGORY_LABELS.diger, items: digerNormal },
+    { category: "denemeler", label: CATEGORY_LABELS.denemeler, items: sortByNewest(writings.filter((w) => w.category === "denemeler")) },
+    { category: "siirler", label: CATEGORY_LABELS.siirler, items: sortByNewest(writings.filter((w) => w.category === "siirler")) },
+    { category: "diger", label: CATEGORY_LABELS.diger, items: sortByNewest(digerNormal) },
   ];
 
   return (

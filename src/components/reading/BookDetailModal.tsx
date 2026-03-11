@@ -189,7 +189,7 @@ export function BookDetailModal({
                 aria-hidden
               />
               <p className="text-xs font-semibold uppercase tracking-wider text-white/50">
-                Senin yorumun
+                Yorumum
               </p>
               <p
                 className="relative z-10 mt-1.5 text-sm text-white/95"

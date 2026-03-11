@@ -391,27 +391,9 @@ body::before {
     20px 25px 50px rgba(0, 0, 0, 0.55);
 }
 
-/* Ortadaki spine — yumuşak gradient gölge (çirkin çizgi değil) */
+/* Ortadaki spine — sadece gizlendi (dikey gri çizgi kaldırıldı) */
 .book-spine {
-  position: absolute;
-  left: 50%;
-  top: 28px;
-  bottom: 28px;
-  width: 56px;
-  transform: translateX(-50%);
-  background: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.22) 0%,
-    rgba(0, 0, 0, 0.04) 35%,
-    rgba(0, 0, 0, 0) 50%,
-    rgba(0, 0, 0, 0.04) 65%,
-    rgba(0, 0, 0, 0.22) 100%
-  );
-  border-radius: 20px;
-  mix-blend-mode: multiply;
-  opacity: 0.55;
-  z-index: 20;
-  pointer-events: none;
+  display: none;
 }
 
 /* Sayfa kenarlarındaki kağıt yığını görüntüsü */

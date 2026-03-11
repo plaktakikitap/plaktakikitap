@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ReadingLogContent } from "@/components/reading/ReadingLogContent";
@@ -36,14 +35,6 @@ export default async function OkumaGunlugumPage() {
     <PageTransitionTarget layoutId="card-/okuma-gunlugum">
       <main className="relative min-h-screen text-white">
         <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
-          <div className="mb-6 sm:mb-8">
-            <Link
-              href="/"
-              className="text-sm text-white/60 transition-colors hover:text-white/90"
-            >
-              ← Ana sayfa
-            </Link>
-          </div>
           <PageHeader
             layoutId="nav-/okuma-gunlugum"
             title="Okuma Günlüğüm"

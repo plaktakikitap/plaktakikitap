@@ -7,8 +7,8 @@ import { ArrowLeft } from "lucide-react";
 export function Nav() {
   const pathname = usePathname();
 
-  // Giriş sayfasında (Plak/Kitap seçimi) navbar gösterme; diğer tüm sayfalarda "Ana Sayfa" çıksın
-  if (pathname === "/") return null;
+  // Giriş sayfası (/) ve ana sayfa (/home) hariç tüm sayfalarda "Ana Sayfa" çıksın
+  if (pathname === "/" || pathname === "/home") return null;
 
   return (
     <nav
