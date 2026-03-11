@@ -87,7 +87,7 @@ export function AdminNormalVideosSection({ videos }: { videos: Video[] }) {
     <section className="rounded-xl border border-[var(--card-border)] bg-[var(--card)]/50 p-6">
       <h2 className="mb-4 flex items-center gap-2 font-medium">Normal videolar</h2>
       <p className="mb-4 text-sm text-[var(--muted)]">
-        Başlık, Açıklama, YouTube URL, Özel Thumbnail. /plaktaki-kitap ve /videos sayfalarında listelenir.
+        Başlık, Açıklama, YouTube URL, Özel Thumbnail. /plaktaki-kitap sayfasında listelenir.
       </p>
       {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 

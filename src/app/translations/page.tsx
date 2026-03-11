@@ -50,6 +50,8 @@ export default async function TranslationsPage({
           layoutId="nav-/translations"
           title="Çevirilerim"
           subtitle="Kitap çevirileri ve projeler"
+          titleClassName="text-white"
+          subtitleClassName="text-white/80"
         />
         <Suspense fallback={null}>
           <TranslationsTabBar />

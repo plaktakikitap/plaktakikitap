@@ -19,7 +19,7 @@ export function TranslationsIndependentSection({
       transition={{ duration: 0.4, delay: 0.1 }}
       className="mb-14"
     >
-      <h2 className="font-editorial text-xl font-medium text-[var(--foreground)] sm:text-2xl mb-2">
+      <h2 className="font-editorial text-xl font-medium text-white sm:text-2xl mb-2">
         Kendi Kendime Çevirilerim
       </h2>
       <p className="text-sm text-[var(--muted)] mb-6">
@@ -53,7 +53,7 @@ function IndependentCard({
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <h3 className="font-editorial font-medium text-[var(--foreground)]">
+          <h3 className="font-editorial font-medium text-white">
             {item.title}
           </h3>
           {item.year != null && (

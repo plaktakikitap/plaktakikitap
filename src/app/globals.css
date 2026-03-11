@@ -127,29 +127,28 @@ h1, h2, h3, .font-editorial {
 :root {
   --admin-focus-ring: rgba(212, 175, 55, 0.5);
 }
-/* Admin form: Apple kalitesi — geniş, okunaklı, yeterli dokunma alanı */
+/* Admin form: açık kutu + koyu yazı — her ortamda okunaklı */
 .admin-input {
   width: 100%;
   min-height: 2.75rem;
   border-radius: 0.875rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #ffffff;
   padding: 0.75rem 1.125rem;
   font-size: 0.9375rem;
-  color: rgba(255, 255, 255, 0.95);
+  color: #0d1117;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 .admin-input:hover {
-  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 0, 0, 0.2);
 }
 .admin-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: #6b7280;
 }
 .admin-input:focus {
-  border-color: rgba(212, 175, 55, 0.6);
+  border-color: rgba(212, 175, 55, 0.8);
   box-shadow: 0 0 0 2px var(--admin-focus-ring);
-  background: rgba(255, 255, 255, 0.08);
 }
 .admin-input-lg {
   min-height: 4rem;
@@ -159,10 +158,12 @@ h1, h2, h3, .font-editorial {
 }
 .admin-select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   padding-right: 2.5rem;
+  color: #0d1117;
 }
 .admin-btn {
   border-radius: 0.75rem;
@@ -189,6 +190,22 @@ h1, h2, h3, .font-editorial {
 .admin-command-center {
   background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 35%, #151922 70%, #0d1117 100%);
   min-height: 100vh;
+}
+
+/* Admin: tüm metin input/textarea/select koyu yazı + açık kutu (okunaklı) */
+.admin-command-center input:not([type="checkbox"]):not([type="radio"]),
+.admin-command-center textarea,
+.admin-command-center select {
+  background: #ffffff !important;
+  color: #0d1117 !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+}
+.admin-command-center input::placeholder,
+.admin-command-center textarea::placeholder {
+  color: #6b7280 !important;
+}
+.admin-command-center select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
 }
 
 /* Command Center: başlıklar için Playfair Display */

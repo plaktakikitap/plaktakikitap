@@ -27,7 +27,7 @@ export function TranslationsAcademiaSection({
       transition={{ duration: 0.4, delay: 0.15 }}
       className="mb-14"
     >
-      <h2 className="font-editorial text-xl font-medium text-[var(--foreground)] sm:text-2xl mb-6">
+      <h2 className="font-editorial text-xl font-medium text-white sm:text-2xl mb-6">
         Akademik Profil
       </h2>
       {profileUrl?.trim() && (
@@ -40,7 +40,7 @@ export function TranslationsAcademiaSection({
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400">
             <GraduationCap className="h-5 w-5" />
           </span>
-          <span className="font-medium text-[var(--foreground)]">Academia.edu</span>
+          <span className="font-medium text-white">Academia.edu</span>
           <ExternalLink className="ml-auto h-4 w-4 text-[var(--muted)]" />
         </a>
       )}
@@ -59,7 +59,7 @@ export function TranslationsAcademiaSection({
                 rel="noopener noreferrer"
                 className="flex items-center justify-between gap-3 rounded-lg border border-amber-400/10 bg-white/5 px-4 py-3 text-sm transition hover:border-amber-400/25 hover:bg-white/10"
               >
-                <span className="font-medium text-[var(--foreground)]">
+                <span className="font-medium text-white">
                   {item.title}
                 </span>
                 <ExternalLink className="h-4 w-4 shrink-0 text-[var(--muted)]" />

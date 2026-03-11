@@ -1,5 +1,9 @@
 import "server-only";
+import { revalidateTag, unstable_cache } from "next/cache";
 import { createServerClient } from "@/lib/supabase/server";
+
+const SITE_SETTINGS_CACHE_TAG = "site-settings";
+const SITE_SETTINGS_REVALIDATE = 60;
 
 export interface SiteSettingsValue {
   /** SEO */
@@ -38,7 +42,7 @@ const DEFAULTS: SiteSettingsValue = {
   intro_subtitle: "yanii... nam-ı diğer Plaktaki Kitap",
 };
 
-export async function getSiteSettings(): Promise<SiteSettingsValue> {
+async function getSiteSettingsUncached(): Promise<SiteSettingsValue> {
   const supabase = await createServerClient();
   const { data } = await supabase
     .from("site_settings")
@@ -49,6 +53,14 @@ export async function getSiteSettings(): Promise<SiteSettingsValue> {
 
   const raw = (data?.value as Record<string, unknown> | null) ?? {};
   return { ...DEFAULTS, ...raw } as SiteSettingsValue;
+}
+
+/** Cached for SITE_SETTINGS_REVALIDATE seconds; invalidate with revalidateTag("site-settings") after updates. */
+export async function getSiteSettings(): Promise<SiteSettingsValue> {
+  return unstable_cache(getSiteSettingsUncached, [SITE_SETTINGS_CACHE_TAG], {
+    revalidate: SITE_SETTINGS_REVALIDATE,
+    tags: [SITE_SETTINGS_CACHE_TAG],
+  })();
 }
 
 export async function updateSiteSettings(partial: Partial<SiteSettingsValue>): Promise<{ id: string } | { error: string }> {
@@ -69,6 +81,7 @@ export async function updateSiteSettings(partial: Partial<SiteSettingsValue>): P
       .update({ value: next, updated_at: new Date().toISOString() })
       .eq("id", existing.id);
     if (error) return { error: error.message };
+    revalidateTag(SITE_SETTINGS_CACHE_TAG);
     return { id: existing.id };
   }
 
@@ -78,5 +91,6 @@ export async function updateSiteSettings(partial: Partial<SiteSettingsValue>): P
     .select("id")
     .single();
   if (error) return { error: error.message };
+  revalidateTag(SITE_SETTINGS_CACHE_TAG);
   return { id: inserted!.id };
 }

@@ -18,7 +18,7 @@ export function TranslationsVolunteerSection({
       transition={{ duration: 0.4, delay: 0.2 }}
       className="mb-14"
     >
-      <h2 className="font-editorial text-xl font-medium text-[var(--foreground)] sm:text-2xl mb-6">
+      <h2 className="font-editorial text-xl font-medium text-white sm:text-2xl mb-6">
         Gönüllü Çeviri Projeleri
       </h2>
       <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
@@ -31,7 +31,7 @@ export function TranslationsVolunteerSection({
             className="group rounded-xl border border-amber-400/15 bg-white/5 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:border-amber-400/30 hover:shadow-[0_0_30px_-8px_rgba(212,182,90,0.18)]"
           >
             <div className="flex items-start justify-between gap-2">
-              <h3 className="font-editorial text-lg font-medium text-[var(--foreground)]">
+              <h3 className="font-editorial text-lg font-medium text-white">
                 {project.org_name}
               </h3>
               {project.years && (

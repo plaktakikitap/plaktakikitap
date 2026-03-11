@@ -29,7 +29,7 @@ export function TranslationsBooksSection({ books }: { books: TranslationBookRow[
         transition={{ duration: 0.4, delay: 0.05 }}
         className="mb-14"
       >
-        <h2 className="font-editorial text-xl font-medium text-[var(--foreground)] sm:text-2xl mb-6">
+        <h2 className="font-editorial text-xl font-medium text-white sm:text-2xl mb-6">
           Yayınlanmış Kitaplar
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
@@ -75,7 +75,7 @@ export function TranslationsBooksSection({ books }: { books: TranslationBookRow[
                   )}
                 </div>
                 <div className="p-4">
-                  <p className="font-editorial font-medium text-[var(--foreground)] line-clamp-2">
+                  <p className="font-editorial font-medium text-white line-clamp-2">
                     {book.title}
                   </p>
                   <p className="mt-0.5 text-sm text-[var(--muted)]">{book.original_author}</p>
@@ -145,7 +145,7 @@ function BookDetailModal({
             />
           </div>
           <div className="flex-1 p-5 sm:p-6 flex flex-col">
-            <h3 className="font-editorial text-lg font-medium text-[var(--foreground)]">
+            <h3 className="font-editorial text-lg font-medium text-white">
               {book.title}
             </h3>
             <p className="text-sm text-[var(--muted)] mt-0.5">{book.original_author}</p>

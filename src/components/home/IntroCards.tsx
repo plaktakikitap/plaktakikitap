@@ -57,13 +57,13 @@ const CARDS: {
     Icon: FolderKanban,
   },
   {
-    href: "/cevirilerim",
+    href: "/translations",
     label: "Çevirilerim",
     subtitle: "yayınlanmış kitaplarım, gönüllü çevirilerim",
     Icon: Languages,
   },
   {
-    href: "/videos",
+    href: "/plaktaki-kitap",
     label: "Plaktaki Kitap Videoları",
     subtitle: "",
     Icon: Video,

@@ -2,14 +2,22 @@ import Image from "next/image";
 import { supabaseServer } from "@/lib/supabase-server";
 import ManualNowPlaying from "./ManualNowPlaying";
 
+/** Admin panelde eklenen şarkılar manual_now_playing tablosunda; sırayla gösterilmek üzere buradan alıyoruz. */
 async function getNowTracks() {
   const supabase = await supabaseServer();
   const { data } = await supabase
-    .from("now_tracks")
-    .select("id, title, artist, duration_sec, cover_url")
-    .eq("is_active", true)
-    .order("sort_order", { ascending: true });
-  return (data ?? []) as { id: string; title: string; artist: string; duration_sec: number | null; cover_url: string | null }[];
+    .from("manual_now_playing")
+    .select("id, title, artist, album_art_url, sort_order")
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: true });
+  const rows = (data ?? []) as { id: string; title: string; artist: string; album_art_url: string | null }[];
+  return rows.map((r) => ({
+    id: r.id,
+    title: r.title,
+    artist: r.artist,
+    duration_sec: 180 as number | null,
+    cover_url: r.album_art_url,
+  }));
 }
 
 async function getReading() {
@@ -64,7 +72,7 @@ export default async function NowPanel() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
-        {/* Şu an dinliyorum — manuel (now_tracks) */}
+        {/* Şu an dinliyorum — admin panelden eklenenler (manual_now_playing) */}
         <GlassCard title="Şu an dinliyorum:">
           <ManualNowPlaying tracks={tracks} />
         </GlassCard>

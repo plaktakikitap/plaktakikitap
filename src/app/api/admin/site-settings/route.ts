@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { SiteSettingsValue } from "@/lib/site-settings";
 import { getSiteSettings } from "@/lib/site-settings";
@@ -47,6 +47,7 @@ export async function PATCH(req: NextRequest) {
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
+    revalidateTag("site-settings");
     revalidatePath("/", "layout");
     revalidatePath("/admin/settings");
     revalidatePath("/home");

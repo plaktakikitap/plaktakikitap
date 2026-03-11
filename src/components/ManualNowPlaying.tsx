@@ -23,7 +23,7 @@ export default function ManualNowPlaying({
   tracks: NowTrack[];
 }) {
   const validTracks = useMemo(
-    () => tracks.filter((t) => t.duration_sec != null && t.duration_sec > 0),
+    () => tracks.map((t) => ({ ...t, duration_sec: t.duration_sec && t.duration_sec > 0 ? t.duration_sec : 180 })),
     [tracks]
   );
 
