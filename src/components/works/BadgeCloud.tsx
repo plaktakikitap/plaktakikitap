@@ -45,7 +45,7 @@ function BadgeItem({ item, index }: { item: WorksItem; index: number }) {
       }}
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
-      className="relative flex h-full min-h-[320px] flex-col rounded-2xl" border border-white/15 bg-white/5 backdrop-blur-sm overflow-hidden"
+      className="relative flex h-full min-h-[320px] flex-col rounded-2xl border border-white/15 bg-white/5 backdrop-blur-sm overflow-hidden"
     >
       {/* Görsel alanı: dikey ve yatay görseller aynı kutuda, okunaklı boyutta */}
       <div className="flex h-44 w-full shrink-0 items-center justify-center rounded-t-2xl bg-white/5 p-3">
