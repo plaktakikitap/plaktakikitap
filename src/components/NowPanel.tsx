@@ -2,7 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { supabaseServer } from "@/lib/supabase-server";
 import { getPlaylistTracksForNowPlaying } from "@/lib/spotify";
+import { getMusicCurrentState } from "@/lib/music";
 import ManualNowPlaying from "./ManualNowPlaying";
+import { AmbientMusicPlayer } from "./AmbientMusicPlayer";
 import type { NowPlayingTrack } from "@/lib/spotify";
 
 /** Admin panelde eklenen şarkılar manual_now_playing tablosunda; sırayla gösterilmek üzere buradan alıyoruz. */
