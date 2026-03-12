@@ -25,6 +25,7 @@ export function ReadingLogContent({
   books,
   currentReading,
   readingCount,
+  totalBookCount,
   goal,
 }: ReadingLogContentProps) {
   const [statusFilter, setStatusFilter] = useState<StatusFilterValue>("");
