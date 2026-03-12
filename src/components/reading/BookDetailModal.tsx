@@ -56,6 +56,7 @@ export function BookDetailModal({
   const inkSeed = book.id.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % 1000;
 
   return (
+    <ModalPortal>
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
