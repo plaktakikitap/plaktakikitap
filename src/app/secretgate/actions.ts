@@ -211,6 +211,7 @@ export async function adminCreateManualTrack(formData: FormData) {
     artist,
     album_art_url: (formData.get("album_art_url") as string)?.trim() || null,
     track_url: (formData.get("track_url") as string)?.trim() || null,
+    audio_url: (formData.get("audio_url") as string)?.trim() || null,
     is_active: formData.get("is_active") === "on",
   });
 }
@@ -221,6 +222,7 @@ export async function adminUpdateManualTrack(id: string, formData: FormData) {
     artist: (formData.get("artist") as string)?.trim(),
     album_art_url: (formData.get("album_art_url") as string)?.trim() || null,
     track_url: (formData.get("track_url") as string)?.trim() || null,
+    audio_url: (formData.get("audio_url") as string)?.trim() || null,
     is_active: formData.get("is_active") === "on",
   });
 }

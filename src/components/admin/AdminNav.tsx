@@ -24,6 +24,8 @@ import {
   BookMarked,
   Film,
   Tv,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 
 const adminLinks = [
@@ -37,7 +39,6 @@ const adminLinks = [
   { href: "/secretgate/movie-watch-log", label: "Film izleme günlüğü", icon: Film },
   { href: "/secretgate/series-watch-log", label: "Dizi izleme günlüğü", icon: Tv },
   { href: "/secretgate/now-playing", label: "Şu an dinliyorum", icon: Music },
-  { href: "/secretgate/music", label: "Ambient müzik", icon: Music },
   { href: "/secretgate/reading", label: "Şu an okuyorum", icon: BookOpen },
   { href: "/secretgate/reading-log", label: "Okuma günlüğü", icon: BookMarked },
   { href: "/secretgate/translations", label: "Çeviriler", icon: Languages },
@@ -58,6 +59,7 @@ export function AdminNav({
   const pathname = usePathname();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const isSimpleAuth = "isSimpleAuth" in user && user.isSimpleAuth;
 
   useEffect(() => {
@@ -113,7 +115,7 @@ export function AdminNav({
         <link.icon
           className={`relative z-10 shrink-0 ${active ? "h-5 w-5" : "h-5 w-5"}`}
         />
-        <span className="relative z-10 hidden min-w-0 truncate text-sm font-light lg:group-hover:inline xl:inline">
+        <span className={`relative z-10 min-w-0 truncate text-sm font-light ${sidebarOpen ? "hidden lg:group-hover:inline xl:inline" : "hidden"}`}>
           {link.label}
         </span>
       </Link>
@@ -122,14 +124,16 @@ export function AdminNav({
 
   const SidebarContent = () => (
     <>
-      <div className="flex items-center justify-between border-b border-white/10 px-3 py-4">
-        <Link
-          href="/secretgate"
-          className="admin-heading font-semibold tracking-tight text-white"
+      <div className="flex items-center justify-between border-b border-white/10 px-2 py-3 lg:px-3 lg:py-4">
+        <button
+          type="button"
+          onClick={() => setSidebarOpen((o) => !o)}
+          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-white/60 hover:bg-white/10 hover:text-white"
+          aria-label={sidebarOpen ? "Paneli daralt" : "Paneli genişlet"}
+          title={sidebarOpen ? "Paneli daralt" : "Paneli genişlet"}
         >
-          <span className="hidden xl:inline">Command Center</span>
-          <span className="xl:hidden">CC</span>
-        </Link>
+          {sidebarOpen ? <PanelLeftClose className="h-5 w-5" /> : <PanelLeftOpen className="h-5 w-5" />}
+        </button>
         <button
           type="button"
           onClick={() => setMenuOpen(false)}
@@ -145,7 +149,7 @@ export function AdminNav({
         ))}
       </nav>
       <div className="border-t border-white/10 px-2 py-3">
-        {!isSimpleAuth && (
+        {!isSimpleAuth && sidebarOpen && (
           <p className="mb-2 truncate px-3 text-xs font-light text-white/50">
             {(user as User).email}
           </p>
@@ -155,7 +159,7 @@ export function AdminNav({
           className="flex w-full items-center gap-3 rounded-r-xl px-3 py-2.5 text-sm font-light text-white/60 hover:bg-white/5 hover:text-white"
         >
           <LogOut className="h-5 w-5 shrink-0" />
-          <span className="hidden xl:inline">Çıkış</span>
+          <span className={sidebarOpen ? "hidden xl:inline" : "hidden"}>Çıkış</span>
         </button>
       </div>
     </>
@@ -163,14 +167,14 @@ export function AdminNav({
 
   return (
     <>
-      {/* Sabit sol sidebar — ikon odaklı, glassmorphism */}
+      {/* Sabit sol sidebar — açılır kapanır panel */}
       <aside
-        className="fixed left-0 top-0 z-50 hidden h-screen w-[72px] flex-col border-r border-white/10 bg-black/30 shadow-[4px_0_32px_-8px_rgba(0,0,0,0.5)] backdrop-blur-xl xl:w-[200px] lg:flex"
+        className={`fixed left-0 top-0 z-50 hidden h-screen w-[72px] flex-col border-r border-white/10 bg-black/30 shadow-[4px_0_32px_-8px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-[width] duration-200 lg:flex ${sidebarOpen ? "xl:w-[200px]" : ""}`}
       >
         <SidebarContent />
       </aside>
 
-      {/* Mobil: hamburger + overlay sidebar */}
+      {/* Mobil: hamburger + çıkış */}
       <div className="fixed left-0 top-0 z-50 flex h-14 w-full items-center justify-between border-b border-white/10 bg-black/40 px-4 backdrop-blur-xl lg:hidden">
         <button
           type="button"
@@ -180,8 +184,8 @@ export function AdminNav({
         >
           <Menu className="h-5 w-5" />
         </button>
-        <Link href="/secretgate" className="admin-heading font-semibold text-white">
-          Command Center
+        <Link href="/secretgate" className="text-sm font-medium text-white/80 hover:text-white">
+          Admin
         </Link>
         <button
           onClick={handleLogout}

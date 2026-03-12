@@ -41,6 +41,8 @@ export const createFilmSchema = z.object({
   rating_5: rating5Schema,
 });
 
+const seriesStatusSchema = z.enum(["finished", "waiting", "dropped"]).optional().nullable();
+
 export const createSeriesSchema = z.object({
   title: z.string().min(1, "Başlık gerekli"),
   slug: z.string().optional(),
@@ -51,6 +53,7 @@ export const createSeriesSchema = z.object({
   episodes_watched: z.number().int().min(0).default(0),
   seasons_watched: z.number().int().min(0).default(0),
   review: z.string().optional().nullable(),
+  status: seriesStatusSchema,
 });
 
 export const createBookSchema = z.object({
@@ -852,6 +855,7 @@ export async function createSeries(
     total_duration_min,
     seasons_watched: data.seasons_watched,
     review: data.review || null,
+    status: data.status ?? null,
   });
 
   if (seriesError) return { error: seriesError.message };
@@ -1109,6 +1113,7 @@ export interface ManualNowPlayingItem {
   artist: string;
   album_art_url: string | null;
   track_url: string | null;
+  audio_url: string | null;
   is_active: boolean;
   sort_order: number;
   created_at: string;
@@ -1142,6 +1147,7 @@ export async function createManualTrack(input: {
   artist: string;
   album_art_url?: string | null;
   track_url?: string | null;
+  audio_url?: string | null;
   is_active?: boolean;
 }) {
   const supabase = await createServerClient();
@@ -1155,6 +1161,7 @@ export async function createManualTrack(input: {
       artist: input.artist.trim(),
       album_art_url: input.album_art_url?.trim() || null,
       track_url: input.track_url?.trim() || null,
+      audio_url: input.audio_url?.trim() || null,
       is_active: input.is_active ?? false,
       sort_order: 0,
     })
@@ -1173,6 +1180,7 @@ export async function updateManualTrack(
     artist?: string;
     album_art_url?: string | null;
     track_url?: string | null;
+    audio_url?: string | null;
     is_active?: boolean;
   }
 ) {
@@ -1182,6 +1190,7 @@ export async function updateManualTrack(
   if (input.artist != null) updates.artist = input.artist.trim();
   if (input.album_art_url !== undefined) updates.album_art_url = input.album_art_url?.trim() || null;
   if (input.track_url !== undefined) updates.track_url = input.track_url?.trim() || null;
+  if (input.audio_url !== undefined) updates.audio_url = input.audio_url?.trim() || null;
   if (input.is_active === true) {
     await supabase.from("manual_now_playing").update({ is_active: false }).eq("is_active", true);
     updates.is_active = true;
@@ -1218,9 +1227,47 @@ export interface ReadingStatus {
   updated_at: string;
 }
 
-/** "Şu an okuyorum": featured current book if any (status=reading + is_featured_current=true), else most recently updated reading. Sadece public/unlisted. */
+/** "Şu an okuyorum": önce admin panelinden girilen reading_status, yoksa books tablosunda featured/latest. */
 export async function getCurrentReading(): Promise<Book | null> {
   const supabase = await createServerClient();
+
+  // 1) Admin "Şu an okuyorum" sayfasından girilen kitap (reading_status)
+  const { data: statusRow } = await supabase
+    .from("reading_status")
+    .select("id, book_title, author, cover_url, progress_percent, updated_at, status")
+    .order("updated_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (statusRow && (statusRow.book_title ?? "").trim() !== "") {
+    const row = statusRow as {
+      id: string;
+      book_title: string;
+      author: string | null;
+      cover_url: string | null;
+      progress_percent: number | null;
+      updated_at: string;
+      status: string;
+    };
+    return {
+      id: row.id,
+      title: row.book_title.trim(),
+      author: row.author?.trim() ?? "",
+      page_count: 0,
+      status: (row.status === "last" ? "reading" : row.status) as Book["status"],
+      rating: null,
+      tags: [],
+      review: null,
+      cover_url: row.cover_url?.trim() || null,
+      spine_url: "",
+      start_date: null,
+      end_date: null,
+      last_progress_update_at: row.updated_at,
+      progress_percent: row.progress_percent ?? null,
+      created_at: row.updated_at,
+    } as Book;
+  }
+
+  // 2) Kitaplık: featured current veya en son güncellenen "reading"
   const visibilityFilter = { visibility: ["public", "unlisted"] as const };
   const { data: featured } = await supabase
     .from("books")

@@ -122,16 +122,16 @@ function NarrativeBlock({
       transition={{ delay: index * 0.12, duration: 0.5 }}
       className="relative z-10 w-full max-w-[min(100%,520px)]"
     >
-      {/* Sadece yazı kutusu — polaroidler satırda en sol/sağda */}
+      {/* Mobilde küçük kutu (p-3, küçük font), masaüstünde normal */}
       <div
-        className={`flex flex-col rounded-xl border p-4 backdrop-blur-md sm:p-5 ${
+        className={`flex flex-col rounded-xl border p-3 backdrop-blur-md md:p-5 ${
           entry.is_highlight
             ? "border-amber-500/40 bg-white/10 shadow-[0_0_20px_rgba(212,175,55,0.15)]"
             : "border-white/10 bg-white/5"
         }`}
       >
-        <h3 className="text-base font-semibold text-white/95 sm:text-lg">{entry.year_or_period}</h3>
-        <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-white/75">
+        <h3 className="text-sm font-semibold text-white/95 md:text-lg">{entry.year_or_period}</h3>
+        <p className="mt-1.5 whitespace-pre-wrap text-xs leading-relaxed text-white/75 md:mt-2 md:text-sm">
           {entry.paragraph_text}
         </p>
       </div>
@@ -139,7 +139,7 @@ function NarrativeBlock({
   );
 }
 
-/** Satırın en sol veya en sağında polaroidleri gösterir — yazıların ötesinde, üstlerini kapatmaz */
+/** Satırın en sol veya en sağında polaroidleri gösterir — masaüstünde; mobilde gizli */
 function RowPolaroids({
   images,
   side,
@@ -153,7 +153,7 @@ function RowPolaroids({
   const isLeft = side === "left";
   return (
     <div
-      className="pointer-events-none absolute top-0 z-[1] flex flex-col gap-4 md:pointer-events-auto"
+      className="pointer-events-none absolute top-0 z-[1] hidden flex-col gap-4 md:pointer-events-auto md:flex"
       style={{
         left: isLeft ? "-0.25rem" : undefined,
         right: isLeft ? undefined : "-0.25rem",
@@ -165,9 +165,7 @@ function RowPolaroids({
         <div
           key={i}
           className="overflow-visible"
-        style={{
-          marginTop: i * 88,
-        }}
+          style={{ marginTop: i * 88 }}
         >
           <PolaroidCard
             url={img.url}
@@ -176,6 +174,33 @@ function RowPolaroids({
             isHighlight={false}
             showTape={i % 3 !== 1}
             side={side}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** Mobilde yazı kutusunun altında polaroidleri akışta gösterir */
+function InlinePolaroids({
+  images,
+  index,
+}: {
+  images: TimelineImage[];
+  index: number;
+}) {
+  if (images.length === 0) return null;
+  return (
+    <div className="flex flex-wrap justify-start gap-3 pt-3 md:hidden">
+      {images.map((img, i) => (
+        <div key={i} className="overflow-visible">
+          <PolaroidCard
+            url={img.url}
+            caption={img.caption}
+            index={index * 3 + i}
+            isHighlight={false}
+            showTape={i % 3 !== 1}
+            side="right"
           />
         </div>
       ))}
@@ -240,16 +265,22 @@ export function AboutTimeline({ entries }: { entries: TimelineEntry[] }) {
                 height: entry.is_highlight ? 14 : 12,
               }}
             />
-            {/* Sol sütun: yazı kutucuğu; solda polaroid alanı için padding ile yazı dışarıda kalır */}
+            {/* Sol sütun: yazı kutucuğu; mobilde altında fotoğraflar */}
             <div className="min-w-0 md:flex md:justify-end md:pl-[180px] md:pr-6">
               {i % 2 === 0 && (
-                <NarrativeBlock entry={entry} side="right" index={i} />
+                <>
+                  <NarrativeBlock entry={entry} side="right" index={i} />
+                  <InlinePolaroids images={entry.associated_images ?? []} index={i} />
+                </>
               )}
             </div>
-            {/* Sağ sütun: yazı kutucuğu; sağda polaroid alanı için padding ile yazı dışarıda kalır */}
+            {/* Sağ sütun: yazı kutucuğu; mobilde altında fotoğraflar */}
             <div className="min-w-0 md:flex md:justify-start md:pl-6 md:pr-[180px]">
               {i % 2 === 1 && (
-                <NarrativeBlock entry={entry} side="left" index={i} />
+                <>
+                  <NarrativeBlock entry={entry} side="left" index={i} />
+                  <InlinePolaroids images={entry.associated_images ?? []} index={i} />
+                </>
               )}
             </div>
           </div>

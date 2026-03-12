@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { ContentItem, Film, Series } from "@/types/database";
 import { calculateTotalLifeSpent } from "@/lib/utils/time";
+import { getSeriesStatusLineColor } from "@/lib/utils/series-status";
 import { Film as FilmIcon, Tv, Clock, Star } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 
@@ -202,6 +203,7 @@ export function CinemaPage({ films, series, stats }: CinemaPageProps) {
                 const totalMins =
                   s.total_duration_min ??
                   (s.avg_episode_min ?? 0) * (s.episodes_watched ?? 0);
+                const lineColor = getSeriesStatusLineColor(s.status ?? null);
                 return (
                   <motion.article
                     key={item.id}
@@ -210,10 +212,27 @@ export function CinemaPage({ films, series, stats }: CinemaPageProps) {
                     transition={{ delay: i * 0.02, duration: 0.15 }}
                     className="overflow-hidden rounded-lg border border-[var(--card-border)] bg-[var(--card)] transition hover:border-[var(--accent)]/30"
                   >
-                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[var(--card-border)]">
-                      <div className="flex h-full w-full items-center justify-center text-[var(--muted)]">
-                        <Tv className="h-12 w-12" />
+                    <div className="block w-full">
+                      <div className="relative aspect-[2/3] w-full overflow-hidden bg-[var(--card-border)]">
+                        {s.poster_url ? (
+                          <img
+                            src={s.poster_url}
+                            alt={item.title}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-[var(--muted)]">
+                            <Tv className="h-12 w-12" />
+                          </div>
+                        )}
                       </div>
+                      {lineColor && (
+                        <div
+                          className="h-0.5 w-full shrink-0"
+                          style={{ backgroundColor: lineColor }}
+                          aria-hidden
+                        />
+                      )}
                     </div>
                     <div className="p-3">
                       <h3 className="font-semibold text-[var(--foreground)] line-clamp-1">

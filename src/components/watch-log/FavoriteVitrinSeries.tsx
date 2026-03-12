@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Tv } from "lucide-react";
 import type { ContentItem, Series } from "@/types/database";
+import { getSeriesStatusLineColor } from "@/lib/utils/series-status";
 
 export type SeriesItem = ContentItem & { series: Series | Series[] | null };
 
@@ -34,6 +35,7 @@ export function FavoriteVitrinSeries({ seriesList }: FavoriteVitrinSeriesProps) 
           const s = getSeries(item);
           if (!s) return null;
 
+          const lineColor = getSeriesStatusLineColor(s.status ?? null);
           return (
             <motion.div
               key={item.id}
@@ -44,16 +46,38 @@ export function FavoriteVitrinSeries({ seriesList }: FavoriteVitrinSeriesProps) 
               className="group flex flex-col items-center"
             >
               <div
-                className="relative flex overflow-hidden rounded-md border-2 border-amber-400/70 shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all duration-300 group-hover:border-amber-300 group-hover:shadow-[0_0_28px_rgba(251,191,36,0.35)]"
+                className="relative flex flex-col overflow-hidden rounded-md border-2 border-amber-400/70 shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all duration-300 group-hover:border-amber-300 group-hover:shadow-[0_0_28px_rgba(251,191,36,0.35)]"
                 style={{ width: "clamp(80px, 18vw, 140px)" }}
               >
-                <div className="aspect-[2/3] w-full bg-gradient-to-b from-amber-950/50 to-black/60 flex flex-col items-center justify-center p-2">
-                  <Tv className="h-10 w-10 text-amber-400/70 sm:h-12 sm:w-12" />
-                  <p className="mt-2 line-clamp-3 text-center font-editorial text-sm font-medium text-white/95">
-                    {item.title}
-                  </p>
+                <div className="relative aspect-[2/3] w-full overflow-hidden bg-gradient-to-b from-amber-950/50 to-black/60 flex flex-col items-center justify-center p-2">
+                  {s.poster_url ? (
+                    <img
+                      src={s.poster_url}
+                      alt=""
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                  ) : (
+                    <>
+                      <Tv className="h-10 w-10 text-amber-400/70 sm:h-12 sm:w-12 relative z-10" />
+                      <p className="mt-2 line-clamp-3 text-center font-editorial text-sm font-medium text-white/95 relative z-10">
+                        {item.title}
+                      </p>
+                    </>
+                  )}
                 </div>
+                {lineColor && (
+                  <div
+                    className="h-0.5 w-full shrink-0"
+                    style={{ backgroundColor: lineColor }}
+                    aria-hidden
+                  />
+                )}
               </div>
+              {s.poster_url && (
+                <p className="mt-2 line-clamp-2 text-center font-editorial text-sm font-medium text-white/95 w-full px-1">
+                  {item.title}
+                </p>
+              )}
               <span className="mt-2 rounded-full border border-amber-400/40 bg-amber-950/30 px-2.5 py-0.5 font-serif text-[10px] uppercase tracking-wider text-amber-200/90 backdrop-blur-sm sm:text-xs">
                 Eymen&apos;in Seçimi
               </span>

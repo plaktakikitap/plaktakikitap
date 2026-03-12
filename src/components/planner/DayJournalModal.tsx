@@ -7,6 +7,7 @@ import type { PlannerEntryWithMedia, DaySmudge } from "@/lib/planner";
 import { InkBleedText } from "./InkBleedText";
 import { SmudgeOverlay, type SmudgePreset } from "./SmudgeOverlay";
 import { getVideoEmbedUrl } from "@/lib/utils/embed";
+import { ModalPortal } from "@/components/ui/ModalPortal";
 
 export type { DaySmudge };
 
@@ -78,6 +79,7 @@ export function DayJournalModal({
   }, []);
 
   return (
+    <ModalPortal>
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -254,5 +256,6 @@ export function DayJournalModal({
         </div>
       </motion.div>
     </motion.div>
+    </ModalPortal>
   );
 }

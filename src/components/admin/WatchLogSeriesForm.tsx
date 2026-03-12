@@ -163,6 +163,15 @@ export function WatchLogSeriesForm() {
             />
           </div>
           <div>
+            <label className={labelClass}>Durum</label>
+            <select name="status" className={inputClass} defaultValue="">
+              <option value="">Seçin</option>
+              <option value="finished">Bitirilmiş</option>
+              <option value="waiting">Devamını Bekliyorum</option>
+              <option value="dropped">Yarıda Bıraktım</option>
+            </select>
+          </div>
+          <div>
             <label className={labelClass}>Puan (0–5)</label>
             <div className="pt-1">
               <StarRatingInput name="rating_5" value={rating5} onChange={setRating5} size="lg" />

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { TranslationBookRow } from "@/types/database";
 import { ShoppingCart, X } from "lucide-react";
 import { LanguagePill } from "./LanguagePill";
+import { ModalPortal } from "@/components/ui/ModalPortal";
 
 const glassPanel = {
   background: "rgba(255,255,255,0.06)",
@@ -111,6 +112,7 @@ function BookDetailModal({
   onClose: () => void;
 }) {
   return (
+    <ModalPortal>
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -197,5 +199,6 @@ function BookDetailModal({
         </div>
       </motion.div>
     </motion.div>
+    </ModalPortal>
   );
 }

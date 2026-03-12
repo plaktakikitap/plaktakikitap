@@ -232,22 +232,27 @@ export default function MessyBulletJournal() {
     [year]
   );
 
+  const currentMonth = months[monthIndex];
+  if (!currentMonth) return null;
+
   return (
     <section className="mx-auto w-full max-w-[2260px] px-2 pb-24 sm:px-6" style={{ minHeight: "min(95vh, 1200px)" }}>
-      <BulletJournalBook>
-        <div
-          ref={flipbookContainerRef}
-          className="relative h-full w-full overflow-hidden rounded-lg"
-          style={{
-            width: "100%",
-            height: "100%",
-            backgroundColor: "#fdfaf3",
-            perspective: "2200px",
-            transformStyle: "preserve-3d",
-          }}
-          data-flipping={flipInProgress}
-        >
-          <HTMLFlipBook
+      {/* Masaüstü: flipbook (yan yana spread) — mobilde gizle */}
+      <div className="hidden md:block">
+        <BulletJournalBook>
+          <div
+            ref={flipbookContainerRef}
+            className="relative h-full w-full overflow-hidden rounded-lg"
+            style={{
+              width: "100%",
+              height: "100%",
+              backgroundColor: "#fdfaf3",
+              perspective: "2200px",
+              transformStyle: "preserve-3d",
+            }}
+            data-flipping={flipInProgress}
+          >
+            <HTMLFlipBook
             width={pageSize.width}
             height={pageSize.height}
             size="fixed"
@@ -361,6 +366,101 @@ export default function MessyBulletJournal() {
           </HTMLFlipBook>
         </div>
       </BulletJournalBook>
+      </div>
+
+      {/* Mobil: üstte takvim sayfası, altta notlar sayfası — dikey notluk */}
+      <div className="block md:hidden w-full max-w-lg mx-auto mt-6 space-y-4">
+        <div className="flex justify-center">
+          <select
+            value={monthIndex}
+            onChange={(e) => setMonthIndex(Number(e.target.value))}
+            className="rounded-lg border border-stone-300 bg-[#fdfaf3] px-3 py-2 text-sm font-medium text-stone-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-600/40"
+            aria-label="Ay seçin"
+          >
+            {months.map((m) => (
+              <option key={m.key} value={m.index}>
+                {m.label} {year}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Üst sayfa: takvim (sol sayfa içeriği) — yatay, sıkıştırılmış */}
+        <div
+          className="relative w-full overflow-hidden rounded-lg shadow-md"
+          style={{
+            aspectRatio: "16/10",
+            backgroundColor: PAPER_BG,
+            boxShadow: "0 4px 14px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(0,0,0,0.06)",
+          }}
+        >
+          <div className="absolute inset-0 overflow-hidden rounded-lg">
+            <MessyPaperPage
+              side="left"
+              overflowVisible
+              showCurledCorner={pageSettings[`${year}-${currentMonth.index}`]?.show_curled_corner ?? true}
+              showCoffeeStain={pageSettings[`${year}-${currentMonth.index}`]?.show_coffee_stain ?? true}
+            >
+              <MessyCalendarGrid
+                year={year}
+                monthIndex={currentMonth.index}
+                summaryByDate={summaryByDateFor(currentMonth.index)}
+                onDayClick={handleDayClick}
+              />
+            </MessyPaperPage>
+            <MessyElementsOverlay elements={DEFAULT_LEFT_OVERLAY} />
+          </div>
+        </div>
+
+        {/* Alt sayfa: notlar (sağ sayfa içeriği) — yatay, sıkıştırılmış */}
+        <div
+          className="relative w-full overflow-hidden rounded-lg shadow-md"
+          style={{
+            aspectRatio: "16/10",
+            backgroundColor: PAPER_BG,
+            boxShadow: "0 4px 14px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(0,0,0,0.06)",
+          }}
+        >
+          <div className="absolute inset-0 overflow-hidden rounded-lg">
+            <MessyPaperPage
+              side="right"
+              showCurledCorner={pageSettings[`${year}-${currentMonth.index}`]?.show_curled_corner ?? true}
+              showCoffeeStain={pageSettings[`${year}-${currentMonth.index}`]?.show_coffee_stain ?? true}
+            >
+              <MessyNotesPage
+                monthName={currentMonth.label}
+                summaries={summaryCache[`${year}-${currentMonth.index}`] ?? []}
+                onDayClick={handleDayClick}
+                images={
+                  (summaryCache[`${year}-${currentMonth.index}`] ?? [])
+                    .filter((s) => s.firstImageUrl)
+                    .map((s) => ({ url: s.firstImageUrl!, dateStr: s.date }))
+                }
+                paperclipImages={
+                  (summaryCache[`${year}-${currentMonth.index}`] ?? [])
+                    .flatMap((s) =>
+                      (s.paperclipImageUrls ?? []).map((url) => ({ url, dateStr: s.date }))
+                    )
+                }
+                attachedImages={
+                  (summaryCache[`${year}-${currentMonth.index}`] ?? []).flatMap((s) => s.attachedImages ?? [])
+                }
+                showWashiTape={pageSettings[`${year}-${currentMonth.index}`]?.show_washi_tape ?? true}
+                showPolaroid={pageSettings[`${year}-${currentMonth.index}`]?.show_polaroid ?? true}
+                customFields={pageSettings[`${year}-${currentMonth.index}`]?.custom_fields ?? []}
+                canvasItems={(canvasByMonth[`${year}-${currentMonth.index}`] ?? []).filter((it) => it.page === "right")}
+              />
+            </MessyPaperPage>
+            <ItemLayer
+              items={plannerItemsByMonth[currentMonth.key] ?? []}
+              pageSide="right"
+              pageWidth={BOOK_PAGE_WIDTH}
+              pageHeight={BOOK_PAGE_HEIGHT}
+            />
+            <MessyElementsOverlay elements={DEFAULT_RIGHT_OVERLAY} />
+          </div>
+        </div>
+      </div>
 
       <AnimatePresence>
         {selectedDay && (

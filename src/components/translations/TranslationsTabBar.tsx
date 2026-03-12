@@ -33,7 +33,7 @@ export function TranslationsTabBar() {
 
   return (
     <nav
-      className="mb-8 flex gap-1 rounded-xl border border-amber-400/15 bg-white/5 p-1 backdrop-blur-sm"
+      className="mb-8 flex gap-0.5 rounded-xl border border-amber-400/15 bg-white/5 p-1 backdrop-blur-sm sm:gap-1"
       role="tablist"
     >
       {TABS.map(({ value, label, icon: Icon }) => (
@@ -43,13 +43,13 @@ export function TranslationsTabBar() {
           role="tab"
           aria-selected={tab === value}
           onClick={() => setTab(value)}
-          className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
+          className={`flex shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition sm:gap-2 sm:px-4 sm:py-2 sm:text-sm ${
             tab === value
               ? "bg-amber-500/25 text-white"
               : "text-white/70 hover:bg-white/5 hover:text-white"
           }`}
         >
-          <Icon className="h-4 w-4" />
+          <Icon className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
           {label}
         </button>
       ))}

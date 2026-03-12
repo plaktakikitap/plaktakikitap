@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { X, Tv } from "lucide-react";
 import type { ContentItem, Series } from "@/types/database";
 import { StarRatingDisplay } from "@/components/ui/StarRating";
+import { ModalPortal } from "@/components/ui/ModalPortal";
+import { getSeriesStatusLabel, getSeriesStatusLineColor } from "@/lib/utils/series-status";
 
 type SeriesItem = ContentItem & { series: Series | Series[] | null };
 
@@ -40,8 +42,11 @@ export function SeriesDetailModal({ item, onClose }: SeriesDetailModalProps) {
     series.total_duration_min ??
     (series.episodes_watched ?? 0) * (series.avg_episode_min ?? 0);
   const ratingValue = item.rating != null ? item.rating / 2 : null;
+  const statusLabel = getSeriesStatusLabel(series.status ?? null);
+  const statusLineColor = getSeriesStatusLineColor(series.status ?? null);
 
   return (
+    <ModalPortal>
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -134,6 +139,12 @@ export function SeriesDetailModal({ item, onClose }: SeriesDetailModalProps) {
             </div>
           )}
 
+          {statusLabel && (
+            <p className="mt-3 text-sm text-white/70">
+              <span className="text-white/55">Durum:</span> {statusLabel}
+            </p>
+          )}
+
           {series.review && (
             <div className="mt-4 flex-1 overflow-y-auto pr-1">
               <p className="text-xs font-semibold uppercase tracking-wider text-white/50">
@@ -150,5 +161,6 @@ export function SeriesDetailModal({ item, onClose }: SeriesDetailModalProps) {
         </div>
       </motion.div>
     </motion.div>
+    </ModalPortal>
   );
 }

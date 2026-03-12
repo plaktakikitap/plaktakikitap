@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 import type { ContentItem, Film } from "@/types/database";
 import { StarRatingDisplay } from "@/components/ui/StarRating";
 import { Film as FilmIcon } from "lucide-react";
+import { ModalPortal } from "@/components/ui/ModalPortal";
 
 type FilmItem = ContentItem & { film: Film | Film[] | null };
 
@@ -43,6 +44,7 @@ export function FilmDetailModal({ item, onClose }: FilmDetailModalProps) {
   const genreTags = film.genre_tags ?? [];
 
   return (
+    <ModalPortal>
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -161,5 +163,6 @@ export function FilmDetailModal({ item, onClose }: FilmDetailModalProps) {
         </div>
       </motion.div>
     </motion.div>
+    </ModalPortal>
   );
 }

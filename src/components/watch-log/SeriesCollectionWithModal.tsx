@@ -4,6 +4,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { ContentItem, Series } from "@/types/database";
 import { SeriesDetailModal } from "./SeriesDetailModal";
+import { getSeriesStatusLineColor } from "@/lib/utils/series-status";
+import { Tv } from "lucide-react";
 
 export type SeriesItem = ContentItem & { series: Series | Series[] | null };
 
@@ -43,6 +45,7 @@ export function SeriesCollectionWithModal({ seriesList }: SeriesCollectionWithMo
           const totalMin =
             series.total_duration_min ??
             (series.episodes_watched ?? 0) * (series.avg_episode_min ?? 0);
+          const lineColor = getSeriesStatusLineColor(series.status ?? null);
           return (
             <motion.li
               key={item.id}
@@ -55,20 +58,44 @@ export function SeriesCollectionWithModal({ seriesList }: SeriesCollectionWithMo
               <button
                 type="button"
                 onClick={() => setSelected(item)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 p-4 text-left backdrop-blur-sm transition hover:border-white/20 hover:bg-white/10"
+                className="flex w-full gap-4 rounded-xl border border-white/10 bg-white/5 p-0 text-left backdrop-blur-sm transition hover:border-white/20 hover:bg-white/10 overflow-hidden"
               >
-                <p className="font-medium text-white/95">{item.title}</p>
-                <p className="mt-1 text-xs text-white/60">
-                  {series.episodes_watched} bölüm
-                  {series.seasons_watched > 0 && ` · ${series.seasons_watched} sezon`}
-                  {series.total_seasons != null && ` / ${series.total_seasons} toplam`}
-                  {totalMin > 0 && ` · ${totalMin} dk`}
-                </p>
-                {item.description && (
-                  <p className="mt-2 line-clamp-2 text-sm text-white/70">
-                    {item.description}
+                <div className="w-20 shrink-0">
+                  <div className="aspect-[2/3] w-full overflow-hidden bg-white/5">
+                    {series.poster_url ? (
+                      <img
+                        src={series.poster_url}
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-white/40">
+                        <Tv className="h-8 w-8" />
+                      </div>
+                    )}
+                  </div>
+                  {lineColor && (
+                    <div
+                      className="h-0.5 w-full shrink-0"
+                      style={{ backgroundColor: lineColor }}
+                      aria-hidden
+                    />
+                  )}
+                </div>
+                <div className="min-w-0 flex-1 py-4 pr-4">
+                  <p className="font-medium text-white/95">{item.title}</p>
+                  <p className="mt-1 text-xs text-white/60">
+                    {series.episodes_watched} bölüm
+                    {series.seasons_watched > 0 && ` · ${series.seasons_watched} sezon`}
+                    {series.total_seasons != null && ` / ${series.total_seasons} toplam`}
+                    {totalMin > 0 && ` · ${totalMin} dk`}
                   </p>
-                )}
+                  {item.description && (
+                    <p className="mt-2 line-clamp-2 text-sm text-white/70">
+                      {item.description}
+                    </p>
+                  )}
+                </div>
               </button>
             </motion.li>
           );

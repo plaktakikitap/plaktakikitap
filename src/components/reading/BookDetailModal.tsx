@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { X, BookOpen } from "lucide-react";
 import type { Book } from "@/types/database";
 import { StarRatingDisplay } from "@/components/ui/StarRating";
 import { InkBleedText } from "@/components/planner/InkBleedText";
+import { ModalPortal } from "@/components/ui/ModalPortal";
 
 interface BookDetailModalProps {
   book: Book | null;
@@ -202,5 +203,6 @@ export function BookDetailModal({
         </div>
       </motion.div>
     </motion.div>
+    </ModalPortal>
   );
 }

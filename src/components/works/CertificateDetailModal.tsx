@@ -4,6 +4,7 @@ import { useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { X, ExternalLink, Award } from "lucide-react";
 import type { WorksItem } from "@/types/works";
+import { ModalPortal } from "@/components/ui/ModalPortal";
 
 interface CertificateDetailModalProps {
   item: WorksItem | null;
@@ -44,6 +45,7 @@ export function CertificateDetailModal({ item, onClose }: CertificateDetailModal
   const dateObtained = year || (item.created_at ? formatDate(item.created_at) : null);
 
   return (
+    <ModalPortal>
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -141,5 +143,6 @@ export function CertificateDetailModal({ item, onClose }: CertificateDetailModal
         </div>
       </motion.div>
     </motion.div>
+    </ModalPortal>
   );
 }

@@ -121,6 +121,9 @@ export async function createSeries(formData: FormData) {
   const spine_url = (formData.get("spine_url") as string)?.trim() || null;
   const is_favorite = formData.get("is_favorite") === "on" || formData.get("is_favorite") === "true";
   const favorite_order = is_favorite ? Date.now() : null;
+  const statusRaw = (formData.get("status") as string)?.trim() || null;
+  const status =
+    statusRaw === "finished" || statusRaw === "waiting" || statusRaw === "dropped" ? statusRaw : null;
 
   const { data: content, error: contentError } = await supabase
     .from("content_items")
@@ -152,6 +155,7 @@ export async function createSeries(formData: FormData) {
     spine_url: spine_url || null,
     is_favorite: is_favorite ?? false,
     favorite_order,
+    status,
   });
 
   if (seriesError) return { error: seriesError.message };

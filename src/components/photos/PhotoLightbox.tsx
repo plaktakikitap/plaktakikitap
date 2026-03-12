@@ -3,6 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ModalPortal } from "@/components/ui/ModalPortal";
 
 function formatDate(iso: string): string {
   try {
@@ -63,6 +64,7 @@ export function PhotoLightbox({
 
   return (
     <AnimatePresence>
+      <ModalPortal>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -128,6 +130,7 @@ export function PhotoLightbox({
           )}
         </motion.div>
       </motion.div>
+      </ModalPortal>
     </AnimatePresence>
   );
 }

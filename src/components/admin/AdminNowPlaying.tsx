@@ -10,6 +10,16 @@ import type { ManualNowPlayingItem } from "@/lib/db/queries";
 import { Music, Plus, Trash2, Star } from "lucide-react";
 import { useState } from "react";
 
+async function uploadMp3(file: File): Promise<string> {
+  const fd = new FormData();
+  fd.set("file", file);
+  fd.set("type", "audio");
+  const res = await fetch("/api/admin/music/upload", { method: "POST", body: fd });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Yükleme başarısız");
+  return data.url as string;
+}
+
 interface AdminNowPlayingProps {
   tracks: ManualNowPlayingItem[];
 }
@@ -18,18 +28,22 @@ export function AdminNowPlaying({ tracks }: AdminNowPlayingProps) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [audioUrl, setAudioUrl] = useState("");
+  const [uploadingAudio, setUploadingAudio] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
     setLoading(true);
     const formData = new FormData(e.currentTarget);
+    if (audioUrl) formData.set("audio_url", audioUrl);
     const result = await adminCreateManualTrack(formData);
     setLoading(false);
     if (result?.error) {
       setError(result.error);
       return;
     }
+    setAudioUrl("");
     router.refresh();
     (e.target as HTMLFormElement).reset();
   }
@@ -77,6 +91,32 @@ export function AdminNowPlaying({ tracks }: AdminNowPlayingProps) {
               className="w-full rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
               placeholder="Artist name"
             />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="mb-1 block text-sm text-[var(--muted)]">MP3 dosyası (isteğe bağlı — yüklerseniz ana sayfada play ile çalar)</label>
+            <input
+              type="file"
+              accept="audio/mpeg,audio/mp3,.mp3"
+              className="text-sm"
+              disabled={!!uploadingAudio}
+              onChange={async (e) => {
+                const f = e.target.files?.[0];
+                if (!f) return;
+                setUploadingAudio(true);
+                setError(null);
+                try {
+                  const url = await uploadMp3(f);
+                  setAudioUrl(url);
+                } catch (err) {
+                  setError(err instanceof Error ? err.message : "Yükleme başarısız");
+                } finally {
+                  setUploadingAudio(false);
+                  e.target.value = "";
+                }
+              }}
+            />
+            {uploadingAudio && <span className="ml-2 text-sm text-amber-600">Yükleniyor…</span>}
+            {audioUrl && <p className="mt-1 text-xs text-[var(--muted)]">MP3 yüklendi.</p>}
           </div>
           <div className="sm:col-span-2">
             <label className="mb-1 block text-sm text-[var(--muted)]">Spotify / dinleme linki (isteğe bağlı)</label>

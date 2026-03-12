@@ -66,6 +66,8 @@ export interface Series {
   poster_url?: string | null;
   /** DVD spine (yan yüz) görseli */
   spine_url?: string | null;
+  /** Dizi izleme durumu: bitirilmiş, devamını bekliyorum, yarıda bıraktım */
+  status?: "finished" | "waiting" | "dropped" | null;
 }
 
 /** Reading log: standalone books table (id, title, author, ...) */

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ExternalLink } from "lucide-react";
 import { parseYouTubeVideoId } from "@/lib/works-utils";
 import type { Video } from "@/types/videos";
+import { ModalPortal } from "@/components/ui/ModalPortal";
 
 interface VideoModalProps {
   video: Video | null;
@@ -45,6 +46,7 @@ export function VideoModal({ video, onClose }: VideoModalProps) {
   return (
     <AnimatePresence>
       {video && videoId && (
+        <ModalPortal>
         <motion.div
           key={video.id}
           initial={{ opacity: 0 }}
@@ -105,6 +107,7 @@ export function VideoModal({ video, onClose }: VideoModalProps) {
             </div>
           </motion.div>
         </motion.div>
+        </ModalPortal>
       )}
     </AnimatePresence>
   );

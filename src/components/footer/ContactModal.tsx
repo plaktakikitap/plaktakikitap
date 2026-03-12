@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import { ModalPortal } from "@/components/ui/ModalPortal";
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -140,6 +141,7 @@ export function ContactModal({ isOpen, onClose, mailTo }: ContactModalProps) {
             </div>
           </motion.div>
         </>
+        </ModalPortal>
       )}
     </AnimatePresence>
   );

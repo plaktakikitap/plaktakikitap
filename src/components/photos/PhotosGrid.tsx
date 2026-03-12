@@ -58,6 +58,47 @@ export function PhotosGrid({ photos, categoryFilter = null }: PhotosGridProps) {
     [filtered]
   );
 
+  /** Yükleme sırasına göre: 1. sağda, 2. solda, 3. sağda, 4. solda... */
+  const { rightCol, leftCol } = useMemo(() => {
+    const right = filtered.filter((_, i) => i % 2 === 0);
+    const left = filtered.filter((_, i) => i % 2 === 1);
+    return { rightCol: right, leftCol: left };
+  }, [filtered]);
+
+  const renderPhoto = (photo: Photo, lightboxIndex: number) => (
+    <motion.figure
+      key={photo.id}
+      layout
+      initial={{ opacity: 0, scale: 0.98 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.98 }}
+      transition={{ duration: 0.22, opacity: { duration: 0.18 } }}
+      className="group mb-3"
+    >
+      <button
+        type="button"
+        onClick={() => setLightboxIndex(lightboxIndex)}
+        className="block w-full text-left"
+      >
+        <span className="block overflow-hidden rounded-xl transition-all duration-200 group-hover:-translate-y-0.5 group-hover:opacity-95">
+          <img
+            src={photo.image_url}
+            alt={photo.caption || "Fotoğraf"}
+            className="w-full rounded-xl"
+            style={{ display: "block", verticalAlign: "middle" }}
+            sizes="50vw"
+          />
+        </span>
+      </button>
+      <figcaption className="mt-1.5 flex min-w-0 items-center justify-between gap-2 px-0.5 text-[11px] tracking-wide text-white/30 transition-opacity duration-200 md:group-hover:text-white/60">
+        <span className="min-w-0 truncate">
+          {photo.caption?.trim() || "\u00A0"}
+        </span>
+        <span className="shrink-0">{displayDate(photo)}</span>
+      </figcaption>
+    </motion.figure>
+  );
+
   return (
     <>
       {filtered.length === 0 ? (
@@ -70,44 +111,16 @@ export function PhotosGrid({ photos, categoryFilter = null }: PhotosGridProps) {
           Bu filtreye uygun fotoğraf yok.
         </motion.p>
       ) : (
-        <div
-          className="columns-2 gap-3"
-          style={{ columnGap: "12px" }}
-        >
+        <div className="grid grid-cols-2 gap-x-3">
           <AnimatePresence mode="popLayout">
-            {filtered.map((photo) => (
-              <motion.figure
-                key={photo.id}
-                layout
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.22, opacity: { duration: 0.18 } }}
-                className="group mb-3 break-inside-avoid"
-              >
-                <button
-                  type="button"
-                  onClick={() => setLightboxIndex(filtered.findIndex((p) => p.id === photo.id))}
-                  className="block w-full text-left"
-                >
-                  <span className="block overflow-hidden rounded-xl transition-all duration-200 group-hover:-translate-y-0.5 group-hover:opacity-95">
-                    <img
-                      src={photo.image_url}
-                      alt={photo.caption || "Fotoğraf"}
-                      className="w-full rounded-xl"
-                      style={{ display: "block", verticalAlign: "middle" }}
-                      sizes="50vw"
-                    />
-                  </span>
-                </button>
-                <figcaption className="mt-1.5 flex min-w-0 items-center justify-between gap-2 px-0.5 text-[11px] tracking-wide text-white/30 transition-opacity duration-200 md:group-hover:text-white/60">
-                  <span className="min-w-0 truncate">
-                    {photo.caption?.trim() || "\u00A0"}
-                  </span>
-                  <span className="shrink-0">{displayDate(photo)}</span>
-                </figcaption>
-              </motion.figure>
-            ))}
+            {/* Sol sütun: 2., 4., 6. ... fotoğraf */}
+            <div className="flex flex-col">
+              {leftCol.map((photo, i) => renderPhoto(photo, i * 2 + 1))}
+            </div>
+            {/* Sağ sütun: 1., 3., 5. ... fotoğraf */}
+            <div className="flex flex-col">
+              {rightCol.map((photo, i) => renderPhoto(photo, i * 2))}
+            </div>
           </AnimatePresence>
         </div>
       )}

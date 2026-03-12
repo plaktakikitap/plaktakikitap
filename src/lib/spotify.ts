@@ -16,6 +16,8 @@ export interface NowPlayingTrack {
   artist: string;
   duration_sec: number;
   cover_url: string | null;
+  /** Manuel yüklenen MP3; varsa play ile çalar. */
+  audio_url?: string | null;
 }
 
 /** Client Credentials ile app-only token (playlist tracks için; user scope gerekmez). */

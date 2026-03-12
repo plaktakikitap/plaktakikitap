@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { PublishedBook } from "@/types/database";
 import { ShoppingCart, X } from "lucide-react";
+import { ModalPortal } from "@/components/ui/ModalPortal";
 
 interface PublishedBooksSectionProps {
   books: PublishedBook[];
@@ -79,6 +80,7 @@ function BookDetailModal({
   onClose: () => void;
 }) {
   return (
+    <ModalPortal>
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -174,6 +176,7 @@ function BookDetailModal({
         </div>
       </motion.div>
     </motion.div>
+    </ModalPortal>
   );
 }
 

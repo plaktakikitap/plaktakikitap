@@ -3,6 +3,7 @@
 import { useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ExternalLink } from "lucide-react";
+import { ModalPortal } from "@/components/ui/ModalPortal";
 type Item = { id: string; title: string; youtube_video_id: string };
 type Props = { item: Item | null; onClose: () => void };
 
@@ -28,6 +29,7 @@ export function PlaktakiKitapPlayerModal({ item, onClose }: Props) {
 
   return (
     <AnimatePresence>
+      <ModalPortal>
       <motion.div
         key={item.id}
         initial={{ opacity: 0 }}
@@ -71,6 +73,7 @@ export function PlaktakiKitapPlayerModal({ item, onClose }: Props) {
           </div>
         </motion.div>
       </motion.div>
+      </ModalPortal>
     </AnimatePresence>
   );
 }

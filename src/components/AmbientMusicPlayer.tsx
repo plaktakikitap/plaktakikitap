@@ -145,19 +145,45 @@ export function AmbientMusicPlayer() {
       </div>
       <div className="px-4 pb-4 pt-3 sm:px-6 sm:pb-6 sm:pt-4">
         <div className="flex items-center gap-4">
-          <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-white/10">
-            {track.cover_url ? (
-              <Image
-                src={track.cover_url}
-                alt=""
-                fill
-                className="object-cover"
-                sizes="64px"
-                unoptimized
+          {/* Plak: dönen vinil + orta etiket (kapak) + merkez delik */}
+          <div className="relative flex h-16 w-16 shrink-0 items-center justify-center">
+            <div
+              className="absolute inset-0 animate-spin rounded-full"
+              style={{
+                animationDuration: "2.8s",
+                background: `
+                  radial-gradient(circle at 30% 30%, rgba(255,255,255,0.06) 0%, transparent 50%),
+                  repeating-radial-gradient(circle at center, transparent 0, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 3px),
+                  radial-gradient(circle at 70% 70%, rgba(0,0,0,0.4) 0%, transparent 45%),
+                  linear-gradient(145deg, #1a1a1a 0%, #0d0d0d 40%, #151515 100%)
+                `,
+                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), inset 0 -2px 8px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.4)",
+              }}
+            />
+            <div
+              className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full"
+              style={{
+                boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08), 0 1px 3px rgba(0,0,0,0.3)",
+                background: track.cover_url ? undefined : "linear-gradient(145deg, #2d2520 0%, #1a1512 100%)",
+              }}
+            >
+              {track.cover_url ? (
+                <Image
+                  src={track.cover_url}
+                  alt=""
+                  fill
+                  className="object-cover"
+                  sizes="48px"
+                  unoptimized
+                />
+              ) : (
+                <span className="text-[0.6rem] font-medium text-amber-200/40">♪</span>
+              )}
+              <div
+                className="absolute left-1/2 top-1/2 z-10 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-950 ring-2 ring-neutral-800"
+                style={{ boxShadow: "inset 0 1px 1px rgba(0,0,0,0.8)" }}
               />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center text-2xl text-white/30">♪</div>
-            )}
+            </div>
           </div>
           <div className="min-w-0 flex-1">
             <p className="truncate font-medium text-white/90">{track.title}</p>
