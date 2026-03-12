@@ -35,39 +35,57 @@ export interface MusicCurrentState {
   currentTrack: MusicTrackPublic | null;
 }
 
-/** Aktif parçaları sırayla döndürür (public okuma). */
+/** Aktif parçaları sırayla döndürür (public okuma). Tablo yoksa veya hata olursa boş dizi. */
 export async function getMusicTracks(): Promise<MusicTrackPublic[]> {
-  const supabase = await createServerClient();
-  const { data } = await supabase
-    .from("music_tracks")
-    .select("id, title, artist, audio_url, cover_url, duration_sec, order_index")
-    .eq("is_active", true)
-    .order("order_index", { ascending: true });
-  const rows = (data ?? []) as MusicTrackRow[];
-  return rows.map((r) => ({
-    id: r.id,
-    title: r.title,
-    artist: r.artist,
-    audio_url: r.audio_url,
-    cover_url: r.cover_url,
-    duration_sec: r.duration_sec || 0,
-    order_index: r.order_index,
-  }));
+  try {
+    const supabase = await createServerClient();
+    const { data, error } = await supabase
+      .from("music_tracks")
+      .select("id, title, artist, audio_url, cover_url, duration_sec, order_index")
+      .eq("is_active", true)
+      .order("order_index", { ascending: true });
+    if (error) return [];
+    const rows = (data ?? []) as MusicTrackRow[];
+    return rows.map((r) => ({
+      id: r.id,
+      title: r.title,
+      artist: r.artist,
+      audio_url: r.audio_url,
+      cover_url: r.cover_url,
+      duration_sec: r.duration_sec || 0,
+      order_index: r.order_index,
+    }));
+  } catch {
+    return [];
+  }
 }
 
 /**
  * Sunucu zamanına göre “şu an hangi parça, kaçıncı saniyede” hesaplar.
  * startedAt yoksa veya track yoksa currentTrackIndex 0, currentOffsetSec 0.
+ * Tablo yoksa / hata olursa boş state döner (ana sayfa düşmez).
  */
 export async function getMusicCurrentState(
   serverTimeMs?: number
 ): Promise<MusicCurrentState> {
   const now = serverTimeMs ?? Date.now();
-  const tracks = await getMusicTracks();
-  const settings = await getSiteSettings();
-  const startedAt = settings.music_playlist_started_at
-    ? new Date(settings.music_playlist_started_at).getTime()
-    : null;
+  const emptyState: MusicCurrentState = {
+    serverTime: new Date(now).toISOString(),
+    startedAt: null,
+    tracks: [],
+    playlistDurationSec: 0,
+    currentTrackIndex: 0,
+    currentOffsetSec: 0,
+    currentTrack: null,
+  };
+  try {
+    const [tracks, settings] = await Promise.all([
+      getMusicTracks(),
+      getSiteSettings(),
+    ]);
+    const startedAt = settings.music_playlist_started_at
+      ? new Date(settings.music_playlist_started_at).getTime()
+      : null;
 
   const playlistDurationSec = tracks.reduce((s, t) => s + Math.max(0, t.duration_sec), 0);
 
@@ -110,4 +128,7 @@ export async function getMusicCurrentState(
     currentOffsetSec: Math.max(0, offsetInTrack),
     currentTrack: tracks[currentIndex] ?? null,
   };
+  } catch {
+    return emptyState;
+  }
 }
