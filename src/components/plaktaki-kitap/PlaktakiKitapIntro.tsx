@@ -63,8 +63,8 @@ export function PlaktakiKitapIntro({ settings }: PlaktakiKitapIntroProps) {
         )}
       </div>
 
-      {/* Açıklamanın hemen altı: butonlar solda, yuvarlak sağda */}
-      <div className="mt-1 flex flex-wrap items-start justify-between gap-2">
+      {/* Açıklamanın hemen altı: butonlar tek satır (kısa), yuvarlak ayrı satırda */}
+      <div className="mt-1">
         <div className="flex flex-wrap items-center gap-2">
           {settings.youtube_channel_url && (
             <a
@@ -90,8 +90,8 @@ export function PlaktakiKitapIntro({ settings }: PlaktakiKitapIntroProps) {
           )}
         </div>
 
-        {/* Yuvarlak abone kutusu — açıklamanın sağ altında */}
-        <div className="flex shrink-0 justify-end">
+        {/* Yuvarlak abone kutusu — butonların hemen altında, sağa hizalı */}
+        <div className="mt-2 flex justify-end sm:mt-3">
           <div
             className="relative flex h-40 w-40 items-center justify-center sm:h-52 sm:w-52"
             aria-label={subscriberCount != null ? `${subscriberCount.toLocaleString("tr-TR")} abone` : "Ailemiz büyüyor"}
