@@ -9,6 +9,91 @@ export interface SpotifyNowPlaying {
   trackUrl: string | null;
 }
 
+/** Şu an dinliyorum kartında gösterilecek track (playlist veya manual). */
+export interface NowPlayingTrack {
+  id: string;
+  title: string;
+  artist: string;
+  duration_sec: number;
+  cover_url: string | null;
+}
+
+/** Client Credentials ile app-only token (playlist tracks için; user scope gerekmez). */
+async function getClientCredentialsToken(): Promise<string | null> {
+  const clientId = process.env.SPOTIFY_CLIENT_ID;
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+  if (!clientId || !clientSecret) return null;
+
+  const basic = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
+  const res = await fetch("https://accounts.spotify.com/api/token", {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${basic}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({ grant_type: "client_credentials" }),
+    cache: "no-store",
+  });
+  const data = await res.json();
+  return (data.access_token as string) ?? null;
+}
+
+/**
+ * Public playlist'ten track listesi döner (Client Credentials).
+ * Ana sayfada "Şu an dinliyorum" için kullanılır; playlist iframe gösterilmez, sadece şarkı bilgisi.
+ */
+export async function getPlaylistTracksForNowPlaying(
+  playlistId: string
+): Promise<NowPlayingTrack[]> {
+  const token = await getClientCredentialsToken();
+  if (!token || !playlistId.trim()) return [];
+
+  try {
+    const all: NowPlayingTrack[] = [];
+    let offset = 0;
+    const limit = 50;
+
+    while (true) {
+      const res = await fetch(
+        `https://api.spotify.com/v1/playlists/${encodeURIComponent(playlistId.trim())}/tracks?limit=${limit}&offset=${offset}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          cache: "no-store",
+        }
+      );
+      if (!res.ok) break;
+      const json = (await res.json()) as {
+        items?: Array<{
+          track?: {
+            id?: string;
+            name?: string;
+            artists?: Array<{ name?: string }>;
+            duration_ms?: number;
+            album?: { images?: Array<{ url?: string }> };
+          } | null;
+        }>;
+      };
+      const items = json.items ?? [];
+      for (const it of items) {
+        const t = it.track;
+        if (!t?.id || !t.name) continue;
+        all.push({
+          id: t.id,
+          title: t.name,
+          artist: (t.artists ?? []).map((a) => a.name ?? "").filter(Boolean).join(", ") || "—",
+          duration_sec: Math.round((t.duration_ms ?? 0) / 1000) || 180,
+          cover_url: t.album?.images?.[0]?.url ?? null,
+        });
+      }
+      if (items.length < limit) break;
+      offset += limit;
+    }
+    return all;
+  } catch {
+    return [];
+  }
+}
+
 async function getAccessToken(): Promise<string | null> {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;

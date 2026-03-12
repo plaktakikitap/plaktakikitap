@@ -22,21 +22,21 @@ export function TranslationsHero({ settings }: { settings: TranslationsSettingsR
       className="mb-14"
     >
       <div
-        className="relative max-w-3xl rounded-xl px-6 py-8 sm:px-10 sm:py-10"
+        className="relative w-full rounded-xl px-6 py-8 sm:px-10 sm:py-10"
         style={glassStyle}
       >
         <div className="absolute inset-0 pointer-events-none rounded-xl border border-amber-400/20" aria-hidden />
         <div className="relative">
-          <div className="font-serif text-base leading-relaxed text-white/95 sm:text-lg max-w-none">
+          <div className="font-serif text-sm italic leading-relaxed text-white/75 sm:text-base max-w-none">
             {settings.intro_body.split("\n").map((p, i) => (
-              <p key={i} className={i > 0 ? "mt-4" : ""}>
+              <p key={i} className={i > 0 ? "mt-3" : ""}>
                 {p}
               </p>
             ))}
           </div>
           {settings.intro_signature?.trim() && (
             <p
-              className="mt-6 text-right text-lg text-amber-800/90 dark:text-amber-200/90"
+              className="mt-5 text-right text-base italic text-amber-800/80 dark:text-amber-200/80"
               style={{ fontFamily: "var(--font-handwriting), cursive" }}
             >
               — {settings.intro_signature}

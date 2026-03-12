@@ -23,6 +23,8 @@ export interface SiteSettingsValue {
   intro_photo_plaktakikitap_url?: string | null;
   intro_title?: string | null;
   intro_subtitle?: string | null;
+  /** Senkron ambient müzik: playlist’in “başladığı” an (ISO string). Herkes bu andan itibaren aynı pozisyonda dinler. */
+  music_playlist_started_at?: string | null;
 }
 
 const DEFAULTS: SiteSettingsValue = {
@@ -40,6 +42,7 @@ const DEFAULTS: SiteSettingsValue = {
   intro_photo_plaktakikitap_url: "/images/plaktakikitap.jpeg",
   intro_title: "Hoş geldiniz, ben Eymen!",
   intro_subtitle: "yanii... nam-ı diğer Plaktaki Kitap",
+  music_playlist_started_at: null,
 };
 
 async function getSiteSettingsUncached(): Promise<SiteSettingsValue> {

@@ -1,9 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 import { supabaseServer } from "@/lib/supabase-server";
+import { getPlaylistTracksForNowPlaying } from "@/lib/spotify";
 import ManualNowPlaying from "./ManualNowPlaying";
+import type { NowPlayingTrack } from "@/lib/spotify";
 
 /** Admin panelde eklenen şarkılar manual_now_playing tablosunda; sırayla gösterilmek üzere buradan alıyoruz. */
-async function getNowTracks() {
+async function getNowTracks(): Promise<NowPlayingTrack[]> {
   const supabase = await supabaseServer();
   const { data } = await supabase
     .from("manual_now_playing")
@@ -15,7 +18,7 @@ async function getNowTracks() {
     id: r.id,
     title: r.title,
     artist: r.artist,
-    duration_sec: 180 as number | null,
+    duration_sec: 180,
     cover_url: r.album_art_url,
   }));
 }
@@ -58,10 +61,25 @@ function GlassCard({
 }
 
 export default async function NowPanel() {
-  const [tracks, reading] = await Promise.all([
-    getNowTracks(),
+  const [musicState, playlistId, reading] = await Promise.all([
+    getMusicCurrentState(),
+    Promise.resolve((process.env.SPOTIFY_PLAYLIST_ID ?? "").trim()),
     getReading(),
   ]);
+  const useAmbient =
+    musicState.tracks.length > 0 &&
+    musicState.startedAt != null &&
+    musicState.startedAt !== "";
+
+  const playlistTracks =
+    playlistId.length > 0 ? await getPlaylistTracksForNowPlaying(playlistId) : [];
+  const tracks =
+    playlistTracks.length > 0
+      ? playlistTracks
+      : await getNowTracks();
+  const playlistUrl = playlistId
+    ? `https://open.spotify.com/playlist/${playlistId}`
+    : null;
 
   const readingTitle = reading ? "Şu an okuyorum:" : "En son okuduğum:";
 
@@ -72,10 +90,26 @@ export default async function NowPanel() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
-        {/* Şu an dinliyorum — admin panelden eklenenler (manual_now_playing) */}
-        <GlassCard title="Şu an dinliyorum:">
-          <ManualNowPlaying tracks={tracks} />
-        </GlassCard>
+        {/* Şu an dinliyorum — ambient senkron veya Spotify/manuel liste */}
+        {useAmbient ? (
+          <AmbientMusicPlayer />
+        ) : (
+          <GlassCard title="Şu an dinliyorum:">
+            <ManualNowPlaying tracks={tracks} />
+            {playlistUrl && tracks.length > 0 && (
+              <p className="mt-3 text-center">
+                <Link
+                  href={playlistUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-white/60 underline decoration-white/30 hover:text-white/80"
+                >
+                  Playlisti Spotify&apos;da dinle
+                </Link>
+              </p>
+            )}
+          </GlassCard>
+        )}
 
         {/* Reading */}
         <GlassCard title={readingTitle}>

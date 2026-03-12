@@ -944,3 +944,91 @@ export async function adminReorderSocialLinks(
   }
   return { success: true };
 }
+
+// --- Ambient music (senkron çalma listesi) ---
+
+export async function adminCreateMusicTrack(formData: FormData) {
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const supabase = createAdminClient();
+  const title = (formData.get("title") as string)?.trim();
+  const artist = (formData.get("artist") as string)?.trim();
+  const audio_url = (formData.get("audio_url") as string)?.trim();
+  const cover_url = (formData.get("cover_url") as string)?.trim() || null;
+  const duration_sec = Math.max(0, parseInt((formData.get("duration_sec") as string) || "0", 10));
+  const order_index = parseInt((formData.get("order_index") as string) || "0", 10);
+
+  if (!title) return { error: "Şarkı adı gerekli" };
+  if (!artist) return { error: "Sanatçı gerekli" };
+  if (!audio_url) return { error: "MP3 dosyası yükleyin" };
+
+  const { error } = await supabase.from("music_tracks").insert({
+    title,
+    artist,
+    audio_url,
+    cover_url,
+    duration_sec,
+    order_index,
+    is_active: true,
+  });
+  if (error) return { error: error.message };
+  revalidatePath("/secretgate/music");
+  revalidatePath("/");
+  return { success: true };
+}
+
+export async function adminUpdateMusicTrack(id: string, formData: FormData) {
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const supabase = createAdminClient();
+  const title = (formData.get("title") as string)?.trim();
+  const artist = (formData.get("artist") as string)?.trim();
+  const audio_url = (formData.get("audio_url") as string)?.trim();
+  const cover_url = (formData.get("cover_url") as string)?.trim() || null;
+  const duration_sec = Math.max(0, parseInt((formData.get("duration_sec") as string) || "0", 10));
+  const order_index = parseInt((formData.get("order_index") as string) || "0", 10);
+  const is_active = formData.get("is_active") === "on";
+
+  if (!title) return { error: "Şarkı adı gerekli" };
+  if (!artist) return { error: "Sanatçı gerekli" };
+  if (!audio_url) return { error: "MP3 URL gerekli" };
+
+  const { error } = await supabase
+    .from("music_tracks")
+    .update({ title, artist, audio_url, cover_url, duration_sec, order_index, is_active })
+    .eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/secretgate/music");
+  revalidatePath("/");
+  return { success: true };
+}
+
+export async function adminDeleteMusicTrack(id: string) {
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("music_tracks").delete().eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/secretgate/music");
+  revalidatePath("/");
+  return { success: true };
+}
+
+export async function adminReorderMusicTracks(orderedIds: string[]) {
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const supabase = createAdminClient();
+  for (let i = 0; i < orderedIds.length; i++) {
+    await supabase.from("music_tracks").update({ order_index: i }).eq("id", orderedIds[i]);
+  }
+  revalidatePath("/secretgate/music");
+  revalidatePath("/");
+  return { success: true };
+}
+
+export async function adminStartMusicPlaylist() {
+  const { updateSiteSettings } = await import("@/lib/site-settings");
+  const result = await updateSiteSettings({
+    music_playlist_started_at: new Date().toISOString(),
+  });
+  if ("error" in result) return { error: result.error };
+  revalidatePath("/secretgate/music");
+  revalidatePath("/");
+  return { success: true };
+}

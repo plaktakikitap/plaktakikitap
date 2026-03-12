@@ -178,6 +178,19 @@ export interface TranslationVolunteerProjectRow {
   created_at: string;
 }
 
+/** Senkron ambient müzik: admin yüklediği parçalar (MP3 + kapak). */
+export interface MusicTrackRow {
+  id: string;
+  title: string;
+  artist: string;
+  audio_url: string;
+  cover_url: string | null;
+  duration_sec: number;
+  order_index: number;
+  is_active: boolean;
+  created_at: string;
+}
+
 export interface MediaAsset {
   id: string;
   content_id: string | null;

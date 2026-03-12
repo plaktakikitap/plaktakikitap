@@ -37,6 +37,7 @@ const adminLinks = [
   { href: "/secretgate/movie-watch-log", label: "Film izleme günlüğü", icon: Film },
   { href: "/secretgate/series-watch-log", label: "Dizi izleme günlüğü", icon: Tv },
   { href: "/secretgate/now-playing", label: "Şu an dinliyorum", icon: Music },
+  { href: "/secretgate/music", label: "Ambient müzik", icon: Music },
   { href: "/secretgate/reading", label: "Şu an okuyorum", icon: BookOpen },
   { href: "/secretgate/reading-log", label: "Okuma günlüğü", icon: BookMarked },
   { href: "/secretgate/translations", label: "Çeviriler", icon: Languages },

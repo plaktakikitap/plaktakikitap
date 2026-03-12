@@ -90,7 +90,7 @@ export default function ManualNowPlaying({
           >
             <div className="h-full w-full rounded-full border-2 border-white/10 bg-gradient-to-br from-neutral-700 to-neutral-900 shadow-inner" />
           </div>
-          {/* Sabit merkez: kapak (plak ortasını örter) */}
+          {/* Sabit merkez: kapak veya kapak yoksa dönen plak */}
           <div className="relative z-10 h-12 w-12 overflow-hidden rounded-full border-2 border-neutral-600 bg-neutral-800 shadow-inner ring-2 ring-neutral-900">
             {track.cover_url ? (
               <Image
@@ -102,9 +102,18 @@ export default function ManualNowPlaying({
                 unoptimized
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-white/30 text-xs">
-                ?
-              </div>
+              /* Kapak yok (manuel liste): dönen plak — şarkı çalıyor hissi */
+              <>
+                <div
+                  className="absolute inset-0 rounded-full animate-spin"
+                  style={{ animationDuration: "2.5s" }}
+                >
+                  <div className="h-full w-full rounded-full bg-gradient-to-br from-neutral-600 to-neutral-800 shadow-inner" />
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="h-5 w-5 rounded-full border border-neutral-700 bg-neutral-900 shadow-inner" />
+                </div>
+              </>
             )}
           </div>
         </div>
