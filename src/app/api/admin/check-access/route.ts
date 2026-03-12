@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase/server";
-
-const getAdminAllowedEmails = (): string[] =>
-  (process.env.ADMIN_ALLOWED_EMAIL ?? "")
-    .split(",")
-    .map((e) => e.trim().replace(/^["']|["']$/g, "").toLowerCase())
-    .filter(Boolean);
+import {
+  isAllowedAdminEmail,
+  getNormalizedAllowedEmails,
+  normalizeUserEmail,
+} from "@/lib/admin/isAllowedAdminEmail";
 
 /** Supabase ile giriş yapan kullanıcının admin izinli e-posta listesinde olup olmadığını kontrol eder. */
 export async function GET(req: NextRequest) {
@@ -19,14 +18,20 @@ export async function GET(req: NextRequest) {
     user = userFromToken ?? null;
   }
 
-  const allowed = getAdminAllowedEmails();
-  const userEmail = user?.email?.trim().toLowerCase();
-  const ok = !!userEmail && allowed.length > 0 && allowed.includes(userEmail);
-  if (!ok && process.env.NODE_ENV !== "production") {
-    console.log("ADMIN_CHECK: ADMIN_ALLOWED_EMAIL (raw):", process.env.ADMIN_ALLOWED_EMAIL);
-    console.log("ADMIN_CHECK: allowed list:", allowed);
-    console.log("ADMIN_CHECK: logged user email:", user?.email);
-    console.log("ADMIN_CHECK: normalized user email:", userEmail);
+  const ok = isAllowedAdminEmail(user?.email);
+
+  const body: Record<string, unknown> = {
+    ok,
+    email: ok ? user!.email : undefined,
+  };
+
+  if (process.env.NODE_ENV !== "production") {
+    body.allowedRaw = process.env.ADMIN_ALLOWED_EMAIL ?? "";
+    body.allowedNormalized = getNormalizedAllowedEmails();
+    body.userEmailRaw = user?.email ?? null;
+    body.userEmailNormalized = normalizeUserEmail(user?.email) || null;
+    body.isAllowed = ok;
   }
-  return NextResponse.json({ ok, email: ok ? user!.email : undefined });
+
+  return NextResponse.json(body);
 }

@@ -1,11 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
-
-const getAdminAllowedEmails = (): string[] =>
-  (process.env.ADMIN_ALLOWED_EMAIL ?? "")
-    .split(",")
-    .map((e) => e.trim().replace(/^["']|["']$/g, "").toLowerCase())
-    .filter(Boolean);
+import { isAllowedAdminEmail } from "@/lib/admin/isAllowedAdminEmail";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -21,10 +16,7 @@ export async function middleware(request: NextRequest) {
       return response;
     }
     const isCookieAuth = request.cookies.get("pk_admin")?.value === "1";
-    const allowedEmails = getAdminAllowedEmails();
-    const userEmail = user?.email?.trim().toLowerCase();
-    const isSupabaseAdmin =
-      !!userEmail && allowedEmails.length > 0 && allowedEmails.includes(userEmail);
+    const isSupabaseAdmin = isAllowedAdminEmail(user?.email);
     if (isCookieAuth || isSupabaseAdmin) {
       return response;
     }
