@@ -139,7 +139,7 @@ export function RichTextEditor({ value, onChange, placeholder = "İçerik yazın
         {showLinkInput ? (
           <span className="flex items-center gap-1">
             <input
-              type="url"
+              type="text"
               value={linkUrl}
               onChange={(e) => setLinkUrl(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), setLink())}

@@ -246,7 +246,7 @@ export function AdminWorksPanel({
           </div>
           <div className="min-w-[200px] flex-1">
             <label className={labelClass}>YouTube URL</label>
-            <input name="youtube_url" type="url" className={inputClass} placeholder="https://youtube.com/..." required />
+            <input name="youtube_url" type="text" className={inputClass} placeholder="https://youtube.com/..." required />
           </div>
           <button type="submit" className={btnClass} disabled={loading}><Plus className="mr-1 inline h-4 w-4" /> Ekle</button>
         </form>
@@ -312,7 +312,7 @@ export function AdminWorksPanel({
           </div>
           <div>
             <label className={labelClass}>Link URL (İncele)</label>
-            <input name="link_url" type="url" className={inputClass} placeholder="https://..." />
+            <input name="link_url" type="text" className={inputClass} placeholder="https://..." />
           </div>
           <button type="submit" className={btnClass} disabled={loading}><Plus className="mr-1 inline h-4 w-4" /> Ekle</button>
         </form>
@@ -344,7 +344,7 @@ export function AdminWorksPanel({
           </div>
           <div className="min-w-[160px]">
             <label className={labelClass}>Link (isteğe bağlı)</label>
-            <input name="link_url" type="url" className={inputClass} placeholder="https://..." />
+            <input name="link_url" type="text" className={inputClass} placeholder="https://..." />
           </div>
           <button type="submit" className={btnClass} disabled={loading}><Plus className="mr-1 inline h-4 w-4" /> Ekle</button>
         </form>
@@ -397,7 +397,7 @@ export function AdminWorksPanel({
           <div className="min-w-[280px] flex-1">
             <label className={labelClass}>CV PDF URL</label>
             <input
-              type="url"
+              type="text"
               className={inputClass}
               value={cvUrl}
               onChange={(e) => setCvUrl(e.target.value)}

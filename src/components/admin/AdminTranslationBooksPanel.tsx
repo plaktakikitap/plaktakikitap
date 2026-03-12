@@ -111,7 +111,7 @@ export function AdminTranslationBooksPanel({ books }: { books: TranslationBookRo
           </div>
           <div className="sm:col-span-2">
             <label className={labelClass}>Amazon URL</label>
-            <input name="amazon_url" type="url" className={inputClass} placeholder="https://..." />
+            <input name="amazon_url" type="text" className={inputClass} placeholder="https://..." />
           </div>
           <div>
             <label className={labelClass}>Kaynak dil</label>

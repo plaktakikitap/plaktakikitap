@@ -6,7 +6,7 @@ import { ExternalLink, Eye } from "lucide-react";
 const PREVIEW_PATHS = [
   { path: "/", label: "Ana Sayfa" },
   { path: "/planner", label: "Ajanda" },
-  { path: "/okuma-gunlugum", label: "Okuma Günlüğü" },
+  { path: "/readings", label: "Okuma Günlüğü" },
   { path: "/izleme-gunlugum", label: "İzleme Günlüğü" },
 ] as const;
 

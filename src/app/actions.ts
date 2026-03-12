@@ -222,7 +222,7 @@ export async function createBook(formData: FormData) {
   if (insertError) return { error: insertError.message };
   revalidatePath("/");
   revalidatePath("/books");
-  revalidatePath("/okuma-gunlugum");
+  revalidatePath("/readings");
   revalidatePath("/secretgate");
   revalidatePath("/secretgate/books");
   revalidatePath("/secretgate/reading-log");
@@ -291,7 +291,7 @@ export async function updateBook(id: string, formData: FormData) {
   if (error) return { error: error.message };
   revalidatePath("/");
   revalidatePath("/books");
-  revalidatePath("/okuma-gunlugum");
+  revalidatePath("/readings");
   revalidatePath("/secretgate");
   revalidatePath("/secretgate/books");
   revalidatePath("/secretgate/reading-log");
@@ -311,7 +311,7 @@ export async function deleteContent(id: string, type: "film" | "series" | "book"
   revalidatePath("/");
   revalidatePath("/cinema");
   revalidatePath("/books");
-  revalidatePath("/okuma-gunlugum");
+  revalidatePath("/readings");
   revalidatePath("/secretgate");
   revalidatePath(`/secretgate/${type}s`);
   return { success: true };

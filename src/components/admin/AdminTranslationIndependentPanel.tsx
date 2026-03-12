@@ -103,11 +103,11 @@ export function AdminTranslationIndependentPanel({ items }: { items: Translation
           </div>
           <div className="sm:col-span-2">
             <label className={labelClass}>external_url</label>
-            <input name="external_url" type="url" className={inputClass} placeholder="https://..." />
+            <input name="external_url" type="text" className={inputClass} placeholder="https://..." />
           </div>
           <div className="sm:col-span-2">
             <label className={labelClass}>PDF (URL veya dosya yükle)</label>
-            <input name="file_url" type="url" className={inputClass} placeholder="https://..." />
+            <input name="file_url" type="text" className={inputClass} placeholder="https://..." />
             <input name="file_file" type="file" accept=".pdf,application/pdf" className="mt-2 text-sm" />
           </div>
           <div className="sm:col-span-2">

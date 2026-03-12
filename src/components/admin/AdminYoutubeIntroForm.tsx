@@ -61,7 +61,7 @@ export function AdminYoutubeIntroForm({
         <input
           id="youtube_channel_url"
           name="youtube_channel_url"
-          type="url"
+          type="text"
           defaultValue={initialChannelUrl}
           placeholder="https://www.youtube.com/@..."
           className={inputClass}
@@ -88,7 +88,7 @@ export function AdminYoutubeIntroForm({
         <input
           id="spotify_url"
           name="spotify_url"
-          type="url"
+          type="text"
           defaultValue={initialSpotifyUrl}
           placeholder="https://open.spotify.com/show/..."
           className={inputClass}

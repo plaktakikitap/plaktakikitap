@@ -3,6 +3,7 @@ import Link from "next/link";
 import { supabaseServer } from "@/lib/supabase-server";
 import { getPlaylistTracksForNowPlaying } from "@/lib/spotify";
 import { getMusicCurrentState } from "@/lib/music";
+import { getCurrentReading } from "@/lib/db/queries";
 import ManualNowPlaying from "./ManualNowPlaying";
 import { AmbientMusicPlayer } from "./AmbientMusicPlayer";
 import type { NowPlayingTrack } from "@/lib/spotify";
@@ -25,25 +26,6 @@ async function getNowTracks(): Promise<NowPlayingTrack[]> {
   }));
 }
 
-async function getReading() {
-  const supabase = await supabaseServer();
-  const { data } = await supabase
-    .from("books")
-    .select("title, author, cover_url, progress_percent, last_progress_update_at")
-    .eq("status", "reading")
-    .order("last_progress_update_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
-  if (!data) return null;
-  return {
-    book_title: data.title,
-    author: data.author,
-    cover_url: data.cover_url,
-    note: null,
-    updated_at: data.last_progress_update_at,
-  };
-}
 
 function GlassCard({
   title,
@@ -63,11 +45,20 @@ function GlassCard({
 }
 
 export default async function NowPanel() {
-  const [musicState, playlistId, reading] = await Promise.all([
+  const [musicState, playlistId, readingBook] = await Promise.all([
     getMusicCurrentState(),
     Promise.resolve((process.env.SPOTIFY_PLAYLIST_ID ?? "").trim()),
-    getReading(),
+    getCurrentReading(),
   ]);
+  const reading = readingBook
+    ? {
+        book_title: readingBook.title,
+        author: readingBook.author,
+        cover_url: readingBook.cover_url,
+        note: null,
+        updated_at: readingBook.last_progress_update_at,
+      }
+    : null;
   const useAmbient =
     musicState.tracks.length > 0 &&
     musicState.startedAt != null &&

@@ -102,7 +102,7 @@ export function AdminNormalVideosSection({ videos }: { videos: Video[] }) {
         </div>
         <div>
           <label className={labelClass}>YouTube URL *</label>
-          <input name="youtube_url" type="url" required placeholder="https://www.youtube.com/watch?v=..." className={inputClass} />
+          <input name="youtube_url" type="text" required placeholder="https://www.youtube.com/watch?v=..." className={inputClass} />
         </div>
         <div>
           <label className={labelClass}>Özel Thumbnail</label>
@@ -176,7 +176,7 @@ function EditForm({
     >
       <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Başlık" className={inputClass} />
       <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} placeholder="Açıklama" className={inputClass} />
-      <input type="url" value={youtube_url} onChange={(e) => setYoutubeUrl(e.target.value)} placeholder="YouTube URL" className={inputClass} />
+      <input type="text" value={youtube_url} onChange={(e) => setYoutubeUrl(e.target.value)} placeholder="YouTube URL" className={inputClass} />
       <AdminImageUpload
         name="thumbnail_url"
         value={thumbnail_url}

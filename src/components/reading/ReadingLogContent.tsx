@@ -17,6 +17,7 @@ interface ReadingLogContentProps {
   books: Book[];
   currentReading: Book | null;
   readingCount: number;
+  totalBookCount?: number;
   goal: ReadingGoal | null;
 }
 
@@ -45,7 +46,7 @@ export function ReadingLogContent({
 
       <section className="mt-12">
         <h2 className="mb-4 font-editorial text-xl font-medium text-white/90">
-          Kitaplık
+          Kitaplık{totalBookCount != null ? ` (${totalBookCount})` : ""}
         </h2>
         <p className="mb-4 text-sm text-white/60">
           Kitaplar sırt görünümüyle; genişlik sayfa sayısına göre değişir. Bir kitaba tıklayın.

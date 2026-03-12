@@ -1,56 +1,6 @@
-import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
-import { PageHeader } from "@/components/layout/PageHeader";
-import { ReadingLogContent } from "@/components/reading/ReadingLogContent";
-import {
-  getPublicBooks,
-  getCurrentReading,
-  getReadingGoal,
-  getReadingCount,
-} from "@/lib/db/queries";
+import { redirect } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-
-export default async function OkumaGunlugumPage() {
-  let books: Awaited<ReturnType<typeof getPublicBooks>> = [];
-  let currentReading: Awaited<ReturnType<typeof getCurrentReading>> = null;
-  let goal: Awaited<ReturnType<typeof getReadingGoal>> = null;
-  let readingCount = 0;
-
-  try {
-    [books, currentReading, goal, readingCount] = await Promise.all([
-      getPublicBooks(),
-      getCurrentReading(),
-      getReadingGoal(),
-      getReadingCount(),
-    ]);
-  } catch (error) {
-    // Supabase not configured or DB error — show empty state
-    console.error("Reading log data fetch error:", error);
-  }
-
-  /* Rafta soldan sağa: en eskiden en yeniye */
-  const booksOldestFirst = [...books].reverse();
-
-  return (
-    <PageTransitionTarget layoutId="card-/okuma-gunlugum">
-      <main className="relative min-h-screen text-white">
-        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
-          <PageHeader
-            layoutId="nav-/okuma-gunlugum"
-            title="Okuma Günlüğüm"
-            titleClassName="!text-white font-bold"
-            subtitle="şu an okuduklarım ve yıllık hedefim"
-            subtitleClassName="text-white/70"
-          />
-
-          <ReadingLogContent
-            books={booksOldestFirst}
-            currentReading={currentReading}
-            readingCount={readingCount}
-            goal={goal}
-          />
-        </div>
-      </main>
-    </PageTransitionTarget>
-  );
+/** Eski URL: /okuma-gunlugum → /readings */
+export default function OkumaGunlugumRedirect() {
+  redirect("/readings");
 }

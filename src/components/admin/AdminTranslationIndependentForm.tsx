@@ -49,11 +49,11 @@ export function AdminTranslationIndependentForm({ item }: { item: TranslationInd
       </div>
       <div>
         <label className={labelClass}>external_url</label>
-        <input name="external_url" type="url" defaultValue={item.external_url ?? ""} className={inputClass} />
+        <input name="external_url" type="text" defaultValue={item.external_url ?? ""} className={inputClass} />
       </div>
       <div>
         <label className={labelClass}>file_url (veya yeni PDF yükle)</label>
-        <input name="file_url" type="url" defaultValue={item.file_url ?? ""} className={inputClass} />
+        <input name="file_url" type="text" defaultValue={item.file_url ?? ""} className={inputClass} />
         <input name="file_file" type="file" accept=".pdf,application/pdf" className="mt-2 text-sm" />
       </div>
       <div>

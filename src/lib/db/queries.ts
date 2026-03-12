@@ -26,15 +26,15 @@ export const createFilmSchema = z.object({
   duration_min: z.number().int().positive("Süre gerekli"),
   year: z.number().int().min(1900).max(2100).optional().nullable(),
   poster_url: z
-    .union([z.literal(""), z.string().url()])
+    .string()
     .optional()
     .nullable()
-    .transform((v) => (v && v.trim() ? v : null)),
+    .transform((v) => (v && v.trim() ? v.trim() : null)),
   spine_url: z
-    .union([z.literal(""), z.string().url()])
+    .string()
     .optional()
     .nullable()
-    .transform((v) => (v && v.trim() ? v : null)),
+    .transform((v) => (v && v.trim() ? v.trim() : null)),
   review: z.string().optional().nullable(),
   director: z.string().optional().nullable().transform((v) => (v && v.trim() ? v.trim() : null)),
   genre_tags: z.array(z.string()).optional().default([]),
@@ -64,10 +64,10 @@ export const createBookSchema = z.object({
   quote: z.string().optional().nullable(),
   review: z.string().optional().nullable(),
   cover_url: z
-    .union([z.literal(""), z.string().url()])
+    .string()
     .optional()
     .nullable()
-    .transform((v) => (v && v.trim() ? v : null)),
+    .transform((v) => (v && v.trim() ? v.trim() : null)),
   spine_url: z
     .string()
     .optional()
@@ -557,7 +557,7 @@ export async function deleteContentItem(
   revalidatePath("/");
   revalidatePath("/cinema");
   revalidatePath("/books");
-  revalidatePath("/okuma-gunlugum");
+  revalidatePath("/readings");
   revalidatePath("/secretgate");
   revalidatePath(`/secretgate/${type}s`);
   return { success: true };
@@ -897,7 +897,7 @@ export async function createBook(
 
   revalidatePath("/");
   revalidatePath("/books");
-  revalidatePath("/okuma-gunlugum");
+  revalidatePath("/readings");
   revalidatePath("/secretgate");
   revalidatePath("/secretgate/books");
   return { success: true, id: book.id };
@@ -1218,14 +1218,16 @@ export interface ReadingStatus {
   updated_at: string;
 }
 
-/** "Şu an okuyorum": featured current book if any (status=reading + is_featured_current=true), else most recently updated reading */
+/** "Şu an okuyorum": featured current book if any (status=reading + is_featured_current=true), else most recently updated reading. Sadece public/unlisted. */
 export async function getCurrentReading(): Promise<Book | null> {
   const supabase = await createServerClient();
+  const visibilityFilter = { visibility: ["public", "unlisted"] as const };
   const { data: featured } = await supabase
     .from("books")
     .select("*")
     .eq("status", "reading")
     .eq("is_featured_current", true)
+    .in("visibility", visibilityFilter.visibility)
     .limit(1)
     .maybeSingle();
   if (featured) return featured as Book;
@@ -1233,6 +1235,7 @@ export async function getCurrentReading(): Promise<Book | null> {
     .from("books")
     .select("*")
     .eq("status", "reading")
+    .in("visibility", visibilityFilter.visibility)
     .order("last_progress_update_at", { ascending: false })
     .limit(1)
     .maybeSingle();

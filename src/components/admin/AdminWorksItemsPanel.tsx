@@ -170,7 +170,7 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
           <form onSubmit={saveCvUrl} className="flex flex-wrap items-end gap-3">
             <div className="min-w-[280px] flex-1">
               <label className={labelClass}>PDF URL</label>
-              <input type="url" className={inputClass} value={cvUrl} onChange={(e) => setCvUrl(e.target.value)} placeholder="https://..." />
+              <input type="text" className={inputClass} value={cvUrl} onChange={(e) => setCvUrl(e.target.value)} placeholder="https://..." />
             </div>
             <button type="submit" className={btnClass} disabled={loading}>Kaydet</button>
           </form>
@@ -212,13 +212,13 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
             {(tab === "youtube" || tab === "project" || tab === "experience" || tab === "software") && (
               <div>
                 <label className={labelClass}>URL</label>
-                <input name="url" type="url" className={inputClass} />
+                <input name="url" type="text" className={inputClass} />
               </div>
             )}
             {tab === "certificate" && (
               <div>
                 <label className={labelClass}>URL (manuel link, isteğe bağlı)</label>
-                <input name="url" type="url" className={inputClass} placeholder="https://..." disabled={!!certificatePdfUrl} />
+                <input name="url" type="text" className={inputClass} placeholder="https://..." disabled={!!certificatePdfUrl} />
               </div>
             )}
             {tab === "photo" && (
@@ -271,7 +271,7 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
                 </div>
                 <div>
                   <label className={labelClass}>GitHub URL</label>
-                  <input name="github_url" type="url" className={inputClass} />
+                  <input name="github_url" type="text" className={inputClass} />
                 </div>
               </>
             )}

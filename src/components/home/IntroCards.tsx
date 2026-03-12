@@ -32,7 +32,7 @@ const CARDS: {
     Icon: User,
   },
   {
-    href: "/okuma-gunlugum",
+    href: "/readings",
     label: "Okuma Günlüğüm",
     subtitle: "altını çizdiklerim, notlarım",
     Icon: BookOpen,

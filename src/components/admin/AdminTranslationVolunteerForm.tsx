@@ -53,15 +53,15 @@ export function AdminTranslationVolunteerForm({ project }: { project: Translatio
       </div>
       <div>
         <label className={labelClass}>website_url</label>
-        <input name="website_url" type="url" defaultValue={project.website_url ?? ""} className={inputClass} />
+        <input name="website_url" type="text" defaultValue={project.website_url ?? ""} className={inputClass} />
       </div>
       <div>
         <label className={labelClass}>instagram_url</label>
-        <input name="instagram_url" type="url" defaultValue={project.instagram_url ?? ""} className={inputClass} />
+        <input name="instagram_url" type="text" defaultValue={project.instagram_url ?? ""} className={inputClass} />
       </div>
       <div>
         <label className={labelClass}>x_url</label>
-        <input name="x_url" type="url" defaultValue={project.x_url ?? ""} className={inputClass} />
+        <input name="x_url" type="text" defaultValue={project.x_url ?? ""} className={inputClass} />
       </div>
       <div>
         <label className={labelClass}>order_index</label>

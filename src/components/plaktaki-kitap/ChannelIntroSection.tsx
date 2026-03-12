@@ -3,6 +3,19 @@
 import { motion } from "framer-motion";
 import { Youtube } from "lucide-react";
 
+function SpotifyIcon({ className }: { className?: string }) {
+  return (
+    <img
+      src="https://cdn.simpleicons.org/spotify/FFFFFF"
+      alt=""
+      width={20}
+      height={20}
+      className={className}
+      aria-hidden
+    />
+  );
+}
+
 function formatSubscribers(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
   if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, "")}K`;
@@ -55,11 +68,9 @@ export function ChannelIntroSection({
             href={spotifyUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-green-400/25 bg-green-500/15 px-4 py-2 text-sm font-medium text-green-200 transition hover:border-green-400/40 hover:bg-green-500/25 hover:text-green-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400/50"
+            className="inline-flex items-center gap-2 rounded-full border border-[#1DB954]/40 bg-[#1DB954]/20 px-4 py-2 text-sm font-medium text-white/95 transition hover:border-[#1DB954]/60 hover:bg-[#1DB954]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1DB954]/50"
           >
-            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-              <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.091-.669-.261-.42-.571 1.74-2.04 4.64-3.061 7.921-3.061 1.881 0 3.481.33 4.921.999.36.149.48.66.24 1.021zm1.44-3.3c-.301.42-.841.561-1.262.241-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-.718-.239-.419-.659 2.159-2.58 5.76-3.3 9.239-2.04 1.121.27 2.161.66 3.119 1.32.421.27.601.9.301 1.32zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-.719-.36-.24-.66 3.921-2.34 10.921-2.58 15.24-1.5.599.15.779.66.3.959z" />
-            </svg>
+            <SpotifyIcon className="h-5 w-5 shrink-0" />
             Sesli kitaplara Spotify&apos;dan da ulaşabilirsiniz!
           </a>
         )}

@@ -67,7 +67,7 @@ export function AdminPlaktakiKitapVideoForm() {
         </div>
         <div>
           <label className={labelClass}>youtube_url *</label>
-          <input name="youtube_url" type="url" required placeholder="https://www.youtube.com/watch?v=..." className={inputClass} />
+          <input name="youtube_url" type="text" required placeholder="https://www.youtube.com/watch?v=..." className={inputClass} />
         </div>
         <div>
           <label className={labelClass}>description</label>

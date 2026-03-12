@@ -76,7 +76,7 @@ export function AdminTranslationsSettingsForm({
           <label className={labelClass}>academia_profile_url</label>
           <input
             name="academia_profile_url"
-            type="url"
+            type="text"
             defaultValue={settings?.academia_profile_url ?? ""}
             className={inputClass}
             placeholder="https://academia.edu/..."

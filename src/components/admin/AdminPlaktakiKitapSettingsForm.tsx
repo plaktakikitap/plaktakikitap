@@ -68,7 +68,7 @@ export function AdminPlaktakiKitapSettingsForm() {
       </div>
       <div className="mt-4">
         <label className={labelClass}>YouTube kanal URL</label>
-        <input name="youtube_channel_url" type="url" defaultValue={settings.youtube_channel_url} placeholder="https://www.youtube.com/@..." className={inputClass} />
+        <input name="youtube_channel_url" type="text" defaultValue={settings.youtube_channel_url} placeholder="https://www.youtube.com/@..." className={inputClass} />
       </div>
       <div className="mt-4">
         <label className={labelClass}>YouTube kanal ID</label>
@@ -87,7 +87,7 @@ export function AdminPlaktakiKitapSettingsForm() {
       </div>
       <div className="mt-4">
         <label className={labelClass}>Spotify profil / podcast URL</label>
-        <input name="spotify_profile_url" type="url" defaultValue={settings.spotify_profile_url ?? ""} placeholder="https://open.spotify.com/show/..." className={inputClass} />
+        <input name="spotify_profile_url" type="text" defaultValue={settings.spotify_profile_url ?? ""} placeholder="https://open.spotify.com/show/..." className={inputClass} />
       </div>
       <button type="submit" disabled={loading} className="mt-6 rounded bg-[var(--primary)] px-4 py-2 text-sm text-[var(--primary-foreground)] disabled:opacity-50">
         {loading ? "Kaydediliyor…" : "Kaydet"}

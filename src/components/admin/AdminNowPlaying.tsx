@@ -82,7 +82,7 @@ export function AdminNowPlaying({ tracks }: AdminNowPlayingProps) {
             <label className="mb-1 block text-sm text-[var(--muted)]">Spotify / dinleme linki (isteğe bağlı)</label>
             <input
               name="track_url"
-              type="url"
+              type="text"
               className="w-full rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
               placeholder="https://open.spotify.com/..."
             />

@@ -206,7 +206,7 @@ function EditForm({
         </div>
         <div>
           <label className={labelClass}>Dergiyi Satın Al linki</label>
-          <input type="url" value={external_url} onChange={(e) => setExternalUrl(e.target.value)} placeholder="https://..." className={inputClass} />
+          <input type="text" value={external_url} onChange={(e) => setExternalUrl(e.target.value)} placeholder="https://..." className={inputClass} />
         </div>
       </div>
       <div>

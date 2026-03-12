@@ -126,7 +126,7 @@ export function AdminPublishedBookForm({ book }: { book: PublishedBook }) {
         <label className={labelClass}>Amazon URL</label>
         <input
           name="amazon_url"
-          type="url"
+          type="text"
           defaultValue={book.amazon_url ?? ""}
           className={inputClass}
         />

@@ -15,15 +15,6 @@ const inputClass =
   "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm";
 const labelClass = "mb-1 block text-sm font-medium text-[var(--muted)]";
 
-function isValidUrl(s: string) {
-  try {
-    new URL(s);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 export function AdminTranslationVolunteerPanel({
   projects,
 }: {
@@ -40,21 +31,6 @@ export function AdminTranslationVolunteerPanel({
     e.preventDefault();
     setError(null);
     const form = e.currentTarget;
-    const website_url = (form.querySelector('[name="website_url"]') as HTMLInputElement)?.value?.trim() || null;
-    const instagram_url = (form.querySelector('[name="instagram_url"]') as HTMLInputElement)?.value?.trim() || null;
-    const x_url = (form.querySelector('[name="x_url"]') as HTMLInputElement)?.value?.trim() || null;
-    if (website_url && !isValidUrl(website_url)) {
-      setError("Website URL geçerli değil.");
-      return;
-    }
-    if (instagram_url && !isValidUrl(instagram_url)) {
-      setError("Instagram URL geçerli değil.");
-      return;
-    }
-    if (x_url && !isValidUrl(x_url)) {
-      setError("X URL geçerli değil.");
-      return;
-    }
     setLoading(true);
     const formData = new FormData(form);
     formData.set("order_index", String(sorted.length));
@@ -137,15 +113,15 @@ export function AdminTranslationVolunteerPanel({
           </div>
           <div>
             <label className={labelClass}>website_url</label>
-            <input name="website_url" type="url" className={inputClass} placeholder="https://..." />
+            <input name="website_url" type="text" className={inputClass} placeholder="https://..." />
           </div>
           <div>
             <label className={labelClass}>instagram_url</label>
-            <input name="instagram_url" type="url" className={inputClass} placeholder="https://..." />
+            <input name="instagram_url" type="text" className={inputClass} placeholder="https://..." />
           </div>
           <div className="sm:col-span-2">
             <label className={labelClass}>x_url</label>
-            <input name="x_url" type="url" className={inputClass} placeholder="https://..." />
+            <input name="x_url" type="text" className={inputClass} placeholder="https://..." />
           </div>
           <div className="sm:col-span-2">
             <button

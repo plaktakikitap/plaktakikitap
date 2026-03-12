@@ -165,7 +165,7 @@ export function AdminSocialsForm({ links }: { links: SocialLinkRow[] }) {
             </label>
             <input
               name="url"
-              type="url"
+              type="text"
               required
               className="w-full rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
               placeholder="https://... veya mail için: mailto:email@..."
@@ -261,7 +261,7 @@ export function AdminSocialsForm({ links }: { links: SocialLinkRow[] }) {
                     </select>
                     <input
                       name="url"
-                      type="url"
+                      type="text"
                       defaultValue={link.url}
                       required
                       className="min-w-[180px] flex-1 rounded border border-[var(--input)] bg-[var(--background)] px-2 py-1 text-sm"

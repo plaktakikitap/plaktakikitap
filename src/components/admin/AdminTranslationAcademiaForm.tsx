@@ -65,7 +65,7 @@ export function AdminTranslationAcademiaForm({
       <div className="mt-4">
         <label className={labelClass}>Profil URL (Academia.edu hesabın)</label>
         <input
-          type="url"
+          type="text"
           value={profileUrl}
           onChange={(e) => setProfileUrl(e.target.value)}
           placeholder="https://academia.edu/..."
@@ -98,7 +98,7 @@ export function AdminTranslationAcademiaForm({
                 className={inputClass}
               />
               <input
-                type="url"
+                type="text"
                 value={p.url}
                 onChange={(e) =>
                   setProjects((prev) =>

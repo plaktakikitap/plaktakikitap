@@ -103,7 +103,7 @@ export function AdminVideosPanel({ initialVideos }: { initialVideos: Video[] }) 
             <input
               value={form.youtube_url}
               onChange={(e) => setForm((f) => ({ ...f, youtube_url: e.target.value }))}
-              type="url"
+              type="text"
               placeholder="https://www.youtube.com/watch?v=..."
               className="w-full rounded border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
               required

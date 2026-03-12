@@ -61,7 +61,7 @@ export function AdminTranslationBookForm({ book }: { book: TranslationBookRow })
       </div>
       <div>
         <label className={labelClass}>Amazon URL</label>
-        <input name="amazon_url" type="url" defaultValue={book.amazon_url ?? ""} className={inputClass} />
+        <input name="amazon_url" type="text" defaultValue={book.amazon_url ?? ""} className={inputClass} />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>

@@ -100,7 +100,7 @@ export function AdminYazilarimForm() {
           </div>
           <div>
             <label className={labelClass}>Dergiyi Satın Al linki</label>
-            <input name="external_url" type="url" placeholder="https://..." className={inputClass} />
+            <input name="external_url" type="text" placeholder="https://..." className={inputClass} />
           </div>
         </div>
       <div className="mt-4">

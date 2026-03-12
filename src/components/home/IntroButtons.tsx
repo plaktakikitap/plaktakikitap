@@ -7,7 +7,7 @@ import { motion, useReducedMotion } from "framer-motion";
 const BUTTONS = [
   { href: "/about", label: "Beni Tanıyın" },
   { href: "/projects", label: "Yaptıklarım" },
-  { href: "/books", label: "Okuma Günlüğüm" },
+  { href: "/readings", label: "Okuma Günlüğüm" },
   { href: "/cinema", label: "İzleme Günlüğüm" },
   { href: "/translations", label: "Çevirilerim" },
   { href: "/posts", label: "Yazılarım" },

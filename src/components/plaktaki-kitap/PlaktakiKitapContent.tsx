@@ -55,7 +55,7 @@ export function PlaktakiKitapContent({ settings, items }: Props) {
         <PlaktakiKitapIntro settings={settings} />
 
         {(allTags.length > 0 || items.length > 6) && (
-          <div className="mb-8 flex flex-wrap items-center gap-3">
+          <div className="mt-2 mb-8 flex flex-wrap items-center gap-3">
             <input
               type="search"
               placeholder="Başlık veya açıklama ara..."

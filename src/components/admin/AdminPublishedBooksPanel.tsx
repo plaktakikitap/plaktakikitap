@@ -109,7 +109,7 @@ export function AdminPublishedBooksPanel({ books }: { books: PublishedBook[] }) 
           </div>
           <div className="sm:col-span-2">
             <label className={labelClass}>Amazon URL (Satın Al linki)</label>
-            <input name="amazon_url" type="url" className={inputClass} placeholder="https://..." />
+            <input name="amazon_url" type="text" className={inputClass} placeholder="https://..." />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>

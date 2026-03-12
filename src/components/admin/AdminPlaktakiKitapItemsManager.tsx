@@ -190,7 +190,7 @@ export function AdminPlaktakiKitapItemsManager() {
           </div>
           <div>
             <label className={labelClass}>YouTube URL *</label>
-            <input name="youtube_url" type="url" required placeholder="https://www.youtube.com/watch?v=..." className={inputClass} />
+            <input name="youtube_url" type="text" required placeholder="https://www.youtube.com/watch?v=..." className={inputClass} />
           </div>
         </div>
         <div>
@@ -306,9 +306,9 @@ function ItemEditForm({
     >
       <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Başlık" className="min-w-[120px] max-w-[200px] rounded border px-2 py-1 text-sm" />
       <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Açıklama" rows={1} className="min-w-[140px] max-w-[220px] rounded border px-2 py-1 text-sm" />
-      <input type="url" value={youtube_url} onChange={(e) => setYoutubeUrl(e.target.value)} placeholder="YouTube URL" className="min-w-[180px] max-w-[240px] rounded border px-2 py-1 text-sm" />
+      <input type="text" value={youtube_url} onChange={(e) => setYoutubeUrl(e.target.value)} placeholder="YouTube URL" className="min-w-[180px] max-w-[240px] rounded border px-2 py-1 text-sm" />
       {isVideo && (
-        <input type="url" value={custom_thumbnail_url} onChange={(e) => setCustomThumbnailUrl(e.target.value)} placeholder="Thumbnail URL" className="min-w-[120px] max-w-[180px] rounded border px-2 py-1 text-sm" />
+        <input type="text" value={custom_thumbnail_url} onChange={(e) => setCustomThumbnailUrl(e.target.value)} placeholder="Thumbnail URL" className="min-w-[120px] max-w-[180px] rounded border px-2 py-1 text-sm" />
       )}
       <label className="flex items-center gap-1 text-sm">
         <input type="checkbox" checked={is_featured} onChange={(e) => setIsFeatured(e.target.checked)} />

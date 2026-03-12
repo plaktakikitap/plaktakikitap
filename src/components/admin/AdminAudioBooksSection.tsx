@@ -100,7 +100,7 @@ export function AdminAudioBooksSection({ videos }: { videos: Video[] }) {
         </div>
         <div>
           <label className={labelClass}>YouTube URL *</label>
-          <input name="youtube_url" type="url" required placeholder="https://www.youtube.com/watch?v=..." className={inputClass} />
+          <input name="youtube_url" type="text" required placeholder="https://www.youtube.com/watch?v=..." className={inputClass} />
         </div>
         <button type="submit" disabled={loading} className="inline-flex items-center gap-2 rounded bg-[var(--primary)] px-4 py-2 text-sm text-[var(--primary-foreground)] disabled:opacity-50">
           <Plus className="h-4 w-4" /> Yeni sesli kitap ekle
@@ -166,7 +166,7 @@ function EditForm({
     >
       <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Kitap Adı" className={inputClass} />
       <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} placeholder="Kısa Özet" className={inputClass} />
-      <input type="url" value={youtube_url} onChange={(e) => setYoutubeUrl(e.target.value)} placeholder="YouTube URL" className={inputClass} />
+      <input type="text" value={youtube_url} onChange={(e) => setYoutubeUrl(e.target.value)} placeholder="YouTube URL" className={inputClass} />
       <div className="flex gap-2">
         <button type="submit" disabled={disabled} className="rounded bg-[var(--primary)] px-3 py-1.5 text-sm text-[var(--primary-foreground)] disabled:opacity-50">Kaydet</button>
         <button type="button" onClick={onCancel} className="rounded border border-[var(--card-border)] px-3 py-1.5 text-sm">İptal</button>
