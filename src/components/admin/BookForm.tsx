@@ -16,7 +16,7 @@ export function BookForm() {
       setError(result.error);
       return;
     }
-    router.push("/admin/books");
+    router.push("/secretgate/books");
     router.refresh();
   }
 

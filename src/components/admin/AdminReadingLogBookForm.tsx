@@ -39,7 +39,7 @@ export function AdminReadingLogBookForm({ book }: AdminReadingLogBookFormProps) 
         setError(result.error);
         return;
       }
-      router.push("/admin/reading-log");
+      router.push("/secretgate/reading-log");
       router.refresh();
     },
     [isEdit, book, rating, router]
@@ -151,14 +151,14 @@ export function AdminReadingLogBookForm({ book }: AdminReadingLogBookFormProps) 
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="block text-sm font-medium">Sırt görseli (spine_url) *</label>
+          <label className="block text-sm font-medium">Sırt görseli (spine_url)</label>
+          <p className="mb-1 text-xs text-[var(--muted)]">Yüklemezseniz rafta kitap adı yazılı sırt görünür.</p>
           <AdminImageUpload
             name="spine_url"
             value={spineUrl}
             onChange={setSpineUrl}
-            placeholder="Sırt görseli yükle"
+            placeholder="Sırt görseli yükle (isteğe bağlı)"
             className="mt-1"
-            required
           />
         </div>
         <div>
@@ -227,7 +227,7 @@ export function AdminReadingLogBookForm({ book }: AdminReadingLogBookFormProps) 
         </button>
         <button
           type="button"
-          onClick={() => router.push("/admin/reading-log")}
+          onClick={() => router.push("/secretgate/reading-log")}
           className="rounded-lg border border-[var(--card-border)] px-4 py-2 text-sm"
         >
           İptal

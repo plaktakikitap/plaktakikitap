@@ -6,14 +6,14 @@ export async function POST(req: NextRequest) {
   const id = String(form.get("id") ?? "");
 
   if (!id) {
-    return NextResponse.redirect(new URL("/admin?err=tracks", req.url));
+    return NextResponse.redirect(new URL("/secretgate?err=tracks", req.url));
   }
 
   const supabase = createAdminClient();
   const { error } = await supabase.from("now_tracks").delete().eq("id", id);
 
   if (error) {
-    return NextResponse.redirect(new URL("/admin?err=tracks&msg=" + encodeURIComponent(error.message), req.url));
+    return NextResponse.redirect(new URL("/secretgate?err=tracks&msg=" + encodeURIComponent(error.message), req.url));
   }
-  return NextResponse.redirect(new URL("/admin?toast=saved", req.url));
+  return NextResponse.redirect(new URL("/secretgate?toast=saved", req.url));
 }

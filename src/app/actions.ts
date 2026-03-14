@@ -96,6 +96,64 @@ export async function createFilm(formData: FormData) {
   return { success: true };
 }
 
+/** contentId = content_items.id */
+export async function updateFilm(contentId: string, formData: FormData) {
+  const supabase = await createServerClient();
+  const title = (formData.get("title") as string)?.trim();
+  if (!title) return { error: "Başlık zorunludur." };
+  const slug = (formData.get("slug") as string)?.trim() || slugify(title);
+  const description = (formData.get("description") as string)?.trim() || null;
+  const visibility = (formData.get("visibility") as Visibility) || "public";
+  const duration_min = parseInt(String(formData.get("duration_min") ?? ""), 10);
+  const year = formData.get("year") ? parseInt(formData.get("year") as string, 10) : null;
+  const poster_url = (formData.get("poster_url") as string)?.trim() || null;
+  const spine_url = (formData.get("spine_url") as string)?.trim() || null;
+  const review = (formData.get("review") as string)?.trim() || null;
+  const director = (formData.get("director") as string)?.trim() || null;
+  const genreTagsRaw = (formData.get("genre_tags") as string)?.trim() || "";
+  const genre_tags = genreTagsRaw ? genreTagsRaw.split(/[\s,]+/).map((s) => s.trim()).filter(Boolean) : [];
+  const rating_5Raw = (formData.get("rating_5") as string)?.trim();
+  const rating_5 = rating_5Raw ? parseFloat(rating_5Raw) : null;
+  const watchedAtRaw = (formData.get("watched_at") as string)?.trim();
+  const watched_at = watchedAtRaw ? new Date(watchedAtRaw).toISOString() : null;
+  const is_favorite = formData.get("is_favorite") === "on" || formData.get("is_favorite") === "true";
+
+  const { error: contentError } = await supabase
+    .from("content_items")
+    .update({ title, slug, description, visibility })
+    .eq("id", contentId)
+    .eq("type", "film");
+
+  if (contentError) return { error: contentError.message };
+
+  const updatePayload: Record<string, unknown> = {
+    duration_min: Number.isNaN(duration_min) || duration_min < 1 ? undefined : duration_min,
+    year,
+    poster_url,
+    spine_url,
+    review,
+    director,
+    genre_tags: genre_tags.length ? genre_tags : null,
+    rating_5: rating_5 != null && !Number.isNaN(rating_5) ? rating_5 : null,
+    is_favorite,
+  };
+  if (watched_at) updatePayload.watched_at = watched_at;
+  if (is_favorite) updatePayload.favorite_order = Date.now();
+  else updatePayload.favorite_order = null;
+
+  const { error: filmError } = await supabase
+    .from("films")
+    .update(updatePayload)
+    .eq("content_id", contentId);
+
+  if (filmError) return { error: filmError.message };
+  revalidatePath("/");
+  revalidatePath("/izleme-gunlugum/filmler");
+  revalidatePath("/secretgate");
+  revalidatePath("/secretgate/films");
+  return { success: true };
+}
+
 export async function createSeries(formData: FormData) {
   const supabase = await createServerClient();
   const title = formData.get("title") as string;
@@ -168,6 +226,74 @@ export async function createSeries(formData: FormData) {
   return { success: true };
 }
 
+/** contentId = content_items.id */
+export async function updateSeries(contentId: string, formData: FormData) {
+  const supabase = await createServerClient();
+  const title = (formData.get("title") as string)?.trim();
+  if (!title) return { error: "Başlık zorunludur." };
+  const slug = (formData.get("slug") as string)?.trim() || slugify(title);
+  const description = (formData.get("description") as string)?.trim() || null;
+  const visibility = (formData.get("visibility") as Visibility) || "public";
+  const episodeCountRaw = formData.get("episode_count") ?? formData.get("episodes_watched");
+  const episode_count = parseInt(String(episodeCountRaw ?? 0), 10) || 0;
+  const avg_episode_min = formData.get("avg_episode_min") ? parseInt(formData.get("avg_episode_min") as string, 10) : null;
+  const total_duration_min =
+    episode_count > 0 && avg_episode_min != null && avg_episode_min > 0
+      ? episode_count * avg_episode_min
+      : null;
+  const seasons_watched = parseInt(String(formData.get("seasons_watched") ?? 0), 10) || 0;
+  const total_seasonsRaw = (formData.get("total_seasons") as string)?.trim();
+  const total_seasons = total_seasonsRaw ? parseInt(total_seasonsRaw, 10) : null;
+  const review = (formData.get("review") as string)?.trim() || null;
+  const creator_or_director = (formData.get("creator_or_director") as string)?.trim() || null;
+  const watchedAtRaw = (formData.get("watched_at") as string)?.trim();
+  const watched_at = watchedAtRaw ? new Date(watchedAtRaw).toISOString() : null;
+  const poster_url = (formData.get("poster_url") as string)?.trim() || null;
+  const spine_url = (formData.get("spine_url") as string)?.trim() || null;
+  const is_favorite = formData.get("is_favorite") === "on" || formData.get("is_favorite") === "true";
+  const statusRaw = (formData.get("status") as string)?.trim() || null;
+  const status =
+    statusRaw === "finished" || statusRaw === "waiting" || statusRaw === "dropped" ? statusRaw : null;
+  const ratingRaw = (formData.get("rating") as string)?.trim();
+  const rating = ratingRaw ? parseFloat(ratingRaw) : null;
+
+  const { error: contentError } = await supabase
+    .from("content_items")
+    .update({ title, slug, description, visibility, rating: rating != null && !Number.isNaN(rating) ? rating : null })
+    .eq("id", contentId)
+    .eq("type", "series");
+
+  if (contentError) return { error: contentError.message };
+
+  const updatePayload: Record<string, unknown> = {
+    episodes_watched: episode_count,
+    avg_episode_min,
+    total_duration_min,
+    seasons_watched,
+    total_seasons: total_seasons != null && !Number.isNaN(total_seasons) ? total_seasons : null,
+    review,
+    creator_or_director: creator_or_director || null,
+    poster_url,
+    spine_url,
+    is_favorite: is_favorite ?? false,
+    favorite_order: is_favorite ? Date.now() : null,
+    status,
+  };
+  if (watched_at) (updatePayload as Record<string, unknown>).watched_at = watched_at;
+
+  const { error: seriesError } = await supabase
+    .from("series")
+    .update(updatePayload)
+    .eq("content_id", contentId);
+
+  if (seriesError) return { error: seriesError.message };
+  revalidatePath("/");
+  revalidatePath("/izleme-gunlugum/diziler");
+  revalidatePath("/secretgate");
+  revalidatePath("/secretgate/series");
+  return { success: true };
+}
+
 export async function createBook(formData: FormData) {
   const supabase = await createServerClient();
   const title = (formData.get("title") as string)?.trim();
@@ -179,8 +305,7 @@ export async function createBook(formData: FormData) {
     return { error: "Sayfa sayısı zorunludur (1 ve üzeri tam sayı)." };
   }
   const visibility = (formData.get("visibility") as Visibility) || "public";
-  const spine_url = (formData.get("spine_url") as string)?.trim();
-  if (!spine_url) return { error: "Sırt görseli URL'si (spine_url) zorunludur." };
+  const spine_url = (formData.get("spine_url") as string)?.trim() || null;
   const review = (formData.get("review") as string)?.trim() || null;
   const cover_url = (formData.get("cover_url") as string)?.trim() || null;
   const tagsRaw = (formData.get("tags") as string)?.trim() || "";
@@ -244,8 +369,7 @@ export async function updateBook(id: string, formData: FormData) {
     return { error: "Sayfa sayısı zorunludur (1 ve üzeri tam sayı)." };
   }
   const visibility = (formData.get("visibility") as "public" | "unlisted" | "private") || "public";
-  const spine_url = (formData.get("spine_url") as string)?.trim();
-  if (!spine_url) return { error: "Sırt görseli URL'si (spine_url) zorunludur." };
+  const spine_url = (formData.get("spine_url") as string)?.trim() || null;
   const review = (formData.get("review") as string)?.trim() || null;
   const cover_url = (formData.get("cover_url") as string)?.trim() || null;
   const tagsRaw = (formData.get("tags") as string)?.trim() || "";

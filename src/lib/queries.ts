@@ -37,6 +37,44 @@ export async function getSeries(includePrivate = false): Promise<(ContentItem & 
   return (data ?? []) as (ContentItem & { series: Series })[];
 }
 
+/** Tek film kaydı (düzenleme sayfası için). id = content_items.id */
+export async function getFilmItem(
+  id: string
+): Promise<(ContentItem & { film: Film }) | null> {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase
+    .from("content_items")
+    .select("*, film:films(*)")
+    .eq("type", "film")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw error;
+  const row = data as (ContentItem & { film: Film | Film[] }) | null;
+  if (!row) return null;
+  const film = Array.isArray(row.film) ? row.film[0] : row.film;
+  if (!film) return null;
+  return { ...row, film } as ContentItem & { film: Film };
+}
+
+/** Tek dizi kaydı (düzenleme sayfası için). id = content_items.id */
+export async function getSeriesItem(
+  id: string
+): Promise<(ContentItem & { series: Series }) | null> {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase
+    .from("content_items")
+    .select("*, series:series(*)")
+    .eq("type", "series")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw error;
+  const row = data as (ContentItem & { series: Series | Series[] }) | null;
+  if (!row) return null;
+  const series = Array.isArray(row.series) ? row.series[0] : row.series;
+  if (!series) return null;
+  return { ...row, series } as ContentItem & { series: Series };
+}
+
 export async function getBooks(includePrivate = false): Promise<Book[]> {
   const supabase = await createServerClient();
   let query = supabase

@@ -863,7 +863,7 @@ export async function createSeries(
   revalidatePath("/");
   revalidatePath("/cinema");
   revalidatePath("/secretgate");
-  revalidatePath("/admin/series");
+  revalidatePath("/secretgate/series");
   return { success: true, id: content.id };
 }
 

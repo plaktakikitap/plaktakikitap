@@ -2,10 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createFilm } from "@/app/actions";
+import { createFilm, updateFilm } from "@/app/actions";
+import type { ContentItem, Film } from "@/types/database";
 import { StarRatingInput } from "@/components/ui/StarRating";
 import { AdminImageUpload } from "./AdminImageUpload";
 import { X } from "lucide-react";
+
+type FilmItem = ContentItem & { film: Film };
 
 const SUGGESTED_GENRES = [
   "Drama",
@@ -20,12 +23,16 @@ const SUGGESTED_GENRES = [
   "Macera",
 ];
 
-export function FilmForm() {
+export function FilmForm({ item }: { item?: FilmItem | null }) {
   const router = useRouter();
+  const isEdit = !!item;
+  const film = item?.film;
   const [error, setError] = useState<string | null>(null);
-  const [rating5, setRating5] = useState<number | null>(null);
-  const [genreTags, setGenreTags] = useState<string[]>([]);
+  const [rating5, setRating5] = useState<number | null>(film?.rating_5 ?? null);
+  const [genreTags, setGenreTags] = useState<string[]>(() => (film?.genre_tags ?? []).filter(Boolean));
   const [genreInput, setGenreInput] = useState("");
+  const [posterUrl, setPosterUrl] = useState(film?.poster_url ?? "");
+  const [spineUrl, setSpineUrl] = useState(film?.spine_url ?? "");
 
   function addGenre(tag: string) {
     const t = tag.trim();
@@ -75,12 +82,14 @@ export function FilmForm() {
 
     formData.set("genre_tags", genreTags.join(", "));
 
-    const result = await createFilm(formData);
+    const result = isEdit
+      ? await updateFilm(item!.id, formData)
+      : await createFilm(formData);
     if (result.error) {
       setError(result.error);
       return;
     }
-    router.push("/admin/films");
+    router.push("/secretgate/films");
     router.refresh();
   }
 
@@ -91,6 +100,7 @@ export function FilmForm() {
         <input
           name="title"
           required
+          defaultValue={item?.title}
           className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
         />
       </div>
@@ -99,6 +109,7 @@ export function FilmForm() {
         <input
           name="director"
           placeholder="Yönetmen adı"
+          defaultValue={film?.director ?? ""}
           className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
         />
       </div>
@@ -108,6 +119,7 @@ export function FilmForm() {
           name="watched_at"
           type="datetime-local"
           required
+          defaultValue={film?.watched_at ? film.watched_at.slice(0, 16) : ""}
           className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
         />
         <p className="mt-0.5 text-xs text-[var(--muted)]">Raf sırası ve &quot;Son izlediğim&quot; buna göre belirlenir.</p>
@@ -121,6 +133,7 @@ export function FilmForm() {
             required
             min={1}
             step={1}
+            defaultValue={film?.duration_min ?? ""}
             className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
           />
           <p className="mt-0.5 text-xs text-[var(--muted)]">Pozitif tam sayı.</p>
@@ -195,7 +208,9 @@ export function FilmForm() {
           <label className="block text-sm font-medium">Kapak görseli (cover)</label>
           <AdminImageUpload
             name="poster_url"
-            placeholder="Kapak yükle"
+            value={posterUrl}
+            onChange={setPosterUrl}
+            placeholder="Kapak yükle (isteğe bağlı)"
             className="mt-1"
           />
         </div>
@@ -203,7 +218,9 @@ export function FilmForm() {
           <label className="block text-sm font-medium">Spine görseli (DVD yan yüz, rafta görünür)</label>
           <AdminImageUpload
             name="spine_url"
-            placeholder="Spine yükle"
+            value={spineUrl}
+            onChange={setSpineUrl}
+            placeholder="Spine yükle (isteğe bağlı)"
             className="mt-1"
           />
         </div>
@@ -215,6 +232,7 @@ export function FilmForm() {
           name="review"
           rows={4}
           placeholder="İnceleme metni"
+          defaultValue={film?.review ?? ""}
           className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
         />
       </div>
@@ -225,6 +243,7 @@ export function FilmForm() {
           <input
             name="slug"
             placeholder="url-friendly-baslik"
+            defaultValue={item?.slug ?? ""}
             className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
           />
         </div>
@@ -232,6 +251,7 @@ export function FilmForm() {
           <label className="block text-sm font-medium">Görünürlük</label>
           <select
             name="visibility"
+            defaultValue={item?.visibility ?? "public"}
             className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
           >
             <option value="public">Herkes</option>
@@ -245,6 +265,7 @@ export function FilmForm() {
         <textarea
           name="description"
           rows={2}
+          defaultValue={item?.description ?? ""}
           className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
         />
       </div>
@@ -255,6 +276,7 @@ export function FilmForm() {
           type="number"
           min={1900}
           max={2100}
+          defaultValue={film?.year ?? ""}
           className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
         />
       </div>
@@ -265,7 +287,7 @@ export function FilmForm() {
           type="submit"
           className="rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white hover:opacity-90"
         >
-          Kaydet
+          {isEdit ? "Güncelle" : "Kaydet"}
         </button>
         <button
           type="button"

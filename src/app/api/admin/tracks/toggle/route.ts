@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
   const { error } = await supabase.from("now_tracks").update({ is_active: next }).eq("id", id);
 
   if (error) {
-    return NextResponse.redirect(new URL("/admin?err=tracks&msg=" + encodeURIComponent(error.message), req.url));
+    return NextResponse.redirect(new URL("/secretgate?err=tracks&msg=" + encodeURIComponent(error.message), req.url));
   }
-  return NextResponse.redirect(new URL("/admin?toast=saved", req.url));
+  return NextResponse.redirect(new URL("/secretgate?toast=saved", req.url));
 }

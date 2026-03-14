@@ -2,15 +2,23 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createSeries } from "@/app/actions";
+import { createSeries, updateSeries } from "@/app/actions";
+import type { ContentItem, Series } from "@/types/database";
 import { StarRatingInput } from "@/components/ui/StarRating";
+import { AdminImageUpload } from "./AdminImageUpload";
 
-export function SeriesForm() {
+type SeriesItem = ContentItem & { series: Series };
+
+export function SeriesForm({ item }: { item?: SeriesItem | null }) {
   const router = useRouter();
+  const isEdit = !!item;
+  const series = item?.series;
   const [error, setError] = useState<string | null>(null);
-  const [rating, setRating] = useState<number | null>(null);
-  const [episodeCount, setEpisodeCount] = useState<number>(0);
-  const [avgEpisodeMin, setAvgEpisodeMin] = useState<number | "">("");
+  const [rating, setRating] = useState<number | null>(item?.rating != null ? item.rating / 2 : null);
+  const [episodeCount, setEpisodeCount] = useState<number>(series?.episodes_watched ?? 0);
+  const [avgEpisodeMin, setAvgEpisodeMin] = useState<number | "">(series?.avg_episode_min ?? "");
+  const [posterUrl, setPosterUrl] = useState(series?.poster_url ?? "");
+  const [spineUrl, setSpineUrl] = useState(series?.spine_url ?? "");
   const totalDurationMin =
     episodeCount > 0 && typeof avgEpisodeMin === "number" && avgEpisodeMin > 0
       ? episodeCount * avgEpisodeMin
@@ -18,12 +26,14 @@ export function SeriesForm() {
 
   async function handleSubmit(formData: FormData) {
     setError(null);
-    const result = await createSeries(formData);
+    const result = isEdit
+      ? await updateSeries(item!.id, formData)
+      : await createSeries(formData);
     if (result.error) {
       setError(result.error);
       return;
     }
-    router.push("/admin/series");
+    router.push("/secretgate/series");
     router.refresh();
   }
 
@@ -34,6 +44,7 @@ export function SeriesForm() {
         <input
           name="title"
           required
+          defaultValue={item?.title}
           className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
         />
       </div>
@@ -42,6 +53,7 @@ export function SeriesForm() {
         <input
           name="slug"
           placeholder="url-friendly-baslik"
+          defaultValue={item?.slug ?? ""}
           className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
         />
       </div>
@@ -50,6 +62,7 @@ export function SeriesForm() {
         <textarea
           name="description"
           rows={3}
+          defaultValue={item?.description ?? ""}
           className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
         />
       </div>
@@ -58,6 +71,7 @@ export function SeriesForm() {
         <input
           name="creator_or_director"
           placeholder="Dizi yaratıcısı veya yönetmeni"
+          defaultValue={series?.creator_or_director ?? ""}
           className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
         />
       </div>
@@ -66,6 +80,7 @@ export function SeriesForm() {
         <input
           name="watched_at"
           type="datetime-local"
+          defaultValue={series?.watched_at ? series.watched_at.slice(0, 16) : ""}
           className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
         />
         <p className="mt-0.5 text-xs text-[var(--muted)]">Boş bırakılırsa bugün kullanılır.</p>
@@ -111,7 +126,7 @@ export function SeriesForm() {
             name="seasons_watched"
             type="number"
             min={0}
-            defaultValue={0}
+            defaultValue={series?.seasons_watched ?? 0}
             className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
           />
         </div>
@@ -122,6 +137,7 @@ export function SeriesForm() {
             type="number"
             min={0}
             placeholder="Dizide toplam kaç sezon var"
+            defaultValue={series?.total_seasons ?? ""}
             className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
           />
         </div>
@@ -137,10 +153,46 @@ export function SeriesForm() {
           </div>
         </div>
       </div>
+      <div className="grid gap-6 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium">Ön kapak (poster)</label>
+          <AdminImageUpload
+            name="poster_url"
+            value={posterUrl}
+            onChange={setPosterUrl}
+            placeholder="Poster yükle (isteğe bağlı)"
+            className="mt-1"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium">Yan kapak (spine)</label>
+          <AdminImageUpload
+            name="spine_url"
+            value={spineUrl}
+            onChange={setSpineUrl}
+            placeholder="Spine yükle (isteğe bağlı)"
+            className="mt-1"
+          />
+        </div>
+      </div>
+      <div>
+        <label className="block text-sm font-medium">Durum</label>
+        <select
+          name="status"
+          defaultValue={series?.status ?? ""}
+          className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
+        >
+          <option value="">Seçin</option>
+          <option value="finished">Bitirilmiş</option>
+          <option value="waiting">Devamını Bekliyorum</option>
+          <option value="dropped">Yarıda Bıraktım</option>
+        </select>
+      </div>
       <div>
         <label className="block text-sm font-medium">Görünürlük</label>
         <select
           name="visibility"
+          defaultValue={item?.visibility ?? "public"}
           className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
         >
           <option value="public">Herkes</option>
@@ -153,6 +205,7 @@ export function SeriesForm() {
         <textarea
           name="review"
           rows={4}
+          defaultValue={series?.review ?? ""}
           className="mt-1 w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
         />
       </div>
@@ -162,7 +215,7 @@ export function SeriesForm() {
           type="submit"
           className="rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white hover:opacity-90"
         >
-          Kaydet
+          {isEdit ? "Güncelle" : "Kaydet"}
         </button>
         <button
           type="button"
