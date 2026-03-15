@@ -151,25 +151,24 @@ export function AmbientMusicPlayer() {
           <div className="relative flex h-[72px] w-[72px] shrink-0 items-center justify-center">
             {/* Dönen plak — vinil çizgiler + orta etiket */}
             <div
-              className="absolute inset-0 rounded-full"
+              className={`${styles.vinylDisc} absolute inset-0 rounded-full`}
               style={{
-                animation: "vinyl-spin 2.6s linear infinite",
                 background: `
-                  radial-gradient(circle at 50% 50%, #0f0e0d 0%, #0f0e0d 32%, transparent 33%),
+                  radial-gradient(circle at 50% 50%, #0f0e0d 0%, #0f0e0d 26%, transparent 27%),
                   repeating-radial-gradient(circle at 50% 50%, transparent 0, transparent 1.2px, rgba(0,0,0,0.35) 1.2px, rgba(0,0,0,0.35) 2.4px),
                   radial-gradient(circle at 30% 30%, rgba(255,255,255,0.04) 0%, transparent 35%),
                   radial-gradient(circle at 70% 70%, rgba(0,0,0,0.3) 0%, transparent 40%),
                   linear-gradient(165deg, #1c1b19 0%, #0d0c0b 50%, #151412 100%)
                 `,
-                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -2px 6px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.35)",
+                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -2px 6px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.4), 0 0 0 1px rgba(212,175,55,0.14), 0 0 18px rgba(212,175,55,0.14), 0 0 36px rgba(212,175,55,0.08)",
               }}
             >
-              {/* Orta etiket (kapak) — plakla birlikte döner */}
+              {/* Orta etiket (kapak) — plakla birlikte döner (küçük çap) */}
               <div
-                className="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full relative"
+                className="absolute left-1/2 top-1/2 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full relative"
                 style={{
-                  boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06), 0 1px 2px rgba(0,0,0,0.3)",
-                  background: track.cover_url ? undefined : "linear-gradient(145deg, #2d2520 0%, #1a1512 100%)",
+                  boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1), 0 1px 2px rgba(0,0,0,0.3), 0 0 0 1px rgba(212,175,55,0.22)",
+                  background: track.cover_url ? undefined : "linear-gradient(145deg, #35322e 0%, #252320 50%, #1c1b18 100%)",
                 }}
               >
                 {track.cover_url ? (
@@ -178,11 +177,11 @@ export function AmbientMusicPlayer() {
                     alt=""
                     fill
                     className="object-cover"
-                    sizes="40px"
+                    sizes="32px"
                     unoptimized
                   />
                 ) : (
-                  <span className="text-[0.55rem] font-medium text-amber-200/40">♪</span>
+                  <span className="text-[0.5rem] font-medium text-amber-200/50">♪</span>
                 )}
               </div>
               <div

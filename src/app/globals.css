@@ -263,6 +263,12 @@ h1, h2, h3, .font-editorial {
   50% { transform: scaleY(1); }
 }
 
+/* Plak dönüşü — ManualNowPlaying ve benzeri */
+@keyframes manual-vinyl-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 /* Home hero H1 - subtle text shadow for readability on dark */
 .home-hero-h1 {
   text-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);

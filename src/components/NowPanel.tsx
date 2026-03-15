@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { supabaseServer } from "@/lib/supabase-server";
 import { getPlaylistTracksForNowPlaying } from "@/lib/spotify";
 import { getMusicCurrentState } from "@/lib/music";
@@ -109,31 +108,6 @@ export default async function NowPanel() {
         ) : (
           <GlassCard title="Şu an dinliyorum:">
             <ManualNowPlaying tracks={tracks} />
-            {playlistUrl && playlistId && (
-              <>
-                <div className="mt-3 overflow-hidden rounded-lg">
-                  <iframe
-                    title="Spotify playlist"
-                    src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator`}
-                    width="100%"
-                    height="152"
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    loading="lazy"
-                    className="border-0"
-                  />
-                </div>
-                <p className="mt-2 text-center">
-                  <Link
-                    href={playlistUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-white/60 underline decoration-white/30 hover:text-white/80"
-                  >
-                    Playlisti Spotify&apos;da aç
-                  </Link>
-                </p>
-              </>
-            )}
           </GlassCard>
         )}
 
