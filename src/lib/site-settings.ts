@@ -84,7 +84,7 @@ export async function updateSiteSettings(partial: Partial<SiteSettingsValue>): P
       .update({ value: next, updated_at: new Date().toISOString() })
       .eq("id", existing.id);
     if (error) return { error: error.message };
-    revalidateTag(SITE_SETTINGS_CACHE_TAG);
+    revalidateTag(SITE_SETTINGS_CACHE_TAG, "max");
     return { id: existing.id };
   }
 
@@ -94,6 +94,6 @@ export async function updateSiteSettings(partial: Partial<SiteSettingsValue>): P
     .select("id")
     .single();
   if (error) return { error: error.message };
-  revalidateTag(SITE_SETTINGS_CACHE_TAG);
+  revalidateTag(SITE_SETTINGS_CACHE_TAG, "max");
   return { id: inserted!.id };
 }
