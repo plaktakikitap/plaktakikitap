@@ -618,6 +618,7 @@ const DEFAULT_CINEMA_STATS: CinemaStats = {
   totalWatchTimeMinutes: 0,
   totalReviews: 0,
   filmWatchedThisMonth: 0,
+  filmWatchedThisYear: 0,
   seriesWatchedThisMonth: 0,
 };
 
