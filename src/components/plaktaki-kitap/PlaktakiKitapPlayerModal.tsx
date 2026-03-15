@@ -15,9 +15,17 @@ function watchUrl(videoId: string) {
 export function PlaktakiKitapPlayerModal({ item, onClose }: Props) {
   const closeRef = useRef<HTMLButtonElement>(null);
   const isOpen = Boolean(item);
+  const [shouldLoadIframe, setShouldLoadIframe] = useState(false);
 
   const onKey = useCallback((e: KeyboardEvent) => { if (e.key === "Escape") onClose(); }, [onClose]);
   useEffect(() => { window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, [onKey]);
+  useEffect(() => {
+    if (isOpen) {
+      const t = setTimeout(() => setShouldLoadIframe(true), 150);
+      return () => clearTimeout(t);
+    }
+    setShouldLoadIframe(false);
+  }, [isOpen]);
   useEffect(() => {
     if (!isOpen) return;
     const prev = document.body.style.overflow;
