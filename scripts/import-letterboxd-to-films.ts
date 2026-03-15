@@ -133,9 +133,10 @@ async function main(): Promise<void> {
         errors.push(`${title}: ${contentError.message}`);
         continue;
       }
-      if (!content?.id) continue;
-      contentId = content.id;
-      contentByKey.set(key(title, year), contentId);
+      const newContentId = content?.id;
+      if (!newContentId) continue;
+      contentId = newContentId;
+      contentByKey.set(key(title, year), newContentId);
       contentCreated += 1;
     }
 
