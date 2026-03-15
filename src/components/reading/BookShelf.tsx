@@ -5,6 +5,8 @@ import { motion, LayoutGroup } from "framer-motion";
 import type { Book } from "@/types/database";
 import styles from "./BookShelf.module.css";
 
+const BASE_SPINE_HEIGHT_PX = 300;
+
 const ROW_SLOP_PX = 15;
 
 /** Gerçek satır bitişlerini ölçüp her satırın altına raf konumunu (px) döndürür */
@@ -81,13 +83,31 @@ interface BookShelfProps {
   onSelectBook?: (book: Book) => void;
 }
 
+/** Görselin en-boy oranına göre sırt genişliği ve yüksekliği (kırpma yok). */
+function spineSizeFromAspect(
+  naturalWidth: number,
+  naturalHeight: number
+): { widthPx: number; heightPx: number } {
+  if (naturalHeight <= 0) return { widthPx: spineWidthPx({ pages: 100 }), heightPx: BASE_SPINE_HEIGHT_PX };
+  const aspect = naturalWidth / naturalHeight;
+  let widthPx = Math.round(BASE_SPINE_HEIGHT_PX * aspect);
+  widthPx = Math.max(MIN_SPINE_WIDTH_PX, Math.min(MAX_SPINE_WIDTH_PX, widthPx));
+  const heightPx = Math.round(widthPx / aspect);
+  return { widthPx, heightPx };
+}
+
 export function BookShelf({ books, onSelectBook }: BookShelfProps) {
   const [failedImageIds, setFailedImageIds] = useState<Set<string>>(() => new Set());
+  const [imageDimensions, setImageDimensions] = useState<Record<string, { w: number; h: number }>>({});
   const [shelfTops, setShelfTops] = useState<number[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleImageError = useCallback((bookId: string) => {
     setFailedImageIds((prev) => new Set(prev).add(bookId));
+  }, []);
+
+  const handleImageLoad = useCallback((bookId: string, w: number, h: number) => {
+    if (w > 0 && h > 0) setImageDimensions((prev) => ({ ...prev, [bookId]: { w, h } }));
   }, []);
 
   const updateShelfTops = useCallback(() => {
@@ -134,10 +154,17 @@ export function BookShelf({ books, onSelectBook }: BookShelfProps) {
           transition={{ layout: layoutTransition }}
         >
           {books.map((book) => {
-            const widthPx = spineWidthPx(book);
             const heightVariationPx = spineHeightVariationPx(book.id);
             const spineImage = book.spine_url || book.cover_url;
             const usePlaceholder = !spineImage || failedImageIds.has(book.id);
+            const dims = imageDimensions[book.id];
+            const fromImage = dims != null;
+            const { widthPx, heightPx: heightFromImage } = fromImage
+              ? spineSizeFromAspect(dims.w, dims.h)
+              : { widthPx: spineWidthPx(book), heightPx: BASE_SPINE_HEIGHT_PX };
+            const heightStyle = fromImage
+              ? `${heightFromImage + heightVariationPx}px`
+              : `calc(clamp(260px, 28vw, 430px) + ${heightVariationPx}px)`;
 
             return (
               <motion.article
@@ -159,8 +186,8 @@ export function BookShelf({ books, onSelectBook }: BookShelfProps) {
                     style={{
                       width: widthPx,
                       minWidth: widthPx,
-                      height: `calc(clamp(260px, 28vw, 430px) + ${heightVariationPx}px)`,
-                      minHeight: `calc(clamp(260px, 28vw, 430px) + ${heightVariationPx}px)`,
+                      height: heightStyle,
+                      minHeight: heightStyle,
                     }}
                   >
                     <div className={styles.spineInner}>
@@ -170,6 +197,10 @@ export function BookShelf({ books, onSelectBook }: BookShelfProps) {
                           alt=""
                           className={styles.spineImage}
                           loading="lazy"
+                          onLoad={(e) => {
+                            const img = e.currentTarget;
+                            handleImageLoad(book.id, img.naturalWidth, img.naturalHeight);
+                          }}
                           onError={() => handleImageError(book.id)}
                         />
                       ) : (

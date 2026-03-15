@@ -974,6 +974,7 @@ export async function adminCreateMusicTrack(formData: FormData) {
   });
   if (error) return { error: error.message };
   revalidatePath("/secretgate/music");
+  revalidatePath("/secretgate/now-playing");
   revalidatePath("/");
   return { success: true };
 }
@@ -999,6 +1000,7 @@ export async function adminUpdateMusicTrack(id: string, formData: FormData) {
     .eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/secretgate/music");
+  revalidatePath("/secretgate/now-playing");
   revalidatePath("/");
   return { success: true };
 }
@@ -1009,6 +1011,7 @@ export async function adminDeleteMusicTrack(id: string) {
   const { error } = await supabase.from("music_tracks").delete().eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/secretgate/music");
+  revalidatePath("/secretgate/now-playing");
   revalidatePath("/");
   return { success: true };
 }
@@ -1020,6 +1023,7 @@ export async function adminReorderMusicTracks(orderedIds: string[]) {
     await supabase.from("music_tracks").update({ order_index: i }).eq("id", orderedIds[i]);
   }
   revalidatePath("/secretgate/music");
+  revalidatePath("/secretgate/now-playing");
   revalidatePath("/");
   return { success: true };
 }

@@ -3,14 +3,26 @@ import { getMusicTracksAdmin } from "@/lib/music";
 import { getSiteSettings } from "@/lib/site-settings";
 import { AdminNowPlaying } from "@/components/admin/AdminNowPlaying";
 import { AdminMusicPanel } from "@/components/admin/AdminMusicPanel";
+import type { ManualNowPlayingItem } from "@/lib/db/queries";
+import type { MusicTrackRow } from "@/types/database";
 
 export default async function AdminNowPlayingPage() {
-  const [tracks, musicTracks, settings] = await Promise.all([
-    getManualNowPlayingList(),
-    getMusicTracksAdmin(),
-    getSiteSettings(),
-  ]);
-  const playlistStartedAt = settings.music_playlist_started_at ?? null;
+  let tracks: ManualNowPlayingItem[] = [];
+  let musicTracks: MusicTrackRow[] = [];
+  let playlistStartedAt: string | null = null;
+
+  try {
+    const [tracksData, musicTracksData, settings] = await Promise.all([
+      getManualNowPlayingList(),
+      getMusicTracksAdmin(),
+      getSiteSettings(),
+    ]);
+    tracks = tracksData ?? [];
+    musicTracks = musicTracksData ?? [];
+    playlistStartedAt = settings?.music_playlist_started_at ?? null;
+  } catch {
+    // Tablo/ortam yoksa sayfa yine açılsın; boş listelerle devam et
+  }
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 pt-24">

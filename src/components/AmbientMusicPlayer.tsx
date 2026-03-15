@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
+import styles from "./AmbientMusicPlayer.module.css";
 
 interface MusicTrackPublic {
   id: string;
@@ -137,6 +138,7 @@ export function AmbientMusicPlayer() {
   const duration = track.duration_sec || 180;
   const progress = (progressSec / duration) * 100;
 
+  // Ses site açılışında asla otomatik başlamaz; sadece Play’e basılınca kaldığı yerden çalar.
   return (
     <div className="rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:rounded-3xl">
       <audio ref={audioRef} preload="metadata" />
@@ -145,62 +147,105 @@ export function AmbientMusicPlayer() {
       </div>
       <div className="px-4 pb-4 pt-3 sm:px-6 sm:pb-6 sm:pt-4">
         <div className="flex items-center gap-4">
-          {/* Plak: dönen vinil + orta etiket (kapak) + merkez delik */}
-          <div className="relative flex h-16 w-16 shrink-0 items-center justify-center">
+          {/* Gerçekçi plak: dönen vinil + kenarda iğne (tonearm) */}
+          <div className="relative flex h-[72px] w-[72px] shrink-0 items-center justify-center">
+            {/* Dönen plak — vinil çizgiler + orta etiket */}
             <div
-              className="absolute inset-0 animate-spin rounded-full"
+              className="absolute inset-0 rounded-full"
               style={{
-                animationDuration: "2.8s",
+                animation: "vinyl-spin 2.6s linear infinite",
                 background: `
-                  radial-gradient(circle at 30% 30%, rgba(255,255,255,0.06) 0%, transparent 50%),
-                  repeating-radial-gradient(circle at center, transparent 0, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 3px),
-                  radial-gradient(circle at 70% 70%, rgba(0,0,0,0.4) 0%, transparent 45%),
-                  linear-gradient(145deg, #1a1a1a 0%, #0d0d0d 40%, #151515 100%)
+                  radial-gradient(circle at 50% 50%, #0f0e0d 0%, #0f0e0d 32%, transparent 33%),
+                  repeating-radial-gradient(circle at 50% 50%, transparent 0, transparent 1.2px, rgba(0,0,0,0.35) 1.2px, rgba(0,0,0,0.35) 2.4px),
+                  radial-gradient(circle at 30% 30%, rgba(255,255,255,0.04) 0%, transparent 35%),
+                  radial-gradient(circle at 70% 70%, rgba(0,0,0,0.3) 0%, transparent 40%),
+                  linear-gradient(165deg, #1c1b19 0%, #0d0c0b 50%, #151412 100%)
                 `,
-                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), inset 0 -2px 8px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.4)",
-              }}
-            />
-            <div
-              className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full"
-              style={{
-                boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08), 0 1px 3px rgba(0,0,0,0.3)",
-                background: track.cover_url ? undefined : "linear-gradient(145deg, #2d2520 0%, #1a1512 100%)",
+                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -2px 6px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.35)",
               }}
             >
-              {track.cover_url ? (
-                <Image
-                  src={track.cover_url}
-                  alt=""
-                  fill
-                  className="object-cover"
-                  sizes="48px"
-                  unoptimized
-                />
-              ) : (
-                <span className="text-[0.6rem] font-medium text-amber-200/40">♪</span>
-              )}
+              {/* Orta etiket (kapak) — plakla birlikte döner */}
               <div
-                className="absolute left-1/2 top-1/2 z-10 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-950 ring-2 ring-neutral-800"
-                style={{ boxShadow: "inset 0 1px 1px rgba(0,0,0,0.8)" }}
+                className="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full relative"
+                style={{
+                  boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06), 0 1px 2px rgba(0,0,0,0.3)",
+                  background: track.cover_url ? undefined : "linear-gradient(145deg, #2d2520 0%, #1a1512 100%)",
+                }}
+              >
+                {track.cover_url ? (
+                  <Image
+                    src={track.cover_url}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes="40px"
+                    unoptimized
+                  />
+                ) : (
+                  <span className="text-[0.55rem] font-medium text-amber-200/40">♪</span>
+                )}
+              </div>
+              <div
+                className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-950 ring-1 ring-neutral-700"
+                style={{ boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.9)" }}
               />
             </div>
+            {/* Tonearm + iğne — sabit, plağın kenarına değiyor */}
+            <svg
+              className="absolute inset-0 h-full w-full pointer-events-none"
+              viewBox="0 0 72 72"
+              fill="none"
+              aria-hidden
+            >
+              <defs>
+                <linearGradient id="armGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#4a4a4a" />
+                  <stop offset="50%" stopColor="#2e2e2e" />
+                  <stop offset="100%" stopColor="#1a1a1a" />
+                </linearGradient>
+                <filter id="armShadow" x="-30%" y="-30%" width="160%" height="160%">
+                  <feDropShadow dx="0" dy="1" stdDeviation="0.6" floodOpacity="0.35" />
+                </filter>
+              </defs>
+              {/* Kol: pivot (sağ üst) → plağın sol alt kenarına (iğne plağa değiyor) */}
+              <path
+                d="M 56 12 Q 32 28 18 42"
+                stroke="url(#armGrad)"
+                strokeWidth="2"
+                strokeLinecap="round"
+                filter="url(#armShadow)"
+              />
+              {/* Pivot noktası */}
+              <circle cx="56" cy="12" r="2.2" fill="#1f1f1f" stroke="#404040" strokeWidth="0.7" />
+              {/* İğne ucu — plağa değen elmas uç */}
+              <path
+                d="M 16 44 L 18 42 L 20 44 L 18 46 Z"
+                fill="#0d0d0d"
+                stroke="#333"
+                strokeWidth="0.5"
+              />
+            </svg>
           </div>
           <div className="min-w-0 flex-1">
             <p className="truncate font-medium text-white/90">{track.title}</p>
             <p className="truncate text-sm text-white/60">{track.artist}</p>
-            <p className="mt-2 text-xs text-white/50">
-              Şu an çalan: {track.title} — {track.artist}
-            </p>
+            {isPlaying && (
+              <p className="mt-2 text-xs text-white/50">
+                Şu an çalan: {track.title} — {track.artist}
+              </p>
+            )}
           </div>
         </div>
         <p className="mt-3 text-sm italic text-white/70">
-          Benimle birlikte dinlemeye devam edebilirsin
+          {isPlaying
+            ? "Benimle birlikte dinlemeye devam edebilirsin"
+            : "Play’e basınca playlist kaldığı yerden sesli çalar (tüm gün aynı zaman çizgisi)."}
         </p>
         <div className="mt-4 flex items-center gap-3">
           <button
             type="button"
             onClick={isPlaying ? handlePause : handlePlay}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/30"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-500/90 text-white hover:bg-amber-500 shadow-md hover:shadow-lg transition"
             aria-label={isPlaying ? "Duraklat" : "Oynat"}
           >
             {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5 ml-0.5" />}

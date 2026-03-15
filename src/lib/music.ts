@@ -3,16 +3,21 @@ import { createServerClient } from "@/lib/supabase/server";
 import { getSiteSettings } from "@/lib/site-settings";
 import type { MusicTrackRow } from "@/types/database";
 
-/** Admin: tüm parçaları (aktif + pasif) sırayla döndürür. Service role gerekir. */
+/** Admin: tüm parçaları (aktif + pasif) sırayla döndürür. Hata olursa boş dizi. */
 export async function getMusicTracksAdmin(): Promise<MusicTrackRow[]> {
-  const { createAdminClient } = await import("@/lib/supabase/admin");
-  const supabase = createAdminClient();
-  const { data } = await supabase
-    .from("music_tracks")
-    .select("*")
-    .order("order_index", { ascending: true })
-    .order("created_at", { ascending: true });
-  return (data ?? []) as MusicTrackRow[];
+  try {
+    const { createAdminClient } = await import("@/lib/supabase/admin");
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from("music_tracks")
+      .select("*")
+      .order("order_index", { ascending: true })
+      .order("created_at", { ascending: true });
+    if (error) return [];
+    return (data ?? []) as MusicTrackRow[];
+  } catch {
+    return [];
+  }
 }
 
 export interface MusicTrackPublic {

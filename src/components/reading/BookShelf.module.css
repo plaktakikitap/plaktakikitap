@@ -87,7 +87,7 @@
 .spineImage {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   display: block;
   background: rgba(40, 30, 20, 0.6);

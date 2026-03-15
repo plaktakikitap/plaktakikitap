@@ -6,8 +6,8 @@ import { Youtube } from "lucide-react";
 import type { PlaktakiKitapSettingsRow } from "@/lib/plaktaki-kitap";
 
 function formatSubscribers(n: number): string {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, "")}K`;
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(".", ",").replace(/,0$/, "")} Milyon`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(".", ",").replace(/,0$/, "")} Bin`;
   return n.toLocaleString("tr-TR");
 }
 
@@ -30,16 +30,21 @@ function SpotifyIcon({ className }: { className?: string }) {
 }
 
 export function PlaktakiKitapIntro({ settings }: PlaktakiKitapIntroProps) {
-  const [subscriberCount, setSubscriberCount] = useState<number | null>(null);
+  const [subscriberCount, setSubscriberCount] = useState<number | null>(
+    settings?.youtube_subscriber_count ?? null
+  );
 
   useEffect(() => {
     fetch("/api/youtube/subscribers")
       .then((r) => r.json())
       .then((d: { subscriberCount?: number | null }) => {
         if (typeof d.subscriberCount === "number") setSubscriberCount(d.subscriberCount);
+        else if (settings?.youtube_subscriber_count != null) setSubscriberCount(settings.youtube_subscriber_count);
       })
-      .catch(() => {});
-  }, []);
+      .catch(() => {
+        if (settings?.youtube_subscriber_count != null) setSubscriberCount(settings.youtube_subscriber_count);
+      });
+  }, [settings?.youtube_subscriber_count]);
 
   if (!settings) return null;
 
@@ -53,7 +58,7 @@ export function PlaktakiKitapIntro({ settings }: PlaktakiKitapIntroProps) {
       {/* Açıklama kutucuğu */}
       <div className="rounded-xl border border-amber-400/15 bg-white/5 px-5 py-3 backdrop-blur-sm sm:px-6 sm:py-3.5">
         {settings.intro_text ? (
-          <p className="font-serif text-sm italic leading-relaxed text-white/75 sm:text-base">
+          <p className="whitespace-pre-line font-serif text-sm italic leading-relaxed text-white/75 sm:text-base">
             {settings.intro_text}
           </p>
         ) : (

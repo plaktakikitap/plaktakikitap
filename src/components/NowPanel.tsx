@@ -102,10 +102,6 @@ export default async function NowPanel() {
 
   return (
     <section className="mx-auto mt-12 w-full max-w-6xl px-4 sm:mt-16 sm:px-6">
-      <div className="mb-3">
-        <h3 className="text-lg font-semibold text-white/90">Şu an</h3>
-      </div>
-
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
         {/* Şu an dinliyorum — ambient senkron veya Spotify/manuel liste */}
         {useAmbient ? (

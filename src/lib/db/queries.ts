@@ -130,7 +130,9 @@ export async function getPublicFilms(): Promise<
 > {
   const supabase = await createServerClient();
   const PAGE = 1000;
-  let contentIds: string[] = [];
+  const IN_BATCH = 200; // Küçük batch ile .in() limitleri aşılmaz
+
+  const contentFilmIds = new Set<string>();
   for (let from = 0; ; from += PAGE) {
     const { data: chunk } = await supabase
       .from("content_items")
@@ -139,34 +141,37 @@ export async function getPublicFilms(): Promise<
       .in("visibility", ["public", "unlisted"])
       .order("id")
       .range(from, from + PAGE - 1);
-    const ids = (chunk ?? []).map((c) => c.id);
-    contentIds = contentIds.concat(ids);
-    if (ids.length < PAGE) break;
+    (chunk ?? []).forEach((c) => contentFilmIds.add(c.id));
+    if (!chunk || chunk.length < PAGE) break;
   }
-  if (contentIds.length === 0) return [];
+  if (contentFilmIds.size === 0) return [];
 
   const allFilmsRows: { id: string; content_id: string; watched_at?: string | null; [k: string]: unknown }[] = [];
-  for (let i = 0; i < contentIds.length; i += PAGE) {
-    const batch = contentIds.slice(i, i + PAGE);
-    const { data: filmsRows, error } = await supabase
+  for (let from = 0; ; from += PAGE) {
+    const { data: chunk, error } = await supabase
       .from("films")
       .select("*")
-      .in("content_id", batch)
-      .order("watched_at", { ascending: true, nullsFirst: false });
+      .order("watched_at", { ascending: true, nullsFirst: false })
+      .range(from, from + PAGE - 1);
     if (error) return [];
-    allFilmsRows.push(...(filmsRows ?? []));
+    (chunk ?? []).forEach((row) => {
+      if (contentFilmIds.has(row.content_id)) allFilmsRows.push(row);
+    });
+    if (!chunk || chunk.length < PAGE) break;
   }
   const filmsRows = allFilmsRows;
 
+  const contentIdsToFetch = [...new Set(filmsRows.map((f) => f.content_id))];
   const contentMap = new Map<string, { id: string; [k: string]: unknown }>();
-  for (let i = 0; i < contentIds.length; i += PAGE) {
-    const batch = contentIds.slice(i, i + PAGE);
+  for (let i = 0; i < contentIdsToFetch.length; i += IN_BATCH) {
+    const batch = contentIdsToFetch.slice(i, i + IN_BATCH);
     const { data: items } = await supabase
       .from("content_items")
       .select("*")
       .in("id", batch);
     (items ?? []).forEach((item) => contentMap.set(item.id, item));
   }
+
   const list: (ContentItem & { film: Film })[] = [];
   for (const film of filmsRows) {
     const content = contentMap.get(film.content_id);

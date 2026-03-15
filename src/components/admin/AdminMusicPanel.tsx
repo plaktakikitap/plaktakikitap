@@ -26,6 +26,7 @@ export function AdminMusicPanel({
   const [success, setSuccess] = useState<string | null>(null);
   const [audioUrl, setAudioUrl] = useState("");
   const [coverUrl, setCoverUrl] = useState("");
+  const [durationSec, setDurationSec] = useState<number>(180);
   const [uploading, setUploading] = useState<"audio" | "cover" | null>(null);
 
   async function uploadFile(type: "audio" | "cover", file: File) {
@@ -38,8 +39,15 @@ export function AdminMusicPanel({
       const res = await fetch("/api/admin/music/upload", { method: "POST", body: fd });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Yükleme başarısız");
-      if (type === "audio") setAudioUrl(data.url);
-      else setCoverUrl(data.url);
+      if (type === "audio") {
+        setAudioUrl(data.url);
+        const url = data.url as string;
+        const audio = new Audio(url);
+        audio.addEventListener("loadedmetadata", () => {
+          const sec = Math.round(audio.duration);
+          if (Number.isFinite(sec) && sec > 0) setDurationSec(sec);
+        });
+      } else setCoverUrl(data.url);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Yükleme başarısız");
     } finally {
@@ -151,14 +159,15 @@ export function AdminMusicPanel({
           {coverUrl && <p className="mt-1 text-xs text-[var(--muted)]">Yüklendi.</p>}
         </div>
         <div>
-          <label className={labelClass}>Süre (saniye)</label>
+          <label className={labelClass}>Süre (saniye) — MP3 yükleyince otomatik dolar</label>
           <input
             name="duration_sec"
             type="number"
             min={0}
             className={inputClass}
             placeholder="180"
-            defaultValue={180}
+            value={durationSec}
+            onChange={(e) => setDurationSec(Math.max(0, parseInt(e.target.value, 10) || 0))}
           />
         </div>
         <div>

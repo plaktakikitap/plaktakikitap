@@ -34,6 +34,10 @@ export function AdminPlaktakiKitapSettingsForm() {
     setLoading(true);
     const fd = new FormData(e.currentTarget);
     try {
+      const rawSubs = (fd.get("youtube_subscriber_count") as string)?.trim() ?? "";
+      const youtube_subscriber_count =
+        rawSubs === "" ? null : (() => { const n = Number(rawSubs); return Number.isFinite(n) && n >= 0 ? n : null; })();
+
       const res = await fetch("/api/admin/plaktaki-kitap/settings", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -41,6 +45,7 @@ export function AdminPlaktakiKitapSettingsForm() {
           intro_text: (fd.get("intro_text") as string)?.trim() ?? "",
           youtube_channel_url: (fd.get("youtube_channel_url") as string)?.trim() ?? "",
           youtube_channel_id: (fd.get("youtube_channel_id") as string)?.trim() ?? "",
+          youtube_subscriber_count,
           spotify_profile_url: (fd.get("spotify_profile_url") as string)?.trim() || null,
         }),
       });
