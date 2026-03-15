@@ -2,7 +2,7 @@ import { getPlaktakiKitapSettings, getPlaktakiKitapItems } from "@/lib/plaktaki-
 import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 import { PlaktakiKitapContent } from "@/components/plaktaki-kitap/PlaktakiKitapContent";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export default async function PlaktakiKitapPage() {
   const [settings, items] = await Promise.all([

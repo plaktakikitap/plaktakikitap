@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useCallback } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { ModalPortal } from "@/components/ui/ModalPortal";
@@ -110,12 +111,15 @@ export function PhotoLightbox({
           className="relative flex max-h-[85vh] max-w-[90vw] flex-col items-center"
           onClick={(e) => e.stopPropagation()}
         >
-          <img
-            src={item.image_url}
-            alt={item.caption || "Fotoğraf"}
-            className="max-h-[85vh] max-w-full rounded-xl object-contain shadow-2xl"
-            draggable={false}
-          />
+          <div className="relative h-[85vh] min-h-[200px] w-full max-w-[90vw]">
+            <Image
+              src={item.image_url}
+              alt={item.caption || "Fotoğraf"}
+              fill
+              className="rounded-xl object-contain shadow-2xl"
+              sizes="90vw"
+            />
+          </div>
           {(item.caption || displayDate) && (
             <div className="mt-3 self-start pl-1 text-left text-[11px] tracking-wide text-white/50">
               {item.caption && <span>{item.caption}</span>}

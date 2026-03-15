@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 export type TimelineImage = { url: string; caption?: string };
@@ -89,7 +90,7 @@ function PolaroidCard({
       >
         {showTape && <TapeStrip corner={tapeCorner} />}
         <div className="relative h-28 w-full overflow-hidden sm:h-36" style={{ border: "1px solid rgba(0,0,0,0.06)" }}>
-          <img src={url} alt="" className="h-full w-full object-cover" />
+          <Image src={url} alt="" fill className="object-cover" sizes="170px" />
         </div>
         <p
           className="absolute left-2 right-2 text-center text-[10px] leading-tight"

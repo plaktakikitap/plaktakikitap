@@ -34,7 +34,7 @@ export async function getPlaktakiKitapSettings(): Promise<PlaktakiKitapSettingsR
   const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("plaktaki_kitap_settings")
-    .select("*")
+    .select("id, intro_text, youtube_channel_url, youtube_channel_id, youtube_subscriber_count, spotify_profile_url, updated_at")
     .limit(1)
     .maybeSingle();
   if (error || !data) return null;
@@ -49,7 +49,7 @@ export async function getPlaktakiKitapItems(): Promise<PlaktakiKitapItemRow[]> {
   const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("plaktaki_kitap_items")
-    .select("*")
+    .select("id, type, title, description, youtube_url, youtube_video_id, custom_thumbnail_url, tags, duration_min, is_featured, order_index, created_at")
     .order("is_featured", { ascending: false })
     .order("order_index", { ascending: true })
     .order("created_at", { ascending: false, nullsFirst: false });

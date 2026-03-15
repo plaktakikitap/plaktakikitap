@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { motion } from "framer-motion";
-import { X } from "lucide-react";
+import { X, RotateCcw } from "lucide-react";
 import type { ContentItem, Film } from "@/types/database";
 import { StarRatingDisplay } from "@/components/ui/StarRating";
 import { Film as FilmIcon } from "lucide-react";
 import { ModalPortal } from "@/components/ui/ModalPortal";
+import { updateFilmRewatchCount } from "@/app/actions";
+import { useRouter } from "next/navigation";
 
 type FilmItem = ContentItem & { film: Film | Film[] | null };
 
@@ -23,6 +25,10 @@ interface FilmDetailModalProps {
 
 export function FilmDetailModal({ item, onClose }: FilmDetailModalProps) {
   const film = item ? getFilm(item) : null;
+  const router = useRouter();
+  const [rewatchCount, setRewatchCount] = useState(0);
+  const [rewatchInput, setRewatchInput] = useState("");
+  const [rewatchPending, setRewatchPending] = useState(false);
 
   const handleKey = useCallback(
     (e: KeyboardEvent) => {
@@ -38,6 +44,7 @@ export function FilmDetailModal({ item, onClose }: FilmDetailModalProps) {
 
   if (!item || !film) return null;
 
+  const totalViews = 1 + (film.rewatch_count ?? 0) + rewatchCount;
   const coverUrl = film.poster_url;
   const ratingValue =
     film.rating_5 ?? (item.rating != null ? item.rating / 2 : null);
@@ -146,6 +153,47 @@ export function FilmDetailModal({ item, onClose }: FilmDetailModalProps) {
               <span className="text-sm text-white/60">({ratingValue} / 5)</span>
             </div>
           )}
+
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const n = parseInt(rewatchInput, 10);
+                if (Number.isNaN(n) || n < 1 || n > 999) return;
+                setRewatchPending(true);
+                const res = await updateFilmRewatchCount(item.id, n);
+                setRewatchPending(false);
+                if (res?.error) return;
+                setRewatchCount((prev) => prev + n);
+                setRewatchInput("");
+                router.refresh();
+              }}
+              className="flex items-center gap-2"
+            >
+              <button
+                type="submit"
+                disabled={rewatchPending || !rewatchInput.trim()}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-sm font-medium text-white/90 transition hover:bg-white/15 disabled:opacity-50"
+              >
+                <RotateCcw className="h-4 w-4" />
+                Tekrar izledim
+              </button>
+              <input
+                type="number"
+                min={1}
+                max={999}
+                placeholder="+kaç?"
+                value={rewatchInput}
+                onChange={(e) => setRewatchInput(e.target.value)}
+                className="w-16 rounded border border-white/20 bg-white/5 px-2 py-1.5 text-center text-sm text-white placeholder:text-white/40"
+              />
+            </form>
+            {totalViews > 1 && (
+              <span className="rounded bg-white/15 px-2 py-1 text-xs font-medium text-white/80">
+                x{totalViews}
+              </span>
+            )}
+          </div>
 
           {film.review && (
             <div className="mt-4 flex-1 overflow-y-auto pr-1">

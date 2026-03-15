@@ -24,6 +24,7 @@ export interface ContentItem {
 }
 
 export interface Film {
+  id?: string;
   content_id: string;
   duration_min: number;
   year: number | null;
@@ -40,6 +41,8 @@ export interface Film {
   favorite_order?: number | null;
   /** İzlenme tarihi; "Son izlediğim" ve raf sırası */
   watched_at?: string | null;
+  /** Ek izleme sayısı; toplam = 1 + rewatch_count. Süre: duration_min × (1 + rewatch_count) */
+  rewatch_count?: number;
 }
 
 export interface Series {
@@ -68,6 +71,8 @@ export interface Series {
   spine_url?: string | null;
   /** Dizi izleme durumu: bitirilmiş, devamını bekliyorum, yarıda bıraktım */
   status?: "finished" | "waiting" | "dropped" | null;
+  /** Ek izleme sayısı; toplam = 1 + rewatch_count. Süre: total_duration_min × (1 + rewatch_count) */
+  rewatch_count?: number;
 }
 
 /** Reading log: standalone books table (id, title, author, ...) */

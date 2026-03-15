@@ -12,7 +12,7 @@ export default async function IzlemeGunlugumFilmlerPage() {
   let favoriteFilms: Awaited<ReturnType<typeof getPublicFavoriteFilms>> = [];
   let totalFilms = 0;
   let totalFilmWatchTimeMinutes = 0;
-  let filmWatchedThisMonth = 0;
+  let filmWatchedThisYear = 0;
 
   try {
     const [filmsData, favoriteData, stats] = await Promise.all([
@@ -24,7 +24,7 @@ export default async function IzlemeGunlugumFilmlerPage() {
     favoriteFilms = favoriteData;
     totalFilms = stats.totalFilms;
     totalFilmWatchTimeMinutes = stats.totalFilmWatchTimeMinutes;
-    filmWatchedThisMonth = stats.filmWatchedThisMonth;
+    filmWatchedThisYear = stats.filmWatchedThisYear;
   } catch {
     // Supabase not configured – show empty state
   }
@@ -57,7 +57,7 @@ export default async function IzlemeGunlugumFilmlerPage() {
             lastTitle={lastFilmTitle}
             totalCount={totalFilms}
             totalMinutes={totalFilmWatchTimeMinutes}
-            thisMonthCount={filmWatchedThisMonth}
+            thisYearCount={filmWatchedThisYear}
           />
 
           <FilmlerPageContent films={films} favoriteFilms={favoriteFilms} />

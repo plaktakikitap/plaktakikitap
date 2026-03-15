@@ -3,25 +3,29 @@ import { getPhotosPublic } from "@/lib/photos";
 import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 import SiteBackground from "@/components/SiteBackground";
 import { PhotosContent } from "@/components/photos/PhotosContent";
+import { PhotosPageSkeleton } from "@/components/photos/PhotosPageSkeleton";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export default async function PhotosPage() {
+  return (
+    <PageTransitionTarget layoutId="card-/photos">
+      <main className="relative min-h-screen text-white">
+        <SiteBackground />
+        <Suspense fallback={<PhotosPageSkeleton />}>
+          <PhotosPageInner />
+        </Suspense>
+      </main>
+    </PageTransitionTarget>
+  );
+}
+
+async function PhotosPageInner() {
   let photos: Awaited<ReturnType<typeof getPhotosPublic>> = [];
   try {
     photos = await getPhotosPublic();
   } catch {
     // Supabase not configured – show empty state
   }
-
-  return (
-    <PageTransitionTarget layoutId="card-/photos">
-      <main className="relative min-h-screen text-white">
-        <SiteBackground />
-        <Suspense fallback={<div className="mx-auto max-w-6xl px-4 py-16 text-center text-white/60">Yükleniyor…</div>}>
-          <PhotosContent photos={photos} />
-        </Suspense>
-      </main>
-    </PageTransitionTarget>
-  );
+  return <PhotosContent photos={photos} />;
 }

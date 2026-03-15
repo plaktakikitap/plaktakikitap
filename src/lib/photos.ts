@@ -12,11 +12,16 @@ export async function getPhotosPublic(): Promise<Photo[]> {
   const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("photos")
-    .select("*")
+    .select("id, image_url, caption, shot_at, created_at, type")
     .order("created_at", { ascending: false });
 
   if (error) return [];
-  const rows = (data ?? []) as Photo[];
+  const rows = (data ?? []).map((r: Record<string, unknown>) => ({
+    ...r,
+    tags: r.tags ?? [],
+    camera: r.camera ?? null,
+    year: r.year ?? null,
+  })) as Photo[];
   return signPhotoUrls(rows);
 }
 

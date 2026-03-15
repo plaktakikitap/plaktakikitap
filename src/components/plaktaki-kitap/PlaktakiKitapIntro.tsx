@@ -48,7 +48,7 @@ export function PlaktakiKitapIntro({ settings }: PlaktakiKitapIntroProps) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
-      className="mb-0"
+      className="mb-2"
     >
       {/* Açıklama kutucuğu */}
       <div className="rounded-xl border border-amber-400/15 bg-white/5 px-5 py-3 backdrop-blur-sm sm:px-6 sm:py-3.5">
@@ -63,8 +63,8 @@ export function PlaktakiKitapIntro({ settings }: PlaktakiKitapIntroProps) {
         )}
       </div>
 
-      {/* Açıklamanın hemen altı: butonlar tek satır (kısa), yuvarlak ayrı satırda */}
-      <div className="mt-1">
+      {/* Açıklamanın hemen altı: butonlar ve abone kutusu yan yana */}
+      <div className="mt-1 flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-2">
           {settings.youtube_channel_url && (
             <a
@@ -74,7 +74,7 @@ export function PlaktakiKitapIntro({ settings }: PlaktakiKitapIntroProps) {
               className="inline-flex items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-500/10 px-4 py-2.5 text-sm font-medium text-amber-200 transition hover:border-amber-400/50 hover:bg-amber-500/20 hover:text-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400/50"
             >
               <Youtube className="h-4 w-4" aria-hidden />
-              YouTube Kanalıma Git
+              YouTube Kanalıma Buradan Ulaşabilirsiniz
             </a>
           )}
           {settings.spotify_profile_url && (
@@ -85,17 +85,16 @@ export function PlaktakiKitapIntro({ settings }: PlaktakiKitapIntroProps) {
               className="inline-flex items-center gap-2 rounded-full border border-[#1DB954]/40 bg-[#1DB954]/20 px-3.5 py-1.5 text-sm font-medium text-white/95 transition hover:border-[#1DB954]/60 hover:bg-[#1DB954]/30 hover:text-white focus:outline-none focus:ring-2 focus:ring-[#1DB954]/50"
             >
               <SpotifyIcon className="h-5 w-5 shrink-0" />
-              Sesli kitaplara Spotify&apos;dan da ulaşabilirsiniz!
+              Seslendirdiğim kitapları Spotify&apos;dan da dinleyebilirsiniz!
             </a>
           )}
         </div>
 
-        {/* Yuvarlak abone kutusu — butonların hemen altında, sağa hizalı */}
-        <div className="mt-2 flex justify-end sm:mt-3">
-          <div
-            className="relative flex h-40 w-40 items-center justify-center sm:h-52 sm:w-52"
-            aria-label={subscriberCount != null ? `${subscriberCount.toLocaleString("tr-TR")} abone` : "Ailemiz büyüyor"}
-          >
+        {/* Yuvarlak abone kutusu — butonların yanında, kompakt */}
+        <div
+          className="relative flex h-32 w-32 shrink-0 items-center justify-center sm:h-36 sm:w-36"
+          aria-label={subscriberCount != null ? `${subscriberCount.toLocaleString("tr-TR")} abone` : "Ailemiz büyüyor"}
+        >
             {/* Çember etrafında eğimli yazı (üst yarım) */}
             <svg
               className="absolute inset-0 h-full w-full"
@@ -110,7 +109,7 @@ export function PlaktakiKitapIntro({ settings }: PlaktakiKitapIntroProps) {
                 />
               </defs>
               <text
-                className="fill-amber-200/95 text-[0.45rem] font-semibold tracking-wider sm:text-[0.55rem]"
+                className="fill-amber-200/95 text-[0.4rem] font-semibold tracking-wider sm:text-[0.45rem]"
                 style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
               >
                 <textPath href="#plaktaki-arc" startOffset="0">
@@ -121,7 +120,7 @@ export function PlaktakiKitapIntro({ settings }: PlaktakiKitapIntroProps) {
 
             {/* Ortada parlak yuvarlak kutu */}
             <div
-              className="relative flex h-28 w-28 flex-col items-center justify-center rounded-full sm:h-36 sm:w-36"
+              className="relative flex h-24 w-24 flex-col items-center justify-center rounded-full sm:h-28 sm:w-28"
               style={{
                 background: "linear-gradient(145deg, rgba(251,191,36,0.35) 0%, rgba(245,158,11,0.25) 40%, rgba(251,191,36,0.2) 100%)",
                 boxShadow:
@@ -136,17 +135,12 @@ export function PlaktakiKitapIntro({ settings }: PlaktakiKitapIntroProps) {
                 aria-hidden
               />
               {subscriberCount != null ? (
-                <span className="relative text-center text-base font-bold tabular-nums text-amber-50 drop-shadow-sm sm:text-xl">
-                  {formatSubscribers(subscriberCount)}
-                </span>
+                <span className="relative text-center text-base font-bold tabular-nums text-amber-50 drop-shadow-sm">{formatSubscribers(subscriberCount)}</span>
               ) : (
-                <span className="relative text-base font-semibold text-amber-100/90 sm:text-lg">—</span>
+                <span className="relative text-lg font-semibold text-amber-100/90">—</span>
               )}
-              <span className="relative text-[0.65rem] font-medium uppercase tracking-wider text-amber-200/80 sm:text-[0.75rem]">
-                abone
-              </span>
+              <span className="relative text-[0.65rem] font-medium uppercase tracking-wider text-amber-200/80 sm:text-[0.75rem]">abone</span>
             </div>
-          </div>
         </div>
       </div>
     </motion.section>

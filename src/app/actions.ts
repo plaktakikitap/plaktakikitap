@@ -500,3 +500,45 @@ export async function setSeriesFavorite(contentId: string, isFavorite: boolean) 
   revalidatePath("/izleme-gunlugum/diziler");
   return { success: true };
 }
+
+/** contentId = content_items.id. addCount = ek izleme sayısı (0–999). */
+export async function updateFilmRewatchCount(contentId: string, addCount: number) {
+  const supabase = await createServerClient();
+  const n = Math.max(0, Math.min(999, Math.floor(addCount)));
+  const { data: rows } = await supabase
+    .from("films")
+    .select("id, rewatch_count")
+    .eq("content_id", contentId);
+  if (!rows?.length) return { error: "Film bulunamadı." };
+  const current = (rows[0]?.rewatch_count ?? 0) || 0;
+  const newVal = Math.min(999, current + n);
+  const { error } = await supabase
+    .from("films")
+    .update({ rewatch_count: newVal })
+    .eq("content_id", contentId);
+  if (error) return { error: error.message };
+  revalidatePath("/izleme-gunlugum/filmler");
+  revalidatePath("/cinema");
+  return { success: true };
+}
+
+/** contentId = content_items.id. addCount = ek izleme sayısı (0–999). */
+export async function updateSeriesRewatchCount(contentId: string, addCount: number) {
+  const supabase = await createServerClient();
+  const n = Math.max(0, Math.min(999, Math.floor(addCount)));
+  const { data: row } = await supabase
+    .from("series")
+    .select("rewatch_count")
+    .eq("content_id", contentId)
+    .single();
+  const current = (row?.rewatch_count ?? 0) || 0;
+  const newVal = Math.min(999, current + n);
+  const { error } = await supabase
+    .from("series")
+    .update({ rewatch_count: newVal })
+    .eq("content_id", contentId);
+  if (error) return { error: error.message };
+  revalidatePath("/izleme-gunlugum/diziler");
+  revalidatePath("/cinema");
+  return { success: true };
+}

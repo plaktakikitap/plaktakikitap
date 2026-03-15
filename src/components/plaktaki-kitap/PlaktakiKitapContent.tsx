@@ -1,14 +1,18 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Play, Disc3 } from "lucide-react";
 import type { PlaktakiKitapSettingsRow, PlaktakiKitapItemRow } from "@/lib/plaktaki-kitap";
-import { getPlaktakiKitapItemThumbUrl } from "@/lib/plaktaki-kitap";
 import { getYouTubeHqDefaultThumbUrl } from "@/lib/works-utils";
 import { PlaktakiKitapIntro } from "./PlaktakiKitapIntro";
-import { PlaktakiKitapPlayerModal } from "./PlaktakiKitapPlayerModal";
+
+const PlaktakiKitapPlayerModal = dynamic(
+  () => import("./PlaktakiKitapPlayerModal").then((m) => ({ default: m.PlaktakiKitapPlayerModal })),
+  { ssr: false }
+);
 
 type Props = {
   settings: PlaktakiKitapSettingsRow | null;
@@ -55,7 +59,7 @@ export function PlaktakiKitapContent({ settings, items }: Props) {
         <PlaktakiKitapIntro settings={settings} />
 
         {(allTags.length > 0 || items.length > 6) && (
-          <div className="mt-2 mb-8 flex flex-wrap items-center gap-3">
+          <div className="mt-2 mb-6 flex flex-wrap items-center gap-3">
             <input
               type="search"
               placeholder="Başlık veya açıklama ara..."

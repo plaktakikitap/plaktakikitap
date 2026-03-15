@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useCallback, useRef } from "react";
+import { useEffect, useCallback, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ExternalLink } from "lucide-react";
 import { ModalPortal } from "@/components/ui/ModalPortal";
+
 type Item = { id: string; title: string; youtube_video_id: string };
 type Props = { item: Item | null; onClose: () => void };
 
@@ -55,14 +56,20 @@ export function PlaktakiKitapPlayerModal({ item, onClose }: Props) {
         >
           <div className="overflow-hidden rounded-xl border border-amber-400/20 bg-black shadow-2xl shadow-amber-900/10">
             <div className="aspect-video w-full">
-              <iframe
-                key={item.id}
-                src={"https://www.youtube.com/embed/" + item.youtube_video_id + "?autoplay=1&rel=0"}
-                title={item.title || "YouTube"}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="h-full w-full"
-              />
+              {shouldLoadIframe ? (
+                <iframe
+                  key={item.id}
+                  src={"https://www.youtube.com/embed/" + item.youtube_video_id + "?autoplay=1&rel=0"}
+                  title={item.title || "YouTube"}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="h-full w-full"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-black/60">
+                  <span className="text-sm text-white/60">Yükleniyor…</span>
+                </div>
+              )}
             </div>
             <div className="flex flex-col gap-3 border-t border-white/10 bg-black/60 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
               <p id="pk-modal-title" className="min-w-0 flex-1 text-sm font-medium text-white/95 line-clamp-2">{item.title || "Video"}</p>

@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { motion } from "framer-motion";
-import { X, Tv } from "lucide-react";
+import { X, Tv, RotateCcw } from "lucide-react";
 import type { ContentItem, Series } from "@/types/database";
 import { StarRatingDisplay } from "@/components/ui/StarRating";
 import { ModalPortal } from "@/components/ui/ModalPortal";
 import { getSeriesStatusLabel, getSeriesStatusLineColor } from "@/lib/utils/series-status";
+import { updateSeriesRewatchCount } from "@/app/actions";
+import { useRouter } from "next/navigation";
 
 type SeriesItem = ContentItem & { series: Series | Series[] | null };
 
@@ -23,6 +25,10 @@ interface SeriesDetailModalProps {
 
 export function SeriesDetailModal({ item, onClose }: SeriesDetailModalProps) {
   const series = item ? getSeries(item) : null;
+  const router = useRouter();
+  const [rewatchCount, setRewatchCount] = useState(0);
+  const [rewatchInput, setRewatchInput] = useState("");
+  const [rewatchPending, setRewatchPending] = useState(false);
 
   const handleKey = useCallback(
     (e: KeyboardEvent) => {
@@ -38,6 +44,7 @@ export function SeriesDetailModal({ item, onClose }: SeriesDetailModalProps) {
 
   if (!item || !series) return null;
 
+  const totalViews = 1 + (series.rewatch_count ?? 0) + rewatchCount;
   const totalDurationMin =
     series.total_duration_min ??
     (series.episodes_watched ?? 0) * (series.avg_episode_min ?? 0);
@@ -138,6 +145,47 @@ export function SeriesDetailModal({ item, onClose }: SeriesDetailModalProps) {
               <span className="text-sm text-white/60">({ratingValue} / 5)</span>
             </div>
           )}
+
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const n = parseInt(rewatchInput, 10);
+                if (Number.isNaN(n) || n < 1 || n > 999) return;
+                setRewatchPending(true);
+                const res = await updateSeriesRewatchCount(item.id, n);
+                setRewatchPending(false);
+                if (res?.error) return;
+                setRewatchCount((prev) => prev + n);
+                setRewatchInput("");
+                router.refresh();
+              }}
+              className="flex items-center gap-2"
+            >
+              <button
+                type="submit"
+                disabled={rewatchPending || !rewatchInput.trim()}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-sm font-medium text-white/90 transition hover:bg-white/15 disabled:opacity-50"
+              >
+                <RotateCcw className="h-4 w-4" />
+                Tekrar izledim
+              </button>
+              <input
+                type="number"
+                min={1}
+                max={999}
+                placeholder="+kaç?"
+                value={rewatchInput}
+                onChange={(e) => setRewatchInput(e.target.value)}
+                className="w-16 rounded border border-white/20 bg-white/5 px-2 py-1.5 text-center text-sm text-white placeholder:text-white/40"
+              />
+            </form>
+            {totalViews > 1 && (
+              <span className="rounded bg-white/15 px-2 py-1 text-xs font-medium text-white/80">
+                x{totalViews}
+              </span>
+            )}
+          </div>
 
           {statusLabel && (
             <p className="mt-3 text-sm text-white/70">

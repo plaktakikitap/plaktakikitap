@@ -11,8 +11,10 @@ interface WatchLogStatsProps {
   lastTitle: string | null;
   totalCount: number;
   totalMinutes: number;
-  /** Bu ay izlenen (watched_at in current month) */
+  /** Bu ay izlenen (watched_at in current month) - diziler sayfası */
   thisMonthCount?: number;
+  /** Bu yıl izlenen (watched_at in current year) - filmler sayfası */
+  thisYearCount?: number;
 }
 
 export function WatchLogStats({
@@ -21,6 +23,7 @@ export function WatchLogStats({
   totalCount,
   totalMinutes,
   thisMonthCount = 0,
+  thisYearCount,
 }: WatchLogStatsProps) {
   const totalTimeStr = formatWatchTimeYilAyGunSaat(totalMinutes);
   const averageMinutes = totalCount > 0 ? Math.round(totalMinutes / totalCount) : 0;
@@ -67,13 +70,15 @@ export function WatchLogStats({
         </div>
       </div>
 
-      {/* Bu ay izlenen */}
+      {/* Bu ay / Bu yıl izlenen */}
       <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-4 backdrop-blur-sm">
         <Calendar className="h-6 w-6 shrink-0 text-amber-400/80" aria-hidden />
         <div>
-          <p className="text-xs text-white/60">Bu ay izlenen</p>
+          <p className="text-xs text-white/60">
+            {thisYearCount != null ? "Bu yıl izlenen" : "Bu ay izlenen"}
+          </p>
           <p className="mt-0.5 font-semibold tabular-nums text-white/95">
-            {thisMonthCount}
+            {thisYearCount != null ? thisYearCount : thisMonthCount}
           </p>
         </div>
       </div>

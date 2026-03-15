@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 interface DeskHeroProps {
@@ -20,7 +21,7 @@ export function DeskHero({ portraitUrl }: DeskHeroProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
-            className="h-10 w-10 overflow-hidden rounded-full md:h-12 md:w-12"
+            className="relative h-10 w-10 overflow-hidden rounded-full md:h-12 md:w-12"
           >
             <img src={portraitUrl} alt="" className="h-full w-full object-cover" />
           </motion.div>

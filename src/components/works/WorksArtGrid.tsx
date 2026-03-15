@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 
@@ -38,7 +39,15 @@ export function WorksArtGrid({ items }: { items: Art[] }) {
               className="relative block overflow-hidden rounded-lg border-2 border-white/20 bg-white/5 py-0 transition-shadow hover:border-amber-400/40"
               style={{ transform: "rotate(" + rot + "deg)", width: 180, height: 220 }}
             >
-              <img src={item.image_url} alt={item.caption || ""} className="h-full w-full object-cover" />
+              <Image
+                src={item.image_url}
+                alt={item.caption || ""}
+                width={180}
+                height={220}
+                className="h-full w-full object-cover"
+                loading="lazy"
+                sizes="180px"
+              />
               {item.caption && (
                 <span className="absolute bottom-0 left-0 right-0 bg-black/60 py-1 text-center text-xs text-white/90">
                   {item.caption}
@@ -70,13 +79,15 @@ export function WorksArtGrid({ items }: { items: Art[] }) {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="relative max-h-[90vh] max-w-[90vw]"
+              className="relative h-[90vh] min-h-[200px] w-full max-w-[90vw]"
               onClick={(e) => e.stopPropagation()}
             >
-              <img
+              <Image
                 src={items[lightboxIndex].image_url}
                 alt={items[lightboxIndex].caption || ""}
-                className="max-h-[90vh] max-w-full rounded-lg object-contain shadow-2xl"
+                fill
+                className="rounded-lg object-contain shadow-2xl"
+                sizes="90vw"
               />
               {items[lightboxIndex].caption && (
                 <p className="mt-2 text-center text-sm text-white/80">{items[lightboxIndex].caption}</p>

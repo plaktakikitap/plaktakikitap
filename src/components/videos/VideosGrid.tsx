@@ -1,11 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Play, Disc3 } from "lucide-react";
 import { parseYouTubeVideoId, getYouTubeThumbUrl } from "@/lib/works-utils";
 import type { Video } from "@/types/videos";
-import { VideoModal } from "./VideoModal";
+
+const VideoModal = dynamic(
+  () => import("./VideoModal").then((m) => ({ default: m.VideoModal })),
+  { ssr: false }
+);
 
 function getThumb(v: Video): string {
   if (v.thumbnail_url?.startsWith("http")) return v.thumbnail_url;
@@ -50,10 +56,13 @@ export function VideosGrid({ videos }: VideosGridProps) {
                   <Disc3 className="h-24 w-24 text-amber-200/80" strokeWidth={1.2} aria-hidden />
                 </div>
               ) : (
-                <img
+                <Image
                   src={getThumb(video)}
                   alt=""
-                  className="absolute inset-0 h-full w-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  loading="lazy"
                 />
               )}
               <div

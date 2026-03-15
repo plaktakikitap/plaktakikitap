@@ -10,7 +10,7 @@ export async function getVideosPublic(): Promise<Video[]> {
   const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("videos")
-    .select("*")
+    .select("id, type, youtube_url, title, description, thumbnail_url, published_at, is_featured, sort_order, created_at")
     .order("sort_order", { ascending: true })
     .order("published_at", { ascending: false, nullsFirst: false });
 
@@ -23,7 +23,7 @@ export async function getLatestVideo(): Promise<Video | null> {
   const supabase = createAdminClient();
   const { data: featured } = await supabase
     .from("videos")
-    .select("*")
+    .select("id, type, youtube_url, title, description, thumbnail_url, published_at, is_featured, sort_order, created_at")
     .eq("is_featured", true)
     .order("published_at", { ascending: false })
     .limit(1)
@@ -33,7 +33,7 @@ export async function getLatestVideo(): Promise<Video | null> {
 
   const { data: latest } = await supabase
     .from("videos")
-    .select("*")
+    .select("id, type, youtube_url, title, description, thumbnail_url, published_at, is_featured, sort_order, created_at")
     .order("published_at", { ascending: false, nullsFirst: false })
     .limit(1)
     .maybeSingle();

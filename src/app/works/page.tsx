@@ -2,7 +2,7 @@ import { getWorksPublic } from "@/lib/works";
 import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 import { WorksContent } from "@/components/works/WorksContent";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export default async function WorksPage() {
   let items: Awaited<ReturnType<typeof getWorksPublic>>["items"] = [];

@@ -94,6 +94,8 @@ export interface CinemaStats {
   totalReviews: number;
   /** Bu ay (watched_at) izlenen film sayısı */
   filmWatchedThisMonth: number;
+  /** Bu yıl (watched_at) izlenen film sayısı */
+  filmWatchedThisYear: number;
   /** Bu ay (watched_at) izlenen dizi sayısı */
   seriesWatchedThisMonth: number;
 }
@@ -122,19 +124,54 @@ function getFilmWatchedAt(item: ContentItem & { film: Film | Film[] | null }): s
   return (film as { watched_at?: string | null })?.watched_at ?? item.created_at;
 }
 
+/** Her izlenme ayrı satır (aynı film tekrar izlendiyse birden fazla kez gelir). */
 export async function getPublicFilms(): Promise<
   (ContentItem & { film: Film | Film[] | null })[]
 > {
   const supabase = await createServerClient();
-  const { data, error } = await supabase
-    .from("content_items")
-    .select("*, film:films(*)")
-    .eq("type", "film")
-    .in("visibility", ["public", "unlisted"]);
+  const PAGE = 1000;
+  let contentIds: string[] = [];
+  for (let from = 0; ; from += PAGE) {
+    const { data: chunk } = await supabase
+      .from("content_items")
+      .select("id")
+      .eq("type", "film")
+      .in("visibility", ["public", "unlisted"])
+      .order("id")
+      .range(from, from + PAGE - 1);
+    const ids = (chunk ?? []).map((c) => c.id);
+    contentIds = contentIds.concat(ids);
+    if (ids.length < PAGE) break;
+  }
+  if (contentIds.length === 0) return [];
 
-  if (error) return [];
-  const list = (data ?? []) as (ContentItem & { film: Film | Film[] | null })[];
-  list.sort((a, b) => new Date(getFilmWatchedAt(a)).getTime() - new Date(getFilmWatchedAt(b)).getTime());
+  const allFilmsRows: { id: string; content_id: string; watched_at?: string | null; [k: string]: unknown }[] = [];
+  for (let i = 0; i < contentIds.length; i += PAGE) {
+    const batch = contentIds.slice(i, i + PAGE);
+    const { data: filmsRows, error } = await supabase
+      .from("films")
+      .select("*")
+      .in("content_id", batch)
+      .order("watched_at", { ascending: true, nullsFirst: false });
+    if (error) return [];
+    allFilmsRows.push(...(filmsRows ?? []));
+  }
+  const filmsRows = allFilmsRows;
+
+  const contentMap = new Map<string, { id: string; [k: string]: unknown }>();
+  for (let i = 0; i < contentIds.length; i += PAGE) {
+    const batch = contentIds.slice(i, i + PAGE);
+    const { data: items } = await supabase
+      .from("content_items")
+      .select("*")
+      .in("id", batch);
+    (items ?? []).forEach((item) => contentMap.set(item.id, item));
+  }
+  const list: (ContentItem & { film: Film })[] = [];
+  for (const film of filmsRows) {
+    const content = contentMap.get(film.content_id);
+    if (content) list.push({ ...content, film: { ...film, id: film.id } as Film });
+  }
   return list;
 }
 
@@ -170,9 +207,15 @@ export async function getPublicFavoriteFilms(): Promise<
     .select("*")
     .eq("is_favorite", true)
     .order("favorite_order", { ascending: false, nullsFirst: false })
-    .limit(5);
+    .limit(20);
   if (filmsErr || !filmsRows?.length) return [];
-  const contentIds = filmsRows.map((f) => f.content_id);
+  const seen = new Set<string>();
+  const uniqueFilms = filmsRows.filter((f) => {
+    if (seen.has(f.content_id)) return false;
+    seen.add(f.content_id);
+    return true;
+  }).slice(0, 5);
+  const contentIds = uniqueFilms.map((f) => f.content_id);
   const { data: items, error: itemsErr } = await supabase
     .from("content_items")
     .select("*")
@@ -181,7 +224,7 @@ export async function getPublicFavoriteFilms(): Promise<
   if (itemsErr || !items?.length) return [];
   const itemMap = new Map(items.map((i) => [i.id, i]));
   const result: (ContentItem & { film: Film | Film[] | null })[] = [];
-  for (const film of filmsRows) {
+  for (const film of uniqueFilms) {
     const content = itemMap.get(film.content_id);
     if (content) result.push({ ...content, film });
   }
@@ -581,60 +624,87 @@ export async function getCinemaStats(): Promise<CinemaStats> {
   try {
     const supabase = await createServerClient();
   const vis = ["public", "unlisted"];
+  const PAGE = 1000;
 
-  const [filmsRes, seriesRes] = await Promise.all([
-    supabase
+  const contentFilmIds = new Set<string>();
+  for (let from = 0; ; from += PAGE) {
+    const { data: chunk } = await supabase
       .from("content_items")
       .select("id")
       .eq("type", "film")
-      .in("visibility", vis),
-    supabase
+      .in("visibility", vis)
+      .order("id")
+      .range(from, from + PAGE - 1);
+    (chunk ?? []).forEach((c) => contentFilmIds.add(c.id));
+    if (!chunk || chunk.length < PAGE) break;
+  }
+
+  const series: { id: string }[] = [];
+  for (let from = 0; ; from += PAGE) {
+    const { data: chunk } = await supabase
       .from("content_items")
       .select("id")
       .eq("type", "series")
-      .in("visibility", vis),
-  ]);
+      .in("visibility", vis)
+      .order("id")
+      .range(from, from + PAGE - 1);
+    if (chunk) series.push(...chunk);
+    if (!chunk || chunk.length < PAGE) break;
+  }
 
-  const films = filmsRes.data ?? [];
-  const series = seriesRes.data ?? [];
-  let totalFilmWatchTimeMinutes = 0;
-  let totalSeriesWatchTimeMinutes = 0;
-  let totalReviews = 0;
-  let filmWatchedThisMonth = 0;
-  let seriesWatchedThisMonth = 0;
+  const allFilmsRows: { content_id: string; duration_min?: number; rewatch_count?: number; review?: string | null; watched_at?: string | null }[] = [];
+  for (let from = 0; ; from += PAGE) {
+    const { data: chunk } = await supabase
+      .from("films")
+      .select("content_id, duration_min, rewatch_count, review, watched_at")
+      .order("id")
+      .range(from, from + PAGE - 1);
+    if (chunk) allFilmsRows.push(...chunk);
+    if (!chunk || chunk.length < PAGE) break;
+  }
+  const publicFilmsRows = allFilmsRows.filter((f) => contentFilmIds.has(f.content_id));
 
   const now = new Date();
   const startOfMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
   const endOfMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0, 23, 59, 59, 999));
+  const startOfYear = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
+  const endOfYear = new Date(Date.UTC(now.getUTCFullYear(), 11, 31, 23, 59, 59, 999));
   const startMs = startOfMonth.getTime();
   const endMs = endOfMonth.getTime();
+  const startYearMs = startOfYear.getTime();
+  const endYearMs = endOfYear.getTime();
 
-  for (const f of films) {
-    const { data: film } = await supabase
-      .from("films")
-      .select("duration_min, review, watched_at")
-      .eq("content_id", f.id)
-      .single();
-    if (film?.duration_min) totalFilmWatchTimeMinutes += film.duration_min;
-    if (film?.review) totalReviews++;
-    if (film?.watched_at) {
+  let totalFilmWatchTimeMinutes = 0;
+  let totalReviews = 0;
+  let filmWatchedThisMonth = 0;
+  let filmWatchedThisYear = 0;
+  for (const film of publicFilmsRows) {
+    const mult = 1 + (film.rewatch_count ?? 0);
+    if (film.duration_min) totalFilmWatchTimeMinutes += film.duration_min * mult;
+    if (film.review) totalReviews++;
+    if (film.watched_at) {
       const t = new Date(film.watched_at).getTime();
       if (t >= startMs && t <= endMs) filmWatchedThisMonth++;
+      if (t >= startYearMs && t <= endYearMs) filmWatchedThisYear++;
     }
   }
+  const totalFilms = publicFilmsRows.length;
+  let totalSeriesWatchTimeMinutes = 0;
+  let seriesWatchedThisMonth = 0;
 
   for (const s of series) {
     const { data: ser } = await supabase
       .from("series")
-      .select("total_duration_min, avg_episode_min, episodes_watched, review, watched_at")
+      .select("total_duration_min, rewatch_count, avg_episode_min, episodes_watched, review, watched_at")
       .eq("content_id", s.id)
       .single();
     if (ser) {
       const mins = (ser as { total_duration_min?: number | null }).total_duration_min;
-      totalSeriesWatchTimeMinutes +=
-        mins != null && !Number.isNaN(mins)
-          ? mins
-          : (ser.avg_episode_min ?? 0) * (ser.episodes_watched ?? 0);
+      const base = mins != null && !Number.isNaN(mins)
+        ? mins
+        : (ser.avg_episode_min ?? 0) * (ser.episodes_watched ?? 0);
+      const mult = 1 + (ser.rewatch_count ?? 0);
+      totalSeriesWatchTimeMinutes += base * mult;
       if (ser.review) totalReviews++;
       if (ser.watched_at) {
         const t = new Date(ser.watched_at).getTime();
@@ -644,13 +714,14 @@ export async function getCinemaStats(): Promise<CinemaStats> {
   }
 
   return {
-    totalFilms: films.length,
+    totalFilms,
     totalSeries: series.length,
     totalFilmWatchTimeMinutes,
     totalSeriesWatchTimeMinutes,
     totalWatchTimeMinutes: totalFilmWatchTimeMinutes + totalSeriesWatchTimeMinutes,
     totalReviews,
     filmWatchedThisMonth,
+    filmWatchedThisYear,
     seriesWatchedThisMonth,
   };
   } catch {
@@ -658,7 +729,7 @@ export async function getCinemaStats(): Promise<CinemaStats> {
   }
 }
 
-/** Bu ay izlenen filmler listesi (admin dashboard). */
+/** Bu ay izlenen filmler listesi (admin dashboard) — her izlenme ayrı satır. */
 export async function getFilmsWatchedThisMonthList(): Promise<
   { id: string; title: string; duration_min: number; watched_at: string }[]
 > {
@@ -668,30 +739,27 @@ export async function getFilmsWatchedThisMonthList(): Promise<
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
   const end = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
 
+  const { data: filmsRows } = await supabase
+    .from("films")
+    .select("content_id, duration_min, watched_at")
+    .gte("watched_at", start)
+    .lte("watched_at", end + "T23:59:59");
+  if (!filmsRows?.length) return [];
+
+  const contentIds = [...new Set(filmsRows.map((f) => f.content_id))];
   const { data: items } = await supabase
     .from("content_items")
     .select("id, title")
-    .eq("type", "film");
+    .in("id", contentIds);
+  const contentMap = new Map((items ?? []).map((i) => [i.id, { id: i.id, title: i.title || "" }]));
 
-  if (!items?.length) return [];
-
-  const out: { id: string; title: string; duration_min: number; watched_at: string }[] = [];
-  for (const item of items) {
-    const { data: film } = await supabase
-      .from("films")
-      .select("duration_min, watched_at")
-      .eq("content_id", item.id)
-      .gte("watched_at", start)
-      .lte("watched_at", end + "T23:59:59")
-      .maybeSingle();
-    if (film?.watched_at)
-      out.push({
-        id: item.id,
-        title: item.title || "",
-        duration_min: film.duration_min ?? 0,
-        watched_at: film.watched_at,
-      });
-  }
+  const out = filmsRows
+    .filter((f) => contentMap.has(f.content_id))
+    .map((f) => ({
+      ...contentMap.get(f.content_id)!,
+      duration_min: f.duration_min ?? 0,
+      watched_at: f.watched_at!,
+    }));
   out.sort((a, b) => new Date(b.watched_at).getTime() - new Date(a.watched_at).getTime());
   return out;
 }

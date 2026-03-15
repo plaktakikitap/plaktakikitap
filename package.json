@@ -11,7 +11,12 @@
     "start": "next start",
     "lint": "eslint",
     "scrape:1000kitap": "tsx scripts/scrape-1000kitap.ts",
-    "import:1000kitap": "tsx scripts/import-1000kitap-to-books.ts"
+    "import:1000kitap": "tsx scripts/import-1000kitap-to-books.ts",
+    "parse:letterboxd": "tsx scripts/parse-letterboxd-csv.ts",
+    "cleanup:letterboxd": "tsx scripts/cleanup-letterboxd-films.ts",
+    "apply:letterboxd-ratings": "tsx scripts/apply-letterboxd-ratings.ts",
+    "apply:letterboxd-reviews": "tsx scripts/apply-letterboxd-reviews.ts",
+    "import:letterboxd": "tsx scripts/import-letterboxd-to-films.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

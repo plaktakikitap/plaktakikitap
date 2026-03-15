@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback, useRef } from "react";
+import { useEffect, useCallback, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ExternalLink } from "lucide-react";
 import { parseYouTubeVideoId } from "@/lib/works-utils";
@@ -20,6 +20,15 @@ export function VideoModal({ video, onClose }: VideoModalProps) {
   const videoId = video ? parseYouTubeVideoId(video.youtube_url) : null;
   const closeRef = useRef<HTMLButtonElement>(null);
   const isOpen = Boolean(video && videoId);
+  const [shouldLoadIframe, setShouldLoadIframe] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      const t = setTimeout(() => setShouldLoadIframe(true), 150);
+      return () => clearTimeout(t);
+    }
+    setShouldLoadIframe(false);
+  }, [isOpen]);
 
   const handleKey = useCallback(
     (e: KeyboardEvent) => {
@@ -78,13 +87,19 @@ export function VideoModal({ video, onClose }: VideoModalProps) {
           >
             <div className="overflow-hidden rounded-xl border border-amber-400/20 bg-black shadow-2xl shadow-amber-900/10">
               <div className="aspect-video w-full">
-                <iframe
-                  src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
-                  title={video.title || "YouTube video"}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="h-full w-full"
-                />
+                {shouldLoadIframe && videoId ? (
+                  <iframe
+                    src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
+                    title={video.title || "YouTube video"}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="h-full w-full"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-black/60">
+                    <span className="text-sm text-white/60">Yükleniyor…</span>
+                  </div>
+                )}
               </div>
               <div className="flex flex-col gap-3 border-t border-white/10 bg-black/60 px-4 py-4 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between">
                 {video.title ? (

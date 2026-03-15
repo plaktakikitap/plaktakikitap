@@ -42,6 +42,7 @@ export function SeriesCollectionWithModal({ seriesList }: SeriesCollectionWithMo
         {seriesList.map((item) => {
           const series = getSeries(item);
           if (!series) return null;
+          const totalViews = 1 + (series.rewatch_count ?? 0);
           const totalMin =
             series.total_duration_min ??
             (series.episodes_watched ?? 0) * (series.avg_episode_min ?? 0);
@@ -84,6 +85,11 @@ export function SeriesCollectionWithModal({ seriesList }: SeriesCollectionWithMo
                 </div>
                 <div className="min-w-0 flex-1 py-4 pr-4">
                   <p className="font-medium text-white/95">{item.title}</p>
+                  {totalViews > 1 && (
+                    <span className="ml-2 inline-block rounded bg-white/15 px-1.5 py-0.5 text-[9px] font-medium text-white/70">
+                      x{totalViews}
+                    </span>
+                  )}
                   <p className="mt-1 text-xs text-white/60">
                     {series.episodes_watched} bölüm
                     {series.seasons_watched > 0 && ` · ${series.seasons_watched} sezon`}

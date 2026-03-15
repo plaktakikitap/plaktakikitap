@@ -1,9 +1,16 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Image from "next/image";
+import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Photo } from "@/types/photos";
-import { PhotoLightbox, type PhotoLightboxItem } from "./PhotoLightbox";
+import type { PhotoLightboxItem } from "./PhotoLightbox";
+
+const PhotoLightbox = dynamic(
+  () => import("./PhotoLightbox").then((m) => ({ default: m.PhotoLightbox })),
+  { ssr: false }
+);
 
 export type PhotoCategoryFilter = "analog" | "digital" | "other" | null;
 
@@ -81,12 +88,16 @@ export function PhotosGrid({ photos, categoryFilter = null }: PhotosGridProps) {
         className="block w-full text-left"
       >
         <span className="block overflow-hidden rounded-xl transition-all duration-200 group-hover:-translate-y-0.5 group-hover:opacity-95">
-          <img
+          <Image
             src={photo.image_url}
             alt={photo.caption || "Fotoğraf"}
+            width={600}
+            height={800}
             className="w-full rounded-xl"
-            style={{ display: "block", verticalAlign: "middle" }}
             sizes="50vw"
+            loading="lazy"
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIhAAAgEDBAMBAAAAAAAAAAAAAQIDAAQRBRIhMQYTQVFh/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAZEQACAwEAAAAAAAAAAAAAAAABAgADESH/2gAMAwEAAhEDEEA/ALvaWVfFb0oNsAjIx/MV0P/Z"
           />
         </span>
       </button>

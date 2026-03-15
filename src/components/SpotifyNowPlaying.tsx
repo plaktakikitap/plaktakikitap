@@ -27,10 +27,9 @@ export default function SpotifyNowPlaying() {
       <div className="text-xs tracking-wide text-white/70">{label}</div>
 
       <div className="mt-3 flex gap-3">
-        <div className="h-14 w-14 overflow-hidden rounded-xl bg-white/10">
+        <div className="relative h-14 w-14 overflow-hidden rounded-xl bg-white/10">
           {albumArt ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={albumArt} alt="" className="h-full w-full object-cover" />
+            <Image src={albumArt} alt="" fill className="object-cover" sizes="56px" />
           ) : null}
         </div>
 

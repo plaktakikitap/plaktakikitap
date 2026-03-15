@@ -1,0 +1,4041 @@
+[
+  {
+    "title": "Öteki",
+    "author": "Fyodor Dostoyevski",
+    "finished_at": "2025-03-10",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/plaktaki%20kitap_%20Okuduklar%C4%B1%20-%201000Kitap_files/621026_1761859360_LddSV.jpg",
+    "source_url": "https://1000kitap.com/kitap/oteki--122"
+  },
+  {
+    "title": "Contes De La Becasse",
+    "author": "Guy de Maupassant",
+    "finished_at": "2025-02-09",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/plaktaki%20kitap_%20Okuduklar%C4%B1%20-%201000Kitap_files/27823_1734387192_WTFM0.webp",
+    "source_url": "https://1000kitap.com/kitap/contes-de-la-becasse--347136"
+  },
+  {
+    "title": "Le Livre de Mon Ami",
+    "author": "Anatole France",
+    "finished_at": "2025-02-09",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/plaktaki%20kitap_%20Okuduklar%C4%B1%20-%201000Kitap_files/234599_1661253592_Qt8p6.webp",
+    "source_url": "https://1000kitap.com/kitap/le-livre-de-mon-ami--349562"
+  },
+  {
+    "title": "Der Kleine Prinz",
+    "author": "Antoine de Saint-Exupéry",
+    "finished_at": "2025-02-09",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/plaktaki%20kitap_%20Okuduklar%C4%B1%20-%201000Kitap_files/302707_33fae_1545335736.webp",
+    "source_url": "https://1000kitap.com/kitap/der-kleine-prinz--139744"
+  },
+  {
+    "title": "İn 80 Tagen Um Die Welt",
+    "author": "Jules Verne",
+    "finished_at": "2025-02-09",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/plaktaki%20kitap_%20Okuduklar%C4%B1%20-%201000Kitap_files/1245347_1660110905_y5Zb9.webp",
+    "source_url": "https://1000kitap.com/kitap/in-80-tagen-um-die-welt--348007"
+  },
+  {
+    "title": "Gurur ve Önyargı",
+    "author": "Jane Austen",
+    "finished_at": "2025-02-09",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/plaktaki%20kitap_%20Okuduklar%C4%B1%20-%201000Kitap_files/621026_1761929410_kiKbu.jpg",
+    "source_url": "https://1000kitap.com/kitap/gurur-ve-onyargi--1654"
+  },
+  {
+    "title": "Ayaşlı ile Kiracıları",
+    "author": "Memduh Şevket Esendal",
+    "finished_at": "2025-02-09",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/plaktaki%20kitap_%20Okuduklar%C4%B1%20-%201000Kitap_files/1343_Ayasli_Ile_Kiracilari-Memduh_sevket_Esendal788.jpg",
+    "source_url": "https://1000kitap.com/kitap/ayasli-ile-kiracilari--1343"
+  },
+  {
+    "title": "The Metamorphosis",
+    "author": "Franz Kafka",
+    "finished_at": "2025-01-06",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/plaktaki%20kitap_%20Okuduklar%C4%B1%20-%201000Kitap_files/313987_b2762_1550574312.webp",
+    "source_url": "https://1000kitap.com/kitap/the-metamorphosis--150724"
+  },
+  {
+    "title": "Zargana",
+    "author": "Hakan Günday",
+    "finished_at": "2025-01-06",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/plaktaki%20kitap_%20Okuduklar%C4%B1%20-%201000Kitap_files/27823_1709191935_8dSt3.jpg",
+    "source_url": "https://1000kitap.com/kitap/zargana--6720"
+  },
+  {
+    "title": "Suyu Geçiş",
+    "author": "Sylvia Plath",
+    "finished_at": "2025-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/plaktaki%20kitap_%20Okuduklar%C4%B1%20-%201000Kitap_files/29183_1423765913.jpg",
+    "source_url": "https://1000kitap.com/kitap/suyu-gecis--29183"
+  },
+  {
+    "title": "Tarkovski’den Sinema Dersleri",
+    "author": "Semir Aslanyürek",
+    "finished_at": "2024-12-06",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim2_files/Tarkovski-den-Sinema-Dersleri_22959_1414091527.webp",
+    "source_url": "https://1000kitap.com/kitap/tarkovskiden-sinema-dersleri--22959"
+  },
+  {
+    "title": "Döşeğimde Ölürken",
+    "author": "William Faulkner",
+    "finished_at": "2024-12-06",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim2_files/353327_E0Xe1_1652467652.jpg",
+    "source_url": "https://1000kitap.com/kitap/dosegimde-olurken--337442"
+  },
+  {
+    "title": "Çukurda",
+    "author": "Anton Çehov",
+    "finished_at": "2024-12-06",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim2_files/1211105_CyPKF_1648686207.jpg",
+    "source_url": "https://1000kitap.com/kitap/cukurda--328776"
+  },
+  {
+    "title": "Kinyas ve Kayra",
+    "author": "Hakan Günday",
+    "finished_at": "2024-11-17",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim2_files/27823_1709158339_X0RtC.jpg",
+    "source_url": "https://1000kitap.com/kitap/kinyas-ve-kayra--3193"
+  },
+  {
+    "title": "Oda Müziği",
+    "author": "James Joyce",
+    "finished_at": "2024-11-17",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim2_files/56586_1699482369_Sekef.jpg",
+    "source_url": "https://1000kitap.com/kitap/oda-muzigi--15968"
+  },
+  {
+    "title": "Edebiyat Sosyolojisi-Kuram ve Uygulama",
+    "author": "Ömer Naci Soykan",
+    "finished_at": "2024-11-17",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim2_files/433333_9a859_1564376777.webp",
+    "source_url": "https://1000kitap.com/kitap/edebiyat-sosyolojisi-kuram-ve-uygulama--173234"
+  },
+  {
+    "title": "Lamiel",
+    "author": "Stendhal",
+    "finished_at": "2024-11-17",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim2_files/Lamiel_18959_1398620769.jpg",
+    "source_url": "https://1000kitap.com/kitap/lamiel--18959"
+  },
+  {
+    "title": "Türk Sinemasında İntiharlar ve Cinayetler Dosyası",
+    "author": "Agah Özgüç",
+    "finished_at": "2024-11-17",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim2_files/568685_3370b_1608728963.webp",
+    "source_url": "https://1000kitap.com/kitap/turk-sinemasinda-intiharlar-ve-cinayetler-dosyasi--256137"
+  },
+  {
+    "title": "İntihar",
+    "author": "Édouard Levé",
+    "finished_at": "2024-11-17",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim2_files/27823_0e404_1631683631.webp",
+    "source_url": "https://1000kitap.com/kitap/intihar--25099"
+  },
+  {
+    "title": "Görünmez Kentler",
+    "author": "Italo Calvino",
+    "finished_at": "2024-11-17",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim2_files/621026_1760333018_2FSXT.jpg",
+    "source_url": "https://1000kitap.com/kitap/gorunmez-kentler--7783"
+  },
+  {
+    "title": "Yürüme",
+    "author": "Oruç Aruoba",
+    "finished_at": "2024-11-17",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim3_files/27823_ROTxH_1479025288.jpg",
+    "source_url": "https://1000kitap.com/kitap/yurume--1037"
+  },
+  {
+    "title": "Türk Sağının Üç Hali",
+    "author": "Tanıl Bora",
+    "finished_at": "2024-09-27",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim3_files/30224_1425392925.webp",
+    "source_url": "https://1000kitap.com/kitap/turk-saginin-uc-hali--30224"
+  },
+  {
+    "title": "Ergenlik ya da Merhaba Hüzün",
+    "author": "Talat Parman",
+    "finished_at": "2024-09-27",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim3_files/568685_e3f2a_1617386118.jpg",
+    "source_url": "https://1000kitap.com/kitap/ergenlik-ya-da-merhaba-huzun--276388"
+  },
+  {
+    "title": "Beyaz Zambaklar Ülkesinde",
+    "author": "Grigory Petrov",
+    "finished_at": "2024-09-06",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim3_files/70453_9ab94_1544427976.jpg",
+    "source_url": "https://1000kitap.com/kitap/beyaz-zambaklar-ulkesinde--138075"
+  },
+  {
+    "title": "Felsefe - Din İlişkileri",
+    "author": "İbn Rüşd",
+    "finished_at": "2024-09-03",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim3_files/56586_bhl9p_1485141176.jpg",
+    "source_url": "https://1000kitap.com/kitap/felsefe-din-iliskileri--72061"
+  },
+  {
+    "title": "Hay bin Yakzan",
+    "author": "İbn-i Sina",
+    "finished_at": "2024-08-31",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim3_files/2553527_1758739580_B5i8t.jpg",
+    "source_url": "https://1000kitap.com/kitap/hay-bin-yakzan--124456"
+  },
+  {
+    "title": "Milli Görüş İktidarı: Niçin ve Nasıl",
+    "author": "Necmettin Erbakan",
+    "finished_at": "2024-08-31",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim3_files/27823_1721741484_5ob0c.jpg",
+    "source_url": "https://1000kitap.com/kitap/milli-gorus-iktidari-nicin-ve-nasil--73839"
+  },
+  {
+    "title": "İslam ve İlim",
+    "author": "Necmettin Erbakan",
+    "finished_at": "2024-08-31",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim3_files/107518_uMNDI_1512803346.jpg",
+    "source_url": "https://1000kitap.com/kitap/islam-ve-ilim--94324"
+  },
+  {
+    "title": "Yaz Geçer",
+    "author": "Murathan Mungan",
+    "finished_at": "2024-08-20",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim3_files/312239_770a7_1550740926.webp",
+    "source_url": "https://1000kitap.com/kitap/yaz-gecer--150961"
+  },
+  {
+    "title": "Piç",
+    "author": "Hakan Günday",
+    "finished_at": "2024-08-11",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim3_files/27823_1709191161_1wOyU.jpg",
+    "source_url": "https://1000kitap.com/kitap/pic--3232"
+  },
+  {
+    "title": "Garbiyatçılık",
+    "author": "Ian Buruma",
+    "finished_at": "2024-08-11",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim4_files/2119332_1722704868_ggpGQ.webp",
+    "source_url": "https://1000kitap.com/kitap/garbiyatcilik--190193"
+  },
+  {
+    "title": "Kısa Film Senaryosu",
+    "author": "Sergei Eisenstein",
+    "finished_at": "2024-08-11",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim4_files/37261_BZb0u_1491936574.webp",
+    "source_url": "https://1000kitap.com/kitap/kisa-film-senaryosu--77159"
+  },
+  {
+    "title": "Unutulmuş Kadın Ressamlar",
+    "author": "Walter Shaw Sparrow",
+    "finished_at": "2024-02-21",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim4_files/13199_60c6c_1620227790.jpg",
+    "source_url": "https://1000kitap.com/kitap/unutulmus-kadin-ressamlar--283073"
+  },
+  {
+    "title": "Denizin Çağrısı",
+    "author": "Jack London",
+    "finished_at": "2024-02-21",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim4_files/Denizin-Cagrisi_21062_1407316160.webp",
+    "source_url": "https://1000kitap.com/kitap/denizin-cagrisi--21062"
+  },
+  {
+    "title": "Aziz Bey Hadisesi",
+    "author": "Ayfer Tunç",
+    "finished_at": "2024-02-18",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim4_files/2553527_1769291268_mLqxy.webp",
+    "source_url": "https://1000kitap.com/kitap/aziz-bey-hadisesi--5967"
+  },
+  {
+    "title": "Tolstoy'dan Anılar",
+    "author": "Maksim Gorki",
+    "finished_at": "2024-02-09",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim4_files/71196_94df0_1532970670.jpg",
+    "source_url": "https://1000kitap.com/kitap/tolstoy-dan-anilar--59204"
+  },
+  {
+    "title": "Güzin Dino - Abidin Dino Mektupları",
+    "author": "Abidin Dino",
+    "finished_at": "2024-02-08",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim4_files/274523_30d42_1549259769.webp",
+    "source_url": "https://1000kitap.com/kitap/guzin-dino-abidin-dino-mektuplari--148198"
+  },
+  {
+    "title": "Dilin Aynasından",
+    "author": "Guy Deutscher",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim4_files/42784_1440061864.jpg",
+    "source_url": "https://1000kitap.com/kitap/dilin-aynasindan--42784"
+  },
+  {
+    "title": "Göç, Kültür, Kimlik",
+    "author": "Iain Chambers",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim4_files/Goc-Kultur-Kimlik_24286_1416145617.webp",
+    "source_url": "https://1000kitap.com/kitap/goc-kultur-kimlik--24286"
+  },
+  {
+    "title": "İdeoloji",
+    "author": "Şerif Mardin",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim4_files/43650_1441108675.webp",
+    "source_url": "https://1000kitap.com/kitap/ideoloji--43650"
+  },
+  {
+    "title": "Baba",
+    "author": "Mario Puzo",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim5_files/56586_d42ef_1589641444.webp",
+    "source_url": "https://1000kitap.com/kitap/baba--1050"
+  },
+  {
+    "title": "Bürokrasi ve Otorite",
+    "author": "Max Weber",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim5_files/31622_1427914843.webp",
+    "source_url": "https://1000kitap.com/kitap/burokrasi-ve-otorite--31622"
+  },
+  {
+    "title": "Benim Üniversitelerim",
+    "author": "Maksim Gorki",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim5_files/56085_SCJDB_1478573532.webp",
+    "source_url": "https://1000kitap.com/kitap/benim-universitelerim--1730"
+  },
+  {
+    "title": "Siyasal İslamın Geleceği",
+    "author": "Graham E. Fuller",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim5_files/51020_1451990340.webp",
+    "source_url": "https://1000kitap.com/kitap/siyasal-islamin-gelecegi--51020"
+  },
+  {
+    "title": "Yabancı Dil Nasıl Öğrenilir",
+    "author": "Graham E. Fuller",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim5_files/38998_1433964132.webp",
+    "source_url": "https://1000kitap.com/kitap/yabanci-dil-nasil-ogrenilir--38998"
+  },
+  {
+    "title": "Dillerin Kökeni Üstüne Deneme",
+    "author": "Jean-Jacques Rousseau",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim5_files/274523_9c3c6_1561994688.jpg",
+    "source_url": "https://1000kitap.com/kitap/dillerin-kokeni-ustune-deneme--21344"
+  },
+  {
+    "title": "Din Üzerine",
+    "author": "Vladimir İlyiç Lenin",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim5_files/56586_1667395672_HiD0W.webp",
+    "source_url": "https://1000kitap.com/kitap/din-uzerine--64758"
+  },
+  {
+    "title": "Şiirler",
+    "author": "Pablo Neruda",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim5_files/56586_mUCen_1499871522.jpg",
+    "source_url": "https://1000kitap.com/kitap/siirler--82483"
+  },
+  {
+    "title": "Safdil",
+    "author": "Voltaire",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim5_files/209154_fa23c_1591774486.jpg",
+    "source_url": "https://1000kitap.com/kitap/safdil--224126"
+  },
+  {
+    "title": "En Kadim ve Modern Felsefenin İlkeleri",
+    "author": "Anne Conway",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim5_files/568685_e74a5_1611050976.jpg",
+    "source_url": "https://1000kitap.com/kitap/en-kadim-ve-modern-felsefenin-ilkeleri--261539"
+  },
+  {
+    "title": "İstanbul'da Kayıp Zamanlar",
+    "author": "Liji Pulcu Çizmeciyan",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim6_files/33412_cNFlP_1490904304.jpg",
+    "source_url": "https://1000kitap.com/kitap/istanbulda-kayip-zamanlar--76470"
+  },
+  {
+    "title": "İslam",
+    "author": "Sezai Karakoç",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim6_files/27823_544fe_1558398567.jpg",
+    "source_url": "https://1000kitap.com/kitap/islam--4368"
+  },
+  {
+    "title": "Gitanjali",
+    "author": "Rabindranath Tagore",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim6_files/56085_BZ0lI_1478572691.webp",
+    "source_url": "https://1000kitap.com/kitap/gitanjali--25869"
+  },
+  {
+    "title": "Akıl Dediğimiz Şey",
+    "author": "Georg Wilhelm Friedrich Hegel",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim6_files/94029_73e46_1569697946.webp",
+    "source_url": "https://1000kitap.com/kitap/akil-dedigimiz-sey--182724"
+  },
+  {
+    "title": "Hare",
+    "author": "Şule Alkış",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim6_files/313547_8c440_1571800968.webp",
+    "source_url": "https://1000kitap.com/kitap/hare--185602"
+  },
+  {
+    "title": "Romantik Bir Viyana Yazı",
+    "author": "Adalet Ağaoğlu",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim6_files/568685_6682d_1574536374.webp",
+    "source_url": "https://1000kitap.com/kitap/romantik-bir-viyana-yazi--189471"
+  },
+  {
+    "title": "Martı Jonathan Livingston",
+    "author": "Richard Bach",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim6_files/27823_e5500_1535285550.jpg",
+    "source_url": "https://1000kitap.com/kitap/marti-jonathan-livingston--1952"
+  },
+  {
+    "title": "Mavi Saçlı Kız",
+    "author": "Burçak Çerezcioğlu",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim6_files/56586_9cdc9_1589286252.webp",
+    "source_url": "https://1000kitap.com/kitap/mavi-sacli-kiz--1945"
+  },
+  {
+    "title": "Genç Elitler",
+    "author": "Marie Lu",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim6_files/9414_JTzRj_1477495199.jpg",
+    "source_url": "https://1000kitap.com/kitap/genc-elitler--67540"
+  },
+  {
+    "title": "Kitap Hırsızı",
+    "author": "Markus Zusak",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim6_files/27823_9af86_1539382785.webp",
+    "source_url": "https://1000kitap.com/kitap/kitap-hirsizi--128241"
+  },
+  {
+    "title": "Hiç Merak Ettiniz Mi? 3",
+    "author": "Ali Bolat",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim7_files/35302_1430870352.webp",
+    "source_url": "https://1000kitap.com/kitap/hic-merak-ettiniz-mi-3--35302"
+  },
+  {
+    "title": "Astronotlar Üşür mü?",
+    "author": "Çağlar Sunay",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim7_files/56586_a6bCp_1498191536.jpg",
+    "source_url": "https://1000kitap.com/kitap/astronotlar-usur-mu--81336"
+  },
+  {
+    "title": "X-Men Astonishing 1",
+    "author": "Joss Whedon",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim7_files/122305_fbbd6_1587990220.webp",
+    "source_url": "https://1000kitap.com/kitap/x-men-astonishing-1--116157"
+  },
+  {
+    "title": "Gizli Savaş",
+    "author": "B. Michael Bendis",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim7_files/290007_E4cig_1524979040.webp",
+    "source_url": "https://1000kitap.com/kitap/gizli-savas--106863"
+  },
+  {
+    "title": "Avengers Dağıldı",
+    "author": "B. Michael Bendis",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim7_files/46872_1445769345.webp",
+    "source_url": "https://1000kitap.com/kitap/avengers-dagildi--46872"
+  },
+  {
+    "title": "Rüzgâr Bizi Götürecek",
+    "author": "Furuğ Ferruhzad",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim7_files/85883_afd7a_1556292176.webp",
+    "source_url": "https://1000kitap.com/kitap/ruzgar-bizi-goturecek--161025"
+  },
+  {
+    "title": "Kum ve Köpük",
+    "author": "Halil Cibran",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim7_files/621026_1761837965_TIpIK.jpg",
+    "source_url": "https://1000kitap.com/kitap/kum-ve-kopuk--11466"
+  },
+  {
+    "title": "Vatan Yahut Silistre",
+    "author": "Namık Kemal",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim7_files/4228_34ff0_1530742991.jpg",
+    "source_url": "https://1000kitap.com/kitap/vatan-yahut-silistre--3428"
+  },
+  {
+    "title": "İntibah",
+    "author": "Namık Kemal",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim7_files/39535_UHGqL_1525619129.jpg",
+    "source_url": "https://1000kitap.com/kitap/intibah--350"
+  },
+  {
+    "title": "Mürekkep ve Yıldızların Kızı",
+    "author": "Kiran Millwood Hargrave",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim7_files/9414_wEXYj_1499378771.webp",
+    "source_url": "https://1000kitap.com/kitap/murekkep-ve-yildizlarin-kizi--82038"
+  },
+  {
+    "title": "Gölün Dibindeki Ev",
+    "author": "Josh Malerman",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim8_files/9414_Vowxv_1488738685.webp",
+    "source_url": "https://1000kitap.com/kitap/golun-dibindeki-ev--74673"
+  },
+  {
+    "title": "The Flash #1",
+    "author": "Francis Manapul",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim8_files/87436_69e6d_1550254634.jpg",
+    "source_url": "https://1000kitap.com/kitap/the-flash-1--150193"
+  },
+  {
+    "title": "Ben Efsaneyim",
+    "author": "Richard Matheson",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim8_files/32601_qd4YE_1493213032.webp",
+    "source_url": "https://1000kitap.com/kitap/ben-efsaneyim--23308"
+  },
+  {
+    "title": "Küçük Ağaç'ın Eğitimi",
+    "author": "Forrest Carter",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim8_files/56586_1668673342_iLvfR.jpg",
+    "source_url": "https://1000kitap.com/kitap/kucuk-agac-in-egitimi--3577"
+  },
+  {
+    "title": "Atinalıların Devleti",
+    "author": "Aristoteles",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim8_files/246307_15820_1539338793.webp",
+    "source_url": "https://1000kitap.com/kitap/atinalilarin-devleti--128137"
+  },
+  {
+    "title": "Refet",
+    "author": "Fatma Aliye Hanım",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim8_files/39535_7ab2d_1542847522.jpg",
+    "source_url": "https://1000kitap.com/kitap/refet--132505"
+  },
+  {
+    "title": "Her Şey İçin Teşekkürler",
+    "author": "Tommy Wallach",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim8_files/9414_FjLe8_1488815057.jpg",
+    "source_url": "https://1000kitap.com/kitap/her-sey-icin-tesekkurler--74724"
+  },
+  {
+    "title": "Binboğalar Efsanesi",
+    "author": "Yaşar Kemal",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim8_files/39535_bWOmt_1507312522.jpg",
+    "source_url": "https://1000kitap.com/kitap/binbogalar-efsanesi--6048"
+  },
+  {
+    "title": "Çakırcalı Efe",
+    "author": "Yaşar Kemal",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim8_files/55096_l0FdR_1495881506.jpg",
+    "source_url": "https://1000kitap.com/kitap/cakircali-efe--700"
+  },
+  {
+    "title": "Üç Anadolu Efsanesi",
+    "author": "Yaşar Kemal",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim8_files/39535_4H50c_1507311074.webp",
+    "source_url": "https://1000kitap.com/kitap/uc-anadolu-efsanesi--3529"
+  },
+  {
+    "title": "Yılanı Öldürseler",
+    "author": "Yaşar Kemal",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim9_files/56586_ab32b_1598009901.jpg",
+    "source_url": "https://1000kitap.com/kitap/yilani-oldurseler--970"
+  },
+  {
+    "title": "Ağrıdağı Efsanesi",
+    "author": "Yaşar Kemal",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim9_files/2553527_1765739414_qm4iU.webp",
+    "source_url": "https://1000kitap.com/kitap/agridagi-efsanesi--935"
+  },
+  {
+    "title": "Cingöz Recai - Şeytani Tuzak",
+    "author": "Peyami Safa",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim9_files/39535_uoY0M_1501962546.webp",
+    "source_url": "https://1000kitap.com/kitap/cingoz-recai-seytani-tuzak--30769"
+  },
+  {
+    "title": "Frankenstein ya da Modern Prometheus",
+    "author": "Mary Shelley",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim9_files/621026_1756161983_UTMNp.webp",
+    "source_url": "https://1000kitap.com/kitap/frankenstein-ya-da-modern-prometheus--4789"
+  },
+  {
+    "title": "Bir Ömür Nasıl Yaşanır?",
+    "author": "İlber Ortaylı",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim9_files/56586_1653916394_2NqzY.webp",
+    "source_url": "https://1000kitap.com/kitap/bir-omur-nasil-yasanir--149700"
+  },
+  {
+    "title": "Aile Mutluluğu",
+    "author": "Lev Tolstoy",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim9_files/568685_7d7a1_1606936671.jpg",
+    "source_url": "https://1000kitap.com/kitap/aile-mutlulugu--251971"
+  },
+  {
+    "title": "Efendi ile Uşağı",
+    "author": "Lev Tolstoy",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim9_files/56085_vjXec_1504284252.jpg",
+    "source_url": "https://1000kitap.com/kitap/efendi-ile-usagi--384"
+  },
+  {
+    "title": "Minimalizm",
+    "author": "Joshua Fields Millburn",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim9_files/135378_lXkVx_1519044647.jpg",
+    "source_url": "https://1000kitap.com/kitap/minimalizm--101076"
+  },
+  {
+    "title": "Kağıttan Kentler",
+    "author": "John Green",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim9_files/John-green_13733_1383315910.jpg",
+    "source_url": "https://1000kitap.com/kitap/kagittan-kentler--13733"
+  },
+  {
+    "title": "Yürüyen Ölüler Bölüm 18: Sırada Ne Var",
+    "author": "Robert Kirkman",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim9_files/59353_1459614075.webp",
+    "source_url": "https://1000kitap.com/kitap/yuruyen-oluler-bolum-18-sirada-ne-var--59353"
+  },
+  {
+    "title": "Yürüyen Ölüler Bölüm 3: Demir Parmaklıklar Ardında",
+    "author": "Robert Kirkman",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim10_files/Yuruyen-Oluler-Bolum-3-Demir-Parmakliklar-Ardinda_25172_1417347521.webp",
+    "source_url": "https://1000kitap.com/kitap/yuruyen-oluler-bolum-3-demir-parmakliklar-ardinda--25172"
+  },
+  {
+    "title": "Yürüyen Ölüler Bölüm 2: Miller Sonra",
+    "author": "Robert Kirkman",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim10_files/Yuruyen-Oluler-Bolum-2-Miller-Sonra_24949_1417040012.webp",
+    "source_url": "https://1000kitap.com/kitap/yuruyen-oluler-bolum-2-miller-sonra--24949"
+  },
+  {
+    "title": "Yürüyen Ölüler Bölüm 1: Günler Sonra",
+    "author": "Robert Kirkman",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim10_files/8178_Yuruyen_oluler_Bolum_1_Gunler_Sonra-Robert_Kirkman_Tony_Moore681.jpg",
+    "source_url": "https://1000kitap.com/kitap/yuruyen-oluler-bolum-1-gunler-sonra--8178"
+  },
+  {
+    "title": "Silmarillion",
+    "author": "J. R. R. Tolkien",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim10_files/2351_Silmarillion-J_R_R_Tolkien381.jpg",
+    "source_url": "https://1000kitap.com/kitap/silmarillion--2351"
+  },
+  {
+    "title": "Yüzüklerin Efendisi - Kralın Dönüşü",
+    "author": "J. R. R. Tolkien",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim10_files/Yuzuklerin-Efendisi-Iii-Kralin-Donusu_15200_1388004747.webp",
+    "source_url": "https://1000kitap.com/kitap/yuzuklerin-efendisi-kralin-donusu--15200"
+  },
+  {
+    "title": "Yüzüklerin Efendisi - İki Kule",
+    "author": "J. R. R. Tolkien",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim10_files/9053_1463678584.jpg",
+    "source_url": "https://1000kitap.com/kitap/yuzuklerin-efendisi-iki-kule--9053"
+  },
+  {
+    "title": "Yüzüklerin Efendisi - Yüzük Kardeşliği",
+    "author": "J. R. R. Tolkien",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim10_files/Yuzuklerin-Efendisi-Birinci-Kisim-Yuzuk-Kardesligi_1645_1397759989.jpg",
+    "source_url": "https://1000kitap.com/kitap/yuzuklerin-efendisi-yuzuk-kardesligi--1645"
+  },
+  {
+    "title": "Hobbit",
+    "author": "J. R. R. Tolkien",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim10_files/9532_du5ZV_1521026215.jpg",
+    "source_url": "https://1000kitap.com/kitap/hobbit--2036"
+  },
+  {
+    "title": "Acımak",
+    "author": "Reşat Nuri Güntekin",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim10_files/9414_6527d_1555435446.jpg",
+    "source_url": "https://1000kitap.com/kitap/acimak--237"
+  },
+  {
+    "title": "Yaprak Dökümü",
+    "author": "Reşat Nuri Güntekin",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim10_files/Yaprak-dokumu_867_1383652782.jpg",
+    "source_url": "https://1000kitap.com/kitap/yaprak-dokumu--867"
+  },
+  {
+    "title": "Hazan Bülbülü",
+    "author": "Hüseyin Rahmi Gürpınar",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim11_files/2553527_1765296170_yX5rw.jpg",
+    "source_url": "https://1000kitap.com/kitap/hazan-bulbulu--194095"
+  },
+  {
+    "title": "Gönül Bir Yel Değirmenidir Sevda Öğütür",
+    "author": "Hüseyin Rahmi Gürpınar",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim11_files/2553527_1765304441_L3y2O.jpg",
+    "source_url": "https://1000kitap.com/kitap/gonul-bir-yel-degirmenidir-sevda-ogutur--188136"
+  },
+  {
+    "title": "Mürebbiye",
+    "author": "Hüseyin Rahmi Gürpınar",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim11_files/2553527_1765304012_fBMfq.webp",
+    "source_url": "https://1000kitap.com/kitap/murebbiye--62314"
+  },
+  {
+    "title": "Efsuncu Baba",
+    "author": "Hüseyin Rahmi Gürpınar",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim11_files/2553527_1765305050_O7Jzi.webp",
+    "source_url": "https://1000kitap.com/kitap/efsuncu-baba--4519"
+  },
+  {
+    "title": "Gulyabani",
+    "author": "Hüseyin Rahmi Gürpınar",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim11_files/2553527_1760970944_TmC4O.jpg",
+    "source_url": "https://1000kitap.com/kitap/gulyabani--153896"
+  },
+  {
+    "title": "Alaycı Kuş",
+    "author": "Suzanne Collins",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim11_files/56586_1658010280_aevJs.jpg",
+    "source_url": "https://1000kitap.com/kitap/alayci-kus--302"
+  },
+  {
+    "title": "Ateşi Yakalamak",
+    "author": "Suzanne Collins",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim11_files/27823_468ef_1634758904.webp",
+    "source_url": "https://1000kitap.com/kitap/atesi-yakalamak--625"
+  },
+  {
+    "title": "Çünkü Biz Karıncayız",
+    "author": "Shaun David Hutchinson",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim11_files/69376_RKfGN_1497619568.jpg",
+    "source_url": "https://1000kitap.com/kitap/cunku-biz-karincayiz--80897"
+  },
+  {
+    "title": "Gemina",
+    "author": "Amie Kaufman",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim11_files/70761_Xm46K_1524514964.webp",
+    "source_url": "https://1000kitap.com/kitap/gemina--106483"
+  },
+  {
+    "title": "Kuyrukluyıldız Altında Bir İzdivaç",
+    "author": "Hüseyin Rahmi Gürpınar",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim11_files/2553527_1765302926_ROuf9.webp",
+    "source_url": "https://1000kitap.com/kitap/kuyrukluyildiz-altinda-bir-izdivac--4520"
+  },
+  {
+    "title": "Üç Silahşor",
+    "author": "Alexandre Dumas",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim12_files/39535_ewPRd_1508359785.jpg",
+    "source_url": "https://1000kitap.com/kitap/uc-silahsor--1680"
+  },
+  {
+    "title": "Labirent: Ölümcül Kaçış",
+    "author": "James Dashner",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim12_files/15301_1472822581.webp",
+    "source_url": "https://1000kitap.com/kitap/labirent-olumcul-kacis--15301"
+  },
+  {
+    "title": "Warcross - Bir Sanal Gerçeklik Oyunu",
+    "author": "Marie Lu",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim12_files/56586_ax53i_1505304008.webp",
+    "source_url": "https://1000kitap.com/kitap/warcross-bir-sanal-gerceklik-oyunu--87903"
+  },
+  {
+    "title": "Wildcard: Joker Oyuncunun Hikayesi",
+    "author": "Marie Lu",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim12_files/71196_a3a78_1537199055.jpg",
+    "source_url": "https://1000kitap.com/kitap/wildcard-joker-oyuncunun-hikayesi--123673"
+  },
+  {
+    "title": "Bir Delinin Anı Defteri - Palto - Burun - Petersburg Öyküleri ve Fayton",
+    "author": "Nikolay Gogol",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim12_files/27823_1759353452_dIKmi.jpg",
+    "source_url": "https://1000kitap.com/kitap/bir-delinin-ani-defteri-palto-burun-petersburg-oykuleri-ve-fayton--9537"
+  },
+  {
+    "title": "Şato",
+    "author": "Franz Kafka",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim12_files/39535_0fJSc_1509399812.jpg",
+    "source_url": "https://1000kitap.com/kitap/sato--1163"
+  },
+  {
+    "title": "Dava",
+    "author": "Franz Kafka",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim12_files/621026_1760894597_w1VzW.webp",
+    "source_url": "https://1000kitap.com/kitap/dava--232"
+  },
+  {
+    "title": "Milena'ya Mektuplar",
+    "author": "Franz Kafka",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim12_files/56586_1686850948_fujff.jpg",
+    "source_url": "https://1000kitap.com/kitap/milena-ya-mektuplar--1549"
+  },
+  {
+    "title": "Dönüşüm",
+    "author": "Franz Kafka",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim12_files/621026_1761838138_SHJ9D.jpg",
+    "source_url": "https://1000kitap.com/kitap/donusum--1310"
+  },
+  {
+    "title": "Babaya Mektup",
+    "author": "Franz Kafka",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim12_files/39535_O8MHw_1509399789.jpg",
+    "source_url": "https://1000kitap.com/kitap/babaya-mektup--4088"
+  },
+  {
+    "title": "Sırça Köşk",
+    "author": "Sabahattin Ali",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim13_files/9414_f1626_1590925800.jpg",
+    "source_url": "https://1000kitap.com/kitap/sirca-kosk--560"
+  },
+  {
+    "title": "Puslu Kıtalar Atlası",
+    "author": "İhsan Oktay Anar",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim13_files/56586_40281_1592799020.webp",
+    "source_url": "https://1000kitap.com/kitap/puslu-kitalar-atlasi--1033"
+  },
+  {
+    "title": "İçimizdeki Şeytan",
+    "author": "Sabahattin Ali",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim13_files/Icimizdeki-Seytan_562_1410469176.jpg",
+    "source_url": "https://1000kitap.com/kitap/icimizdeki-seytan--562"
+  },
+  {
+    "title": "Denemeler",
+    "author": "Montaigne",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim13_files/621026_1757787045_5TNi3.jpg",
+    "source_url": "https://1000kitap.com/kitap/denemeler--1395"
+  },
+  {
+    "title": "Olasılıksız",
+    "author": "Adam Fawer",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim13_files/102_Olasiliksiz-Adam_Fawer324.jpg",
+    "source_url": "https://1000kitap.com/kitap/olasiliksiz--102"
+  },
+  {
+    "title": "Martin Eden",
+    "author": "Jack London",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim13_files/621026_1759701210_Jz4yr.jpg",
+    "source_url": "https://1000kitap.com/kitap/martin-eden--1614"
+  },
+  {
+    "title": "Aylak Adam",
+    "author": "Yusuf Atılgan",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim13_files/39535_JqnjY_1516402826.webp",
+    "source_url": "https://1000kitap.com/kitap/aylak-adam--1091"
+  },
+  {
+    "title": "Çavdar Tarlasında Çocuklar",
+    "author": "J. D. Salinger",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim13_files/1855_cavdar_Tarlasinda_cocuklar(gonulcelen)-Jerome_David_Salinger608.jpg",
+    "source_url": "https://1000kitap.com/kitap/cavdar-tarlasinda-cocuklar--1855"
+  },
+  {
+    "title": "İnce Memed 1",
+    "author": "Yaşar Kemal",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim13_files/39535_AMRrt_1507312826.jpg",
+    "source_url": "https://1000kitap.com/kitap/ince-memed-1--929"
+  },
+  {
+    "title": "Bir İdam Mahkûmunun Son Günü",
+    "author": "Victor Hugo",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim13_files/56586_1654202423_1botF.jpg",
+    "source_url": "https://1000kitap.com/kitap/bir-idam-mahkmunun-son-gunu--2370"
+  },
+  {
+    "title": "Genç Werther'in Acıları",
+    "author": "Johann Wolfgang Von Goethe",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim14_files/621026_1761808127_LlZFY.jpg",
+    "source_url": "https://1000kitap.com/kitap/genc-werther-in-acilari--1648"
+  },
+  {
+    "title": "Otomatik Portakal",
+    "author": "Anthony Burgess",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim14_files/9414_0e26b_1553711443.webp",
+    "source_url": "https://1000kitap.com/kitap/otomatik-portakal--5909"
+  },
+  {
+    "title": "Saatleri Ayarlama Enstitüsü",
+    "author": "Ahmet Hamdi Tanpınar",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim14_files/332663_6951b_1555101507.jpg",
+    "source_url": "https://1000kitap.com/kitap/saatleri-ayarlama-enstitusu--1196"
+  },
+  {
+    "title": "Sefiller (2 Cilt Takım)",
+    "author": "Victor Hugo",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim14_files/27823_affc8_1552170008.jpg",
+    "source_url": "https://1000kitap.com/kitap/sefiller-2-cilt-takim--172"
+  },
+  {
+    "title": "Sineklerin Tanrısı",
+    "author": "William Golding",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim14_files/27823_1749013388_jxfIb.jpg",
+    "source_url": "https://1000kitap.com/kitap/sineklerin-tanrisi--269"
+  },
+  {
+    "title": "Fahrenheit 451",
+    "author": "Ray Bradbury",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim14_files/290007_NtfIA_1527626700.webp",
+    "source_url": "https://1000kitap.com/kitap/fahrenheit-451--1687"
+  },
+  {
+    "title": "George Dandin veya Bir Koca Nasıl Rezil Edilir?",
+    "author": "Molière",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim14_files/621026_1761252817_SJex5.jpg",
+    "source_url": "https://1000kitap.com/kitap/george-dandin-veya-bir-koca-nasil-rezil-edilir--44909"
+  },
+  {
+    "title": "Hayatım",
+    "author": "Anton Çehov",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim14_files/94029_2384e_1562584789.jpg",
+    "source_url": "https://1000kitap.com/kitap/hayatim--169318"
+  },
+  {
+    "title": "Bozkır",
+    "author": "Anton Çehov",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim14_files/27823_60fe1_1550790236.jpg",
+    "source_url": "https://1000kitap.com/kitap/bozkir--147381"
+  },
+  {
+    "title": "Üç Yıl",
+    "author": "Anton Çehov",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim14_files/56085_UyhC5_1527114421.jpg",
+    "source_url": "https://1000kitap.com/kitap/uc-yil--109524"
+  },
+  {
+    "title": "Üç Kız Kardeş",
+    "author": "Anton Çehov",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim15_files/621026_1755268927_WUIKj.jpg",
+    "source_url": "https://1000kitap.com/kitap/uc-kiz-kardes--8575"
+  },
+  {
+    "title": "Vanya Dayı",
+    "author": "Anton Çehov",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim15_files/56085_dvGWH_1478572268.webp",
+    "source_url": "https://1000kitap.com/kitap/vanya-dayi--8574"
+  },
+  {
+    "title": "Vişne Bahçesi",
+    "author": "Anton Çehov",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim15_files/27823_1748882260_g1uLA.webp",
+    "source_url": "https://1000kitap.com/kitap/visne-bahcesi--53486"
+  },
+  {
+    "title": "Martı",
+    "author": "Anton Çehov",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim15_files/56085_ypMF6_1527114451.webp",
+    "source_url": "https://1000kitap.com/kitap/marti--6138"
+  },
+  {
+    "title": "Cinder",
+    "author": "Marissa Meyer",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim15_files/55259_61c9d_1535811988.webp",
+    "source_url": "https://1000kitap.com/kitap/cinder--121085"
+  },
+  {
+    "title": "Kış Masalı",
+    "author": "William Shakespeare",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim15_files/621026_1761606302_b65PS.webp",
+    "source_url": "https://1000kitap.com/kitap/kis-masali--948"
+  },
+  {
+    "title": "Julius Caesar",
+    "author": "William Shakespeare",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim15_files/274523_aac25_1561992261.jpg",
+    "source_url": "https://1000kitap.com/kitap/julius-caesar--13623"
+  },
+  {
+    "title": "On İkinci Gece",
+    "author": "William Shakespeare",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim15_files/56085_mMwak_1503762992.jpg",
+    "source_url": "https://1000kitap.com/kitap/on-ikinci-gece--947"
+  },
+  {
+    "title": "Fırtına",
+    "author": "William Shakespeare",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim15_files/621026_1761764996_xREt1.jpg",
+    "source_url": "https://1000kitap.com/kitap/firtina--9631"
+  },
+  {
+    "title": "Yanlışlıklar Komedyası",
+    "author": "William Shakespeare",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim15_files/27823_1735311518_IpbtE.jpg",
+    "source_url": "https://1000kitap.com/kitap/yanlisliklar-komedyasi--6979"
+  },
+  {
+    "title": "Kral Lear",
+    "author": "William Shakespeare",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim16_files/27823_1749014890_7Z5MQ.jpg",
+    "source_url": "https://1000kitap.com/kitap/kral-lear--7123"
+  },
+  {
+    "title": "Soneler",
+    "author": "William Shakespeare",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim16_files/27823_1728327935_pY1ib.webp",
+    "source_url": "https://1000kitap.com/kitap/soneler--7317"
+  },
+  {
+    "title": "Venedik Taciri",
+    "author": "William Shakespeare",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim16_files/56085_Tg6Yt_1503762795.jpg",
+    "source_url": "https://1000kitap.com/kitap/venedik-taciri--1661"
+  },
+  {
+    "title": "Othello",
+    "author": "William Shakespeare",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim16_files/621026_1760165885_Aln7G.jpg",
+    "source_url": "https://1000kitap.com/kitap/othello--3685"
+  },
+  {
+    "title": "Macbeth",
+    "author": "William Shakespeare",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim16_files/621026_1761775196_6az6T.webp",
+    "source_url": "https://1000kitap.com/kitap/macbeth--27205"
+  },
+  {
+    "title": "Romeo ve Juliet",
+    "author": "William Shakespeare",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim16_files/621026_1761775020_UZwsB.webp",
+    "source_url": "https://1000kitap.com/kitap/romeo-ve-juliet--4586"
+  },
+  {
+    "title": "Hamlet",
+    "author": "William Shakespeare",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim16_files/621026_1761775122_wAGYD.webp",
+    "source_url": "https://1000kitap.com/kitap/hamlet--1651"
+  },
+  {
+    "title": "Az Biraz Mutlu",
+    "author": "Adam Silvera",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim16_files/9414_stCKI_1497622788.jpg",
+    "source_url": "https://1000kitap.com/kitap/az-biraz-mutlu--80908"
+  },
+  {
+    "title": "Çikolata Kalpli Ejderha",
+    "author": "Stephanie Burgis",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim16_files/87436_vDSkJ_1518814269.jpg",
+    "source_url": "https://1000kitap.com/kitap/cikolata-kalpli-ejderha--100759"
+  },
+  {
+    "title": "Otostopçunun Galaksi Rehberi",
+    "author": "Douglas Adams",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim16_files/70109_ZnOkw_1500476337.jpg",
+    "source_url": "https://1000kitap.com/kitap/otostopcunun-galaksi-rehberi--16285"
+  },
+  {
+    "title": "Naruto 21. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim17_files/46265_1444984515.jpg",
+    "source_url": "https://1000kitap.com/kitap/naruto-21-cilt--46265"
+  },
+  {
+    "title": "Naruto 20. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim17_files/46264_1444984191.jpg",
+    "source_url": "https://1000kitap.com/kitap/naruto-20-cilt--46264"
+  },
+  {
+    "title": "Naruto 19. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim17_files/33032_1428871661.jpg",
+    "source_url": "https://1000kitap.com/kitap/naruto-19-cilt--33032"
+  },
+  {
+    "title": "Naruto 18. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim17_files/Naruto-18-Cilt_26174_1418394041.jpg",
+    "source_url": "https://1000kitap.com/kitap/naruto-18-cilt--26174"
+  },
+  {
+    "title": "Naruto 17. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim17_files/Naruto-17-Cilt_23143_1414496592.jpg",
+    "source_url": "https://1000kitap.com/kitap/naruto-17-cilt--23143"
+  },
+  {
+    "title": "Naruto 16. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim17_files/Naruto-16-Cilt_23142_1414496446.webp",
+    "source_url": "https://1000kitap.com/kitap/naruto-16-cilt--23142"
+  },
+  {
+    "title": "Naruto 15. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim17_files/Naruto-15-Cilt_23141_1414496368.webp",
+    "source_url": "https://1000kitap.com/kitap/naruto-15-cilt--23141"
+  },
+  {
+    "title": "Naruto 14. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim17_files/Naruto-14-Cilt_23133_1414488499.jpg",
+    "source_url": "https://1000kitap.com/kitap/naruto-14-cilt--23133"
+  },
+  {
+    "title": "Naruto 13. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim17_files/Naruto-13-Cilt_23132_1414488294.webp",
+    "source_url": "https://1000kitap.com/kitap/naruto-13-cilt--23132"
+  },
+  {
+    "title": "Naruto 12. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim17_files/Naruto-12-Cilt_23130_1414488224.jpg",
+    "source_url": "https://1000kitap.com/kitap/naruto-12-cilt--23130"
+  },
+  {
+    "title": "Naruto 11. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim18_files/Naruto-11-Cilt_23129_1414487873.jpg",
+    "source_url": "https://1000kitap.com/kitap/naruto-11-cilt--23129"
+  },
+  {
+    "title": "Naruto 9. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim18_files/Naruto-9-Cilt_23127_1414487579.webp",
+    "source_url": "https://1000kitap.com/kitap/naruto-9-cilt--23127"
+  },
+  {
+    "title": "Naruto 10. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim18_files/Naruto-10-Cilt_23128_1414487740.webp",
+    "source_url": "https://1000kitap.com/kitap/naruto-10-cilt--23128"
+  },
+  {
+    "title": "Naruto 8. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim18_files/Naruto-8-Cilt_23108_1414445924.webp",
+    "source_url": "https://1000kitap.com/kitap/naruto-8-cilt--23108"
+  },
+  {
+    "title": "Naruto 7. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim18_files/Naruto-7-Cilt_23107_1414445786.webp",
+    "source_url": "https://1000kitap.com/kitap/naruto-7-cilt--23107"
+  },
+  {
+    "title": "Naruto 6. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim18_files/Naruto-6-Cilt_23106_1414445435.webp",
+    "source_url": "https://1000kitap.com/kitap/naruto-6-cilt--23106"
+  },
+  {
+    "title": "Naruto 5. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim18_files/Naruto-5-Cilt_23105_1414445268.webp",
+    "source_url": "https://1000kitap.com/kitap/naruto-5-cilt--23105"
+  },
+  {
+    "title": "Naruto 4. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim18_files/Naruto-4-Cilt_20959_1406892982.webp",
+    "source_url": "https://1000kitap.com/kitap/naruto-4-cilt--20959"
+  },
+  {
+    "title": "Naruto 3. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim18_files/Naruto-3-Cilt_20957_1406892868.jpg",
+    "source_url": "https://1000kitap.com/kitap/naruto-3-cilt--20957"
+  },
+  {
+    "title": "Naruto 2. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim18_files/Naruto-2-Cilt_20955_1406892658.jpg",
+    "source_url": "https://1000kitap.com/kitap/naruto-2-cilt--20955"
+  },
+  {
+    "title": "Naruto 1. Cilt",
+    "author": "Masaşi Kişimoto",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim19_files/Naruto-1-Cilt_20952_1406892513.jpg",
+    "source_url": "https://1000kitap.com/kitap/naruto-1-cilt--20952"
+  },
+  {
+    "title": "İyi Kız",
+    "author": "Mary Kubica",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim19_files/2553527_1771178826_LPhyO.webp",
+    "source_url": "https://1000kitap.com/kitap/iyi-kiz--50567"
+  },
+  {
+    "title": "Başka Bir Gün",
+    "author": "David Levithan",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim19_files/60942_1463073683.jpg",
+    "source_url": "https://1000kitap.com/kitap/baska-bir-gun--60942"
+  },
+  {
+    "title": "Her Gün",
+    "author": "David Levithan",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim19_files/40059_1435621237.jpg",
+    "source_url": "https://1000kitap.com/kitap/her-gun--40059"
+  },
+  {
+    "title": "Kaplan Yürekli Çocuk",
+    "author": "Linda Coggin",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim19_files/62348_1466872082.jpg",
+    "source_url": "https://1000kitap.com/kitap/kaplan-yurekli-cocuk--62348"
+  },
+  {
+    "title": "Huzur Sokağı",
+    "author": "Şule Yüksel Şenler",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim19_files/2553527_1760259454_lDvdm.jpg",
+    "source_url": "https://1000kitap.com/kitap/huzur-sokagi--99"
+  },
+  {
+    "title": "Usta ve Margarita",
+    "author": "Mihail Bulgakov",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim19_files/2553527_1757007094_yJaDo.jpg",
+    "source_url": "https://1000kitap.com/kitap/usta-ve-margarita--5593"
+  },
+  {
+    "title": "Genç Bir Doktorun Anıları",
+    "author": "Mihail Bulgakov",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim19_files/621026_1757189077_FlhiK.jpg",
+    "source_url": "https://1000kitap.com/kitap/genc-bir-doktorun-anilari--16339"
+  },
+  {
+    "title": "Üç Büyük Usta",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim19_files/56085_NUlGt_1478574495.jpg",
+    "source_url": "https://1000kitap.com/kitap/uc-buyuk-usta--20100"
+  },
+  {
+    "title": "Bir Zanaatla Beklenmedik Karşılaşma",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim19_files/343512_58e09_1603555486.webp",
+    "source_url": "https://1000kitap.com/kitap/bir-zanaatla-beklenmedik-karsilasma--236552"
+  },
+  {
+    "title": "Sahaf Mendel",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim20_files/27823_1731330068_0cslP.jpg",
+    "source_url": "https://1000kitap.com/kitap/sahaf-mendel--286726"
+  },
+  {
+    "title": "Karmaşık Duygular",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim20_files/621026_1757797203_2cAjd.webp",
+    "source_url": "https://1000kitap.com/kitap/karmasik-duygular--65124"
+  },
+  {
+    "title": "Hayatın Mucizeleri",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim20_files/27823_1723916785_zEfoA.jpg",
+    "source_url": "https://1000kitap.com/kitap/hayatin-mucizeleri--203055"
+  },
+  {
+    "title": "Clarissa",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim20_files/69376_VwITi_1498658171.webp",
+    "source_url": "https://1000kitap.com/kitap/clarissa--6548"
+  },
+  {
+    "title": "Gömülü Şamdan",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim20_files/39535_whvtg_1503331221.jpg",
+    "source_url": "https://1000kitap.com/kitap/gomulu-samdan--49524"
+  },
+  {
+    "title": "Rahel Tanrı’yla Hesaplaşıyor",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim20_files/39535_15c4b_1538613125.webp",
+    "source_url": "https://1000kitap.com/kitap/rahel-tanriyla-hesaplasiyor--125199"
+  },
+  {
+    "title": "Mürebbiye",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim20_files/56105_1455891213.webp",
+    "source_url": "https://1000kitap.com/kitap/murebbiye--56105"
+  },
+  {
+    "title": "Geçmişe Yolculuk",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim20_files/27823_1766873557_6upSz.webp",
+    "source_url": "https://1000kitap.com/kitap/gecmise-yolculuk--77618"
+  },
+  {
+    "title": "Kızıl",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim20_files/56085_FizDQ_1527114806.webp",
+    "source_url": "https://1000kitap.com/kitap/kizil--107438"
+  },
+  {
+    "title": "Lyon'da Düğün",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim20_files/39535_c6fe0_1536827979.webp",
+    "source_url": "https://1000kitap.com/kitap/lyon-da-dugun--121051"
+  },
+  {
+    "title": "Yakıcı Sır",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim21_files/45287_1443351932.webp",
+    "source_url": "https://1000kitap.com/kitap/yakici-sir--45287"
+  },
+  {
+    "title": "Mecburiyet",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim21_files/621026_1761234472_thDTc.webp",
+    "source_url": "https://1000kitap.com/kitap/mecburiyet--71897"
+  },
+  {
+    "title": "Bir Kadının Yaşamından Yirmi Dört Saat",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim21_files/621026_1758575182_kBO3E.jpg",
+    "source_url": "https://1000kitap.com/kitap/bir-kadinin-yasamindan-yirmi-dort-saat--8057"
+  },
+  {
+    "title": "Bilinmeyen Bir Kadının Mektubu",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim21_files/56586_1658894462_Rfojn.jpg",
+    "source_url": "https://1000kitap.com/kitap/bilinmeyen-bir-kadinin-mektubu--6159"
+  },
+  {
+    "title": "Amok Koşucusu",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim21_files/2553527_1757702439_WXTpU.jpg",
+    "source_url": "https://1000kitap.com/kitap/amok-kosucusu--1162"
+  },
+  {
+    "title": "Duyguların Rengi",
+    "author": "Kathryn Stockett",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim21_files/1565_Duygularin_Rengi-Kathryn_Stockett380.jpg",
+    "source_url": "https://1000kitap.com/kitap/duygularin-rengi--1565"
+  },
+  {
+    "title": "Tutulma",
+    "author": "Stephenie Meyer",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim21_files/Tutulma_1593_1386362320.jpg",
+    "source_url": "https://1000kitap.com/kitap/tutulma--1593"
+  },
+  {
+    "title": "Şafak Vakti",
+    "author": "Stephenie Meyer",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim21_files/87436_KObSr_1516825254.webp",
+    "source_url": "https://1000kitap.com/kitap/safak-vakti--1594"
+  },
+  {
+    "title": "Yeniay",
+    "author": "Stephenie Meyer",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim21_files/Yeniay_1591_1386362201.jpg",
+    "source_url": "https://1000kitap.com/kitap/yeniay--1591"
+  },
+  {
+    "title": "Alacakaranlık",
+    "author": "Stephenie Meyer",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim21_files/Alacakaranlik_1590_1395842126.webp",
+    "source_url": "https://1000kitap.com/kitap/alacakaranlik--1590"
+  },
+  {
+    "title": "Tokyo Gul 1. Cilt",
+    "author": "Sui Ishida",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim22_files/50375_1451054182.jpg",
+    "source_url": "https://1000kitap.com/kitap/tokyo-gul-1-cilt--50375"
+  },
+  {
+    "title": "Deniz Feneri",
+    "author": "Virginia Woolf",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim22_files/1552_1440169452.jpg",
+    "source_url": "https://1000kitap.com/kitap/deniz-feneri--1552"
+  },
+  {
+    "title": "Savaş ve Barış (2 Cilt Takım)",
+    "author": "Lev Tolstoy",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim22_files/56586_67250_1610136006.jpg",
+    "source_url": "https://1000kitap.com/kitap/savas-ve-baris-2-cilt-takim--181"
+  },
+  {
+    "title": "Sabah Uykum",
+    "author": "Ahmet Batman",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim22_files/12268_Sabah_Uykum-Ahmet_Batman557.jpg",
+    "source_url": "https://1000kitap.com/kitap/sabah-uykum--12268"
+  },
+  {
+    "title": "Soğuk Kahve",
+    "author": "Ahmet Batman",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim22_files/8153_Soguk_Kahve-Ahmet_Batman653.jpg",
+    "source_url": "https://1000kitap.com/kitap/soguk-kahve--8153"
+  },
+  {
+    "title": "Şirin - Başkan Olmak Kolay mı?",
+    "author": "Birsen Ekim Özen",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim22_files/87436_7733d_1571779357.jpg",
+    "source_url": "https://1000kitap.com/kitap/sirin-baskan-olmak-kolay-mi--20889"
+  },
+  {
+    "title": "Allah'ı Merak Ediyorum 2",
+    "author": "Özkan Öze",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim22_files/70109_C91oL_1501850563.webp",
+    "source_url": "https://1000kitap.com/kitap/allahi-merak-ediyorum-2--84948"
+  },
+  {
+    "title": "Allah'ı Merak Ediyorum",
+    "author": "Özkan Öze",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim22_files/27823_CSovz_1501404973.webp",
+    "source_url": "https://1000kitap.com/kitap/allahi-merak-ediyorum--84168"
+  },
+  {
+    "title": "Levent - Mardin'de",
+    "author": "Mustafa Orakçı",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim22_files/40325_1435939463.jpg",
+    "source_url": "https://1000kitap.com/kitap/levent-mardinde--40325"
+  },
+  {
+    "title": "Bir Küçük Osmancık Vardı",
+    "author": "Hasan Nail Canat",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim22_files/27823_jCMxa_1487003543.jpg",
+    "source_url": "https://1000kitap.com/kitap/bir-kucuk-osmancik-vardi--5415"
+  },
+  {
+    "title": "Sol Ayağım",
+    "author": "Christy Brown",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim23_files/882_Sol_Ayagim.webp",
+    "source_url": "https://1000kitap.com/kitap/sol-ayagim--882"
+  },
+  {
+    "title": "Deyim mi Demeyim mi?",
+    "author": "Melek Çe",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim23_files/87436_b0d6c_1535399801.webp",
+    "source_url": "https://1000kitap.com/kitap/deyim-mi-demeyim-mi--46475"
+  },
+  {
+    "title": "Dolaptan Temaşa",
+    "author": "Ahmet Mithat Efendi",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim23_files/2553527_1760970646_Rx3MD.webp",
+    "source_url": "https://1000kitap.com/kitap/dolaptan-temasa--149900"
+  },
+  {
+    "title": "Üç Ölüm",
+    "author": "Lev Tolstoy",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim23_files/Uc-Olum_6070_1384627524.webp",
+    "source_url": "https://1000kitap.com/kitap/uc-olum--6070"
+  },
+  {
+    "title": "Morgue Sokağı Cinayetleri",
+    "author": "Edgar Allan Poe",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim23_files/27823_1739295525_dNuhw.jpg",
+    "source_url": "https://1000kitap.com/kitap/morgue-sokagi-cinayetleri--182705"
+  },
+  {
+    "title": "İnsan Neyle Yaşar?",
+    "author": "Lev Tolstoy",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim23_files/621026_1757654793_gKzUt.webp",
+    "source_url": "https://1000kitap.com/kitap/insan-neyle-yasar--174"
+  },
+  {
+    "title": "Altıncı Koğuş",
+    "author": "Anton Çehov",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim23_files/621026_1757754660_N9DYJ.jpg",
+    "source_url": "https://1000kitap.com/kitap/altinci-kogus--8573"
+  },
+  {
+    "title": "Bir Çöküşün Öyküsü",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim23_files/2553527_1772802250_czLXv.webp",
+    "source_url": "https://1000kitap.com/kitap/bir-cokusun-oykusu--73466"
+  },
+  {
+    "title": "Korku",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim23_files/56586_e3ce3_1603605624.jpg",
+    "source_url": "https://1000kitap.com/kitap/korku--28343"
+  },
+  {
+    "title": "Olağanüstü Bir Gece",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim23_files/27823_5b2e5_1591134945.jpg",
+    "source_url": "https://1000kitap.com/kitap/olaganustu-bir-gece--48832"
+  },
+  {
+    "title": "Kızıl Kahkaha",
+    "author": "Leonid Andreyev",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim24_files/621026_1763319392_Ju2h2.webp",
+    "source_url": "https://1000kitap.com/kitap/kizil-kahkaha--173672"
+  },
+  {
+    "title": "Zacharius Usta",
+    "author": "Jules Verne",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim24_files/87436_d99a4_1544311085.webp",
+    "source_url": "https://1000kitap.com/kitap/zacharius-usta--99512"
+  },
+  {
+    "title": "Ermiş",
+    "author": "Halil Cibran",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim24_files/621026_1761773570_dG0SG.webp",
+    "source_url": "https://1000kitap.com/kitap/ermis--852"
+  },
+  {
+    "title": "Meczup",
+    "author": "Halil Cibran",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim24_files/27823_1762951582_cmCKX.jpg",
+    "source_url": "https://1000kitap.com/kitap/meczup--29193"
+  },
+  {
+    "title": "Kibarlık Budalası",
+    "author": "Molière",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim24_files/621026_1761252726_zaxB3.jpg",
+    "source_url": "https://1000kitap.com/kitap/kibarlik-budalasi--937"
+  },
+  {
+    "title": "İvan İlyiç'in Ölümü",
+    "author": "Lev Tolstoy",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim24_files/621026_1761838288_33L9t.jpg",
+    "source_url": "https://1000kitap.com/kitap/ivan-ilyic-in-olumu--380"
+  },
+  {
+    "title": "Bir Kuzey Macerası",
+    "author": "Jack London",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim24_files/621026_1761165487_PkLxE.webp",
+    "source_url": "https://1000kitap.com/kitap/bir-kuzey-macerasi--100272"
+  },
+  {
+    "title": "Ay Işığı Sokağı",
+    "author": "Stefan Zweig",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim24_files/52353_pCcki_1496846976.jpg",
+    "source_url": "https://1000kitap.com/kitap/ay-isigi-sokagi--20522"
+  },
+  {
+    "title": "Paris Sıkıntısı",
+    "author": "Charles Baudelaire",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim24_files/27823_1727081112_1RFU9.jpg",
+    "source_url": "https://1000kitap.com/kitap/paris-sikintisi--7905"
+  },
+  {
+    "title": "Huzur",
+    "author": "Ahmet Hamdi Tanpınar",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim24_files/332663_4012e_1555100450.webp",
+    "source_url": "https://1000kitap.com/kitap/huzur--1198"
+  },
+  {
+    "title": "İşaret Çocukları",
+    "author": "Cahit Zarifoğlu",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim25_files/39535_tE1D4_1517011666.webp",
+    "source_url": "https://1000kitap.com/kitap/isaret-cocuklari--22832"
+  },
+  {
+    "title": "Bütün Şiirleri",
+    "author": "Orhan Veli Kanık",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim25_files/568685_b2c8e_1609944856.jpg",
+    "source_url": "https://1000kitap.com/kitap/butun-siirleri--258967"
+  },
+  {
+    "title": "Sisler Bulvarı",
+    "author": "Attila İlhan",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim25_files/1386184_4uSZI_1644326186.webp",
+    "source_url": "https://1000kitap.com/kitap/sisler-bulvari--324544"
+  },
+  {
+    "title": "Lavinia",
+    "author": "Özdemir Asaf",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim25_files/30074_1425238716.jpg",
+    "source_url": "https://1000kitap.com/kitap/lavinia--30074"
+  },
+  {
+    "title": "Yalnızlık Paylaşılmaz",
+    "author": "Özdemir Asaf",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim25_files/274523_f1755_1555101646.jpg",
+    "source_url": "https://1000kitap.com/kitap/yalnizlik-paylasilmaz--159097"
+  },
+  {
+    "title": "Bir Yaz Gecesi Rüyası",
+    "author": "William Shakespeare",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim25_files/27823_1759066362_pcRIy.jpg",
+    "source_url": "https://1000kitap.com/kitap/bir-yaz-gecesi-ruyasi--1847"
+  },
+  {
+    "title": "Hayvan Mezarlığı",
+    "author": "Stephen King",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim25_files/2800_1460405167.jpg",
+    "source_url": "https://1000kitap.com/kitap/hayvan-mezarligi--2800"
+  },
+  {
+    "title": "Eski Sokak",
+    "author": "Behçet Necatigil",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim25_files/6879_Eski_Sokak-Behcet_Necatigil899.jpg",
+    "source_url": "https://1000kitap.com/kitap/eski-sokak--6879"
+  },
+  {
+    "title": "Şiirler",
+    "author": "Akif İnan",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim25_files/30208_1425396604.jpg",
+    "source_url": "https://1000kitap.com/kitap/siirler--30208"
+  },
+  {
+    "title": "Anayurt Oteli",
+    "author": "Yusuf Atılgan",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim25_files/36048_xKd87_1510236094.jpg",
+    "source_url": "https://1000kitap.com/kitap/anayurt-oteli--1094"
+  },
+  {
+    "title": "Yüzbaşının Kızı",
+    "author": "Aleksandr Puşkin",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim26_files/39535_0VO3G_1518332892.jpg",
+    "source_url": "https://1000kitap.com/kitap/yuzbasinin-kizi--903"
+  },
+  {
+    "title": "Üvercinka",
+    "author": "Cemal Süreya",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim26_files/568685_68108_1598271573.webp",
+    "source_url": "https://1000kitap.com/kitap/uvercinka--234616"
+  },
+  {
+    "title": "Şiir Okuma Kılavuzu",
+    "author": "İsmet Özel",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim26_files/568685_f90cd_1571949881.jpg",
+    "source_url": "https://1000kitap.com/kitap/siir-okuma-kilavuzu--185857"
+  },
+  {
+    "title": "Anne Frank'ın Hatıra Defteri",
+    "author": "Anne Frank",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim26_files/56586_1656995298_gGoU1.jpg",
+    "source_url": "https://1000kitap.com/kitap/anne-frank-in-hatira-defteri--889"
+  },
+  {
+    "title": "Kafes",
+    "author": "Josh Malerman",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim26_files/41730_1438179446.jpg",
+    "source_url": "https://1000kitap.com/kitap/kafes--41730"
+  },
+  {
+    "title": "Mucize",
+    "author": "R. J. Palacio",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim26_files/621026_1761678780_5AGlw.webp",
+    "source_url": "https://1000kitap.com/kitap/mucize--48518"
+  },
+  {
+    "title": "Kuralsız",
+    "author": "Veronica Roth",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim26_files/9953_Kuralsiz-Verenico_Roth590.webp",
+    "source_url": "https://1000kitap.com/kitap/kuralsiz--9953"
+  },
+  {
+    "title": "Yoldaki İşaretler",
+    "author": "Seyyid Kutub",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim26_files/9414_55f8a_1576695149.webp",
+    "source_url": "https://1000kitap.com/kitap/yoldaki-isaretler--132"
+  },
+  {
+    "title": "Gölge ve Kemik",
+    "author": "Leigh Bardugo",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim26_files/4151_Golge_ve_Kemik-Leigh_Bardugo789.jpg",
+    "source_url": "https://1000kitap.com/kitap/golge-ve-kemik--4151"
+  },
+  {
+    "title": "4N1K",
+    "author": "Büşra Yılmaz",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim26_files/87436_ANMZj_1515166478.webp",
+    "source_url": "https://1000kitap.com/kitap/4n1k--45742"
+  },
+  {
+    "title": "Açlık Oyunları",
+    "author": "Suzanne Collins",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim27_files/621026_1766418118_25EhH.webp",
+    "source_url": "https://1000kitap.com/kitap/aclik-oyunlari--233"
+  },
+  {
+    "title": "Illuminae",
+    "author": "Amie Kaufman",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim27_files/107518_kiHLN_1511116654.webp",
+    "source_url": "https://1000kitap.com/kitap/illuminae--92576"
+  },
+  {
+    "title": "Yandaş",
+    "author": "Veronica Roth",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim27_files/Yandas_19279_1399561548.webp",
+    "source_url": "https://1000kitap.com/kitap/yandas--19279"
+  },
+  {
+    "title": "Uyumsuz",
+    "author": "Veronica Roth",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim27_files/Uyumsuz_15410_1389209341.webp",
+    "source_url": "https://1000kitap.com/kitap/uyumsuz--15410"
+  },
+  {
+    "title": "Ruhlar Kütüphanesi",
+    "author": "Ransom Riggs",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim27_files/65328_1473264762.jpg",
+    "source_url": "https://1000kitap.com/kitap/ruhlar-kutuphanesi--65328"
+  },
+  {
+    "title": "Gölge Şehir",
+    "author": "Ransom Riggs",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim27_files/9414_d3bb2_1566230379.webp",
+    "source_url": "https://1000kitap.com/kitap/golge-sehir--59635"
+  },
+  {
+    "title": "Bir Genç Kızın Gizli Defteri",
+    "author": "İpek Ongun",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim27_files/2553527_1758978687_kvEMm.webp",
+    "source_url": "https://1000kitap.com/kitap/bir-genc-kizin-gizli-defteri--1877"
+  },
+  {
+    "title": "Scarlet",
+    "author": "Marissa Meyer",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim27_files/28649_1423034674.jpg",
+    "source_url": "https://1000kitap.com/kitap/scarlet--28649"
+  },
+  {
+    "title": "Cadı Avcısı",
+    "author": "Virginia Boecker",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim27_files/53869_1453981180.webp",
+    "source_url": "https://1000kitap.com/kitap/cadi-avcisi--53869"
+  },
+  {
+    "title": "Bayan Peregrine'in Tuhaf Çocukları",
+    "author": "Ransom Riggs",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim27_files/56586_6499f_1594929830.webp",
+    "source_url": "https://1000kitap.com/kitap/bayan-peregrinein-tuhaf-cocuklari--6014"
+  },
+  {
+    "title": "Kızıl Yükseliş",
+    "author": "Pierce Brown",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim28_files/31950_1428079488.webp",
+    "source_url": "https://1000kitap.com/kitap/kizil-yukselis--31950"
+  },
+  {
+    "title": "Genç Kız Kalbi",
+    "author": "Mehmet Rauf",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim28_files/2553527_1760973155_rLJva.jpg",
+    "source_url": "https://1000kitap.com/kitap/genc-kiz-kalbi--181770"
+  },
+  {
+    "title": "Sevdiğim Tüm Erkeklere",
+    "author": "Jenny Han",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim28_files/9414_2LQJM_1478850586.jpg",
+    "source_url": "https://1000kitap.com/kitap/sevdigim-tum-erkeklere--68306"
+  },
+  {
+    "title": "İlk Aşk",
+    "author": "John Green",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim28_files/Ilk-Ask_19618_19618_1401097224.webp",
+    "source_url": "https://1000kitap.com/kitap/ilk-ask--19618"
+  },
+  {
+    "title": "Hayatın Kıyısında",
+    "author": "Jennifer Niven",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim28_files/87436_35e24_1578627813.jpg",
+    "source_url": "https://1000kitap.com/kitap/hayatin-kiyisinda--69354"
+  },
+  {
+    "title": "Silber - Rüya Labirenti",
+    "author": "Kerstin Gier",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim28_files/51200_OXPaK_1479229676.jpg",
+    "source_url": "https://1000kitap.com/kitap/silber-ruya-labirenti--68515"
+  },
+  {
+    "title": "Silber - Rüya Kapısı",
+    "author": "Kerstin Gier",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim28_files/27823_29c49_1542752478.jpg",
+    "source_url": "https://1000kitap.com/kitap/silber-ruya-kapisi--60841"
+  },
+  {
+    "title": "Silber",
+    "author": "Kerstin Gier",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim28_files/39491_1434744889.webp",
+    "source_url": "https://1000kitap.com/kitap/silber--39491"
+  },
+  {
+    "title": "Yazdan Geriye Kalanlar",
+    "author": "Cassandra Clare",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim28_files/9414_tIib6_1476033972.webp",
+    "source_url": "https://1000kitap.com/kitap/yazdan-geriye-kalanlar--66649"
+  },
+  {
+    "title": "Lola ve Komşu Çocuk",
+    "author": "Stephanie Perkins",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim28_files/43973_1441503463.jpg",
+    "source_url": "https://1000kitap.com/kitap/lola-ve-komsu-cocuk--43973"
+  },
+  {
+    "title": "Anna ve Fransız Öpücüğü",
+    "author": "Stephanie Perkins",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim29_files/51200_h6L8N_1503963118.webp",
+    "source_url": "https://1000kitap.com/kitap/anna-ve-fransiz-opucugu--85887"
+  },
+  {
+    "title": "Isla Ve Mutlu Son",
+    "author": "Stephanie Perkins",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim29_files/59939_1460645923.jpg",
+    "source_url": "https://1000kitap.com/kitap/isla-ve-mutlu-son--59939"
+  },
+  {
+    "title": "Kızıl Kraliçe",
+    "author": "Victoria Aveyard",
+    "finished_at": "2024-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim29_files/48289_1447693315.webp",
+    "source_url": "https://1000kitap.com/kitap/kizil-kralice--48289"
+  },
+  {
+    "title": "Beyaz Diş",
+    "author": "Jack London",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim29_files/621026_1760821697_vRjdr.jpg",
+    "source_url": "https://1000kitap.com/kitap/beyaz-dis--856"
+  },
+  {
+    "title": "Masumiyet Müzesi",
+    "author": "Orhan Pamuk",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim29_files/332663_9c51e_1559330870.webp",
+    "source_url": "https://1000kitap.com/kitap/masumiyet-muzesi--128"
+  },
+  {
+    "title": "Devlet",
+    "author": "Platon (Eflatun)",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim29_files/39535_e85It_1502742900.jpg",
+    "source_url": "https://1000kitap.com/kitap/devlet--325"
+  },
+  {
+    "title": "Bülbülü Öldürmek",
+    "author": "Harper Lee",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim29_files/9414_2abd3_1574440780.jpg",
+    "source_url": "https://1000kitap.com/kitap/bulbulu-oldurmek--939"
+  },
+  {
+    "title": "Momo",
+    "author": "Michael Ende",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim29_files/51200_DyMYo_1504796394.jpg",
+    "source_url": "https://1000kitap.com/kitap/momo--3574"
+  },
+  {
+    "title": "Cesur Yeni Dünya",
+    "author": "Aldous Huxley",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim29_files/1057_1464209425.webp",
+    "source_url": "https://1000kitap.com/kitap/cesur-yeni-dunya--1057"
+  },
+  {
+    "title": "Karamazov Kardeşler",
+    "author": "Fyodor Dostoyevski",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim29_files/621026_1759988992_cFWZ0.webp",
+    "source_url": "https://1000kitap.com/kitap/karamazov-kardesler--497"
+  },
+  {
+    "title": "Mutlu Prens",
+    "author": "Oscar Wilde",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim30_files/71196_tyL09_1508450305.jpg",
+    "source_url": "https://1000kitap.com/kitap/mutlu-prens--363"
+  },
+  {
+    "title": "Sergüzeşt",
+    "author": "Samipaşazade Sezai",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim30_files/27823_xaobK_1519218019.jpg",
+    "source_url": "https://1000kitap.com/kitap/serguzest--351"
+  },
+  {
+    "title": "İki Şehrin Hikâyesi",
+    "author": "Charles Dickens",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim30_files/332663_fef38_1560712847.jpg",
+    "source_url": "https://1000kitap.com/kitap/iki-sehrin-hikayesi--865"
+  },
+  {
+    "title": "İnci",
+    "author": "John Steinbeck",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim30_files/39535_6ujQh_1516487883.webp",
+    "source_url": "https://1000kitap.com/kitap/inci--576"
+  },
+  {
+    "title": "Babalar ve Oğullar",
+    "author": "Ivan Turgenyev",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim30_files/27823_1762152426_LjeF9.jpg",
+    "source_url": "https://1000kitap.com/kitap/babalar-ve-ogullar--138"
+  },
+  {
+    "title": "Çizgili Pijamalı Çocuk",
+    "author": "John Boyne",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim30_files/621026_1758213509_hHYbS.jpg",
+    "source_url": "https://1000kitap.com/kitap/cizgili-pijamali-cocuk--8959"
+  },
+  {
+    "title": "Bütün Şiirleri",
+    "author": "Sabahattin Ali",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim30_files/69985_3kWiD_1492194307.jpg",
+    "source_url": "https://1000kitap.com/kitap/butun-siirleri--551"
+  },
+  {
+    "title": "Açlık",
+    "author": "Knut Hamsun",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim30_files/101_1441502227.webp",
+    "source_url": "https://1000kitap.com/kitap/aclik--101"
+  },
+  {
+    "title": "İçimdeki Müzik",
+    "author": "Sharon M. Draper",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim30_files/246583_ab77d_1604230242.webp",
+    "source_url": "https://1000kitap.com/kitap/icimdeki-muzik--245587"
+  },
+  {
+    "title": "Afrikalı Leo",
+    "author": "Amin Maalouf",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim30_files/27823_1737117472_lW8yf.jpg",
+    "source_url": "https://1000kitap.com/kitap/afrikali-leo--524"
+  },
+  {
+    "title": "Doğu'nun Limanları",
+    "author": "Amin Maalouf",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim31_files/2553527_1764665399_RW08h.webp",
+    "source_url": "https://1000kitap.com/kitap/dogu-nun-limanlari--518"
+  },
+  {
+    "title": "Semerkant",
+    "author": "Amin Maalouf",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim31_files/621026_1757279108_qCuZF.webp",
+    "source_url": "https://1000kitap.com/kitap/semerkant--193"
+  },
+  {
+    "title": "Zengin Hayaller Peşinde",
+    "author": "Cahit Zarifoğlu",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim31_files/87436_04c79_1579114145.webp",
+    "source_url": "https://1000kitap.com/kitap/zengin-hayaller-pesinde--29976"
+  },
+  {
+    "title": "Of Not Being A Jew",
+    "author": "İsmet Özel",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim31_files/27823_1742732534_xgGVv.jpg",
+    "source_url": "https://1000kitap.com/kitap/of-not-being-a-jew--46030"
+  },
+  {
+    "title": "Kırk Hadis",
+    "author": "İsmet Özel",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim31_files/56586_4705c_1575457202.jpg",
+    "source_url": "https://1000kitap.com/kitap/kirk-hadis--27439"
+  },
+  {
+    "title": "Üç Zor Mesele",
+    "author": "İsmet Özel",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim31_files/39535_nUkpg_1509442574.webp",
+    "source_url": "https://1000kitap.com/kitap/uc-zor-mesele--17265"
+  },
+  {
+    "title": "Taşları Yemek Yasak",
+    "author": "İsmet Özel",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim31_files/56586_1686470099_v8dFp.webp",
+    "source_url": "https://1000kitap.com/kitap/taslari-yemek-yasak--13097"
+  },
+  {
+    "title": "Waldo Sen Neden Burada Değilsin?",
+    "author": "İsmet Özel",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim31_files/56586_52f9a_1610118581.jpg",
+    "source_url": "https://1000kitap.com/kitap/waldo-sen-neden-burada-degilsin--4608"
+  },
+  {
+    "title": "Riyazüs Salihin",
+    "author": "İmam Nevevi",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim31_files/2403481_1745866886_8mTN8.webp",
+    "source_url": "https://1000kitap.com/kitap/riyazus-salihin--222999"
+  },
+  {
+    "title": "Hayâtü's Sahâbe (4 Cilt Takım)",
+    "author": "M. Yusuf Kandehlevi",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim31_files/1361835_8281I_1647608328.webp",
+    "source_url": "https://1000kitap.com/kitap/hayatu-s-sahabe-4-cilt-takim--330312"
+  },
+  {
+    "title": "Siyer Bilinci Dersleri",
+    "author": "Muhammed Emin Yıldırım",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim32_files/27823_1729847444_v4Ute.jpg",
+    "source_url": "https://1000kitap.com/kitap/siyer-bilinci-dersleri--82379"
+  },
+  {
+    "title": "Peygamberler Tarihi",
+    "author": "M. Asım Köksal",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim32_files/234599_1707587099_3ZfZm.jpg",
+    "source_url": "https://1000kitap.com/kitap/peygamberler-tarihi--348180"
+  },
+  {
+    "title": "Mayıs Giremez",
+    "author": "Küçük İskender",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim32_files/91199_86472_1536223065.webp",
+    "source_url": "https://1000kitap.com/kitap/mayis-giremez--121820"
+  },
+  {
+    "title": "Varoluşçuluk",
+    "author": "Jean-Paul Sartre",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim32_files/6362_1436265872.jpg",
+    "source_url": "https://1000kitap.com/kitap/varolusculuk--6362"
+  },
+  {
+    "title": "Bulantı",
+    "author": "Jean-Paul Sartre",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim32_files/1154_Bulanti-Jean_Paul_Sartre914.jpg",
+    "source_url": "https://1000kitap.com/kitap/bulanti--1154"
+  },
+  {
+    "title": "Duvar",
+    "author": "Jean-Paul Sartre",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim32_files/27823_f2008_1529940056.jpg",
+    "source_url": "https://1000kitap.com/kitap/duvar--1821"
+  },
+  {
+    "title": "Dişi Kurdun Rüyaları",
+    "author": "Cengiz Aytmatov",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim32_files/7625_1463869616.webp",
+    "source_url": "https://1000kitap.com/kitap/disi-kurdun-ruyalari--7625"
+  },
+  {
+    "title": "Toprak Ana",
+    "author": "Cengiz Aytmatov",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim32_files/866_1463868155.jpg",
+    "source_url": "https://1000kitap.com/kitap/toprak-ana--866"
+  },
+  {
+    "title": "Beyaz Gemi",
+    "author": "Cengiz Aytmatov",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim32_files/820_1463867535.jpg",
+    "source_url": "https://1000kitap.com/kitap/beyaz-gemi--820"
+  },
+  {
+    "title": "Ölüm Bir Varmış Bir Yokmuş",
+    "author": "José Saramago",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim32_files/9414_eca61_1572776040.jpg",
+    "source_url": "https://1000kitap.com/kitap/olum-bir-varmis-bir-yokmus--7107"
+  },
+  {
+    "title": "Azil",
+    "author": "Hakan Günday",
+    "finished_at": "2023-08-18",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim33_files/27823_1709216941_xvfrI.webp",
+    "source_url": "https://1000kitap.com/kitap/azil--1540"
+  },
+  {
+    "title": "Dine Karşı Din",
+    "author": "Ali Şeriati",
+    "finished_at": "2023-07-08",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim33_files/39535_5AfsO_1508349582.webp",
+    "source_url": "https://1000kitap.com/kitap/dine-karsi-din--776"
+  },
+  {
+    "title": "Malcolm X",
+    "author": "Alex Haley",
+    "finished_at": "2023-06-30",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim33_files/395_Malcolm_-x-Alex_Haley535.jpg",
+    "source_url": "https://1000kitap.com/kitap/malcolm-x--395"
+  },
+  {
+    "title": "Bir Delinin Anıları",
+    "author": "Gustave Flaubert",
+    "finished_at": "2023-06-30",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim33_files/56586_1681534687_hIrs9.jpg",
+    "source_url": "https://1000kitap.com/kitap/bir-delinin-anilari--3842"
+  },
+  {
+    "title": "Malafa",
+    "author": "Hakan Günday",
+    "finished_at": "2023-06-17",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim33_files/27823_1709219154_waf0U.jpg",
+    "source_url": "https://1000kitap.com/kitap/malafa--6721"
+  },
+  {
+    "title": "Dilbilimci Ve Diller",
+    "author": "Claude Hagege",
+    "finished_at": "2023-06-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim33_files/196554_1675191326_di3X0.webp",
+    "source_url": "https://1000kitap.com/kitap/dilbilimci-ve-diller--370101"
+  },
+  {
+    "title": "Ben Sana Mecburum",
+    "author": "Attila İlhan",
+    "finished_at": "2023-06-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim33_files/39535_5vqMN_1505398933.webp",
+    "source_url": "https://1000kitap.com/kitap/ben-sana-mecburum--6291"
+  },
+  {
+    "title": "Prens",
+    "author": "Niccolo Machiavelli",
+    "finished_at": "2023-06-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim33_files/270185_b10e1_1565772751.jpg",
+    "source_url": "https://1000kitap.com/kitap/prens--174991"
+  },
+  {
+    "title": "Utopia",
+    "author": "Thomas More",
+    "finished_at": "2023-06-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim33_files/39535_kXfG1_1508359662.jpg",
+    "source_url": "https://1000kitap.com/kitap/utopia--1734"
+  },
+  {
+    "title": "İdeal Öğretmen",
+    "author": "Grigory Petrov",
+    "finished_at": "2023-05-19",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim33_files/56586_FWPaz_1641803959.webp",
+    "source_url": "https://1000kitap.com/kitap/ideal-ogretmen--117924"
+  },
+  {
+    "title": "Harry Potter ve Lanetli Çocuk",
+    "author": "J. K. Rowling",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim34_files/9414_I6LNl_1476957299.jpg",
+    "source_url": "https://1000kitap.com/kitap/harry-potter-ve-lanetli-cocuk--67210"
+  },
+  {
+    "title": "Boş Koltuk",
+    "author": "J. K. Rowling",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim34_files/3950_Bos_Koltuk-Jk_Rowling356.jpg",
+    "source_url": "https://1000kitap.com/kitap/bos-koltuk--3950"
+  },
+  {
+    "title": "Fantastik Canavarlar Nelerdir, Nerede Bulunurlar?",
+    "author": "Newt Scamander",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim34_files/Fantastik-Canavarlar-Nelerdir-Nerede-Bulunurlar_20942_1406889823.webp",
+    "source_url": "https://1000kitap.com/kitap/fantastik-canavarlar-nelerdir-nerede-bulunurlar--20942"
+  },
+  {
+    "title": "Ben, Kirke",
+    "author": "Madeline Miller",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim34_files/316900_77fb2_1570898267.webp",
+    "source_url": "https://1000kitap.com/kitap/ben-kirke--177628"
+  },
+  {
+    "title": "Cimri",
+    "author": "Molière",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim34_files/621026_1761324064_oMxk2.jpg",
+    "source_url": "https://1000kitap.com/kitap/cimri--938"
+  },
+  {
+    "title": "Yalancılar",
+    "author": "E. Lockhart",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim34_files/56586_0mbn4_1487888355.webp",
+    "source_url": "https://1000kitap.com/kitap/yalancilar--74008"
+  },
+  {
+    "title": "Aristo ve Dante Evrenin Sırlarını Keşfediyor",
+    "author": "Benjamin Alire Sáenz",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim34_files/69376_i3AR2_1494924309.jpg",
+    "source_url": "https://1000kitap.com/kitap/aristo-ve-dante-evrenin-sirlarini-kesfediyor--79060"
+  },
+  {
+    "title": "Fangirl",
+    "author": "Rainbow Rowell",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim34_files/87436_42503_1534029243.webp",
+    "source_url": "https://1000kitap.com/kitap/fangirl--40856"
+  },
+  {
+    "title": "Eleanor ve Park",
+    "author": "Rainbow Rowell",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim34_files/48255_1447585942.jpg",
+    "source_url": "https://1000kitap.com/kitap/eleanor-ve-park--48255"
+  },
+  {
+    "title": "Asla Vazgeçme",
+    "author": "Rainbow Rowell",
+    "finished_at": "2023-12-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim34_files/135378_PucT2_1517679683.jpg",
+    "source_url": "https://1000kitap.com/kitap/asla-vazgecme--99585"
+  },
+  {
+    "title": "Kara Keşiş",
+    "author": "Anton Çehov",
+    "finished_at": "2023-05-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim36_files/56586_1653916244_rQ4nJ.jpg",
+    "source_url": "https://1000kitap.com/kitap/kara-kesis--229010"
+  },
+  {
+    "title": "İktisat, Siyaset ve Din",
+    "author": "Mustafa Özel",
+    "finished_at": "2023-04-29",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim36_files/35717_5adc5_1580867945.webp",
+    "source_url": "https://1000kitap.com/kitap/iktisat-siyaset-ve-din--199676"
+  },
+  {
+    "title": "Kitaplardan Korkan Çocuk",
+    "author": "Susanna Tamaro",
+    "finished_at": "2023-04-29",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim36_files/47200_1446234210.webp",
+    "source_url": "https://1000kitap.com/kitap/kitaplardan-korkan-cocuk--47200"
+  },
+  {
+    "title": "Yöntem Üzerine Konuşma",
+    "author": "René Descartes",
+    "finished_at": "2023-04-28",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim36_files/73593_e8e10_1588324276.jpg",
+    "source_url": "https://1000kitap.com/kitap/yontem-uzerine-konusma--216519"
+  },
+  {
+    "title": "Örneklerle Kolay Ekonomi",
+    "author": "Mahfi Eğilmez",
+    "finished_at": "2023-04-28",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim36_files/56586_1718893522_r28ws.jpg",
+    "source_url": "https://1000kitap.com/kitap/orneklerle-kolay-ekonomi--40963"
+  },
+  {
+    "title": "İmamın Manken Kızı",
+    "author": "Emine Şenlikoğlu",
+    "finished_at": "2023-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim36_files/448_Imamin_Manken_Kizi-Emine_senlikoglu431.jpg",
+    "source_url": "https://1000kitap.com/kitap/imamin-manken-kizi--448"
+  },
+  {
+    "title": "Yaşamak",
+    "author": "Cahit Zarifoğlu",
+    "finished_at": "2023-04-13",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim36_files/39535_6qlDw_1517011599.jpg",
+    "source_url": "https://1000kitap.com/kitap/yasamak--11530"
+  },
+  {
+    "title": "Karl Marx ve Marksizm Üzerine",
+    "author": "Vladimir İlyiç Lenin",
+    "finished_at": "2023-04-11",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim36_files/53108_1453393252.jpg",
+    "source_url": "https://1000kitap.com/kitap/karl-marx-ve-marksizm-uzerine--53108"
+  },
+  {
+    "title": "Tekne Kazıntısı",
+    "author": "İsmet Özel",
+    "finished_at": "2023-04-09",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim36_files/267621_1757205157_b4PJr.jpg",
+    "source_url": "https://1000kitap.com/kitap/tekne-kazintisi--317965"
+  },
+  {
+    "title": "Menziller",
+    "author": "Cahit Zarifoğlu",
+    "finished_at": "2023-04-09",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim36_files/22834_1420968811.jpg",
+    "source_url": "https://1000kitap.com/kitap/menziller--22834"
+  },
+  {
+    "title": "Siyaset Sosyolojisi",
+    "author": "Tom Bottomore",
+    "finished_at": "2023-03-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim37_files/70109_FmrwG_1501852473.webp",
+    "source_url": "https://1000kitap.com/kitap/siyaset-sosyolojisi--84958"
+  },
+  {
+    "title": "Medya Denetimi",
+    "author": "Noam Chomsky",
+    "finished_at": "2023-03-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim37_files/56586_1665268372_JdrkL.jpg",
+    "source_url": "https://1000kitap.com/kitap/medya-denetimi--31175"
+  },
+  {
+    "title": "Türk Edebiyatında Unutulmayan Aşk Şiirleri Antolojisi",
+    "author": "Edip Cansever",
+    "finished_at": "2023-03-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim37_files/27823_e023t_1516483229.jpg",
+    "source_url": "https://1000kitap.com/kitap/turk-edebiyatinda-unutulmayan-ask-siirleri-antolojisi--98358"
+  },
+  {
+    "title": "Şeffaflık Toplumu",
+    "author": "Byung-Chul Han",
+    "finished_at": "2023-02-21",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim37_files/73978_l0nrL_1499179089.jpg",
+    "source_url": "https://1000kitap.com/kitap/seffaflik-toplumu--81922"
+  },
+  {
+    "title": "Türk Olamadıysan Oldun Amerikalı",
+    "author": "İsmet Özel",
+    "finished_at": "2023-02-19",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim37_files/343512_8cb62_1593724760.webp",
+    "source_url": "https://1000kitap.com/kitap/turk-olamadiysan-oldun-amerikali--81628"
+  },
+  {
+    "title": "Kör Baykuş",
+    "author": "Sadık Hidayet",
+    "finished_at": "2023-01-17",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim37_files/56586_1683529539_J7SYy.jpg",
+    "source_url": "https://1000kitap.com/kitap/kor-baykus--1099"
+  },
+  {
+    "title": "Hayvanlardan Tanrılara: Sapiens",
+    "author": "Yuval Noah Harari",
+    "finished_at": "2023-01-08",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim37_files/39535_N8EA1_1516451283.jpg",
+    "source_url": "https://1000kitap.com/kitap/hayvanlardan-tanrilara-sapiens--29637"
+  },
+  {
+    "title": "Poetika",
+    "author": "Aristoteles",
+    "finished_at": "2023-01-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim37_files/2553527_1761828909_Gw4aR.jpg",
+    "source_url": "https://1000kitap.com/kitap/poetika--128333"
+  },
+  {
+    "title": "İnsanlığımı Yitirirken",
+    "author": "Osamu Dazai",
+    "finished_at": "2023-01-03",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim37_files/316900_sCQtI_1649925794.jpg",
+    "source_url": "https://1000kitap.com/kitap/insanligimi-yitirirken--333965"
+  },
+  {
+    "title": "Nebevi Eğitim Modeli Darü'l Erkam",
+    "author": "Muhammed Emin Yıldırım",
+    "finished_at": "2023-01-02",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim37_files/56586_7fd71_1598407066.webp",
+    "source_url": "https://1000kitap.com/kitap/nebevi-egitim-modeli-daru-l-erkam--642"
+  },
+  {
+    "title": "Kitapları Çok Seven Çocuklar",
+    "author": "Peter Carnavas",
+    "finished_at": "2022-11-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim38_files/270185_e6953_1556992373.jpg",
+    "source_url": "https://1000kitap.com/kitap/kitaplari-cok-seven-cocuklar--162034"
+  },
+  {
+    "title": "Moby Dick",
+    "author": "Herman Melville",
+    "finished_at": "2022-11-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim38_files/56586_OnJCJ_1643147274.webp",
+    "source_url": "https://1000kitap.com/kitap/moby-dick--1981"
+  },
+  {
+    "title": "Cahil Filozof",
+    "author": "Voltaire",
+    "finished_at": "2022-10-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim38_files/56586_1699777664_3ASYR.jpg",
+    "source_url": "https://1000kitap.com/kitap/cahil-filozof--257468"
+  },
+  {
+    "title": "Sanatçı Mektupları",
+    "author": "Michael Bird",
+    "finished_at": "2022-09-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim38_files/568685_63011_1609627186.jpg",
+    "source_url": "https://1000kitap.com/kitap/sanatci-mektuplari--258219"
+  },
+  {
+    "title": "Kırmızı ve Siyah",
+    "author": "Stendhal",
+    "finished_at": "2022-07-07",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim38_files/56586_1680883904_6FjkP.webp",
+    "source_url": "https://1000kitap.com/kitap/kirmizi-ve-siyah--1066"
+  },
+  {
+    "title": "Tahrir Vazifeleri",
+    "author": "İsmet Özel",
+    "finished_at": "2022-07-04",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim38_files/39535_9WR2D_1508342441.webp",
+    "source_url": "https://1000kitap.com/kitap/tahrir-vazifeleri--10504"
+  },
+  {
+    "title": "Tersi ve Yüzü",
+    "author": "Albert Camus",
+    "finished_at": "2022-06-30",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim38_files/87436_a5e19_1581343358.jpg",
+    "source_url": "https://1000kitap.com/kitap/tersi-ve-yuzu--3827"
+  },
+  {
+    "title": "Göz",
+    "author": "Stephen King",
+    "finished_at": "2022-06-29",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim38_files/163_1460647925.webp",
+    "source_url": "https://1000kitap.com/kitap/goz--163"
+  },
+  {
+    "title": "Yabancı Dil Nasıl Öğrenilmez?",
+    "author": "Ali Işık",
+    "finished_at": "2022-06-28",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim38_files/Yabanci-Dil-Nasil-Ogrenilmez_14883_1387371228.webp",
+    "source_url": "https://1000kitap.com/kitap/yabanci-dil-nasil-ogrenilmez--14883"
+  },
+  {
+    "title": "Anadolu Tanrıları",
+    "author": "Halikarnas Balıkçısı",
+    "finished_at": "2022-06-27",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim38_files/27420_1420305324.webp",
+    "source_url": "https://1000kitap.com/kitap/anadolu-tanrilari--27420"
+  },
+  {
+    "title": "Sanat Nedir?",
+    "author": "Lev Tolstoy",
+    "finished_at": "2022-06-27",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim39_files/274523_63c09_1562051666.jpg",
+    "source_url": "https://1000kitap.com/kitap/sanat-nedir--21335"
+  },
+  {
+    "title": "Reis Bey",
+    "author": "Necip Fazıl Kısakürek",
+    "finished_at": "2022-06-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim39_files/39535_oRGpV_1500748443.jpg",
+    "source_url": "https://1000kitap.com/kitap/reis-bey--6061"
+  },
+  {
+    "title": "Haberci",
+    "author": "Halil Cibran",
+    "finished_at": "2022-06-20",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim39_files/27682_1420836924.jpg",
+    "source_url": "https://1000kitap.com/kitap/haberci--27682"
+  },
+  {
+    "title": "Lüzumsuz Adam",
+    "author": "Sait Faik Abasıyanık",
+    "finished_at": "2022-06-15",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim39_files/2553527_1767869869_fUTwk.webp",
+    "source_url": "https://1000kitap.com/kitap/luzumsuz-adam--1152"
+  },
+  {
+    "title": "Anna Karenina",
+    "author": "Lev Tolstoy",
+    "finished_at": "2022-06-06",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim39_files/621026_1761774781_yN1QE.webp",
+    "source_url": "https://1000kitap.com/kitap/anna-karenina--357"
+  },
+  {
+    "title": "Tiyatro ve Tesiri",
+    "author": "Necip Fazıl Kısakürek",
+    "finished_at": "2022-06-03",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim39_files/39535_J6bMa_1504632222.webp",
+    "source_url": "https://1000kitap.com/kitap/tiyatro-ve-tesiri--87291"
+  },
+  {
+    "title": "Az",
+    "author": "Hakan Günday",
+    "finished_at": "2022-05-20",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim39_files/27823_1709188869_3XXpU.jpg",
+    "source_url": "https://1000kitap.com/kitap/az--2451"
+  },
+  {
+    "title": "16.50 Treni",
+    "author": "Agatha Christie",
+    "finished_at": "2022-05-06",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim39_files/9414_91504_1575834165.webp",
+    "source_url": "https://1000kitap.com/kitap/16-50-treni--3038"
+  },
+  {
+    "title": "Kadın Yok Savaşın Yüzünde",
+    "author": "Svetlana Aleksiyeviç",
+    "finished_at": "2022-05-06",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim39_files/36554_6cxNY_1478293603.jpg",
+    "source_url": "https://1000kitap.com/kitap/kadin-yok-savasin-yuzunde--67983"
+  },
+  {
+    "title": "Sanatçı ve Çağı",
+    "author": "Albert Camus",
+    "finished_at": "2022-04-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim39_files/56586_xM3Ne_1498793818.jpg",
+    "source_url": "https://1000kitap.com/kitap/sanatci-ve-cagi--81601"
+  },
+  {
+    "title": "Dilin Tarihi",
+    "author": "Steven Roger Fischer",
+    "finished_at": "2022-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim40_files/Dilin-Tarihi_24285_1416145344.jpg",
+    "source_url": "https://1000kitap.com/kitap/dilin-tarihi--24285"
+  },
+  {
+    "title": "Masal Masal İçinde",
+    "author": "Ahmet Ümit",
+    "finished_at": "2022-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim40_files/287_Masal_Masal_Icinde-Ahmet_umit407.jpg",
+    "source_url": "https://1000kitap.com/kitap/masal-masal-icinde--287"
+  },
+  {
+    "title": "İşte Dali",
+    "author": "Catherine Ingram",
+    "finished_at": "2022-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim40_files/56586_7jSxG_1480933933.webp",
+    "source_url": "https://1000kitap.com/kitap/iste-dali--49010"
+  },
+  {
+    "title": "İşte Monet",
+    "author": "Sara Pappworth",
+    "finished_at": "2022-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim40_files/56586_UE5PN_1489443285.webp",
+    "source_url": "https://1000kitap.com/kitap/iste-monet--75348"
+  },
+  {
+    "title": "Madalyonun İçi",
+    "author": "Gülseren Budayıcıoğlu",
+    "finished_at": "2022-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim40_files/56586_6f6ca_1601658768.jpg",
+    "source_url": "https://1000kitap.com/kitap/madalyonun-ici--8554"
+  },
+  {
+    "title": "Camdaki Kız",
+    "author": "Gülseren Budayıcıoğlu",
+    "finished_at": "2022-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim40_files/9414_47a87_1553944360.jpg",
+    "source_url": "https://1000kitap.com/kitap/camdaki-kiz--152813"
+  },
+  {
+    "title": "İçerdeki Kedi",
+    "author": "William S. Burroughs",
+    "finished_at": "2022-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim40_files/Icerdeki-kedi_13729_1383313773.jpg",
+    "source_url": "https://1000kitap.com/kitap/icerdeki-kedi--13729"
+  },
+  {
+    "title": "Huzursuzluk",
+    "author": "Zülfü Livaneli",
+    "finished_at": "2022-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim40_files/9414_x1Luo_1483992861.jpg",
+    "source_url": "https://1000kitap.com/kitap/huzursuzluk--71260"
+  },
+  {
+    "title": "Sınırın Güneyinde, Güneşin Batısında",
+    "author": "Haruki Murakami",
+    "finished_at": "2022-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim40_files/2553527_1768736189_NGkz3.webp",
+    "source_url": "https://1000kitap.com/kitap/sinirin-guneyinde-gunesin-batisinda--5787"
+  },
+  {
+    "title": "Tevrat ve İncil'in Değişmezliği",
+    "author": "İskender Cedid",
+    "finished_at": "2022-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim40_files/27823_7da3e_1619910266.webp",
+    "source_url": "https://1000kitap.com/kitap/tevrat-ve-incilin-degismezligi--124352"
+  },
+  {
+    "title": "Ehl-i Sünnet Akâidi",
+    "author": "Kolektif",
+    "finished_at": "2022-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim41_files/325284_50a5c_1609913140.webp",
+    "source_url": "https://1000kitap.com/kitap/ehl-i-sunnet-akaidi--258846"
+  },
+  {
+    "title": "Allah'ın Varlığının 12 Delili",
+    "author": "Caner Taslaman",
+    "finished_at": "2022-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim41_files/56586_10138_1632233475.jpg",
+    "source_url": "https://1000kitap.com/kitap/allahin-varliginin-12-delili--46285"
+  },
+  {
+    "title": "Tefsire Giriş",
+    "author": "Muhammed Hüseyin ez-Zehebi",
+    "finished_at": "2022-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim41_files/27823_1668540132_esXZO.webp",
+    "source_url": "https://1000kitap.com/kitap/tefsire-giris--359311"
+  },
+  {
+    "title": "İnsan İlişkilerde İlahî Ölçü",
+    "author": "Muhammed Emin Yıldırım",
+    "finished_at": "2022-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim41_files/1278171_1761766799_r67cU.webp",
+    "source_url": "https://1000kitap.com/kitap/insan-iliskilerde-ilahi-olcu--199625"
+  },
+  {
+    "title": "Tefsir Tarihi",
+    "author": "Muhsin Demirci",
+    "finished_at": "2022-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim41_files/60325_1461506425.jpg",
+    "source_url": "https://1000kitap.com/kitap/tefsir-tarihi--60325"
+  },
+  {
+    "title": "Le Petit Prince",
+    "author": "Antoine de Saint-Exupéry",
+    "finished_at": "2022-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim41_files/274351_96370_1532908996.webp",
+    "source_url": "https://1000kitap.com/kitap/le-petit-prince--115503"
+  },
+  {
+    "title": "Ruhumun Penceresi",
+    "author": "Emine Şenlikoğlu",
+    "finished_at": "2022-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim41_files/960606_7f117_1615074159.webp",
+    "source_url": "https://1000kitap.com/kitap/ruhumun-penceresi--270590"
+  },
+  {
+    "title": "Bilinmeyen Adanın Öyküsü",
+    "author": "José Saramago",
+    "finished_at": "2022-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim41_files/Bilinmeyen-Adanin-Oykusu_7103_1412964570.webp",
+    "source_url": "https://1000kitap.com/kitap/bilinmeyen-adanin-oykusu--7103"
+  },
+  {
+    "title": "Bu Ülke",
+    "author": "Cemil Meriç",
+    "finished_at": "2022-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim41_files/27823_1729793536_hi4wT.jpg",
+    "source_url": "https://1000kitap.com/kitap/bu-ulke--1778"
+  },
+  {
+    "title": "Ikigai - Japonların Uzun ve Mutlu Yaşam Sırrı",
+    "author": "Francesc Miralles",
+    "finished_at": "2022-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim41_files/27823_1724307973_mHnQv.jpg",
+    "source_url": "https://1000kitap.com/kitap/ikigai-japonlarin-uzun-ve-mutlu-yasam-sirri--94879"
+  },
+  {
+    "title": "Romantika",
+    "author": "Turgut Özakman",
+    "finished_at": "2022-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim42_files/56586_IbHGJ_1651254151.jpg",
+    "source_url": "https://1000kitap.com/kitap/romantika--1668"
+  },
+  {
+    "title": "Öncü Müslüman Kadınlar",
+    "author": "Fatih Altuğ",
+    "finished_at": "2022-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim42_files/181992_81d20_1617908308.jpg",
+    "source_url": "https://1000kitap.com/kitap/oncu-musluman-kadinlar--277667"
+  },
+  {
+    "title": "Müslümanca Yaşamak",
+    "author": "Rasim Özdenören",
+    "finished_at": "2022-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim42_files/27823_1736924027_E29en.webp",
+    "source_url": "https://1000kitap.com/kitap/muslumanca-yasamak--9466"
+  },
+  {
+    "title": "Yaşlı Adam ve Deniz",
+    "author": "Ernest Hemingway",
+    "finished_at": "2022-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim42_files/39535_eHbVY_1519212633.webp",
+    "source_url": "https://1000kitap.com/kitap/yasli-adam-ve-deniz--1618"
+  },
+  {
+    "title": "Fransız Masalları",
+    "author": "Ségur Kontesi",
+    "finished_at": "2022-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim42_files/439353_c4a55_1571427488.webp",
+    "source_url": "https://1000kitap.com/kitap/fransiz-masallari--185104"
+  },
+  {
+    "title": "Başını Örten Kızlar Felsefe Bilmelidir",
+    "author": "İsmet Özel",
+    "finished_at": "2022-04-13",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim42_files/27823_34891_1545081816.jpg",
+    "source_url": "https://1000kitap.com/kitap/basini-orten-kizlar-felsefe-bilmelidir--128440"
+  },
+  {
+    "title": "Erbain",
+    "author": "İsmet Özel",
+    "finished_at": "2022-04-13",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim42_files/39535_1FSIk_1508435271.jpg",
+    "source_url": "https://1000kitap.com/kitap/erbain--11503"
+  },
+  {
+    "title": "Çalıkuşu",
+    "author": "Reşat Nuri Güntekin",
+    "finished_at": "2022-04-06",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim42_files/621026_1761075843_F12xX.jpg",
+    "source_url": "https://1000kitap.com/kitap/calikusu--236"
+  },
+  {
+    "title": "Üç Örnek Öykü ve Bir Önsöz",
+    "author": "Miguel de Unamuno",
+    "finished_at": "2022-04-03",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim42_files/31573_1427834244.jpg",
+    "source_url": "https://1000kitap.com/kitap/uc-ornek-oyku-ve-bir-onsoz--31573"
+  },
+  {
+    "title": "Selvi Boylum Al Yazmalım",
+    "author": "Cengiz Aytmatov",
+    "finished_at": "2022-03-30",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim42_files/87436_18653_1552394468.jpg",
+    "source_url": "https://1000kitap.com/kitap/selvi-boylum-al-yazmalim--20477"
+  },
+  {
+    "title": "Büyük İslam İlmihali",
+    "author": "Ömer Nasuhi Bilmen",
+    "finished_at": "2022-03-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim43_files/23362_1429370632.jpg",
+    "source_url": "https://1000kitap.com/kitap/buyuk-islam-ilmihali--23362"
+  },
+  {
+    "title": "Bu Bir Pipo Değildir",
+    "author": "Michel Foucault",
+    "finished_at": "2022-03-22",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim43_files/Bu-Bir-Pipo-Degildir_24209_1415908479.webp",
+    "source_url": "https://1000kitap.com/kitap/bu-bir-pipo-degildir--24209"
+  },
+  {
+    "title": "Neden ve Nasıl Siyer Öğrenmeliyiz?",
+    "author": "Muhammed Emin Yıldırım",
+    "finished_at": "2022-03-20",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim43_files/60421_IA0Gh_1520893976.jpg",
+    "source_url": "https://1000kitap.com/kitap/neden-ve-nasil-siyer-ogrenmeliyiz--103065"
+  },
+  {
+    "title": "El Doctor Jekyll Y El Senor Hyde",
+    "author": "Robert Louis Stevenson",
+    "finished_at": "2022-03-15",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim43_files/568685_c8924_1571263982.webp",
+    "source_url": "https://1000kitap.com/kitap/el-doctor-jekyll-y-el-senor-hyde--184845"
+  },
+  {
+    "title": "Yaşamak",
+    "author": "Yu Hua",
+    "finished_at": "2022-03-11",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim43_files/87436_05203_1570726113.webp",
+    "source_url": "https://1000kitap.com/kitap/yasamak--60686"
+  },
+  {
+    "title": "Görev ve Yetkileri Açısından Hz. Peygamber",
+    "author": "Muhammed Emin Yıldırım",
+    "finished_at": "2022-03-07",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim43_files/60421_L2K9I_1520894236.jpg",
+    "source_url": "https://1000kitap.com/kitap/gorev-ve-yetkileri-acisindan-hz-peygamber--103067"
+  },
+  {
+    "title": "Peygamberimin Sevdiği Müslüman",
+    "author": "Mehmet Yaşar Kandemir",
+    "finished_at": "2022-03-07",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim43_files/434428_583d6_1602681577.webp",
+    "source_url": "https://1000kitap.com/kitap/peygamberimin-sevdigi-musluman--243129"
+  },
+  {
+    "title": "Hastalık Hastası",
+    "author": "Molière",
+    "finished_at": "2022-03-03",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim43_files/2553527_1767946269_8thqP.webp",
+    "source_url": "https://1000kitap.com/kitap/hastalik-hastasi--1774"
+  },
+  {
+    "title": "Theo'ya Mektuplar",
+    "author": "Vincent Van Gogh",
+    "finished_at": "2022-03-01",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim43_files/332663_8f78d_1541180486.webp",
+    "source_url": "https://1000kitap.com/kitap/theo-ya-mektuplar--131798"
+  },
+  {
+    "title": "Şiirce",
+    "author": "Canan Tan",
+    "finished_at": "2022-02-26",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim43_files/70804_8RYIU_1507629827.jpg",
+    "source_url": "https://1000kitap.com/kitap/siirce--89555"
+  },
+  {
+    "title": "Küskün Kahvenin Türküsü",
+    "author": "Carson McCullers",
+    "finished_at": "2022-02-25",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim44_files/56085_4XFlt_1478571904.jpg",
+    "source_url": "https://1000kitap.com/kitap/kuskun-kahvenin-turkusu--18779"
+  },
+  {
+    "title": "Köpek Kalbi",
+    "author": "Mihail Bulgakov",
+    "finished_at": "2022-01-21",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim44_files/56085_Takis_1478572814.jpg",
+    "source_url": "https://1000kitap.com/kitap/kopek-kalbi--5592"
+  },
+  {
+    "title": "Dinle Küçük Adam",
+    "author": "Wilhelm Reich",
+    "finished_at": "2022-01-20",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim44_files/Dinle-Kucuk-Adam_2779_1402492737.webp",
+    "source_url": "https://1000kitap.com/kitap/dinle-kucuk-adam--2779"
+  },
+  {
+    "title": "Aşk ve Anlatı Şiirleri",
+    "author": "William Shakespeare",
+    "finished_at": "2022-01-18",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim44_files/39535_nh6vb_1508234866.jpg",
+    "source_url": "https://1000kitap.com/kitap/ask-ve-anlati-siirleri--31239"
+  },
+  {
+    "title": "Paris'te Bir Osmanlı Sefiri",
+    "author": "Yirmisekiz Mehmet Çelebi",
+    "finished_at": "2022-01-12",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim44_files/56586_1714289480_bT2Qf.jpg",
+    "source_url": "https://1000kitap.com/kitap/paris-te-bir-osmanli-sefiri--37348"
+  },
+  {
+    "title": "Zorba",
+    "author": "Nikos Kazancakis",
+    "finished_at": "2022-01-10",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim44_files/27823_1750246831_KXciC.png",
+    "source_url": "https://1000kitap.com/kitap/zorba--1365"
+  },
+  {
+    "title": "Carmen",
+    "author": "Prosper Mérimée",
+    "finished_at": "2022-01-10",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim44_files/568685_b4f62_1620736898.jpg",
+    "source_url": "https://1000kitap.com/kitap/carmen--284418"
+  },
+  {
+    "title": "Niçin islam?",
+    "author": "İsmail Raci Faruki",
+    "finished_at": "2022-01-09",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim44_files/72548_EA8Nd_1518387270.webp",
+    "source_url": "https://1000kitap.com/kitap/nicin-islam--100367"
+  },
+  {
+    "title": "Korku ve Yakarış",
+    "author": "Cahit Zarifoğlu",
+    "finished_at": "2022-01-08",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim44_files/39535_GCc76_1517011783.jpg",
+    "source_url": "https://1000kitap.com/kitap/korku-ve-yakaris--25001"
+  },
+  {
+    "title": "Çocukluğun Soğuk Geceleri",
+    "author": "Tezer Özlü",
+    "finished_at": "2022-01-07",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim44_files/332663_6bf70_1546632216.webp",
+    "source_url": "https://1000kitap.com/kitap/cocuklugun-soguk-geceleri--1170"
+  },
+  {
+    "title": "Bir Öldürme Töreni",
+    "author": "Nuri Pakdil",
+    "finished_at": "2022-01-07",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim45_files/29752_1424700674.jpg",
+    "source_url": "https://1000kitap.com/kitap/bir-oldurme-toreni--29752"
+  },
+  {
+    "title": "Büyük İnsanlık",
+    "author": "Nazım Hikmet Ran",
+    "finished_at": "2022-01-06",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim45_files/885_Buyuk_Insanlik_-_Kendi_Sesinden_siirler-Nazim_Hikmet_Ran879.webp",
+    "source_url": "https://1000kitap.com/kitap/buyuk-insanlik--885"
+  },
+  {
+    "title": "Büyücü Kız Madoka Magica - Cilt 1",
+    "author": "Magica Quartet",
+    "finished_at": "2022-01-06",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim45_files/2553527_1766695395_jJ5A0.jpg",
+    "source_url": "https://1000kitap.com/kitap/buyucu-kiz-madoka-magica-cilt-1--266890"
+  },
+  {
+    "title": "Gençlik Yolculuğu 1",
+    "author": "Io Sakisaka",
+    "finished_at": "2022-01-06",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim45_files/568685_cc580_1567779451.jpg",
+    "source_url": "https://1000kitap.com/kitap/genclik-yolculugu-1--178595"
+  },
+  {
+    "title": "Vadedilmiş Yokyer - 1. Cilt",
+    "author": "Kaiu Shirai",
+    "finished_at": "2022-01-05",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim45_files/56586_1660500782_5YkB0.webp",
+    "source_url": "https://1000kitap.com/kitap/vadedilmis-yokyer-1-cilt--200038"
+  },
+  {
+    "title": "Dune Çocukları",
+    "author": "Frank Herbert",
+    "finished_at": "2022-01-05",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim45_files/71196_tUhpa_1518893285.webp",
+    "source_url": "https://1000kitap.com/kitap/dune-cocuklari--100855"
+  },
+  {
+    "title": "Dune Mesihi",
+    "author": "Frank Herbert",
+    "finished_at": "2022-01-03",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim45_files/56586_1679429872_2mCVg.jpg",
+    "source_url": "https://1000kitap.com/kitap/dune-mesihi--18395"
+  },
+  {
+    "title": "Dans Edemeyeceksem Bu Benim Devrimim Değildir",
+    "author": "Emma Goldman",
+    "finished_at": "2021-10-17",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim45_files/10179_Dans_Edemeyeceksem_Bu_Benim_Devrimim_Degildir-Emma_Goldman838.webp",
+    "source_url": "https://1000kitap.com/kitap/dans-edemeyeceksem-bu-benim-devrimim-degildir--10179"
+  },
+  {
+    "title": "Bütün Şiirleri",
+    "author": "Edgar Allan Poe",
+    "finished_at": "2021-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim45_files/332663_52a9f_1550394035.jpg",
+    "source_url": "https://1000kitap.com/kitap/butun-siirleri--53866"
+  },
+  {
+    "title": "Bütün Hikayeleri",
+    "author": "Edgar Allan Poe",
+    "finished_at": "2021-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim45_files/27823_0k2Nq_1506634915.jpg",
+    "source_url": "https://1000kitap.com/kitap/butun-hikayeleri--10245"
+  },
+  {
+    "title": "Deliliğin Dağlarında",
+    "author": "H. P. Lovecraft",
+    "finished_at": "2021-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim46_files/9414_9cd14_1535903447.webp",
+    "source_url": "https://1000kitap.com/kitap/deliligin-daglarinda--120592"
+  },
+  {
+    "title": "Old Boy Cilt 3&4",
+    "author": "Garon Tsuchiya",
+    "finished_at": "2021-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim46_files/568685_595a6_1610275586.webp",
+    "source_url": "https://1000kitap.com/kitap/old-boy-cilt-3-4--259767"
+  },
+  {
+    "title": "Old Boy Cilt 1&2",
+    "author": "Garon Tsuchiya",
+    "finished_at": "2021-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim46_files/113293_70a22_1587034895.webp",
+    "source_url": "https://1000kitap.com/kitap/old-boy-cilt-1-2--213001"
+  },
+  {
+    "title": "Beş Şehir",
+    "author": "Ahmet Hamdi Tanpınar",
+    "finished_at": "2021-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim46_files/332663_b58ec_1555101457.jpg",
+    "source_url": "https://1000kitap.com/kitap/bes-sehir--2047"
+  },
+  {
+    "title": "Aganta Burina Burinata",
+    "author": "Halikarnas Balıkçısı",
+    "finished_at": "2021-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim46_files/89367_2ALdW_1500306399.jpg",
+    "source_url": "https://1000kitap.com/kitap/aganta-burina-burinata--9126"
+  },
+  {
+    "title": "Yürümenin Felsefesi",
+    "author": "Frédéric Gros",
+    "finished_at": "2021-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim46_files/9414_64f48_1569348707.jpg",
+    "source_url": "https://1000kitap.com/kitap/yurumenin-felsefesi--77368"
+  },
+  {
+    "title": "Hayata Dön",
+    "author": "Gülseren Budayıcıoğlu",
+    "finished_at": "2021-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim46_files/8555_Hayata_Don-Gulseren_Budayicioglu778.jpg",
+    "source_url": "https://1000kitap.com/kitap/hayata-don--8555"
+  },
+  {
+    "title": "Günahın Üç Rengi",
+    "author": "Gülseren Budayıcıoğlu",
+    "finished_at": "2021-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim46_files/8556_Gunahin_uc_Rengi-Gulseren_Budayicioglu893.jpg",
+    "source_url": "https://1000kitap.com/kitap/gunahin-uc-rengi--8556"
+  },
+  {
+    "title": "Kral Kaybederse",
+    "author": "Gülseren Budayıcıoğlu",
+    "finished_at": "2021-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim46_files/29023_1423597615.webp",
+    "source_url": "https://1000kitap.com/kitap/kral-kaybederse--29023"
+  },
+  {
+    "title": "Doğu Ekspresinde Cinayet",
+    "author": "Agatha Christie",
+    "finished_at": "2021-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim46_files/27823_3b413_1543355008.jpg",
+    "source_url": "https://1000kitap.com/kitap/dogu-ekspresinde-cinayet--4907"
+  },
+  {
+    "title": "Barnaba İncili ve Gerçekler",
+    "author": "İskender Cedid",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim47_files/376465_a5036_1593517886.jpg",
+    "source_url": "https://1000kitap.com/kitap/barnaba-incili-ve-gercekler--227272"
+  },
+  {
+    "title": "Yokuşa Akan Sular",
+    "author": "Mustafa Kutlu",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim47_files/39535_ojiVl_1502830267.jpg",
+    "source_url": "https://1000kitap.com/kitap/yokusa-akan-sular--3060"
+  },
+  {
+    "title": "Ya Tahammül Ya Sefer",
+    "author": "Mustafa Kutlu",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim47_files/27823_OA6C3_1476564066.webp",
+    "source_url": "https://1000kitap.com/kitap/ya-tahammul-ya-sefer--6082"
+  },
+  {
+    "title": "Uzun Hikâye",
+    "author": "Mustafa Kutlu",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim47_files/Uzun-Hikaye_1182_1407945270.jpg",
+    "source_url": "https://1000kitap.com/kitap/uzun-hikaye--1182"
+  },
+  {
+    "title": "Hüzün ve Tesadüf",
+    "author": "Mustafa Kutlu",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim47_files/5041_bp61r_1496132218.jpg",
+    "source_url": "https://1000kitap.com/kitap/huzun-ve-tesaduf--4601"
+  },
+  {
+    "title": "Hikayeler",
+    "author": "Cahit Zarifoğlu",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim47_files/29912_1424959717.webp",
+    "source_url": "https://1000kitap.com/kitap/hikayeler--29912"
+  },
+  {
+    "title": "Şiirler",
+    "author": "Cahit Zarifoğlu",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim47_files/39535_ojUCP_1517011721.jpg",
+    "source_url": "https://1000kitap.com/kitap/siirler--4993"
+  },
+  {
+    "title": "Dil Belâsı",
+    "author": "İmam Gazali",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim47_files/27823_1747648791_YpXXI.webp",
+    "source_url": "https://1000kitap.com/kitap/dil-belasi--89886"
+  },
+  {
+    "title": "Kur'an Bize Yeter Söylemine Kur'an-ı Kerimden Cevaplar",
+    "author": "Ömer Faruk Korkmaz",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim47_files/56586_1669390800_uYDo6.jpg",
+    "source_url": "https://1000kitap.com/kitap/kuran-bize-yeter-soylemine-kuran-i-kerimden-cevaplar--221178"
+  },
+  {
+    "title": "Muhteşem Prensesler - İstemiyorum Diyen Prenses",
+    "author": "Silvia Roncaglia",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim47_files/290007_ouibv_1524977466.jpg",
+    "source_url": "https://1000kitap.com/kitap/muhtesem-prensesler-istemiyorum-diyen-prenses--106857"
+  },
+  {
+    "title": "Muhteşem Prensesler - Çok Fazla Masal Okuyan Prenses",
+    "author": "Silvia Roncaglia",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim48_files/290007_PaqmJ_1524977697.jpg",
+    "source_url": "https://1000kitap.com/kitap/muhtesem-prensesler-cok-fazla-masal-okuyan-prenses--106858"
+  },
+  {
+    "title": "Little Prince",
+    "author": "Antoine de Saint-Exupéry",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim48_files/87436_e7f0b_1534195486.webp",
+    "source_url": "https://1000kitap.com/kitap/little-prince--117661"
+  },
+  {
+    "title": "Kıskançlık",
+    "author": "Marcel Proust",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim48_files/617924_454d8_1603663642.webp",
+    "source_url": "https://1000kitap.com/kitap/kiskanclik--244644"
+  },
+  {
+    "title": "Yürümek",
+    "author": "Henry David Thoreau",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim48_files/9414_fe88b_1560592453.jpg",
+    "source_url": "https://1000kitap.com/kitap/yurumek--166966"
+  },
+  {
+    "title": "Komünist Manifesto",
+    "author": "Karl Marx",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim48_files/27823_1737307765_Qxpi4.jpg",
+    "source_url": "https://1000kitap.com/kitap/komunist-manifesto--9540"
+  },
+  {
+    "title": "Ana",
+    "author": "Maksim Gorki",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim48_files/332663_d0340_1556046798.webp",
+    "source_url": "https://1000kitap.com/kitap/ana--119491"
+  },
+  {
+    "title": "Cadılar",
+    "author": "Roald Dahl",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim48_files/Cadilar_15965_1390835098.webp",
+    "source_url": "https://1000kitap.com/kitap/cadilar--15965"
+  },
+  {
+    "title": "Aşk-ı Memnu",
+    "author": "Halid Ziya Uşaklıgil",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim48_files/51200_wK2kC_1478427065.webp",
+    "source_url": "https://1000kitap.com/kitap/ask-i-memnu--1646"
+  },
+  {
+    "title": "Mai ve Siyah",
+    "author": "Halid Ziya Uşaklıgil",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim48_files/568685_68131_1617109564.webp",
+    "source_url": "https://1000kitap.com/kitap/mai-ve-siyah--275681"
+  },
+  {
+    "title": "Siddhartha",
+    "author": "Hermann Hesse",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim48_files/27823_1727632242_Z7ciR.jpg",
+    "source_url": "https://1000kitap.com/kitap/siddhartha--3554"
+  },
+  {
+    "title": "Budala",
+    "author": "Fyodor Dostoyevski",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim49_files/56085_AVtb2_1478578397.webp",
+    "source_url": "https://1000kitap.com/kitap/budala--488"
+  },
+  {
+    "title": "İnsancıklar",
+    "author": "Fyodor Dostoyevski",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim49_files/27823_1708097993_gjpD5.jpg",
+    "source_url": "https://1000kitap.com/kitap/insanciklar--495"
+  },
+  {
+    "title": "Kumarbaz",
+    "author": "Fyodor Dostoyevski",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim49_files/56085_eo0YI_1478578236.webp",
+    "source_url": "https://1000kitap.com/kitap/kumarbaz--126"
+  },
+  {
+    "title": "Beyaz Geceler",
+    "author": "Fyodor Dostoyevski",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim49_files/621026_1761053275_z6xso.jpg",
+    "source_url": "https://1000kitap.com/kitap/beyaz-geceler--123"
+  },
+  {
+    "title": "Kırmızı Pazartesi",
+    "author": "Gabriel Garcia Marquez",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim49_files/27823_1748113839_uT9pf.webp",
+    "source_url": "https://1000kitap.com/kitap/kirmizi-pazartesi--1364"
+  },
+  {
+    "title": "Veba",
+    "author": "Albert Camus",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim49_files/56085_QKdMv_1478564838.jpg",
+    "source_url": "https://1000kitap.com/kitap/veba--1289"
+  },
+  {
+    "title": "Miskinler Tekkesi",
+    "author": "Reşat Nuri Güntekin",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim49_files/4902_Miskinler_Tekkesi-Resat_Nuri_Guntekin722.webp",
+    "source_url": "https://1000kitap.com/kitap/miskinler-tekkesi--4902"
+  },
+  {
+    "title": "Şu Çılgın Türkler",
+    "author": "Turgut Özakman",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim49_files/892_su_cilgin_Turkler.jpg",
+    "source_url": "https://1000kitap.com/kitap/su-cilgin-turkler--892"
+  },
+  {
+    "title": "Kendine Ait Bir Oda",
+    "author": "Virginia Woolf",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim49_files/87436_b5b39_1551791752.jpg",
+    "source_url": "https://1000kitap.com/kitap/kendine-ait-bir-oda--152819"
+  },
+  {
+    "title": "Dokuzuncu Hariciye Koğuşu",
+    "author": "Peyami Safa",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim49_files/705_eoh7X_1476034246.webp",
+    "source_url": "https://1000kitap.com/kitap/dokuzuncu-hariciye-kogusu--373"
+  },
+  {
+    "title": "Fatih Harbiye",
+    "author": "Peyami Safa",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim50_files/39535_1KDfQ_1501095661.jpg",
+    "source_url": "https://1000kitap.com/kitap/fatih-harbiye--1078"
+  },
+  {
+    "title": "Ne Tuhaf",
+    "author": "Sabahattin Kudret Aksal",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim50_files/107518_Wjzwx_1517422401.webp",
+    "source_url": "https://1000kitap.com/kitap/ne-tuhaf--27146"
+  },
+  {
+    "title": "Dokuza Kadar On",
+    "author": "Özdemir Asaf",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim50_files/39535_M4ihA_1508957555.jpg",
+    "source_url": "https://1000kitap.com/kitap/dokuza-kadar-on--18540"
+  },
+  {
+    "title": "Bir Aşka Vuran Güneş",
+    "author": "Oktay Rifat",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim50_files/Bir-Aska-Vuran-Gunes_25576_1417904807.jpg",
+    "source_url": "https://1000kitap.com/kitap/bir-aska-vuran-gunes--25576"
+  },
+  {
+    "title": "Sakın Şaşırma",
+    "author": "Orhan Veli Kanık",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim50_files/39535_irJw7_1509480682.jpg",
+    "source_url": "https://1000kitap.com/kitap/sakin-sasirma--16835"
+  },
+  {
+    "title": "Deli Kızın Türküsü",
+    "author": "Gülten Akın",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim50_files/9414_rlVkh_1478204751.webp",
+    "source_url": "https://1000kitap.com/kitap/deli-kizin-turkusu--29386"
+  },
+  {
+    "title": "Sevmek Diye Bir Şey",
+    "author": "Tarık Dursun K.",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim50_files/11421_gvjKx_1522056143.jpg",
+    "source_url": "https://1000kitap.com/kitap/sevmek-diye-bir-sey--104043"
+  },
+  {
+    "title": "Göğe Bakma Durağı",
+    "author": "Turgut Uyar",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim50_files/39535_VqaD8_1509476841.webp",
+    "source_url": "https://1000kitap.com/kitap/goge-bakma-duragi--14191"
+  },
+  {
+    "title": "Dağ Uykusu",
+    "author": "Fazıl Hüsnü Dağlarca",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim50_files/5908_Dag_Uykusu-Fazil__Husnu__Daglarca635.jpg",
+    "source_url": "https://1000kitap.com/kitap/dag-uykusu--5908"
+  },
+  {
+    "title": "Üstü Kalsın",
+    "author": "Cemal Süreya",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim50_files/Ustu-Kalsin_18144_1395832740.webp",
+    "source_url": "https://1000kitap.com/kitap/ustu-kalsin--18144"
+  },
+  {
+    "title": "Sevmek, Sevinmek, İyi Şeyler Üstüne",
+    "author": "Yaşar Kemal",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim51_files/39535_FHCd0_1507311553.jpg",
+    "source_url": "https://1000kitap.com/kitap/sevmek-sevinmek-iyi-seyler-ustune--21722"
+  },
+  {
+    "title": "Şiirimiz Mor Külhanidir Abiler",
+    "author": "Ece Ayhan",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim51_files/Siirimiz-Mor-Kulhanidir-Abiler_14810_1387119069.jpg",
+    "source_url": "https://1000kitap.com/kitap/siirimiz-mor-kulhanidir-abiler--14810"
+  },
+  {
+    "title": "Gelmiş Bulundum – Seçme Şiirler",
+    "author": "Edip Cansever",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim51_files/56085_IKGVO_1527116576.webp",
+    "source_url": "https://1000kitap.com/kitap/gelmis-bulundum-secme-siirler--12541"
+  },
+  {
+    "title": "Henüz Vakit Varken Gülüm",
+    "author": "Nazım Hikmet Ran",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim51_files/39535_WlYVP_1508701602.webp",
+    "source_url": "https://1000kitap.com/kitap/henuz-vakit-varken-gulum--3427"
+  },
+  {
+    "title": "Görmek",
+    "author": "José Saramago",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim51_files/36048_YbKsH_1502969084.jpg",
+    "source_url": "https://1000kitap.com/kitap/gormek--4552"
+  },
+  {
+    "title": "Körlük",
+    "author": "José Saramago",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim51_files/56085_AFXW2_1496331048.jpg",
+    "source_url": "https://1000kitap.com/kitap/korluk--1185"
+  },
+  {
+    "title": "Yeşilin Kızı Anne",
+    "author": "L. M. Montgomery",
+    "finished_at": "2021-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim51_files/1506763_bac2c_1626532021.webp",
+    "source_url": "https://1000kitap.com/kitap/yesilin-kizi-anne--268689"
+  },
+  {
+    "title": "Gezgin",
+    "author": "Halil Cibran",
+    "finished_at": "2021-01-03",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim51_files/27823_1762951999_sDLK4.webp",
+    "source_url": "https://1000kitap.com/kitap/gezgin--35887"
+  },
+  {
+    "title": "Ölü Ozanlar Derneği",
+    "author": "N. H. Kleinbaum",
+    "finished_at": "2020-10-03",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim51_files/9414_d9aef_1560966293.webp",
+    "source_url": "https://1000kitap.com/kitap/olu-ozanlar-dernegi--118955"
+  },
+  {
+    "title": "Mutluluk Dediğimiz Şey",
+    "author": "Sigmund Freud",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim51_files/49304_1449396966.webp",
+    "source_url": "https://1000kitap.com/kitap/mutluluk-dedigimiz-sey--49304"
+  },
+  {
+    "title": "En Çok Kendisine Yabancıdır İnsan",
+    "author": "Marquis de Sade",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim52_files/287121_c8a69_1536483883.jpg",
+    "source_url": "https://1000kitap.com/kitap/en-cok-kendisine-yabancidir-insan--48510"
+  },
+  {
+    "title": "Diriliş Neslinin Amentüsü",
+    "author": "Sezai Karakoç",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim52_files/56586_1671479276_HAFnM.jpg",
+    "source_url": "https://1000kitap.com/kitap/dirilis-neslinin-amentusu--21159"
+  },
+  {
+    "title": "Yedi Güzel Adam",
+    "author": "Cahit Zarifoğlu",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim52_files/56586_1712157682_ToIju.jpg",
+    "source_url": "https://1000kitap.com/kitap/yedi-guzel-adam--21348"
+  },
+  {
+    "title": "Mutlu Olma Sanatı",
+    "author": "Arthur Schopenhauer",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim52_files/621026_1756323009_iZMcI.jpg",
+    "source_url": "https://1000kitap.com/kitap/mutlu-olma-sanati--182702"
+  },
+  {
+    "title": "Charlie'nin Büyük Cam Asansörü",
+    "author": "Roald Dahl",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim52_files/Charlienin-Buyuk-Cam-Asansoru_15443_1389266429.jpg",
+    "source_url": "https://1000kitap.com/kitap/charlie-nin-buyuk-cam-asansoru--15443"
+  },
+  {
+    "title": "Jane Eyre",
+    "author": "Charlotte Brontë",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim52_files/123836_72f1b_1535053672.jpg",
+    "source_url": "https://1000kitap.com/kitap/jane-eyre--119621"
+  },
+  {
+    "title": "Yeraltından Notlar",
+    "author": "Fyodor Dostoyevski",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim52_files/621026_1761647098_b5UEi.jpg",
+    "source_url": "https://1000kitap.com/kitap/yeraltindan-notlar--125"
+  },
+  {
+    "title": "Simyacı",
+    "author": "Paulo Coelho",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim52_files/56586_1732084458_5QTb7.jpg",
+    "source_url": "https://1000kitap.com/kitap/simyaci--104"
+  },
+  {
+    "title": "Yabancı",
+    "author": "Albert Camus",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim52_files/2991_1473403522.jpg",
+    "source_url": "https://1000kitap.com/kitap/yabanci--2991"
+  },
+  {
+    "title": "Delifişek",
+    "author": "José Mauro de Vasconcelos",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim52_files/27823_1739210796_inp3L.jpg",
+    "source_url": "https://1000kitap.com/kitap/delifisek--3576"
+  },
+  {
+    "title": "Sofie'nin Dünyası",
+    "author": "Jostein Gaarder",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim53_files/621026_1762359129_eGzYz.webp",
+    "source_url": "https://1000kitap.com/kitap/sofie-nin-dunyasi--161"
+  },
+  {
+    "title": "Matmazel Noraliya'nın Koltuğu",
+    "author": "Peyami Safa",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim53_files/39535_60SUQ_1501970351.webp",
+    "source_url": "https://1000kitap.com/kitap/matmazel-noraliyanin-koltugu--1575"
+  },
+  {
+    "title": "Felsefenin Kısa Tarihi",
+    "author": "Nigel Warburton",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim53_files/27823_fb6cb_1611354576.webp",
+    "source_url": "https://1000kitap.com/kitap/felsefenin-kisa-tarihi--40277"
+  },
+  {
+    "title": "Felsefeye Giriş",
+    "author": "Nigel Warburton",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim53_files/56586_TK8ZR_1651463252.jpg",
+    "source_url": "https://1000kitap.com/kitap/felsefeye-giris--15045"
+  },
+  {
+    "title": "Charlie and the Chocolate Factory",
+    "author": "Roald Dahl",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim53_files/285482_1e95b_1578984972.jpg",
+    "source_url": "https://1000kitap.com/kitap/charlie-and-the-chocolate-factory--196196"
+  },
+  {
+    "title": "Yüreğinin Götürdüğü Yere Git",
+    "author": "Susanna Tamaro",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim53_files/9414_4d5e8_1566900432.jpg",
+    "source_url": "https://1000kitap.com/kitap/yureginin-goturdugu-yere-git--709"
+  },
+  {
+    "title": "Hobbit (Resimli Baskı)",
+    "author": "J. R. R. Tolkien",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim53_files/107518_pLeWS_1513346158.webp",
+    "source_url": "https://1000kitap.com/kitap/hobbit-resimli-baski--95033"
+  },
+  {
+    "title": "Suikast Sınıfı 21",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim53_files/1017507_5a9e4_1635274251.jpg",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-21--291575"
+  },
+  {
+    "title": "Suikast Sınıfı 20",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim53_files/298907_23928_1615622834.webp",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-20--271747"
+  },
+  {
+    "title": "Suikast Sınıfı 19",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim53_files/674022_d7569_1604482756.webp",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-19--245983"
+  },
+  {
+    "title": "Suikast Sınıfı 18",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim54_files/568685_c1028_1597852504.webp",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-18--233977"
+  },
+  {
+    "title": "Suikast Sınıfı 17",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim54_files/228449_d9fd1_1589747600.webp",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-17--220362"
+  },
+  {
+    "title": "Suikast Sınıfı 16",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim54_files/228449_255fd_1589747322.webp",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-16--220361"
+  },
+  {
+    "title": "Suikast Sınıfı 15",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim54_files/9414_4d688_1565803920.jpg",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-15--175026"
+  },
+  {
+    "title": "Suikast Sınıfı 14",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim54_files/71196_a60a8_1547371998.webp",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-14--144058"
+  },
+  {
+    "title": "Suikast Sınıfı 13",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim54_files/254726_79fce_1533064315.jpg",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-13--115869"
+  },
+  {
+    "title": "Suikast Sınıfı 12",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim54_files/254726_5aa4d_1533064074.webp",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-12--115867"
+  },
+  {
+    "title": "Suikast Sınıfı 11",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim54_files/254726_f0e18_1533063949.webp",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-11--115866"
+  },
+  {
+    "title": "Suikast Sınıfı 10",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim54_files/254726_98b97_1533063811.webp",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-10--115865"
+  },
+  {
+    "title": "Suikast Sınıfı 9",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim54_files/254726_6457e_1533063681.webp",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-9--115864"
+  },
+  {
+    "title": "Suikast Sınıfı 8",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim55_files/316900_d8808_1566897480.jpg",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-8--115863"
+  },
+  {
+    "title": "Suikast Sınıfı 7",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim55_files/316900_bf9a0_1567149164.webp",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-7--115862"
+  },
+  {
+    "title": "Suikast Sınıfı 6",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim55_files/254726_a4f5f_1533062980.webp",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-6--115861"
+  },
+  {
+    "title": "Suikast Sınıfı 5",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim55_files/9414_aG1vh_1480497102.webp",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-5--69177"
+  },
+  {
+    "title": "Suikast Sınıfı 4",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim55_files/27823_9b63b_1533070147.jpg",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-4--69176"
+  },
+  {
+    "title": "Suikast Sınıfı 3",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim55_files/27823_ea161_1533070041.webp",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-3--69174"
+  },
+  {
+    "title": "Suikast Sınıfı 2",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim55_files/9414_Y60hM_1480496659.webp",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-2--69173"
+  },
+  {
+    "title": "Suikast Sınıfı 1",
+    "author": "Yusei Matsui",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim55_files/9414_67cfD_1480496565.jpg",
+    "source_url": "https://1000kitap.com/kitap/suikast-sinifi-1--69171"
+  },
+  {
+    "title": "One-Punch Man - Cilt 5",
+    "author": "One (Mangaka)",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim55_files/9532_SFJdX_1488798346.jpg",
+    "source_url": "https://1000kitap.com/kitap/one-punch-man-cilt-5--74702"
+  },
+  {
+    "title": "One-Punch Man - Cilt 4",
+    "author": "One (Mangaka)",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim55_files/9532_xsoVm_1488792377.jpg",
+    "source_url": "https://1000kitap.com/kitap/one-punch-man-cilt-4--74699"
+  },
+  {
+    "title": "One Punch Man - Cilt 3",
+    "author": "One (Mangaka)",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim56_files/9532_vKqtX_1488792284.webp",
+    "source_url": "https://1000kitap.com/kitap/one-punch-man-cilt-3--74698"
+  },
+  {
+    "title": "One Punch Man - Cilt 2",
+    "author": "One (Mangaka)",
+    "finished_at": "2020-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim56_files/30590_RfI75_1479300138.jpg",
+    "source_url": "https://1000kitap.com/kitap/one-punch-man-cilt-2--68550"
+  },
+  {
+    "title": "One-Punch Man - Cilt 1",
+    "author": "One (Mangaka)",
+    "finished_at": "2020-04-13",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim56_files/30590_GNaD4_1479299796.webp",
+    "source_url": "https://1000kitap.com/kitap/one-punch-man-cilt-1--68549"
+  },
+  {
+    "title": "Alice Harikalar Diyarında",
+    "author": "Lewis Carroll",
+    "finished_at": "2019-04-26",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim56_files/27823_1708426185_8bTkR.jpg",
+    "source_url": "https://1000kitap.com/kitap/alice-harikalar-diyarinda--7828"
+  },
+  {
+    "title": "Beyoğlu Rapsodisi",
+    "author": "Ahmet Ümit",
+    "finished_at": "2019-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim56_files/293_Beyoglu_Rapsodisi.jpg",
+    "source_url": "https://1000kitap.com/kitap/beyoglu-rapsodisi--293"
+  },
+  {
+    "title": "Öğrencime Mektuplar 2",
+    "author": "Vehbi Vakkasoğlu",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim56_files/27823_6abbc_1541790824.webp",
+    "source_url": "https://1000kitap.com/kitap/ogrencime-mektuplar-2--122423"
+  },
+  {
+    "title": "Ögrencime Mektuplar/1",
+    "author": "Vehbi Vakkasoğlu",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim56_files/225773_2b4d5_1623741300.webp",
+    "source_url": "https://1000kitap.com/kitap/ogrencime-mektuplar-1--290406"
+  },
+  {
+    "title": "Son Peygamber Hz. Muhammed (s.a.v)",
+    "author": "Ahmed Cevdet Paşa",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim56_files/256216_ddbad_1547374512.webp",
+    "source_url": "https://1000kitap.com/kitap/son-peygamber-hz-muhammed-s-a-v--135962"
+  },
+  {
+    "title": "Beyhude Ömrüm",
+    "author": "Mustafa Kutlu",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim56_files/39535_nS7vV_1502829983.webp",
+    "source_url": "https://1000kitap.com/kitap/beyhude-omrum--9556"
+  },
+  {
+    "title": "Mavi Kuş",
+    "author": "Mustafa Kutlu",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim56_files/39535_cOQ0d_1502829940.jpg",
+    "source_url": "https://1000kitap.com/kitap/mavi-kus--1184"
+  },
+  {
+    "title": "Küçük Prens",
+    "author": "Antoine de Saint-Exupéry",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim57_files/36554_8JLTM_1478101575.jpg",
+    "source_url": "https://1000kitap.com/kitap/kucuk-prens--624"
+  },
+  {
+    "title": "Ateşten Gömlek",
+    "author": "Halide Edib Adıvar",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim57_files/87436_12b7a_1570432613.webp",
+    "source_url": "https://1000kitap.com/kitap/atesten-gomlek--545"
+  },
+  {
+    "title": "Suç ve Ceza",
+    "author": "Fyodor Dostoyevski",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim57_files/2553527_1765274563_M1xeg.jpg",
+    "source_url": "https://1000kitap.com/kitap/suc-ve-ceza--121"
+  },
+  {
+    "title": "1984",
+    "author": "George Orwell",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim57_files/100_1472675944.jpg",
+    "source_url": "https://1000kitap.com/kitap/1984--100"
+  },
+  {
+    "title": "Cingöz Recai - Arsen Lüpen İstanbul'da",
+    "author": "Peyami Safa",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim57_files/39535_eLGh4_1508927327.jpg",
+    "source_url": "https://1000kitap.com/kitap/cingoz-recai-arsen-lupen-istanbul-da--30766"
+  },
+  {
+    "title": "Yalnızız",
+    "author": "Peyami Safa",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim57_files/705_rX5Pz_1476163836.webp",
+    "source_url": "https://1000kitap.com/kitap/yalniziz--1245"
+  },
+  {
+    "title": "Ozan Beedle'ın Hikayeleri",
+    "author": "J. K. Rowling",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim57_files/6231_Ozan_Beedlenin_Hikayeleri-Jk_Rowling870.jpg",
+    "source_url": "https://1000kitap.com/kitap/ozan-beedlein-hikayeleri--6231"
+  },
+  {
+    "title": "Gün Olur Asra Bedel",
+    "author": "Cengiz Aytmatov",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim57_files/1577_1463867769.webp",
+    "source_url": "https://1000kitap.com/kitap/gun-olur-asra-bedel--1577"
+  },
+  {
+    "title": "Fareler ve İnsanlar",
+    "author": "John Steinbeck",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim57_files/27823_1709455067_LgVS1.webp",
+    "source_url": "https://1000kitap.com/kitap/fareler-ve-insanlar--566"
+  },
+  {
+    "title": "Hachiko",
+    "author": "Leslea Newman",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim57_files/56586_1735068178_QN8D0.webp",
+    "source_url": "https://1000kitap.com/kitap/hachiko--90395"
+  },
+  {
+    "title": "Huckleberry Finn",
+    "author": "Mark Twain",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim58_files/228449_70bc8_1584416480.jpg",
+    "source_url": "https://1000kitap.com/kitap/huckleberry-finn--205860"
+  },
+  {
+    "title": "Satranç",
+    "author": "Stefan Zweig",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim58_files/56586_1719218173_yuk9N.jpg",
+    "source_url": "https://1000kitap.com/kitap/satranc--1103"
+  },
+  {
+    "title": "Çağlar Boyu Quidditch",
+    "author": "J. K. Rowling",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim58_files/12103_1442612581.jpg",
+    "source_url": "https://1000kitap.com/kitap/caglar-boyu-quidditch--12103"
+  },
+  {
+    "title": "Death Note, Vol. 1: Boredom",
+    "author": "Tsugumi Ooba",
+    "finished_at": "2019-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim58_files/87436_04f89_1534129550.jpg",
+    "source_url": "https://1000kitap.com/kitap/death-note-vol-1-boredom--117474"
+  },
+  {
+    "title": "Oz",
+    "author": "Adam Fawer",
+    "finished_at": "2018-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim58_files/62036_1466005019.jpg",
+    "source_url": "https://1000kitap.com/kitap/oz--62036"
+  },
+  {
+    "title": "Marslı",
+    "author": "Andy Weir",
+    "finished_at": "2018-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim58_files/Marsli_25702_1418024106.jpg",
+    "source_url": "https://1000kitap.com/kitap/marsli--25702"
+  },
+  {
+    "title": "Hayvan Çiftliği",
+    "author": "George Orwell",
+    "finished_at": "2018-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim58_files/621026_1756070151_qU0vv.jpg",
+    "source_url": "https://1000kitap.com/kitap/hayvan-ciftligi--147"
+  },
+  {
+    "title": "Güneşi Uyandıralım",
+    "author": "José Mauro de Vasconcelos",
+    "finished_at": "2018-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim58_files/9414_f945f_1573236680.webp",
+    "source_url": "https://1000kitap.com/kitap/gunesi-uyandiralim--3198"
+  },
+  {
+    "title": "Üçüncü Sayfa Şiirleri",
+    "author": "Bedirhan Gökçe",
+    "finished_at": "2018-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim58_files/38837_AoTLZ_1490543331.jpg",
+    "source_url": "https://1000kitap.com/kitap/ucuncu-sayfa-siirleri--76181"
+  },
+  {
+    "title": "Harry Potter ve Ateş Kadehi",
+    "author": "J. K. Rowling",
+    "finished_at": "2017-04-09",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim58_files/56586_1675448552_2lm8y.jpg",
+    "source_url": "https://1000kitap.com/kitap/harry-potter-ve-ates-kadehi--2270"
+  },
+  {
+    "title": "Harry Potter ve Azkaban Tutsağı",
+    "author": "J. K. Rowling",
+    "finished_at": "2017-04-09",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim59_files/2269_1464005873.jpg",
+    "source_url": "https://1000kitap.com/kitap/harry-potter-ve-azkaban-tutsagi--2269"
+  },
+  {
+    "title": "Harry Potter ve Sırlar Odası",
+    "author": "J. K. Rowling",
+    "finished_at": "2017-04-09",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim59_files/2268_1464006069.jpg",
+    "source_url": "https://1000kitap.com/kitap/harry-potter-ve-sirlar-odasi--2268"
+  },
+  {
+    "title": "Harry Potter ve Felsefe Taşı",
+    "author": "J. K. Rowling",
+    "finished_at": "2017-04-09",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim59_files/2267_1464005642.jpg",
+    "source_url": "https://1000kitap.com/kitap/harry-potter-ve-felsefe-tasi--2267"
+  },
+  {
+    "title": "Lalencik",
+    "author": "Halim Akın",
+    "finished_at": "2016-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim59_files/313987_31d97_1560436187.webp",
+    "source_url": "https://1000kitap.com/kitap/lalencik--166798"
+  },
+  {
+    "title": "Şeker Portakalı",
+    "author": "José Mauro de Vasconcelos",
+    "finished_at": "2015-04-14",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim59_files/9414_56d68_1551424706.webp",
+    "source_url": "https://1000kitap.com/kitap/seker-portakali--239"
+  },
+  {
+    "title": "Hazırlıksız",
+    "author": "Tolga Gümüşay",
+    "finished_at": "2010-07-01",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim59_files/Hazirliksiz_21101_1407571759.webp",
+    "source_url": "https://1000kitap.com/kitap/hazirliksiz--21101"
+  },
+  {
+    "title": "İlk Akın",
+    "author": "Rahim Er",
+    "finished_at": "2010-04-16",
+    "cover_url": "https://1000kitap.com/eymenyalaz/kitaplari/okuduklarim59_files/27823_ca350_1534364531.webp",
+    "source_url": "https://1000kitap.com/kitap/ilk-akin--111145"
+  }
+]
