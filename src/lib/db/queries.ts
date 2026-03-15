@@ -170,7 +170,8 @@ export async function getPublicFilms(): Promise<
   const list: (ContentItem & { film: Film })[] = [];
   for (const film of filmsRows) {
     const content = contentMap.get(film.content_id);
-    if (content) list.push({ ...content, film: { ...film, id: film.id } as Film });
+    if (content)
+      list.push({ ...content, film: { ...film, id: film.id } as Film } as ContentItem & { film: Film });
   }
   return list;
 }
