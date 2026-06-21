@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { createBook, updateBook } from "@/app/actions";
+import { triggerPaperConfetti } from "@/lib/paperConfetti";
 import type { Book } from "@/types/database";
 import { StarRatingInput } from "@/components/ui/StarRating";
 import { AdminImageUpload } from "./AdminImageUpload";
@@ -32,6 +33,10 @@ export function AdminReadingLogBookForm({ book }: AdminReadingLogBookFormProps) 
       setError(null);
       const formData = new FormData(e.currentTarget);
       formData.set("book_rating", rating != null ? String(rating) : "");
+      const markingFinished = status === "finished";
+      const newlyFinished =
+        markingFinished && (!isEdit || book?.status !== "finished");
+
       const result = isEdit
         ? await updateBook(book!.id, formData)
         : await createBook(formData);
@@ -39,10 +44,23 @@ export function AdminReadingLogBookForm({ book }: AdminReadingLogBookFormProps) 
         setError(result.error);
         return;
       }
+
+      if (newlyFinished) {
+        const submitter = (e.nativeEvent as SubmitEvent).submitter;
+        if (submitter instanceof HTMLElement) {
+          triggerPaperConfetti(submitter);
+        } else {
+          const fallback = e.currentTarget.querySelector('button[type="submit"]');
+          if (fallback instanceof HTMLElement) {
+            triggerPaperConfetti(fallback);
+          }
+        }
+      }
+
       router.push("/secretgate/reading-log");
       router.refresh();
     },
-    [isEdit, book, rating, router]
+    [isEdit, book, rating, router, status]
   );
 
   return (

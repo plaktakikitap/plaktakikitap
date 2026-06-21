@@ -1,30 +1,8 @@
 import Image from "next/image";
-import { supabaseServer } from "@/lib/supabase-server";
-import { getPlaylistTracksForNowPlaying } from "@/lib/spotify";
-import { getMusicCurrentState } from "@/lib/music";
 import { getCurrentReading } from "@/lib/db/queries";
+import { getNowPanelMusicData } from "@/lib/now-playing";
 import ManualNowPlaying from "./ManualNowPlaying";
 import { AmbientMusicPlayer } from "./AmbientMusicPlayer";
-import type { NowPlayingTrack } from "@/lib/spotify";
-
-/** Admin panelde eklenen şarkılar manual_now_playing tablosunda; sırayla gösterilmek üzere buradan alıyoruz. */
-async function getNowTracks(): Promise<NowPlayingTrack[]> {
-  const supabase = await supabaseServer();
-  const { data } = await supabase
-    .from("manual_now_playing")
-    .select("id, title, artist, album_art_url, audio_url, sort_order")
-    .order("sort_order", { ascending: true })
-    .order("created_at", { ascending: true });
-  const rows = (data ?? []) as { id: string; title: string; artist: string; album_art_url: string | null; audio_url: string | null }[];
-  return rows.map((r) => ({
-    id: r.id,
-    title: r.title,
-    artist: r.artist,
-    duration_sec: 180,
-    cover_url: r.album_art_url,
-    audio_url: r.audio_url ?? null,
-  }));
-}
 
 
 function GlassCard({
@@ -45,28 +23,32 @@ function GlassCard({
 }
 
 export default async function NowPanel() {
-  let musicState: Awaited<ReturnType<typeof getMusicCurrentState>>;
-  let playlistId = "";
+  let musicData: Awaited<ReturnType<typeof getNowPanelMusicData>>;
   let readingBook: Awaited<ReturnType<typeof getCurrentReading>> = null;
   try {
-    [musicState, playlistId, readingBook] = await Promise.all([
-      getMusicCurrentState(),
-      Promise.resolve((process.env.SPOTIFY_PLAYLIST_ID ?? "").trim()),
+    [musicData, readingBook] = await Promise.all([
+      getNowPanelMusicData(),
       getCurrentReading(),
     ]);
   } catch {
-    musicState = {
-      serverTime: new Date().toISOString(),
-      startedAt: null,
+    musicData = {
+      musicState: {
+        serverTime: new Date().toISOString(),
+        startedAt: null,
+        tracks: [],
+        playlistDurationSec: 0,
+        currentTrackIndex: 0,
+        currentOffsetSec: 0,
+        currentTrack: null,
+      },
       tracks: [],
-      playlistDurationSec: 0,
-      currentTrackIndex: 0,
-      currentOffsetSec: 0,
-      currentTrack: null,
+      useAmbient: false,
+      playlistUrl: null,
     };
-    playlistId = "";
     readingBook = null;
   }
+
+  const { tracks, useAmbient } = musicData;
   const reading = readingBook
     ? {
         book_title: readingBook.title,
@@ -76,27 +58,6 @@ export default async function NowPanel() {
         updated_at: readingBook.last_progress_update_at,
       }
     : null;
-  const useAmbient =
-    musicState.tracks.length > 0 &&
-    musicState.startedAt != null &&
-    musicState.startedAt !== "";
-
-  let playlistTracks: NowPlayingTrack[] = [];
-  let tracks: NowPlayingTrack[] = [];
-  try {
-    playlistTracks =
-      playlistId.length > 0 ? await getPlaylistTracksForNowPlaying(playlistId) : [];
-    tracks =
-      playlistTracks.length > 0
-        ? playlistTracks
-        : await getNowTracks();
-  } catch {
-    tracks = [];
-  }
-  const playlistUrl = playlistId
-    ? `https://open.spotify.com/playlist/${playlistId}`
-    : null;
-
   const readingTitle = reading ? "Şu an okuyorum:" : "En son okuduğum:";
 
   return (

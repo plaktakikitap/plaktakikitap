@@ -7,6 +7,9 @@ import SiteBackground from "@/components/SiteBackground";
 import { MaintenanceGate } from "@/components/MaintenanceGate";
 import { SiteSoundVolumeHydrate } from "@/components/SiteSoundVolumeHydrate";
 import Footer from "@/components/Footer";
+import { PageTransition } from "@/components/PageTransition";
+import { ScrollVinylIndicator } from "@/components/ScrollVinylIndicator";
+import IntroAnimation from "@/components/IntroAnimation";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -119,16 +122,21 @@ export default function RootLayout({
       <body
         className={`${cormorant.variable} ${sourceSerif.variable} ${dmSans.variable} ${cinzel.variable} ${inter.variable} ${caveat.variable} ${permanentMarker.variable} ${patrickHand.variable} ${nothingYouCouldDo.variable} ${playfair.variable} min-h-screen antialiased`}
       >
-        <MaintenanceGate />
-        <SiteSoundVolumeHydrate />
-        <SiteBackground />
-        <Nav />
-        <MainWrapper>
-          <div className="min-h-0 flex-1 flex flex-col">
-            <MotionLayout>{children}</MotionLayout>
-          </div>
-          <Footer />
-        </MainWrapper>
+        <IntroAnimation>
+          <MaintenanceGate />
+          <SiteSoundVolumeHydrate />
+          <SiteBackground />
+          <ScrollVinylIndicator />
+          <Nav />
+          <MainWrapper>
+            <PageTransition>
+              <div className="min-h-0 flex-1 flex flex-col">
+                <MotionLayout>{children}</MotionLayout>
+              </div>
+            </PageTransition>
+            <Footer />
+          </MainWrapper>
+        </IntroAnimation>
       </body>
     </html>
   );

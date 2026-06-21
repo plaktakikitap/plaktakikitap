@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { PlannerDaySummary } from "@/lib/planner";
 import { SmudgeOverlay } from "./SmudgeOverlay";
+import { HandDrawnCircleOverlay } from "./HandDrawnCircleOverlay";
 
 const BLUR_DATA_URL =
   "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUG/8QAIhAAAgEDBAMBAAAAAAAAAAAAAQIDAAQRBRIhMQYTQVFh/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBEQACEQADAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAT8Q/9k=";
@@ -54,6 +56,8 @@ export function MessyDayCell({
   const today = isTodayCell(dateStr);
   const firstImageUrl = summary?.firstImageUrl ?? summary?.imageUrls?.[0];
   const smudge = summary?.smudge;
+  const [hovered, setHovered] = useState(false);
+
   return (
     <button
       type="button"
@@ -65,9 +69,12 @@ export function MessyDayCell({
         transformStyle: "preserve-3d",
         transform: `skewX(${day % 5 === 0 ? -0.5 : day % 5 === 2 ? 0.5 : 0}deg)`,
       }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       onClick={() => onDayClick(dateStr, monthName, day)}
       aria-label={`${day} ${monthName}`}
     >
+      <HandDrawnCircleOverlay active={hovered} variant={day} />
       <div className="relative z-[2] flex justify-end">
         <span className="text-xs font-semibold text-black/75 font-sans">
           {day}
