@@ -190,7 +190,7 @@ export default function FlipFrame({
 
   const showBoxShell = !reduce && !lidGone;
   const showBoxBody = showBoxShell;
-  const satellitesActive = boxOpened && (reduce || lidGone);
+  const satellitesActive = Boolean(boxOpened && hovered);
 
   useEffect(() => {
     if (reduce) {
@@ -231,7 +231,7 @@ export default function FlipFrame({
       }}
       onMouseLeave={() => setHovered(false)}
     >
-      <SatelliteCards active={satellitesActive} hovered={hovered} />
+      <SatelliteCards active={satellitesActive} />
 
       {showBoxBody && (
         <div
