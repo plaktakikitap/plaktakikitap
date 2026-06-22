@@ -1,5 +1,6 @@
 import { supabaseServer } from "@/lib/supabase-server";
 import { SocialLinksSection } from "@/components/footer/SocialLinksSection";
+import SiteAgeCounter from "@/components/SiteAgeCounter";
 
 export default async function Footer() {
   const supabase = await supabaseServer();
@@ -27,6 +28,8 @@ export default async function Footer() {
         }}
         aria-hidden
       />
+
+      <SiteAgeCounter />
 
       <div className="!mx-auto !flex !max-w-6xl !flex-col !gap-4 !px-4 !py-5 !sm:px-6 !md:flex-row !md:items-end !md:justify-between">
         <div className="!text-[11px] !font-light !tracking-[0.2em] !text-white/50 sm:!text-xs sm:!tracking-[0.25em]">

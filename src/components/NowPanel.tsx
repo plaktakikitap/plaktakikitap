@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getCurrentReading } from "@/lib/db/queries";
 import { getNowPanelMusicData } from "@/lib/now-playing";
 import ManualNowPlaying from "./ManualNowPlaying";
+import LastFmNowPlaying from "./LastFmNowPlaying";
 import { AmbientMusicPlayer } from "./AmbientMusicPlayer";
 
 
@@ -44,11 +45,12 @@ export default async function NowPanel() {
       tracks: [],
       useAmbient: false,
       playlistUrl: null,
+      lastFmTrack: null,
     };
     readingBook = null;
   }
 
-  const { tracks, useAmbient } = musicData;
+  const { tracks, useAmbient, lastFmTrack } = musicData;
   const reading = readingBook
     ? {
         book_title: readingBook.title,
@@ -63,9 +65,11 @@ export default async function NowPanel() {
   return (
     <section className="mx-auto mt-12 w-full max-w-6xl px-4 sm:mt-16 sm:px-6">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
-        {/* Şu an dinliyorum — ambient senkron veya Spotify/manuel liste */}
+        {/* Şu an dinliyorum — ambient, Last.fm veya admin/manuel liste */}
         {useAmbient ? (
           <AmbientMusicPlayer />
+        ) : lastFmTrack ? (
+          <LastFmNowPlaying initial={lastFmTrack} />
         ) : (
           <GlassCard title="Şu an dinliyorum:">
             <ManualNowPlaying tracks={tracks} />

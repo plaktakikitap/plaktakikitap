@@ -1,11 +1,8 @@
 import "server-only";
 
-export type LastFmNowPlaying = {
-  title: string;
-  artist: string;
-  albumArt: string | null;
-  isNowPlaying: boolean;
-};
+import type { LastFmNowPlaying } from "@/types/now-playing";
+
+export type { LastFmNowPlaying };
 
 type LastFmImage = { size: string; "#text"?: string };
 type LastFmTrack = {

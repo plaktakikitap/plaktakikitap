@@ -525,19 +525,35 @@ body::before {
 .yazilarim-editor-wrap .ProseMirror em { font-style: italic; }
 .yazilarim-editor-wrap .ProseMirror.is-editor-empty:before { color: var(--muted); float: left; height: 0; pointer-events: none; content: attr(data-placeholder); }
 
-/* Plak custom cursor — 32×32, hotspot merkez (16 16). Kaynak: public/images/cursor-vinyl*.png */
+/* Plak custom cursor — tüm sitede; Tailwind cursor-* sınıflarını da ezer */
 @media (pointer: fine) {
-  body {
-    cursor: url("/images/cursor-vinyl.png") 16 16, auto;
+  :root.vinyl-cursor,
+  :root.vinyl-cursor body,
+  :root.vinyl-cursor body *:not(input):not(textarea):not(select) {
+    cursor: url("/images/cursor-vinyl.png") 16 16, auto !important;
   }
 
-  a,
-  button,
-  [role="button"],
-  .card,
-  .nav-card,
-  .clickable {
-    cursor: url("/images/cursor-vinyl-hover.png") 16 16, pointer;
+  :root.vinyl-cursor a,
+  :root.vinyl-cursor button,
+  :root.vinyl-cursor summary,
+  :root.vinyl-cursor label,
+  :root.vinyl-cursor [role="button"],
+  :root.vinyl-cursor [role="link"],
+  :root.vinyl-cursor [role="menuitem"],
+  :root.vinyl-cursor [role="tab"],
+  :root.vinyl-cursor .card,
+  :root.vinyl-cursor .nav-card,
+  :root.vinyl-cursor .clickable,
+  :root.vinyl-cursor .cursor-pointer,
+  :root.vinyl-cursor [class*="cursor-pointer"] {
+    cursor: url("/images/cursor-vinyl-hover.png") 16 16, pointer !important;
+  }
+
+  :root.vinyl-cursor input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]),
+  :root.vinyl-cursor textarea,
+  :root.vinyl-cursor select,
+  :root.vinyl-cursor [contenteditable="true"] {
+    cursor: text !important;
   }
 }
 
