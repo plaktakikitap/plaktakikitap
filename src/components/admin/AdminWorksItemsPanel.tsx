@@ -36,6 +36,15 @@ const VISIBILITY_OPTIONS = [
   { value: "private", label: "Gizli" },
 ] as const;
 
+function isPdfFile(file: File): boolean {
+  const name = file.name.toLowerCase();
+  return (
+    file.type === "application/pdf" ||
+    file.type === "application/x-pdf" ||
+    name.endsWith(".pdf")
+  );
+}
+
 type Props = {
   items: WorksItem[];
   cvDownloadUrl: string;
@@ -120,7 +129,7 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
 
   async function handleCertificatePdfSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (!file || file.type !== "application/pdf") return;
+    if (!file || !isPdfFile(file)) return;
     setPdfUploading(true);
     setError(null);
     const formData = new FormData();
@@ -173,7 +182,7 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
   async function handleCvPdfSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.type !== "application/pdf") {
+    if (!isPdfFile(file)) {
       setError("Lütfen PDF dosyası seçin.");
       e.target.value = "";
       return;
