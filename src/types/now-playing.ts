@@ -13,4 +13,6 @@ export interface LastFmNowPlaying {
   artist: string;
   albumArt: string | null;
   isNowPlaying: boolean;
+  /** Last.fm scrobble zamanı (ISO); şu an çalıyorsa null */
+  playedAt: string | null;
 }
