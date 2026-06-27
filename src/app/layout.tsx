@@ -12,6 +12,7 @@ import { ScrollVinylIndicator } from "@/components/ScrollVinylIndicator";
 import IntroAnimation from "@/components/IntroAnimation";
 import { GlobalVinylCursor } from "@/components/GlobalVinylCursor";
 import { Analytics } from "@vercel/analytics/next";
+import Script from "next/script";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -122,8 +123,16 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <head>
+        <meta name="google-adsense-account" content="ca-pub-1523513721493697" />
         <link rel="preload" href="/images/cursor-vinyl.png" as="image" />
         <link rel="preload" href="/images/cursor-vinyl-hover.png" as="image" />
+        <Script
+          id="google-adsense"
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1523513721493697"
+          crossOrigin="anonymous"
+          strategy="beforeInteractive"
+        />
       </head>
       <body
         className={`${cormorant.variable} ${sourceSerif.variable} ${dmSans.variable} ${cinzel.variable} ${inter.variable} ${caveat.variable} ${permanentMarker.variable} ${patrickHand.variable} ${nothingYouCouldDo.variable} ${playfair.variable} min-h-screen antialiased`}
