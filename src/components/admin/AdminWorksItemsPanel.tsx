@@ -45,6 +45,22 @@ function isPdfFile(file: File): boolean {
   );
 }
 
+function isCvStoragePath(stored: string): boolean {
+  const v = stored.trim();
+  return !!v && !v.startsWith("http://") && !v.startsWith("https://");
+}
+
+function cvDisplayHref(stored: string): string {
+  if (!stored.trim()) return "";
+  return isCvStoragePath(stored) ? "/api/cv/download" : stored;
+}
+
+function cvDisplayLabel(stored: string): string {
+  if (!stored.trim()) return "";
+  if (isCvStoragePath(stored)) return stored.split("/").pop() ?? "CV.pdf";
+  return stored.split("/").pop() ?? stored;
+}
+
 type Props = {
   items: WorksItem[];
   cvDownloadUrl: string;
@@ -191,18 +207,16 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
     setError(null);
     const formData = new FormData();
     formData.set("file", file);
-    formData.set("folder", "cv");
-    const res = await fetch("/api/admin/upload/file", { method: "POST", body: formData });
+    const res = await fetch("/api/admin/works/cv-upload", { method: "POST", body: formData });
     const data = await res.json().catch(() => ({}));
     setCvPdfUploading(false);
     e.target.value = "";
-    if (!res.ok || !data.url) {
+    if (!res.ok || !data.path) {
       setError(data.error ?? "PDF yükleme başarısız.");
       return;
     }
-    setCvUrl(data.url);
-    const saved = await saveCvUrl(data.url);
-    if (!saved) setError("PDF yüklendi ancak kaydedilemedi. Linki elle kaydedin.");
+    setCvUrl(data.path);
+    router.refresh();
   }
 
   async function handleCvFormSubmit(e: React.FormEvent) {
@@ -285,12 +299,12 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
               <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3">
                 <p className="text-xs font-medium uppercase tracking-wide text-white/40">Aktif CV</p>
                 <a
-                  href={cvUrl}
+                  href={cvDisplayHref(cvUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-1 inline-flex items-center gap-1.5 break-all text-sm text-[#d4af37] hover:text-[#f4d03f]"
                 >
-                  {cvUrl.split("/").pop() ?? cvUrl}
+                  {cvDisplayLabel(cvUrl)}
                   <ExternalLink className="h-3.5 w-3.5 shrink-0 opacity-70" />
                 </a>
               </div>
