@@ -4,7 +4,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, ExternalLink } from "lucide-react";
 
 const RichTextEditor = dynamic(
   () => import("./RichTextEditor").then((m) => ({ default: m.RichTextEditor })),
@@ -31,9 +31,6 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 const CATEGORY_ORDER = ["denemeler", "siirler", "diger"];
 
-const inputClass = "w-full rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-500";
-const labelClass = "mb-1 block text-sm font-medium text-white/80";
-
 export function AdminYazilarimList({ initialWritings }: { initialWritings: Writing[] }) {
   const router = useRouter();
   const [writings, setWritings] = useState(initialWritings);
@@ -47,7 +44,17 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
     items: writings.filter((w) => w.category === cat),
   }));
 
-  async function handleUpdate(id: string, payload: { category?: string; title?: string; body?: string; published_at?: string; tefrika_issue?: string | null; external_url?: string | null }) {
+  async function handleUpdate(
+    id: string,
+    payload: {
+      category?: string;
+      title?: string;
+      body?: string;
+      published_at?: string;
+      tefrika_issue?: string | null;
+      external_url?: string | null;
+    }
+  ) {
     setError(null);
     setLoading(true);
     try {
@@ -100,17 +107,27 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
   }
 
   return (
-    <div className="space-y-6">
-      {error && <p className="text-sm text-red-600">{error}</p>}
+    <div className="space-y-5">
+      {error ? <p className="admin-error">{error}</p> : null}
+
       {byCategory.map(({ category, label, items }) => (
-        <div key={category} className="rounded-xl border border-[var(--card-border)] bg-[var(--card)]/50 p-4">
-          <h3 className="mb-3 font-medium text-white">{label}</h3>
+        <div key={category} className="admin-bento-card p-5 sm:p-6">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <h3 className="admin-section-title">{label}</h3>
+            <span className="rounded-full bg-white/[0.06] px-2.5 py-0.5 text-xs text-white/45">
+              {items.length} yazı
+            </span>
+          </div>
+
           {items.length === 0 ? (
-            <p className="text-sm text-white/60">Bu kategoride yazı yok.</p>
+            <p className="text-sm text-white/45">Bu kategoride yazı yok.</p>
           ) : (
             <ul className="space-y-2">
               {items.map((w) => (
-                <li key={w.id} className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-[var(--card-border)] bg-[var(--background)]/50 p-3">
+                <li
+                  key={w.id}
+                  className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3 sm:p-4"
+                >
                   {editingId === w.id ? (
                     <EditForm
                       writing={w}
@@ -119,22 +136,37 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
                       disabled={loading}
                     />
                   ) : (
-                    <>
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <div className="min-w-0 flex-1">
-                        <Link href={`/writings/${w.id}`} target="_blank" className="font-medium text-amber-400 hover:text-amber-300 hover:underline">
+                        <Link
+                          href={`/writings/${w.id}`}
+                          target="_blank"
+                          className="inline-flex items-center gap-1.5 font-medium text-[#d4af37] hover:text-[#f4d03f]"
+                        >
                           {w.title || "—"}
+                          <ExternalLink className="h-3.5 w-3.5 opacity-60" />
                         </Link>
-                        <span className="ml-2 text-sm text-white/60">{formatDate(w.published_at)}</span>
+                        <p className="mt-0.5 text-xs text-white/45">{formatDate(w.published_at)}</p>
                       </div>
                       <div className="flex gap-1">
-                        <button type="button" onClick={() => setEditingId(w.id)} className="rounded p-2 text-white/60 hover:bg-white/10 hover:text-white" aria-label="Düzenle">
+                        <button
+                          type="button"
+                          onClick={() => setEditingId(w.id)}
+                          className="rounded-lg p-2 text-white/50 transition-colors hover:bg-white/[0.06] hover:text-white"
+                          aria-label="Düzenle"
+                        >
                           <Pencil className="h-4 w-4" />
                         </button>
-                        <button type="button" onClick={() => handleDelete(w.id)} className="rounded p-2 text-white/60 hover:bg-red-500/20 hover:text-red-400" aria-label="Sil">
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(w.id)}
+                          className="rounded-lg p-2 text-white/50 transition-colors hover:bg-red-500/15 hover:text-red-400"
+                          aria-label="Sil"
+                        >
                           <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
-                    </>
+                    </div>
                   )}
                 </li>
               ))}
@@ -153,7 +185,14 @@ function EditForm({
   disabled,
 }: {
   writing: Writing;
-  onSave: (p: { category?: string; title?: string; body?: string; published_at?: string; tefrika_issue?: string | null; external_url?: string | null }) => void;
+  onSave: (p: {
+    category?: string;
+    title?: string;
+    body?: string;
+    published_at?: string;
+    tefrika_issue?: string | null;
+    external_url?: string | null;
+  }) => void;
   onCancel: () => void;
   disabled: boolean;
 }) {
@@ -179,43 +218,79 @@ function EditForm({
           external_url: external_url.trim() || null,
         });
       }}
-      className="w-full space-y-3"
+      className="w-full space-y-4"
     >
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className={labelClass}>Kategori</label>
-          <select value={category} onChange={(e) => setCategory(e.target.value)} className={inputClass}>
+          <label className="admin-label">Kategori</label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="admin-input admin-select"
+          >
             {CATEGORY_ORDER.map((c) => (
-              <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>
+              <option key={c} value={c}>
+                {CATEGORY_LABELS[c]}
+              </option>
             ))}
           </select>
         </div>
         <div>
-          <label className={labelClass}>Tarih</label>
-          <input type="datetime-local" value={published_at} onChange={(e) => setPublishedAt(e.target.value)} className={inputClass} />
+          <label className="admin-label">Tarih</label>
+          <input
+            type="datetime-local"
+            value={published_at}
+            onChange={(e) => setPublishedAt(e.target.value)}
+            className="admin-input"
+          />
         </div>
       </div>
       <div>
-        <label className={labelClass}>Başlık</label>
-        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className={inputClass} />
+        <label className="admin-label">Başlık</label>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="admin-input admin-input-lg"
+        />
       </div>
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className={labelClass}>Tefrika sayısı</label>
-          <input type="text" value={tefrika_issue} onChange={(e) => setTefrikaIssue(e.target.value)} placeholder="Örn. 5" className={inputClass} />
+          <label className="admin-label">Tefrika sayısı</label>
+          <input
+            type="text"
+            value={tefrika_issue}
+            onChange={(e) => setTefrikaIssue(e.target.value)}
+            placeholder="Örn. 5"
+            className="admin-input"
+          />
         </div>
         <div>
-          <label className={labelClass}>Dergiyi Satın Al linki</label>
-          <input type="text" value={external_url} onChange={(e) => setExternalUrl(e.target.value)} placeholder="https://..." className={inputClass} />
+          <label className="admin-label">Dergiyi satın al</label>
+          <input
+            type="url"
+            value={external_url}
+            onChange={(e) => setExternalUrl(e.target.value)}
+            placeholder="https://..."
+            className="admin-input"
+          />
         </div>
       </div>
       <div>
-        <label className={labelClass}>İçerik</label>
-        <RichTextEditor value={body} onChange={setBody} placeholder="Yazı içeriği…" minHeight="10rem" />
+        <label className="admin-label">İçerik</label>
+        <RichTextEditor value={body} onChange={setBody} placeholder="Yazı içeriği…" minHeight="12rem" variant="admin" />
       </div>
-      <div className="flex gap-2">
-        <button type="submit" disabled={disabled} className="rounded bg-[var(--primary)] px-3 py-1.5 text-sm text-[var(--primary-foreground)] disabled:opacity-50">Kaydet</button>
-        <button type="button" onClick={onCancel} className="rounded border border-[var(--card-border)] px-3 py-1.5 text-sm">İptal</button>
+      <div className="flex flex-wrap gap-2 pt-1">
+        <button type="submit" disabled={disabled} className="admin-btn-gold disabled:opacity-50">
+          Kaydet
+        </button>
+        <button
+          type="button"
+          onClick={onCancel}
+          className="rounded-xl border border-white/10 px-4 py-2.5 text-sm text-white/65 transition-colors hover:border-white/20 hover:text-white"
+        >
+          İptal
+        </button>
       </div>
     </form>
   );

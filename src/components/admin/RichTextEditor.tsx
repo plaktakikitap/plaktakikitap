@@ -15,11 +15,19 @@ interface RichTextEditorProps {
   onChange: (html: string) => void;
   placeholder?: string;
   minHeight?: string;
+  variant?: "default" | "admin";
 }
 
-export function RichTextEditor({ value, onChange, placeholder = "İçerik yazın…", minHeight = "12rem" }: RichTextEditorProps) {
+export function RichTextEditor({
+  value,
+  onChange,
+  placeholder = "İçerik yazın…",
+  minHeight = "12rem",
+  variant = "default",
+}: RichTextEditorProps) {
   const [linkUrl, setLinkUrl] = useState("");
   const [showLinkInput, setShowLinkInput] = useState(false);
+  const isAdmin = variant === "admin";
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -76,95 +84,121 @@ export function RichTextEditor({ value, onChange, placeholder = "İçerik yazın
 
   if (!editor) return null;
 
+  const btnClass = isAdmin ? "admin-rte-btn" : toolbarBtnClass;
+  const dividerClass = isAdmin ? "admin-rte-divider" : "mx-1 w-px self-stretch bg-[var(--card-border)]";
+
+  const toolbar = (
+    <>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleBold().run()}
+        className={btnClass}
+        data-active={editor.isActive("bold") ? "true" : undefined}
+        title="Kalın"
+      >
+        <Bold className="h-4 w-4" />
+      </button>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+        className={btnClass}
+        data-active={editor.isActive("italic") ? "true" : undefined}
+        title="İtalik"
+      >
+        <Italic className="h-4 w-4" />
+      </button>
+      <span className={dividerClass} aria-hidden />
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        className={btnClass}
+        data-active={editor.isActive("heading", { level: 2 }) ? "true" : undefined}
+        title="Başlık 2"
+      >
+        <Heading2 className="h-4 w-4" />
+      </button>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        className={btnClass}
+        data-active={editor.isActive("heading", { level: 3 }) ? "true" : undefined}
+        title="Başlık 3"
+      >
+        <Heading3 className="h-4 w-4" />
+      </button>
+      <span className={dividerClass} aria-hidden />
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleBulletList().run()}
+        className={btnClass}
+        data-active={editor.isActive("bulletList") ? "true" : undefined}
+        title="Madde işareti listesi"
+      >
+        <List className="h-4 w-4" />
+      </button>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        className={btnClass}
+        data-active={editor.isActive("orderedList") ? "true" : undefined}
+        title="Numaralı liste"
+      >
+        <ListOrdered className="h-4 w-4" />
+      </button>
+      <span className={dividerClass} aria-hidden />
+      {showLinkInput ? (
+        <span className="flex items-center gap-1">
+          <input
+            type="text"
+            value={linkUrl}
+            onChange={(e) => setLinkUrl(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), setLink())}
+            placeholder="https://..."
+            className="h-8 w-40 rounded-lg border border-black/10 bg-white px-2 text-sm text-neutral-900 placeholder:text-neutral-500"
+            autoFocus
+          />
+          <button
+            type="button"
+            onClick={setLink}
+            className={isAdmin ? "admin-btn-gold !rounded-lg !px-2.5 !py-1.5 !text-xs" : "rounded bg-[var(--primary)] px-2 py-1 text-xs text-[var(--primary-foreground)]"}
+          >
+            Ekle
+          </button>
+          <button type="button" onClick={() => setShowLinkInput(false)} className="text-xs text-neutral-500">
+            İptal
+          </button>
+        </span>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setShowLinkInput(true)}
+          className={btnClass}
+          data-active={editor.isActive("link") ? "true" : undefined}
+          title="Link ekle"
+        >
+          <LinkIcon className="h-4 w-4" />
+        </button>
+      )}
+    </>
+  );
+
+  if (isAdmin) {
+    return (
+      <div className="admin-rte">
+        <div className="admin-rte-toolbar">{toolbar}</div>
+        <EditorContent
+          editor={editor}
+          style={{ minHeight }}
+          className="yazilarim-editor-wrap [&_.ProseMirror]:min-h-[8rem] [&_.ProseMirror]:px-4 [&_.ProseMirror]:py-3 [&_.ProseMirror]:outline-none [&_.ProseMirror]:text-neutral-900 [&_.ProseMirror.p-is-empty:before]:pointer-events-none [&_.ProseMirror.p-is-empty:before]:float-left [&_.ProseMirror.p-is-empty:before]:h-0 [&_.ProseMirror.p-is-empty:before]:text-neutral-400 [&_.ProseMirror.p-is-empty:before]:content-[attr(data-placeholder)]"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="rounded-lg border border-[var(--card-border)] bg-white">
       <div className="flex flex-wrap items-center gap-1 border-b border-[var(--card-border)] p-2">
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          className={toolbarBtnClass}
-          data-active={editor.isActive("bold") ? "true" : undefined}
-          title="Kalın"
-        >
-          <Bold className="h-4 w-4" />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={toolbarBtnClass}
-          data-active={editor.isActive("italic") ? "true" : undefined}
-          title="İtalik"
-        >
-          <Italic className="h-4 w-4" />
-        </button>
-        <span className="mx-1 w-px self-stretch bg-[var(--card-border)]" />
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={toolbarBtnClass}
-          data-active={editor.isActive("heading", { level: 2 }) ? "true" : undefined}
-          title="Başlık 2"
-        >
-          <Heading2 className="h-4 w-4" />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          className={toolbarBtnClass}
-          data-active={editor.isActive("heading", { level: 3 }) ? "true" : undefined}
-          title="Başlık 3"
-        >
-          <Heading3 className="h-4 w-4" />
-        </button>
-        <span className="mx-1 w-px self-stretch bg-[var(--card-border)]" />
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={toolbarBtnClass}
-          data-active={editor.isActive("bulletList") ? "true" : undefined}
-          title="Madde işareti listesi"
-        >
-          <List className="h-4 w-4" />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={toolbarBtnClass}
-          data-active={editor.isActive("orderedList") ? "true" : undefined}
-          title="Numaralı liste"
-        >
-          <ListOrdered className="h-4 w-4" />
-        </button>
-        <span className="mx-1 w-px self-stretch bg-[var(--card-border)]" />
-        {showLinkInput ? (
-          <span className="flex items-center gap-1">
-            <input
-              type="text"
-              value={linkUrl}
-              onChange={(e) => setLinkUrl(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), setLink())}
-              placeholder="https://..."
-              className="h-8 w-40 rounded border border-[var(--card-border)] bg-white px-2 text-sm text-neutral-900 placeholder:text-neutral-500"
-              autoFocus
-            />
-            <button type="button" onClick={setLink} className="rounded bg-[var(--primary)] px-2 py-1 text-xs text-[var(--primary-foreground)]">
-              Ekle
-            </button>
-            <button type="button" onClick={() => setShowLinkInput(false)} className="text-xs text-[var(--muted)]">
-              İptal
-            </button>
-          </span>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setShowLinkInput(true)}
-            className={toolbarBtnClass}
-            data-active={editor.isActive("link") ? "true" : undefined}
-            title="Link ekle"
-          >
-            <LinkIcon className="h-4 w-4" />
-          </button>
-        )}
+        {toolbar}
       </div>
       <EditorContent
         editor={editor}

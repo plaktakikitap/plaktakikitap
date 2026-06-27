@@ -26,11 +26,13 @@ import {
   Tv,
   PanelLeftClose,
   PanelLeftOpen,
+  MessageSquare,
 } from "lucide-react";
 
 const adminLinks = [
   { href: "/secretgate", label: "Dashboard", icon: LayoutDashboard },
   { href: "/secretgate/about", label: "Beni Tanıyın", icon: UserCircle },
+  { href: "/secretgate/mesajlar", label: "Site İçi Mesajlar", icon: MessageSquare },
   { href: "/secretgate/works", label: "Yaptıklarım", icon: Briefcase },
   { href: "/secretgate/yazilarim", label: "Yazılarım", icon: FileText },
   { href: "/secretgate/photos", label: "Fotoğraf", icon: Camera },

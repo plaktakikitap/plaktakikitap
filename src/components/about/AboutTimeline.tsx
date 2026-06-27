@@ -1,8 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useRef } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import { getEraCardTheme, resolveEraKey, type EraKey } from "@/lib/about-era-colors";
 
 export type TimelineImage = { url: string; caption?: string };
 
@@ -14,6 +21,8 @@ export type TimelineEntry = {
   order_index: number;
   is_highlight: boolean;
 };
+
+const CARD_EASE = [0.22, 1, 0.36, 1] as const;
 
 /** Deterministik rastgele — Polaroid rotasyonu için */
 function seededRotate(seed: number, min: number, max: number): number {
@@ -52,21 +61,45 @@ function PolaroidCard({
   url,
   caption,
   index,
-  isHighlight,
   showTape,
   side,
+  reduceMotion,
 }: {
   url: string;
   caption?: string;
   index: number;
-  isHighlight: boolean;
   showTape?: boolean;
   /** Sol/sağ: sol -15°, sağ +15° eğim */
   side?: "left" | "right";
+  reduceMotion: boolean;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-15% 0px -15% 0px" });
   const baseRot = POLAROID_ROTATIONS[index % POLAROID_ROTATIONS.length] ?? seededRotate(index, -25, 25);
   const rot = side === "left" ? -15 : side === "right" ? 15 : baseRot;
   const tapeCorner = (["tr", "bl", "br", "tl"] as const)[index % 4];
+  const staggerDelay = side === "left" ? 0.1 : side === "right" ? 0.25 : 0.15;
+
+  const frameStyle: React.CSSProperties = reduceMotion
+    ? {
+        opacity: isInView ? 1 : 0,
+        transition: "opacity 200ms ease-out",
+      }
+    : {
+        opacity: isInView ? 1 : 0,
+        transform: isInView ? "scale(1)" : "scale(0.92)",
+        transition: `opacity 0.4s ease-out ${staggerDelay}s, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) ${staggerDelay}s`,
+      };
+
+  const imageStyle: React.CSSProperties = reduceMotion
+    ? {}
+    : {
+        filter: isInView
+          ? "brightness(1) saturate(1) contrast(1)"
+          : "brightness(2) saturate(0) contrast(0.3)",
+        transition: `filter 1.8s ease-out ${staggerDelay}s`,
+      };
+
   return (
     <div
       style={{
@@ -76,9 +109,7 @@ function PolaroidCard({
       className="inline-block"
     >
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.1, duration: 0.45 }}
+        ref={ref}
         whileHover={{ scale: 1.05, boxShadow: "0 8px 32px rgba(0,0,0,0.3), 0 0 20px rgba(212,175,55,0.2)" }}
         className="relative w-[140px] shrink-0 overflow-visible rounded-[2px] bg-white shadow-[0_4px_16px_rgba(0,0,0,0.2),0_8px_28px_rgba(0,0,0,0.12)] sm:w-[170px]"
         style={{
@@ -86,11 +117,19 @@ function PolaroidCard({
           paddingLeft: 8,
           paddingRight: 8,
           paddingBottom: 40,
+          ...frameStyle,
         }}
       >
         {showTape && <TapeStrip corner={tapeCorner} />}
         <div className="relative h-28 w-full overflow-hidden sm:h-36" style={{ border: "1px solid rgba(0,0,0,0.06)" }}>
-          <Image src={url} alt="" fill className="object-cover" sizes="170px" />
+          <Image
+            src={url}
+            alt=""
+            fill
+            className="object-cover"
+            sizes="170px"
+            style={imageStyle}
+          />
         </div>
         <p
           className="absolute left-2 right-2 text-center text-[10px] leading-tight"
@@ -109,33 +148,104 @@ function PolaroidCard({
 
 function NarrativeBlock({
   entry,
-  side,
-  index,
+  column,
+  reduceMotion,
+  eraKey,
 }: {
   entry: TimelineEntry;
-  side: "left" | "right";
-  index: number;
+  column: "left" | "right";
+  reduceMotion: boolean;
+  eraKey: EraKey;
 }) {
+  const enterX = column === "left" ? -40 : 40;
+  const cardStyle = getEraCardTheme(eraKey, entry.is_highlight);
+
   return (
     <motion.div
-      initial={{ opacity: 0, x: side === "left" ? -40 : 40 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.12, duration: 0.5 }}
+      initial={reduceMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: enterX }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
+      transition={{ duration: 0.6, ease: CARD_EASE }}
       className="relative z-10 w-full max-w-[min(100%,520px)]"
     >
-      {/* Mobilde küçük kutu (p-3, küçük font), masaüstünde normal */}
-      <div
-        className={`flex flex-col rounded-xl border p-3 backdrop-blur-md md:p-5 ${
-          entry.is_highlight
-            ? "border-amber-500/40 bg-white/10 shadow-[0_0_20px_rgba(212,175,55,0.15)]"
-            : "border-white/10 bg-white/5"
-        }`}
+      <motion.div
+        initial={false}
+        className="flex flex-col rounded-xl border p-3 backdrop-blur-md md:p-5"
+        style={cardStyle}
+        transition={{ duration: reduceMotion ? 0 : 0.8, ease: CARD_EASE }}
       >
         <h3 className="text-sm font-semibold text-white/95 md:text-lg">{entry.year_or_period}</h3>
         <p className="mt-1.5 whitespace-pre-wrap text-xs leading-relaxed text-white/75 md:mt-2 md:text-sm">
           {entry.paragraph_text}
         </p>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function MilestoneDot({
+  isHighlight,
+  reduceMotion,
+}: {
+  isHighlight: boolean;
+  reduceMotion: boolean;
+}) {
+  const size = isHighlight ? 14 : 12;
+
+  return (
+    <motion.div
+      initial={reduceMotion ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+      whileInView={reduceMotion ? undefined : { scale: 1, opacity: 1 }}
+      viewport={{ once: true, margin: "-40% 0px -40% 0px" }}
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 20,
+        delay: reduceMotion ? 0 : 0.1,
+      }}
+      className="absolute left-[7px] top-8 z-10 rounded-full border-2 border-amber-500/60 bg-amber-500/90 shadow-[0_0_12px_rgba(212,175,55,0.5)] md:left-1/2 md:top-10 md:-translate-x-1/2"
+      style={{ width: size, height: size }}
+    />
+  );
+}
+
+function ContinuingPulse({ reduceMotion }: { reduceMotion: boolean }) {
+  return (
+    <div className="relative inline-block h-3 w-3">
+      {!reduceMotion && (
+        <motion.div
+          animate={{ scale: [1, 2.5], opacity: [0.6, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut" }}
+          className="absolute inset-0 rounded-full bg-[#c9a65a]"
+          aria-hidden
+        />
+      )}
+      <div
+        className="relative z-[1] h-3 w-3 rounded-full bg-[#c9a65a] shadow-[0_0_10px_rgba(201,166,90,0.45)]"
+        aria-hidden
+      />
+    </div>
+  );
+}
+
+function TimelineContinuing({ reduceMotion }: { reduceMotion: boolean }) {
+  return (
+    <motion.div
+      initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-20% 0px" }}
+      transition={{ duration: 0.8, delay: reduceMotion ? 0 : 0.3, ease: CARD_EASE }}
+      className="relative pb-4 pt-8 sm:pt-10"
+    >
+      <div
+        className="absolute left-[7px] top-8 md:left-1/2 md:top-10 md:-translate-x-1/2"
+        aria-hidden
+      >
+        <ContinuingPulse reduceMotion={reduceMotion} />
       </div>
+      <p className="pl-8 text-[0.85rem] italic tracking-[0.05em] text-[#9a9488] md:pl-0 md:pt-12 md:text-center">
+        hâlâ devam ediyor...
+      </p>
     </motion.div>
   );
 }
@@ -145,10 +255,12 @@ function RowPolaroids({
   images,
   side,
   index,
+  reduceMotion,
 }: {
   images: TimelineImage[];
   side: "left" | "right";
   index: number;
+  reduceMotion: boolean;
 }) {
   if (images.length === 0) return null;
   const isLeft = side === "left";
@@ -172,9 +284,9 @@ function RowPolaroids({
             url={img.url}
             caption={img.caption}
             index={index * 3 + i}
-            isHighlight={false}
             showTape={i % 3 !== 1}
             side={side}
+            reduceMotion={reduceMotion}
           />
         </div>
       ))}
@@ -186,9 +298,13 @@ function RowPolaroids({
 function InlinePolaroids({
   images,
   index,
+  column,
+  reduceMotion,
 }: {
   images: TimelineImage[];
   index: number;
+  column: "left" | "right";
+  reduceMotion: boolean;
 }) {
   if (images.length === 0) return null;
   return (
@@ -199,9 +315,9 @@ function InlinePolaroids({
             url={img.url}
             caption={img.caption}
             index={index * 3 + i}
-            isHighlight={false}
             showTape={i % 3 !== 1}
-            side="right"
+            side={column}
+            reduceMotion={reduceMotion}
           />
         </div>
       ))}
@@ -210,83 +326,134 @@ function InlinePolaroids({
 }
 
 export function AboutTimeline({ entries }: { entries: TimelineEntry[] }) {
-  const [mounted, setMounted] = useState(false);
-  const { scrollYProgress } = useScroll();
-  const glowOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.3, 0.7, 0.9, 0.5]);
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
 
-  useEffect(() => setMounted(true), []);
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ["start 0.85", "end 0.15"],
+  });
+
+  const lineScale = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const glowOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.3, 0.7, 0.9, 0.5]);
 
   const sorted = [...entries].sort((a, b) => a.order_index - b.order_index);
 
-  if (!mounted || sorted.length === 0) {
-    return (
-      <div className="py-24 text-center text-white/50">
-        {sorted.length === 0 ? "Henüz timeline içeriği yok. Admin panelinden ekleyebilirsiniz." : "Yükleniyor..."}
-      </div>
-    );
-  }
-
   return (
-    <div className="relative mx-auto max-w-5xl overflow-visible px-3 py-10 sm:px-4 sm:py-16">
+    <div
+      ref={timelineRef}
+      className="relative mx-auto max-w-5xl overflow-visible px-3 py-10 sm:px-4 sm:py-16"
+    >
+      {sorted.length === 0 ? (
+        <div className="py-24 text-center text-white/50">
+          Henüz timeline içeriği yok. Admin panelinden ekleyebilirsiniz.
+        </div>
+      ) : (
+        <>
       {/* Timeline spine — mobilde solda, masaüstünde ortada */}
-      <div className="absolute left-4 top-0 bottom-0 w-px md:left-1/2 md:-translate-x-1/2">
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-b from-amber-500/20 via-amber-500/40 to-amber-500/20"
-          style={{ opacity: glowOpacity }}
-        />
+      <div className="pointer-events-none absolute bottom-0 left-4 top-0 w-0.5 md:left-1/2 md:-translate-x-1/2">
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 w-0.5"
           style={{
-            background: "linear-gradient(180deg, transparent 0%, rgba(212,175,55,0.15) 20%, rgba(212,175,55,0.25) 50%, rgba(212,175,55,0.15) 80%, transparent 100%)",
-            boxShadow: "0 0 12px rgba(212,175,55,0.2)",
+            background:
+              "linear-gradient(180deg, transparent 0%, rgba(212,175,55,0.12) 15%, rgba(212,175,55,0.18) 50%, rgba(212,175,55,0.12) 85%, transparent 100%)",
           }}
+          aria-hidden
+        />
+        {reduceMotion ? (
+          <div
+            className="absolute left-0 top-0 h-full w-0.5 bg-[#c9a65a]"
+            aria-hidden
+          />
+        ) : (
+          <motion.div
+            className="absolute left-0 top-0 h-full w-0.5 origin-top bg-[#c9a65a]"
+            style={{
+              scaleY: lineScale,
+              boxShadow: "0 0 10px rgba(201,166,90,0.45)",
+            }}
+            aria-hidden
+          />
+        )}
+        <motion.div
+          className="absolute inset-0 w-0.5"
+          style={{
+            opacity: glowOpacity,
+            background:
+              "linear-gradient(180deg, transparent 0%, rgba(212,175,55,0.25) 30%, rgba(212,175,55,0.35) 50%, rgba(212,175,55,0.25) 70%, transparent 100%)",
+          }}
+          aria-hidden
         />
       </div>
 
       <div className="relative space-y-12 sm:space-y-20">
-        {sorted.map((entry, i) => (
-          <div
-            key={entry.id}
-            className="relative grid min-h-[100px] grid-cols-1 items-start gap-0 overflow-visible pl-10 md:min-h-[200px] md:grid-cols-2 md:pl-0"
-          >
-            {/* Polaroidler — sitenin EN SOLunda (sol entry) veya EN SAĞında (sağ entry), yazıların ötesinde */}
-            <RowPolaroids
-              images={entry.associated_images ?? []}
-              side={i % 2 === 0 ? "left" : "right"}
-              index={i}
-            />
-            {/* Event marker — mobilde spine'ın üstünde, masaüstünde ortada */}
+        {sorted.map((entry, i) => {
+          const column: "left" | "right" = i % 2 === 0 ? "left" : "right";
+          const polaroidSide: "left" | "right" = column;
+          const eraKey = resolveEraKey(entry.year_or_period);
+
+          return (
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: i * 0.08 + 0.2, type: "spring", stiffness: 300 }}
-              className="absolute left-[7px] top-8 z-10 rounded-full border-2 border-amber-500/60 bg-amber-500/90 shadow-[0_0_12px_rgba(212,175,55,0.5)] md:left-1/2 md:top-10 md:-translate-x-1/2"
-              style={{
-                width: entry.is_highlight ? 14 : 12,
-                height: entry.is_highlight ? 14 : 12,
-              }}
-            />
-            {/* Sol sütun: yazı kutucuğu; mobilde altında fotoğraflar */}
-            <div className="min-w-0 md:flex md:justify-end md:pl-[180px] md:pr-6">
-              {i % 2 === 0 && (
-                <>
-                  <NarrativeBlock entry={entry} side="right" index={i} />
-                  <InlinePolaroids images={entry.associated_images ?? []} index={i} />
-                </>
-              )}
-            </div>
-            {/* Sağ sütun: yazı kutucuğu; mobilde altında fotoğraflar */}
-            <div className="min-w-0 md:flex md:justify-start md:pl-6 md:pr-[180px]">
-              {i % 2 === 1 && (
-                <>
-                  <NarrativeBlock entry={entry} side="left" index={i} />
-                  <InlinePolaroids images={entry.associated_images ?? []} index={i} />
-                </>
-              )}
-            </div>
-          </div>
-        ))}
+              key={entry.id}
+              viewport={{ margin: "-30% 0px -30% 0px" }}
+              className="relative grid min-h-[100px] grid-cols-1 items-start gap-0 overflow-visible pl-10 md:min-h-[200px] md:grid-cols-2 md:pl-0"
+            >
+              <RowPolaroids
+                images={entry.associated_images ?? []}
+                side={polaroidSide}
+                index={i}
+                reduceMotion={!!reduceMotion}
+              />
+
+              <MilestoneDot
+                isHighlight={entry.is_highlight}
+                reduceMotion={!!reduceMotion}
+              />
+
+              <div className="min-w-0 md:flex md:justify-end md:pl-[180px] md:pr-6">
+                {column === "left" && (
+                  <>
+                    <NarrativeBlock
+                      entry={entry}
+                      column={column}
+                      reduceMotion={!!reduceMotion}
+                      eraKey={eraKey}
+                    />
+                    <InlinePolaroids
+                      images={entry.associated_images ?? []}
+                      index={i}
+                      column={column}
+                      reduceMotion={!!reduceMotion}
+                    />
+                  </>
+                )}
+              </div>
+
+              <div className="min-w-0 md:flex md:justify-start md:pl-6 md:pr-[180px]">
+                {column === "right" && (
+                  <>
+                    <NarrativeBlock
+                      entry={entry}
+                      column={column}
+                      reduceMotion={!!reduceMotion}
+                      eraKey={eraKey}
+                    />
+                    <InlinePolaroids
+                      images={entry.associated_images ?? []}
+                      index={i}
+                      column={column}
+                      reduceMotion={!!reduceMotion}
+                    />
+                  </>
+                )}
+              </div>
+            </motion.div>
+          );
+        })}
+        <TimelineContinuing reduceMotion={!!reduceMotion} />
       </div>
+        </>
+      )}
     </div>
   );
 }
