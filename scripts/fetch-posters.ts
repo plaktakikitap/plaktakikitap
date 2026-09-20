@@ -91,7 +91,7 @@ async function searchTmdbPoster(
 }
 
 async function fetchAllMissingPosters(
-  supabase: ReturnType<typeof createClient>
+  supabase: ReturnType<typeof createClient<any>>
 ): Promise<FilmRow[]> {
   const all: FilmRow[] = [];
   let from = 0;
