@@ -56,37 +56,31 @@ export default async function KaralamaDetailPage({
 
   return (
     <main className="relative min-h-screen text-[#f3ead9]">
-      <article className="animate-page-fade-in mx-auto max-w-[680px] px-4 py-12 sm:px-6 sm:py-16">
-        <header className="mb-10 text-center">
-          <h1
-            className="text-3xl font-medium leading-tight text-[#f3ead9] sm:text-4xl"
-            style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
-          >
-            {item.baslik}
-          </h1>
-          <time
-            dateTime={item.olusturma_tarihi}
-            className="mt-3 block text-sm text-[#9a9488]"
-          >
-            {formatDate(item.olusturma_tarihi)}
-          </time>
-        </header>
-
-        <div
-          className="whitespace-pre-wrap text-center text-[1.05rem] leading-[1.8] text-[#e8dcc0]"
+      <article className="animate-page-fade-in mx-auto max-w-[720px] px-4 py-12 sm:px-6 sm:py-16">
+        <Link
+          href={SECTION_PATH}
+          className="mb-10 inline-block text-[0.78rem] tracking-[0.08em] text-[#9a9488] no-underline transition hover:text-[#c9a65a]"
         >
+          ← {SECTION_NAME}
+        </Link>
+
+        <h1
+          className="m-0 mb-3 text-[1.15rem] font-semibold tracking-[-0.01em] text-[#f3ead9] sm:text-[1.35rem]"
+          style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+        >
+          {item.baslik}
+        </h1>
+
+        <div className="max-w-[680px] whitespace-pre-wrap text-[0.95rem] leading-[1.75] text-[#c8bfb0]">
           {item.icerik}
         </div>
 
-        <p className="mt-14 text-center">
-          <Link
-            href={SECTION_PATH}
-            className="text-sm text-[#c9a65a] no-underline hover:underline"
-          >
-            ← {SECTION_TITLE}
-          </Link>
-        </p>
-        <p className="sr-only">{SECTION_NAME}</p>
+        <time
+          dateTime={item.olusturma_tarihi}
+          className="mt-3 block text-[0.78rem] tracking-[0.03em] text-[#6b6560]"
+        >
+          {formatDate(item.olusturma_tarihi)}
+        </time>
       </article>
     </main>
   );

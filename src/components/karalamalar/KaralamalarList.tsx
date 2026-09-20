@@ -19,12 +19,6 @@ function formatDate(iso: string): string {
   }
 }
 
-function preview(text: string, max = 140): string {
-  const clean = text.replace(/\s+/g, " ").trim();
-  if (clean.length <= max) return clean;
-  return `${clean.slice(0, max).trimEnd()}...`;
-}
-
 export function KaralamalarList({ items }: { items: Karalama[] }) {
   const [visible, setVisible] = useState(PAGE_SIZE);
   const shown = items.slice(0, visible);
@@ -40,43 +34,44 @@ export function KaralamalarList({ items }: { items: Karalama[] }) {
 
   return (
     <div>
-      <ul className="divide-y divide-[rgba(201,166,90,0.15)]">
-        {shown.map((k) => (
-          <li key={k.id}>
-            <Link
-              href={`${SECTION_PATH}/${k.slug}`}
-              className="group flex flex-col gap-2 py-6 no-underline sm:flex-row sm:items-start sm:justify-between sm:gap-8"
+      {shown.map((k, idx) => (
+        <div key={k.id}>
+          <article className="mb-12">
+            <h2
+              className="m-0 mb-3 text-[1.15rem] font-semibold tracking-[-0.01em] text-[#f3ead9]"
+              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
             >
-              <div className="min-w-0 flex-1">
-                <h2
-                  className="text-2xl font-medium leading-snug text-[#f3ead9] transition-colors group-hover:text-[#c9a65a] sm:text-3xl"
-                  style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
-                >
-                  {k.baslik}
-                </h2>
-                <p className="mt-2 text-sm leading-relaxed text-[#9a9488]">
-                  {preview(k.icerik)}
-                </p>
-              </div>
-              <time
-                dateTime={k.olusturma_tarihi}
-                className="shrink-0 pt-1 text-xs tracking-wide text-[#9a9488]/70"
+              <Link
+                href={`${SECTION_PATH}/${k.slug}`}
+                className="text-inherit no-underline"
               >
-                {formatDate(k.olusturma_tarihi)}
-              </time>
-            </Link>
-          </li>
-        ))}
-      </ul>
+                {k.baslik}
+              </Link>
+            </h2>
+            <div className="max-w-[680px] whitespace-pre-wrap text-[0.95rem] leading-[1.75] text-[#c8bfb0]">
+              {k.icerik}
+            </div>
+            <time
+              dateTime={k.olusturma_tarihi}
+              className="mt-3 block text-[0.78rem] tracking-[0.03em] text-[#6b6560]"
+            >
+              {formatDate(k.olusturma_tarihi)}
+            </time>
+          </article>
+          {idx < shown.length - 1 || hasMore ? (
+            <hr className="mb-12 border-0 border-t border-[rgba(201,166,90,0.1)]" />
+          ) : null}
+        </div>
+      ))}
 
       {hasMore ? (
-        <div className="mt-8 flex justify-center">
+        <div className="flex justify-center pb-8">
           <button
             type="button"
             onClick={() => setVisible((v) => v + PAGE_SIZE)}
-            className="rounded-full border border-[rgba(201,166,90,0.35)] px-5 py-2 text-xs uppercase tracking-[0.18em] text-[#c9a65a] transition hover:bg-[rgba(201,166,90,0.1)]"
+            className="text-[0.78rem] tracking-[0.12em] text-[#9a9488] transition hover:text-[#c9a65a]"
           >
-            Daha fazla yükle
+            daha fazla
           </button>
         </div>
       ) : null}

@@ -7,10 +7,8 @@ import {
   Languages,
   Camera,
   Video,
-  Feather,
   type LucideIcon,
 } from "lucide-react";
-import { SECTION_PATH, SECTION_TITLE } from "@/lib/karalamalar-section";
 
 export type NavCardItem = {
   href: string;
@@ -77,12 +75,5 @@ export const NAV_CARDS: NavCardItem[] = [
     subtitle: "düşünceler, denemeler, parçalar",
     Icon: FileText,
     accentColor: "74,44,58",
-  },
-  {
-    href: SECTION_PATH,
-    title: SECTION_TITLE,
-    subtitle: "kafama esen kısa notlar",
-    Icon: Feather,
-    accentColor: "166,148,90",
   },
 ];

@@ -21,16 +21,10 @@ export default async function KaralamalarPage() {
   return (
     <PageTransitionTarget layoutId={`card-${SECTION_PATH}`}>
       <main className="relative min-h-screen text-[#f3ead9]">
-        <div className="animate-page-fade-in mx-auto max-w-2xl px-4 py-12 sm:px-6 sm:py-16">
-          <header className="mb-12 text-center">
-            <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-[#c9a65a]">
-              {SECTION_NAME}
-            </p>
-            <p className="mt-3 text-sm text-[#9a9488]">
-              Kafama esen kısa notlar
-            </p>
-          </header>
-
+        <div className="animate-page-fade-in mx-auto max-w-[720px] px-4 py-12 sm:px-6 sm:py-16">
+          <p className="mb-10 text-[0.7rem] font-medium lowercase tracking-[0.15em] text-[#9a9488]">
+            {SECTION_NAME}
+          </p>
           <KaralamalarList items={items} />
         </div>
       </main>

@@ -5,6 +5,7 @@ import { getBooks } from "@/lib/queries";
 import { Plus, Pencil } from "lucide-react";
 import { DeleteButton } from "@/components/admin/DeleteButton";
 import { AdminReadingGoalForm } from "@/components/admin/AdminReadingGoalForm";
+import { ExcelIndirButonu } from "@/components/admin/ExcelIndirButonu";
 
 export default async function AdminReadingLogPage() {
   const books = await getBooks(true);
@@ -28,18 +29,21 @@ export default async function AdminReadingLogPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10">
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-3xl font-bold">Okuma günlüğü</h1>
           <p className="mt-1 text-[var(--muted)]">{books.length} kitap</p>
         </div>
-        <Link
-          href="/secretgate/reading-log/new"
-          className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white hover:opacity-90"
-        >
-          <Plus className="h-4 w-4" />
-          Yeni kitap
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          <ExcelIndirButonu tur="kitaplar" />
+          <Link
+            href="/secretgate/reading-log/new"
+            className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white hover:opacity-90"
+          >
+            <Plus className="h-4 w-4" />
+            Yeni kitap
+          </Link>
+        </div>
       </div>
 
       <section className="mb-10">

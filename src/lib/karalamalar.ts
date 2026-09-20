@@ -12,6 +12,16 @@ export interface Karalama {
   guncelleme_tarihi: string;
 }
 
+export interface KaralamaVersiyon {
+  id: string;
+  karalama_id: string;
+  baslik: string;
+  icerik: string;
+  degistiren_alan: string | null;
+  versiyon_no: number;
+  olusturma_tarihi: string;
+}
+
 const SELECT_COLS =
   "id, baslik, icerik, slug, yayinda, olusturma_tarihi, guncelleme_tarihi";
 
@@ -113,6 +123,15 @@ export async function updateKaralama(
   id: string,
   payload: KaralamaUpdate
 ): Promise<Karalama | { error: string }> {
+  const supabase = createAdminClient();
+
+  const { data: mevcut, error: fetchErr } = await supabase
+    .from("karalamalar")
+    .select("baslik, icerik")
+    .eq("id", id)
+    .maybeSingle();
+  if (fetchErr || !mevcut) return { error: "Karalama bulunamadı." };
+
   const updates: Record<string, unknown> = {
     guncelleme_tarihi: new Date().toISOString(),
   };
@@ -127,13 +146,36 @@ export async function updateKaralama(
     updates.icerik = icerik;
   }
   if (payload.slug !== undefined) {
-    const slug = payload.slug.trim() || slugify(String(updates.baslik ?? ""));
+    const slug = payload.slug.trim() || slugify(String(updates.baslik ?? mevcut.baslik));
     if (!slug) return { error: "Geçerli bir slug gerekli." };
     updates.slug = slug;
   }
   if (payload.yayinda !== undefined) updates.yayinda = payload.yayinda;
 
-  const supabase = createAdminClient();
+  const baslikDegisti =
+    updates.baslik !== undefined && updates.baslik !== mevcut.baslik;
+  const icerikDegisti =
+    updates.icerik !== undefined && updates.icerik !== mevcut.icerik;
+
+  if (baslikDegisti || icerikDegisti) {
+    const { count } = await supabase
+      .from("karalama_versiyonlar")
+      .select("*", { count: "exact", head: true })
+      .eq("karalama_id", id);
+
+    let degistiren_alan = "ikisi";
+    if (baslikDegisti && !icerikDegisti) degistiren_alan = "baslik";
+    else if (!baslikDegisti && icerikDegisti) degistiren_alan = "icerik";
+
+    await supabase.from("karalama_versiyonlar").insert({
+      karalama_id: id,
+      baslik: mevcut.baslik,
+      icerik: mevcut.icerik,
+      degistiren_alan,
+      versiyon_no: (count ?? 0) + 1,
+    });
+  }
+
   const { data, error } = await supabase
     .from("karalamalar")
     .update(updates)
@@ -146,6 +188,25 @@ export async function updateKaralama(
     return { error: error.message || "Güncellenemedi." };
   }
   return data as Karalama;
+}
+
+export async function getKaralamaVersiyonlar(
+  karalamaId: string
+): Promise<KaralamaVersiyon[]> {
+  try {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from("karalama_versiyonlar")
+      .select(
+        "id, karalama_id, baslik, icerik, degistiren_alan, versiyon_no, olusturma_tarihi"
+      )
+      .eq("karalama_id", karalamaId)
+      .order("versiyon_no", { ascending: false });
+    if (error) return [];
+    return (data ?? []) as KaralamaVersiyon[];
+  } catch {
+    return [];
+  }
 }
 
 export async function deleteKaralama(id: string): Promise<boolean> {

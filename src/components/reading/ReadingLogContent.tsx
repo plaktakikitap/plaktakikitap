@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import type { Book } from "@/types/database";
 import { ReadingLogHeaderCards } from "./ReadingLogHeaderCards";
 import { ReadingLogBooksSection } from "./ReadingLogBooksSection";
@@ -35,7 +36,17 @@ export function ReadingLogContent({
 
   return (
     <>
-      <section className="mt-8">
+      <div className="mt-6 flex justify-end">
+        <Link
+          href="/okuma-gunlugum/istatistikler"
+          className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(201,166,90,0.25)] bg-[rgba(201,166,90,0.08)] px-3.5 py-1.5 text-xs tracking-wide text-[#c9a65a] transition-colors hover:border-[rgba(201,166,90,0.45)] hover:bg-[rgba(201,166,90,0.14)] hover:text-[#f3ead9]"
+        >
+          <span aria-hidden>📊</span>
+          istatistiklerimi gör
+        </Link>
+      </div>
+
+      <section className="mt-6">
         <ReadingLogHeaderCards
           currentReading={currentReading}
           readingCount={readingCount}
