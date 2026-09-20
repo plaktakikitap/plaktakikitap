@@ -10,6 +10,7 @@ type LastFmTrack = {
   artist?: { "#text"?: string; name?: string };
   image?: LastFmImage[];
   "@attr"?: { nowplaying?: string };
+  date?: { uts?: string; "#text"?: string };
 };
 
 export async function getNowPlaying(): Promise<LastFmNowPlaying | null> {
@@ -31,6 +32,11 @@ export async function getNowPlaying(): Promise<LastFmNowPlaying | null> {
     if (!track) return null;
 
     const isNowPlaying = track["@attr"]?.nowplaying === "true";
+    const utsRaw = track.date?.uts;
+    const playedAt =
+      !isNowPlaying && utsRaw
+        ? new Date(Number.parseInt(utsRaw, 10) * 1000).toISOString()
+        : null;
     const albumArtRaw =
       track.image?.find((img) => img.size === "large")?.["#text"] ?? null;
     const albumArt =
@@ -41,6 +47,7 @@ export async function getNowPlaying(): Promise<LastFmNowPlaying | null> {
       artist: track.artist?.["#text"] || track.artist?.name || "",
       albumArt,
       isNowPlaying,
+      playedAt,
     };
   } catch (err) {
     console.error("Last.fm now-playing hatası:", err);

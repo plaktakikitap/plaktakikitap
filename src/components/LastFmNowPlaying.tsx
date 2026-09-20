@@ -2,10 +2,34 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { formatRelativeTimeTr } from "@/lib/format-relative-time";
 import type { LastFmNowPlaying as LastFmTrack } from "@/types/now-playing";
+
+function usePlayedAgoLabel(track: LastFmTrack) {
+  const [label, setLabel] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (track.isNowPlaying) {
+      setLabel("şimdi");
+      return;
+    }
+    if (!track.playedAt) {
+      setLabel(null);
+      return;
+    }
+
+    const update = () => setLabel(formatRelativeTimeTr(track.playedAt!));
+    update();
+    const interval = window.setInterval(update, 60_000);
+    return () => window.clearInterval(interval);
+  }, [track.isNowPlaying, track.playedAt]);
+
+  return label;
+}
 
 export default function LastFmNowPlaying({ initial }: { initial: LastFmTrack }) {
   const [track, setTrack] = useState(initial);
+  const playedAgo = usePlayedAgoLabel(track);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,7 +127,15 @@ export default function LastFmNowPlaying({ initial }: { initial: LastFmTrack }) 
           <div className="min-w-0 flex-1">
             <p className="truncate font-medium text-white/90">{track.title}</p>
             <p className="truncate text-sm text-white/60">{track.artist}</p>
-            <p className="mt-2 text-xs text-white/40">Apple Music</p>
+            <p className="mt-2 text-xs text-white/40">
+              {playedAgo ? (
+                <>
+                  <span className="text-white/50">{playedAgo}</span>
+                  {" · "}
+                </>
+              ) : null}
+              Apple Music
+            </p>
           </div>
         </div>
       </div>

@@ -11,6 +11,7 @@ import { PageTransition } from "@/components/PageTransition";
 import { ScrollVinylIndicator } from "@/components/ScrollVinylIndicator";
 import IntroAnimation from "@/components/IntroAnimation";
 import { GlobalVinylCursor } from "@/components/GlobalVinylCursor";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -143,6 +144,7 @@ export default function RootLayout({
             <Footer />
           </MainWrapper>
         </IntroAnimation>
+        <Analytics />
       </body>
     </html>
   );

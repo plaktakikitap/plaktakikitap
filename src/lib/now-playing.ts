@@ -79,6 +79,7 @@ export async function getStripMusicNowPlaying(): Promise<LastFmNowPlaying | null
         artist: track.artist,
         albumArt: track.cover_url,
         isNowPlaying: false,
+        playedAt: null,
       };
     }
   } catch {
@@ -93,6 +94,7 @@ export async function getStripMusicNowPlaying(): Promise<LastFmNowPlaying | null
         artist: spotify.artist ?? "",
         albumArt: spotify.albumArt,
         isNowPlaying: spotify.isPlaying,
+        playedAt: null,
       };
     }
   } catch {
