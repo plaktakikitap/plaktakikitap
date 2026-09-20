@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import bcrypt from "bcryptjs";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 export const dynamic = "force-dynamic";
 
 const SALT_ROUNDS = 10;
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   try {
     const body = await req.json();
     const newPassword = typeof body.new_password === "string" ? body.new_password.trim() : "";

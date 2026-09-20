@@ -1,12 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { addPlannerMediaAdmin } from "@/lib/planner-admin";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 const BUCKET = "planner-media";
-const ALLOWED = ["image/jpeg", "image/png", "image/webp", "image/gif", "video/mp4", "video/webm"];
-const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+const ALLOWED = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "video/mp4",
+  "video/webm",
+];
+const MAX_SIZE = 10 * 1024 * 1024;
 
 export async function POST(request: NextRequest) {
+  const denied = await requireAdminApi(request);
+  if (denied) return denied;
+
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
@@ -14,9 +25,16 @@ export async function POST(request: NextRequest) {
     const attachmentTypeRaw = (formData.get("attachmentType") as string)?.trim();
     const attachmentStyleRaw = (formData.get("attachmentStyle") as string)?.trim();
     const attachmentType =
-      attachmentTypeRaw === "paperclip" || attachmentTypeRaw === "paste" || attachmentTypeRaw === "staple" ? attachmentTypeRaw : undefined;
+      attachmentTypeRaw === "paperclip" ||
+      attachmentTypeRaw === "paste" ||
+      attachmentTypeRaw === "staple"
+        ? attachmentTypeRaw
+        : undefined;
     const attachmentStyle =
-      attachmentStyleRaw === "standard_clip" || attachmentStyleRaw === "colorful_clip" || attachmentStyleRaw === "binder_clip" || attachmentStyleRaw === "staple"
+      attachmentStyleRaw === "standard_clip" ||
+      attachmentStyleRaw === "colorful_clip" ||
+      attachmentStyleRaw === "binder_clip" ||
+      attachmentStyleRaw === "staple"
         ? attachmentStyleRaw
         : undefined;
 
@@ -25,11 +43,17 @@ export async function POST(request: NextRequest) {
     }
 
     if (file.size > MAX_SIZE) {
-      return NextResponse.json({ error: "File too large" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Dosya 10MB'dan küçük olmalı" },
+        { status: 400 }
+      );
     }
 
     if (!ALLOWED.includes(file.type)) {
-      return NextResponse.json({ error: "Invalid file type" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Geçersiz dosya tipi" },
+        { status: 400 }
+      );
     }
 
     const supabase = createAdminClient();
@@ -61,7 +85,9 @@ export async function POST(request: NextRequest) {
     }
 
     const base = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "") || "";
-    const publicUrl = base ? `${base}/storage/v1/object/public/${BUCKET}/${data.path}` : "";
+    const publicUrl = base
+      ? `${base}/storage/v1/object/public/${BUCKET}/${data.path}`
+      : "";
     return NextResponse.json({ path: data.path, publicUrl });
   } catch {
     return NextResponse.json({ error: "Upload failed" }, { status: 500 });

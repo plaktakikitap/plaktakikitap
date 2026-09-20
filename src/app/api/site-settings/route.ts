@@ -5,5 +5,6 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const settings = await getSiteSettings();
-  return NextResponse.json(settings);
+  const { admin_password_hash: _hash, ...publicSettings } = settings;
+  return NextResponse.json(publicSettings);
 }

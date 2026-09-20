@@ -4,8 +4,12 @@ import {
   createPlannerEntryAdmin,
   addPlannerMediaAdmin,
 } from "@/lib/planner-admin";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 export async function POST(request: NextRequest) {
+  const denied = await requireAdminApi(request);
+  if (denied) return denied;
+
   try {
     const body = await request.json();
     const date = body.date as string;

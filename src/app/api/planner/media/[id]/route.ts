@@ -1,13 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updatePlannerMediaAdmin } from "@/lib/planner-admin";
+import {
+  updatePlannerMediaAdmin,
+  deletePlannerMediaAdmin,
+} from "@/lib/planner-admin";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 export async function PATCH(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const denied = await requireAdminApi(request);
+  if (denied) return denied;
+
   try {
     const { id } = await params;
-    const body = await _request.json();
+    const body = await request.json();
 
     const attachmentType = body.attachmentType;
     const attachmentStyle = body.attachmentStyle;
@@ -32,8 +39,10 @@ export async function PATCH(
     }
 
     const result = await updatePlannerMediaAdmin(id, {
-      attachmentType: (attachmentType === "" ? null : attachmentType) ?? undefined,
-      attachmentStyle: (attachmentStyle === "" ? null : attachmentStyle) ?? undefined,
+      attachmentType:
+        (attachmentType === "" ? null : attachmentType) ?? undefined,
+      attachmentStyle:
+        (attachmentStyle === "" ? null : attachmentStyle) ?? undefined,
     });
     if (result.error) {
       return NextResponse.json({ error: result.error }, { status: 500 });
@@ -42,4 +51,19 @@ export async function PATCH(
   } catch {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const denied = await requireAdminApi(request);
+  if (denied) return denied;
+
+  const { id } = await params;
+  const result = await deletePlannerMediaAdmin(id);
+  if (result.error) {
+    return NextResponse.json({ error: result.error }, { status: 500 });
+  }
+  return NextResponse.json({ ok: true });
 }

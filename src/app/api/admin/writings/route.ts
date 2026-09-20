@@ -1,12 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getWritingsPublic, createWriting } from "@/lib/writings";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 export async function GET() {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   const items = await getWritingsPublic();
   return NextResponse.json(items);
 }
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   try {
     const body = await req.json();
     if (!body || typeof body !== "object") {

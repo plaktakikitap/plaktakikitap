@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updateVideo, deleteVideo } from "@/lib/videos";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   try {
     const { id } = await params;
     const body = await req.json();
@@ -42,6 +46,9 @@ export async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   const { id } = await params;
   const ok = await deleteVideo(id);
   if (!ok) return NextResponse.json({ error: "Delete failed" }, { status: 500 });

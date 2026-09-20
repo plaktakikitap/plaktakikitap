@@ -6,6 +6,44 @@ import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { AttachmentStyle } from "./planner";
 
+export async function getRecentPlannerEntriesAdmin(
+  limit = 5
+): Promise<{ id: string; title: string | null; date: string; created_at: string }[]> {
+  try {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from("planner_entry")
+      .select("id, title, created_at, day_id")
+      .order("created_at", { ascending: false })
+      .limit(limit);
+    if (error || !data?.length) return [];
+
+    const dayIds = [...new Set(data.map((r) => r.day_id as string).filter(Boolean))];
+    const dateByDay = new Map<string, string>();
+    if (dayIds.length) {
+      const { data: days } = await supabase
+        .from("planner_day")
+        .select("id, date")
+        .in("id", dayIds);
+      for (const d of days ?? []) {
+        dateByDay.set(d.id as string, d.date as string);
+      }
+    }
+
+    return data.map((row) => ({
+      id: row.id as string,
+      title: (row.title as string | null) ?? null,
+      date:
+        dateByDay.get(row.day_id as string) ??
+        (row.created_at as string)?.slice(0, 10) ??
+        "",
+      created_at: row.created_at as string,
+    }));
+  } catch {
+    return [];
+  }
+}
+
 export async function ensurePlannerDayAdmin(dateStr: string): Promise<{ id: string } | { error: string }> {
   const supabase = createAdminClient();
   const [, m] = dateStr.split("-").map(Number);
@@ -129,6 +167,38 @@ export async function updatePlannerMediaAdmin(
   if (input.attachmentType !== undefined) updates.attachment_type = input.attachmentType ?? null;
   if (input.attachmentStyle !== undefined) updates.attachment_style = input.attachmentStyle ?? null;
   const { error } = await supabase.from("planner_media").update(updates).eq("id", id);
+  if (error) return { error: error.message };
+  return {};
+}
+
+export async function deletePlannerMediaAdmin(
+  id: string
+): Promise<{ error?: string }> {
+  const supabase = createAdminClient();
+  const { data: row, error: fetchErr } = await supabase
+    .from("planner_media")
+    .select("url")
+    .eq("id", id)
+    .maybeSingle();
+  if (fetchErr) return { error: fetchErr.message };
+  if (!row) return { error: "Medya bulunamadı." };
+
+  const url = row.url as string;
+  const BUCKET = "planner-media";
+  let path: string | null = null;
+  if (url && !url.startsWith("http")) {
+    path = url;
+  } else if (url?.includes(`/${BUCKET}/`)) {
+    path = url.split(`/${BUCKET}/`)[1] ?? null;
+  }
+  if (path) {
+    const { error: storageError } = await supabase.storage
+      .from(BUCKET)
+      .remove([path]);
+    if (storageError) return { error: "Dosya silinemedi" };
+  }
+
+  const { error } = await supabase.from("planner_media").delete().eq("id", id);
   if (error) return { error: error.message };
   return {};
 }

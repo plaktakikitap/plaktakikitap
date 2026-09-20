@@ -166,10 +166,35 @@ export async function updateWorksItem(
 
 export async function deleteWorksItem(id: string): Promise<{ ok: true } | { error: string }> {
   const supabase = createAdminClient();
+  const { data: row } = await supabase
+    .from("works_items")
+    .select("image_url")
+    .eq("id", id)
+    .maybeSingle();
+
+  const imageUrl = row?.image_url as string | undefined;
+  if (imageUrl) {
+    let path: string | null = null;
+    if (!imageUrl.startsWith("http")) {
+      path = imageUrl;
+    } else if (imageUrl.includes(`/${WORKS_MEDIA_BUCKET}/`)) {
+      path = imageUrl.split(`/${WORKS_MEDIA_BUCKET}/`)[1] ?? null;
+    }
+    if (path) {
+      const { error: storageError } = await supabase.storage
+        .from(WORKS_MEDIA_BUCKET)
+        .remove([path]);
+      if (storageError) {
+        return { error: "Dosya silinemedi" };
+      }
+    }
+  }
+
   const { error } = await supabase.from("works_items").delete().eq("id", id);
   if (error) return { error: error.message };
   return { ok: true };
 }
+
 
 /** Upload CV PDF to works-media (PDF destekli bucket) */
 export async function uploadCvPdf(file: File): Promise<{ path: string } | { error: string }> {
@@ -202,6 +227,21 @@ export async function uploadWorksMedia(
   file: File,
   path: string
 ): Promise<{ path: string } | { error: string }> {
+  const MAX_SIZE = 10 * 1024 * 1024;
+  const ALLOWED_IMAGE_TYPES = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/gif",
+  ];
+  if (!file?.size) return { error: "Dosya gerekli." };
+  if (file.size > MAX_SIZE) {
+    return { error: "Dosya 10MB'dan küçük olmalı" };
+  }
+  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+    return { error: "Geçersiz dosya tipi" };
+  }
+
   const supabase = createAdminClient();
   const { data, error } = await supabase.storage.from(WORKS_MEDIA_BUCKET).upload(path, file, {
     upsert: true,
@@ -210,3 +250,4 @@ export async function uploadWorksMedia(
   if (error) return { error: error.message };
   return { path: data.path };
 }
+

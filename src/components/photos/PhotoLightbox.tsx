@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useCallback } from "react";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { ModalPortal } from "@/components/ui/ModalPortal";
+import { PhotoImage } from "./PhotoImage";
 
 function formatDate(iso: string): string {
   try {
@@ -112,7 +112,7 @@ export function PhotoLightbox({
           onClick={(e) => e.stopPropagation()}
         >
           <div className="relative h-[85vh] min-h-[200px] w-full max-w-[90vw]">
-            <Image
+            <PhotoImage
               src={item.image_url}
               alt={item.caption || "Fotoğraf"}
               fill

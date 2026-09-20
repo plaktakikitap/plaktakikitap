@@ -182,6 +182,14 @@ export async function createSeries(formData: FormData) {
   const statusRaw = (formData.get("status") as string)?.trim() || null;
   const status =
     statusRaw === "finished" || statusRaw === "waiting" || statusRaw === "dropped" ? statusRaw : null;
+  const yearRaw = (formData.get("year") as string)?.trim();
+  const year = yearRaw ? parseInt(yearRaw, 10) : null;
+  const genreTagsRaw = formData.get("genre_tags") as string | null;
+  const genre_tags = genreTagsRaw
+    ? genreTagsRaw.split(/[\s,]+/).map((s) => s.trim()).filter(Boolean)
+    : [];
+  const rating_5Raw = formData.get("rating_5") as string | null;
+  const rating_5 = rating_5Raw ? parseFloat(rating_5Raw) : null;
 
   const { data: content, error: contentError } = await supabase
     .from("content_items")
@@ -214,6 +222,9 @@ export async function createSeries(formData: FormData) {
     is_favorite: is_favorite ?? false,
     favorite_order,
     status,
+    year: year != null && !Number.isNaN(year) ? year : null,
+    genre_tags: genre_tags.length ? genre_tags : null,
+    rating_5: rating_5 != null && !Number.isNaN(rating_5) ? rating_5 : null,
   });
 
   if (seriesError) return { error: seriesError.message };
@@ -256,6 +267,14 @@ export async function updateSeries(contentId: string, formData: FormData) {
     statusRaw === "finished" || statusRaw === "waiting" || statusRaw === "dropped" ? statusRaw : null;
   const ratingRaw = (formData.get("rating") as string)?.trim();
   const rating = ratingRaw ? parseFloat(ratingRaw) : null;
+  const yearRaw = (formData.get("year") as string)?.trim();
+  const year = yearRaw ? parseInt(yearRaw, 10) : null;
+  const genreTagsRaw = formData.get("genre_tags") as string | null;
+  const genre_tags = genreTagsRaw
+    ? genreTagsRaw.split(/[\s,]+/).map((s) => s.trim()).filter(Boolean)
+    : [];
+  const rating_5Raw = formData.get("rating_5") as string | null;
+  const rating_5 = rating_5Raw ? parseFloat(rating_5Raw) : null;
 
   const { error: contentError } = await supabase
     .from("content_items")
@@ -278,6 +297,9 @@ export async function updateSeries(contentId: string, formData: FormData) {
     is_favorite: is_favorite ?? false,
     favorite_order: is_favorite ? Date.now() : null,
     status,
+    year: year != null && !Number.isNaN(year) ? year : null,
+    genre_tags: genre_tags.length ? genre_tags : null,
+    rating_5: rating_5 != null && !Number.isNaN(rating_5) ? rating_5 : null,
   };
   if (watched_at) (updatePayload as Record<string, unknown>).watched_at = watched_at;
 
@@ -288,6 +310,7 @@ export async function updateSeries(contentId: string, formData: FormData) {
 
   if (seriesError) return { error: seriesError.message };
   revalidatePath("/");
+  revalidatePath("/izleme-gunlugum");
   revalidatePath("/izleme-gunlugum/diziler");
   revalidatePath("/secretgate");
   revalidatePath("/secretgate/series");

@@ -1,12 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPhotosAdmin, createPhoto } from "@/lib/photos";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 export async function GET() {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   const photos = await getPhotosAdmin();
   return NextResponse.json(photos);
 }
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   try {
     const body = await req.json();
     if (!body || typeof body !== "object") {

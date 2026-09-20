@@ -6,42 +6,79 @@ import { usePathname, useRouter } from "next/navigation";
 import { createBrowserClient } from "@/lib/supabase/browser";
 import type { User } from "@supabase/supabase-js";
 import {
-  LayoutDashboard,
   LogOut,
   Calendar,
   Music,
-  BookOpen,
-  Share2,
-  UserCircle,
-  Briefcase,
   Camera,
-  Video,
   Settings,
-  Languages,
-  FileText,
   Menu,
   X,
-  BookMarked,
   Film,
-  Tv,
   PanelLeftClose,
   PanelLeftOpen,
+  Feather,
+  BarChart3,
+  MoreHorizontal,
+  LayoutDashboard,
+  UserCircle,
   MessageSquare,
+  Briefcase,
+  FileText,
+  Video,
+  BookOpen,
+  BookMarked,
+  Languages,
+  Share2,
+  Tv,
+  CalendarDays,
+  CheckSquare,
+  HardDrive,
+  Apple,
+  Dumbbell,
+  NotebookPen,
+  Sparkles,
+  Wallet,
+  Flame,
+  Languages as LanguagesIcon,
 } from "lucide-react";
 
-const adminLinks = [
+const primaryLinks = [
+  { href: "/secretgate/planner", label: "Ajanda", icon: Calendar },
+  { href: "/secretgate/karalamalar", label: "Karalamalar", icon: Feather },
+  { href: "/secretgate/film-dizi", label: "Film & Dizi", icon: Film },
+  { href: "/secretgate/photos", label: "Fotoğraflar", icon: Camera },
+  { href: "/secretgate/su-an", label: "Şu an", icon: Music },
+  {
+    href: "/secretgate/istatistikler",
+    label: "İstatistikler",
+    icon: BarChart3,
+    soon: true,
+  },
+];
+
+const personalLinks = [
+  { href: "/secretgate/takvim", label: "Takvim", icon: CalendarDays },
+  { href: "/secretgate/yapilacaklar", label: "Yapılacaklar", icon: CheckSquare },
+  { href: "/secretgate/dosyalar", label: "Dosyalar", icon: HardDrive },
+  { href: "/secretgate/beslenme", label: "Beslenme", icon: Apple },
+  { href: "/secretgate/spor", label: "Spor", icon: Dumbbell },
+  { href: "/secretgate/gunluk", label: "Günlük", icon: NotebookPen },
+  { href: "/secretgate/sukur", label: "Şükür", icon: Sparkles },
+  { href: "/secretgate/finans", label: "Finans", icon: Wallet },
+  { href: "/secretgate/aliskanliklar", label: "Alışkanlıklar", icon: Flame },
+  { href: "/secretgate/diller", label: "Diller", icon: LanguagesIcon },
+];
+
+const moreLinks = [
   { href: "/secretgate", label: "Dashboard", icon: LayoutDashboard },
   { href: "/secretgate/about", label: "Beni Tanıyın", icon: UserCircle },
-  { href: "/secretgate/mesajlar", label: "Site İçi Mesajlar", icon: MessageSquare },
+  { href: "/secretgate/mesajlar", label: "Mesajlar", icon: MessageSquare },
   { href: "/secretgate/works", label: "Yaptıklarım", icon: Briefcase },
   { href: "/secretgate/yazilarim", label: "Yazılarım", icon: FileText },
-  { href: "/secretgate/photos", label: "Fotoğraf", icon: Camera },
   { href: "/secretgate/plaktaki-kitap", label: "Plaktaki Kitap", icon: Video },
-  { href: "/secretgate/planner", label: "Planner", icon: Calendar },
-  { href: "/secretgate/movie-watch-log", label: "Film izleme günlüğü", icon: Film },
-  { href: "/secretgate/series-watch-log", label: "Dizi izleme günlüğü", icon: Tv },
-  { href: "/secretgate/now-playing", label: "Şu an dinliyorum", icon: Music },
-  { href: "/secretgate/reading", label: "Şu an okuyorum", icon: BookOpen },
+  { href: "/secretgate/movie-watch-log", label: "Film günlüğü (detay)", icon: Film },
+  { href: "/secretgate/series-watch-log", label: "Dizi günlüğü (detay)", icon: Tv },
+  { href: "/secretgate/reading", label: "Okuma (detay)", icon: BookOpen },
   { href: "/secretgate/reading-log", label: "Okuma günlüğü", icon: BookMarked },
   { href: "/secretgate/translations", label: "Çeviriler", icon: Languages },
   { href: "/secretgate/socials", label: "Bana Ulaşın", icon: Share2 },
@@ -62,6 +99,7 @@ export function AdminNav({
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [moreOpen, setMoreOpen] = useState(false);
   const isSimpleAuth = "isSimpleAuth" in user && user.isSimpleAuth;
 
   useEffect(() => {
@@ -92,8 +130,34 @@ export function AdminNav({
     router.refresh();
   }
 
-  const NavLink = ({ link }: { link: (typeof adminLinks)[0] }) => {
+  const NavLink = ({
+    link,
+  }: {
+    link: {
+      href: string;
+      label: string;
+      icon: typeof Calendar;
+      soon?: boolean;
+    };
+  }) => {
     const active = isActive(pathname, link.href);
+    if (link.soon) {
+      return (
+        <span
+          title="Yakında"
+          className="flex cursor-not-allowed items-center gap-3 rounded-r-xl px-3 py-2.5 text-white/25"
+        >
+          <link.icon className="h-5 w-5 shrink-0" />
+          <span
+            className={`min-w-0 truncate text-sm font-light ${
+              sidebarOpen ? "hidden lg:group-hover:inline xl:inline" : "hidden"
+            }`}
+          >
+            {link.label}
+          </span>
+        </span>
+      );
+    }
     return (
       <Link
         href={link.href}
@@ -102,7 +166,7 @@ export function AdminNav({
         className={`group relative flex items-center gap-3 rounded-r-xl px-3 py-2.5 transition-all duration-200 ${
           active
             ? "admin-nav-active text-amber-400"
-            : "text-white/60 hover:text-white/90 hover:bg-white/5"
+            : "text-white/60 hover:bg-white/5 hover:text-white/90"
         }`}
       >
         {active && (
@@ -114,10 +178,12 @@ export function AdminNav({
             }}
           />
         )}
-        <link.icon
-          className={`relative z-10 shrink-0 ${active ? "h-5 w-5" : "h-5 w-5"}`}
-        />
-        <span className={`relative z-10 min-w-0 truncate text-sm font-light ${sidebarOpen ? "hidden lg:group-hover:inline xl:inline" : "hidden"}`}>
+        <link.icon className="relative z-10 h-5 w-5 shrink-0" />
+        <span
+          className={`relative z-10 min-w-0 truncate text-sm font-light ${
+            sidebarOpen ? "hidden lg:group-hover:inline xl:inline" : "hidden"
+          }`}
+        >
           {link.label}
         </span>
       </Link>
@@ -134,7 +200,11 @@ export function AdminNav({
           aria-label={sidebarOpen ? "Paneli daralt" : "Paneli genişlet"}
           title={sidebarOpen ? "Paneli daralt" : "Paneli genişlet"}
         >
-          {sidebarOpen ? <PanelLeftClose className="h-5 w-5" /> : <PanelLeftOpen className="h-5 w-5" />}
+          {sidebarOpen ? (
+            <PanelLeftClose className="h-5 w-5" />
+          ) : (
+            <PanelLeftOpen className="h-5 w-5" />
+          )}
         </button>
         <button
           type="button"
@@ -146,9 +216,41 @@ export function AdminNav({
         </button>
       </div>
       <nav className="flex-1 space-y-0.5 overflow-y-auto px-2 py-3">
-        {adminLinks.map((link) => (
+        {primaryLinks.map((link) => (
           <NavLink key={link.href} link={link} />
         ))}
+        <div className="my-2 border-t border-white/10 pt-2">
+          <p
+            className={`mb-1 px-3 text-[9px] font-medium uppercase tracking-[0.14em] text-white/25 ${
+              sidebarOpen ? "hidden xl:block" : "hidden"
+            }`}
+          >
+            Kişisel
+          </p>
+          {personalLinks.map((link) => (
+            <NavLink key={link.href} link={link} />
+          ))}
+        </div>
+        <div className="pt-1">
+          <button
+            type="button"
+            onClick={() => setMoreOpen((o) => !o)}
+            className="flex w-full items-center gap-3 rounded-r-xl px-3 py-2.5 text-white/45 hover:bg-white/5 hover:text-white/70"
+            title="Diğer"
+          >
+            <MoreHorizontal className="h-5 w-5 shrink-0" />
+            <span
+              className={`text-sm font-light ${
+                sidebarOpen ? "hidden xl:inline" : "hidden"
+              }`}
+            >
+              Diğer {moreOpen ? "▴" : "▾"}
+            </span>
+          </button>
+          {moreOpen
+            ? moreLinks.map((link) => <NavLink key={link.href} link={link} />)
+            : null}
+        </div>
       </nav>
       <div className="border-t border-white/10 px-2 py-3">
         {!isSimpleAuth && sidebarOpen && (
@@ -161,7 +263,9 @@ export function AdminNav({
           className="flex w-full items-center gap-3 rounded-r-xl px-3 py-2.5 text-sm font-light text-white/60 hover:bg-white/5 hover:text-white"
         >
           <LogOut className="h-5 w-5 shrink-0" />
-          <span className={sidebarOpen ? "hidden xl:inline" : "hidden"}>Çıkış</span>
+          <span className={sidebarOpen ? "hidden xl:inline" : "hidden"}>
+            Çıkış
+          </span>
         </button>
       </div>
     </>
@@ -169,14 +273,14 @@ export function AdminNav({
 
   return (
     <>
-      {/* Sabit sol sidebar — açılır kapanır panel */}
       <aside
-        className={`fixed left-0 top-0 z-50 hidden h-screen w-[72px] flex-col border-r border-white/10 bg-black/30 shadow-[4px_0_32px_-8px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-[width] duration-200 lg:flex ${sidebarOpen ? "xl:w-[200px]" : ""}`}
+        className={`fixed left-0 top-0 z-50 hidden h-screen w-[72px] flex-col border-r border-white/10 bg-black/30 shadow-[4px_0_32px_-8px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-[width] duration-200 lg:flex ${
+          sidebarOpen ? "xl:w-[200px]" : ""
+        }`}
       >
         <SidebarContent />
       </aside>
 
-      {/* Mobil: hamburger + çıkış */}
       <div className="fixed left-0 top-0 z-50 flex h-14 w-full items-center justify-between border-b border-white/10 bg-black/40 px-4 backdrop-blur-xl lg:hidden">
         <button
           type="button"
@@ -186,7 +290,10 @@ export function AdminNav({
         >
           <Menu className="h-5 w-5" />
         </button>
-        <Link href="/secretgate" className="text-sm font-medium text-white/80 hover:text-white">
+        <Link
+          href="/secretgate/planner"
+          className="text-sm font-medium text-white/80 hover:text-white"
+        >
           Admin
         </Link>
         <button

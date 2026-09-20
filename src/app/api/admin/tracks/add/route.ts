@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   const form = await req.formData();
   const title = String(form.get("title") ?? "").trim();
   const artist = String(form.get("artist") ?? "").trim();

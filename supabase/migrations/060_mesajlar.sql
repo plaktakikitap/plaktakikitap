@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS mesajlar (
 
 CREATE INDEX IF NOT EXISTS idx_mesajlar_tarih ON mesajlar (tarih DESC);
 
+ALTER TABLE mesajlar ENABLE ROW LEVEL SECURITY;
+
 CREATE POLICY "mesajlar_anon_insert"
   ON mesajlar FOR INSERT
   TO anon

@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import Image from "next/image";
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Photo } from "@/types/photos";
 import type { PhotoLightboxItem } from "./PhotoLightbox";
+import { PhotoImage } from "./PhotoImage";
 
 const PhotoLightbox = dynamic(
   () => import("./PhotoLightbox").then((m) => ({ default: m.PhotoLightbox })),
@@ -88,7 +88,7 @@ export function PhotosGrid({ photos, categoryFilter = null }: PhotosGridProps) {
         className="block w-full text-left"
       >
         <span className="block overflow-hidden rounded-xl transition-all duration-200 group-hover:-translate-y-0.5 group-hover:opacity-95">
-          <Image
+          <PhotoImage
             src={photo.image_url}
             alt={photo.caption || "Fotoğraf"}
             width={600}

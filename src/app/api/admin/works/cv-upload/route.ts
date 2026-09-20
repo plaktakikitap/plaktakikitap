@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { setCvDownloadSetting, uploadCvPdf } from "@/lib/works";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 const MAX_SIZE = 15 * 1024 * 1024;
 
@@ -13,6 +14,9 @@ function isPdfFile(file: File): boolean {
 }
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   try {
     const formData = await req.formData();
     const file = formData.get("file") as File | null;

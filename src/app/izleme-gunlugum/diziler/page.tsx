@@ -1,13 +1,24 @@
-import { getPublicSeries, getPublicFavoriteSeries, getCinemaStats } from "@/lib/db/queries";
+import type { Metadata } from "next";
+import Link from "next/link";
+import {
+  getPublicSeries,
+  getPublicFavoriteSeries,
+  getCinemaStats,
+} from "@/lib/db/queries";
 import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { WatchLogStats } from "@/components/watch-log/WatchLogStats";
 import { FavoriteVitrinSeries } from "@/components/watch-log/FavoriteVitrinSeries";
-import { SeriesFilterableSection } from "@/components/watch-log/SeriesFilterableSection";
-import Link from "next/link";
+import { WatchPosterGrid } from "@/components/watch-log/WatchPosterGrid";
+import { seriesToPosterItem } from "@/lib/watch-log-poster";
 import type { ContentItem, Series } from "@/types/database";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Diziler | İzleme Günlüğüm | Plaktaki Kitap",
+  description: "İzlediğim diziler ve onlara dair düşüncelerim.",
+};
 
 type SeriesItem = ContentItem & { series: Series | Series[] | null };
 
@@ -30,16 +41,23 @@ export default async function IzlemeGunlugumDizilerPage() {
     totalSeriesWatchTimeMinutes = stats.totalSeriesWatchTimeMinutes;
     seriesWatchedThisMonth = stats.seriesWatchedThisMonth;
   } catch {
-    // Supabase not configured – show empty state
+    // empty
   }
 
+  const posterItems = seriesList.map(seriesToPosterItem);
   const lastSeriesTitle =
-    seriesList.length > 0 ? seriesList[seriesList.length - 1].title : null;
+    posterItems.length > 0
+      ? [...posterItems].sort((a, b) => {
+          const ta = a.watchedAt ? new Date(a.watchedAt).getTime() : 0;
+          const tb = b.watchedAt ? new Date(b.watchedAt).getTime() : 0;
+          return tb - ta;
+        })[0]?.title ?? null
+      : null;
 
   return (
     <PageTransitionTarget layoutId="card-/izleme-gunlugum/diziler">
       <main className="relative min-h-screen text-white">
-        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+        <div className="mx-auto max-w-6xl px-3 py-8 sm:px-6 sm:py-10">
           <div className="mb-6 sm:mb-8">
             <Link
               href="/izleme-gunlugum"
@@ -66,7 +84,13 @@ export default async function IzlemeGunlugumDizilerPage() {
 
           <FavoriteVitrinSeries seriesList={favoriteSeries} />
 
-          <SeriesFilterableSection seriesList={seriesList} />
+          <div className="mt-8">
+            <WatchPosterGrid
+              items={posterItems}
+              initialKind="series"
+              showKindFilter={false}
+            />
+          </div>
         </div>
       </main>
     </PageTransitionTarget>

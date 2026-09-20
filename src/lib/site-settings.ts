@@ -66,6 +66,16 @@ export async function getSiteSettings(): Promise<SiteSettingsValue> {
   })();
 }
 
+/** Public-safe settings (never includes password hash). */
+export async function getPublicSiteSettings(): Promise<
+  Omit<SiteSettingsValue, "admin_password_hash">
+> {
+  const settings = await getSiteSettings();
+  const { admin_password_hash: _h, ...publicSettings } = settings;
+  return publicSettings;
+}
+
+
 export async function updateSiteSettings(partial: Partial<SiteSettingsValue>): Promise<{ id: string } | { error: string }> {
   const supabase = await createServerClient();
   const { data: existing } = await supabase

@@ -3,7 +3,7 @@
 import { useId } from "react";
 
 const MAX = 5;
-const STEP = 0.25;
+const STEP = 0.5;
 const OPTIONS = (() => {
   const arr: number[] = [];
   for (let v = 0; v <= MAX; v += STEP) arr.push(Math.round(v * 100) / 100);
@@ -20,7 +20,7 @@ function StarRow({ sizeClass }: { sizeClass: string }) {
 }
 
 interface StarRatingDisplayProps {
-  /** 0–5 arası, 0.25 adımlı */
+  /** 0–5 arası, 0.5 adımlı */
   value: number | null | undefined;
   size?: "sm" | "md" | "lg";
   className?: string;
@@ -118,7 +118,7 @@ export function StarRatingInput({
         </button>
       </div>
       <label htmlFor={id} className="sr-only">
-        Puan (0–5, 0.25 adım)
+        Puan (0–5, 0.5 adım)
       </label>
       <input
         id={id}

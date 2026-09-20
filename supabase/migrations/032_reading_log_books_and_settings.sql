@@ -104,6 +104,8 @@ DROP TABLE IF EXISTS books;
 
 ALTER TABLE books_new RENAME TO books;
 
+ALTER TABLE books ENABLE ROW LEVEL SECURITY;
+
 CREATE POLICY "public_read_books"
   ON books FOR SELECT
   USING (visibility IN ('public', 'unlisted'));

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 type TimelineEntry = {
   id?: string;
@@ -12,6 +13,9 @@ type TimelineEntry = {
 
 /** Admin: Create timeline entry */
 export async function POST(req: NextRequest) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   try {
     const body = (await req.json()) as TimelineEntry;
     const supabase = createAdminClient();

@@ -1,13 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPlaktakiKitapItems, createPlaktakiKitapItem } from "@/lib/plaktaki-kitap";
 import { parseYouTubeVideoId } from "@/lib/works-utils";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 export async function GET() {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   const items = await getPlaktakiKitapItems();
   return NextResponse.json(items);
 }
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   try {
     const body = await req.json();
     if (!body || typeof body !== "object") {

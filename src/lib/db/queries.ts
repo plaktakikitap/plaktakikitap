@@ -1281,6 +1281,26 @@ export async function updateManualTrack(
 
 export async function deleteManualTrack(id: string) {
   const supabase = await createServerClient();
+  const { data: row } = await supabase
+    .from("manual_now_playing")
+    .select("audio_url, album_art_url")
+    .eq("id", id)
+    .maybeSingle();
+
+  const paths: string[] = [];
+  for (const url of [row?.audio_url, row?.album_art_url]) {
+    if (typeof url !== "string" || !url) continue;
+    if (url.includes("/music/")) {
+      const path = url.split("/music/")[1]?.split("?")[0];
+      if (path) paths.push(decodeURIComponent(path));
+    }
+  }
+  if (paths.length) {
+    const { createAdminClient } = await import("@/lib/supabase/admin");
+    const admin = createAdminClient();
+    await admin.storage.from("music").remove(paths);
+  }
+
   const { error } = await supabase.from("manual_now_playing").delete().eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/");

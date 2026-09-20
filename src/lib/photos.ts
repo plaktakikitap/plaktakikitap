@@ -5,9 +5,22 @@ import type { Photo, PhotoType } from "@/types/photos";
 export type { Photo, PhotoType } from "@/types/photos";
 
 const PHOTOS_BUCKET = "photos-media";
-const SIGNED_URL_EXPIRES = 60 * 60; // 1 hour
+const MAX_PHOTO_BYTES = 10 * 1024 * 1024;
+const ALLOWED_PHOTO_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+]);
 
-/** Public: all photos, newest first (created_at desc). Signs storage paths to signed URLs. */
+function publicPhotoUrl(supabase: ReturnType<typeof createAdminClient>, pathOrUrl: string): string {
+  if (!pathOrUrl) return pathOrUrl;
+  if (pathOrUrl.startsWith("http")) return pathOrUrl;
+  const { data } = supabase.storage.from(PHOTOS_BUCKET).getPublicUrl(pathOrUrl);
+  return data.publicUrl;
+}
+
+/** Public: all photos, newest first. Resolves storage paths to public URLs. */
 export async function getPhotosPublic(): Promise<Photo[]> {
   const supabase = createAdminClient();
   const { data, error } = await supabase
@@ -22,23 +35,16 @@ export async function getPhotosPublic(): Promise<Photo[]> {
     camera: r.camera ?? null,
     year: r.year ?? null,
   })) as Photo[];
-  return signPhotoUrls(rows);
+  return resolvePhotoUrls(rows);
 }
 
-/** Sign image_url when it is a storage path (not http). */
-async function signPhotoUrls<T extends { image_url: string }>(items: T[]): Promise<T[]> {
+/** Resolve image_url when it is a storage path (not http). */
+async function resolvePhotoUrls<T extends { image_url: string }>(items: T[]): Promise<T[]> {
   const supabase = createAdminClient();
-  const out = await Promise.all(
-    items.map(async (item) => {
-      const url = item.image_url;
-      if (!url || url.startsWith("http")) return item;
-      const { data } = await supabase.storage
-        .from(PHOTOS_BUCKET)
-        .createSignedUrl(url, SIGNED_URL_EXPIRES);
-      return { ...item, image_url: data?.signedUrl ?? url };
-    })
-  );
-  return out;
+  return items.map((item) => ({
+    ...item,
+    image_url: publicPhotoUrl(supabase, item.image_url),
+  }));
 }
 
 /** Admin: all photos */
@@ -72,8 +78,8 @@ export async function createPhoto(payload: PhotoInsert): Promise<Photo | null> {
     .select()
     .single();
   if (error) return null;
-  const signed = await signPhotoUrls([data as Photo]);
-  return signed[0] ?? null;
+  const resolved = await resolvePhotoUrls([data as Photo]);
+  return resolved[0] ?? null;
 }
 
 export async function updatePhoto(
@@ -97,26 +103,90 @@ export async function updatePhoto(
     .select()
     .single();
   if (error) return null;
-  const signed = await signPhotoUrls([data as Photo]);
-  return signed[0] ?? null;
+  const resolved = await resolvePhotoUrls([data as Photo]);
+  return resolved[0] ?? null;
 }
 
-export async function deletePhoto(id: string): Promise<boolean> {
+export async function deletePhoto(id: string): Promise<boolean | { error: string }> {
   const supabase = createAdminClient();
+  const { data: row, error: fetchErr } = await supabase
+    .from("photos")
+    .select("image_url")
+    .eq("id", id)
+    .maybeSingle();
+  if (fetchErr) return { error: fetchErr.message };
+  if (!row) return { error: "Fotoğraf bulunamadı." };
+
+  const imageUrl = row.image_url as string;
+  // Storage path (not full URL)
+  if (imageUrl && !imageUrl.startsWith("http")) {
+    const { error: storageError } = await supabase.storage
+      .from(PHOTOS_BUCKET)
+      .remove([imageUrl]);
+    if (storageError) {
+      console.error("Photo storage delete:", storageError);
+      return { error: "Dosya silinemedi" };
+    }
+  } else if (imageUrl?.includes(`/${PHOTOS_BUCKET}/`)) {
+    const path = imageUrl.split(`/${PHOTOS_BUCKET}/`)[1];
+    if (path) {
+      const { error: storageError } = await supabase.storage
+        .from(PHOTOS_BUCKET)
+        .remove([path]);
+      if (storageError) {
+        console.error("Photo storage delete:", storageError);
+        return { error: "Dosya silinemedi" };
+      }
+    }
+  }
+
   const { error } = await supabase.from("photos").delete().eq("id", id);
-  return !error;
+  if (error) return { error: error.message };
+  return true;
 }
 
-/** Upload file to photos-media; returns storage path. */
+
+export type UploadPhotoResult =
+  | { path: string }
+  | { error: string };
+
+function uniquePhotoFileName(file: File): string {
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+  const rand = Math.random().toString(36).slice(2, 11);
+  return `${Date.now()}-${rand}.${ext}`;
+}
+
+/** Upload file to photos-media; returns storage path (not public URL). */
 export async function uploadPhotoFile(
   file: File,
   path?: string
-): Promise<{ path: string } | null> {
+): Promise<UploadPhotoResult> {
+  if (!file?.size) {
+    return { error: "Dosya seçin." };
+  }
+  if (file.size > MAX_PHOTO_BYTES) {
+    return { error: "Dosya 10MB'tan küçük olmalı." };
+  }
+  if (!ALLOWED_PHOTO_TYPES.has(file.type)) {
+    return { error: "Sadece JPG, PNG, WEBP veya GIF yüklenebilir." };
+  }
+
   const supabase = createAdminClient();
-  const name = path ?? `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+  const name = path?.trim() || uniquePhotoFileName(file);
   const { data, error } = await supabase.storage
     .from(PHOTOS_BUCKET)
-    .upload(name, file, { upsert: true });
-  if (error) return null;
+    .upload(name, file, {
+      cacheControl: "3600",
+      upsert: false,
+      contentType: file.type,
+    });
+
+  if (error) {
+    console.error("Upload hatası:", error);
+    if (error.message?.toLowerCase().includes("already exists")) {
+      return { error: "Aynı isimde dosya zaten var. Tekrar deneyin." };
+    }
+    return { error: `Yükleme başarısız: ${error.message}` };
+  }
   return { path: data.path };
 }

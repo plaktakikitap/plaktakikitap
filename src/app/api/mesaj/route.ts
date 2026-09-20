@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase-server";
+import { sanitizeText } from "@/lib/sanitize";
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,10 +25,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const temizIsim = sanitizeText(isim.trim());
+    const temizMesaj = sanitizeText(mesaj.trim());
+
     const supabase = await supabaseServer();
     const { error } = await supabase.from("mesajlar").insert({
-      isim: isim.trim(),
-      mesaj: mesaj.trim(),
+      isim: temizIsim,
+      mesaj: temizMesaj,
     });
 
     if (error) {

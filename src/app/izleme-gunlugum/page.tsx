@@ -1,57 +1,82 @@
-import Link from "next/link";
+import type { Metadata } from "next";
+import {
+  getPublicFilms,
+  getPublicSeries,
+  getCinemaStats,
+} from "@/lib/db/queries";
 import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { Film, Tv } from "lucide-react";
+import { WatchLogStats } from "@/components/watch-log/WatchLogStats";
+import { WatchPosterGrid } from "@/components/watch-log/WatchPosterGrid";
+import {
+  filmToPosterItem,
+  seriesToPosterItem,
+  type WatchPosterItem,
+} from "@/lib/watch-log-poster";
 
 export const dynamic = "force-dynamic";
 
-export default function IzlemeGunlugumSelectionPage() {
+export const metadata: Metadata = {
+  title: "İzleme Günlüğüm | Plaktaki Kitap",
+  description: "İzlediğim filmler ve diziler, onlara dair düşüncelerim.",
+};
+
+export default async function IzlemeGunlugumPage() {
+  let items: WatchPosterItem[] = [];
+  let totalFilms = 0;
+  let totalSeries = 0;
+  let totalFilmMinutes = 0;
+  let totalSeriesMinutes = 0;
+  let filmThisYear = 0;
+  let lastTitle: string | null = null;
+
+  try {
+    const [films, seriesList, stats] = await Promise.all([
+      getPublicFilms(),
+      getPublicSeries(),
+      getCinemaStats(),
+    ]);
+    items = [
+      ...films.map(filmToPosterItem),
+      ...seriesList.map(seriesToPosterItem),
+    ];
+    totalFilms = stats.totalFilms;
+    totalSeries = stats.totalSeries;
+    totalFilmMinutes = stats.totalFilmWatchTimeMinutes;
+    totalSeriesMinutes = stats.totalSeriesWatchTimeMinutes;
+    filmThisYear = stats.filmWatchedThisYear;
+    const newest = [...items].sort((a, b) => {
+      const ta = a.watchedAt ? new Date(a.watchedAt).getTime() : 0;
+      const tb = b.watchedAt ? new Date(b.watchedAt).getTime() : 0;
+      return tb - ta;
+    })[0];
+    lastTitle = newest?.title ?? null;
+  } catch {
+    // empty
+  }
+
   return (
     <PageTransitionTarget layoutId="card-/izleme-gunlugum">
       <main className="relative min-h-screen text-white">
-        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
+        <div className="mx-auto max-w-6xl px-3 py-8 sm:px-6 sm:py-10">
           <PageHeader
             layoutId="nav-/izleme-gunlugum"
             title="İzleme Günlüğüm"
             titleClassName="!text-white font-bold"
-            subtitle="izlediğim diziler, filmler ve onlara olan yorumlarım"
+            subtitle="izlediğim filmler, diziler ve onlara dair düşüncelerim"
             subtitleClassName="text-white/70"
           />
 
-          <div className="grid gap-6 sm:grid-cols-2 sm:gap-8">
-            <Link
-              href="/izleme-gunlugum/filmler"
-              className="group flex min-h-[220px] flex-col items-center justify-center rounded-2xl border border-white/20 bg-white/10 p-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-amber-400/40 hover:bg-white/15 hover:shadow-[0_24px_80px_rgba(0,0,0,0.35),0_0_32px_rgba(251,191,36,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0e14] sm:min-h-[260px]"
-            >
-              <Film
-                className="mb-4 h-14 w-14 text-amber-400/90 transition-colors group-hover:text-amber-300 sm:h-16 sm:w-16"
-                strokeWidth={1.5}
-                aria-hidden
-              />
-              <span className="font-editorial text-2xl font-medium text-white sm:text-3xl">
-                Filmler
-              </span>
-              <span className="mt-2 text-sm text-white/60">
-                Film koleksiyonum ve yorumlarım
-              </span>
-            </Link>
+          <WatchLogStats
+            variant="film"
+            lastTitle={lastTitle}
+            totalCount={totalFilms + totalSeries}
+            totalMinutes={totalFilmMinutes + totalSeriesMinutes}
+            thisYearCount={filmThisYear}
+          />
 
-            <Link
-              href="/izleme-gunlugum/diziler"
-              className="group flex min-h-[220px] flex-col items-center justify-center rounded-2xl border border-white/20 bg-white/10 p-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-amber-400/40 hover:bg-white/15 hover:shadow-[0_24px_80px_rgba(0,0,0,0.35),0_0_32px_rgba(251,191,36,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0e14] sm:min-h-[260px]"
-            >
-              <Tv
-                className="mb-4 h-14 w-14 text-amber-400/90 transition-colors group-hover:text-amber-300 sm:h-16 sm:w-16"
-                strokeWidth={1.5}
-                aria-hidden
-              />
-              <span className="font-editorial text-2xl font-medium text-white sm:text-3xl">
-                Diziler
-              </span>
-              <span className="mt-2 text-sm text-white/60">
-                Dizi koleksiyonum ve yorumlarım
-              </span>
-            </Link>
+          <div className="mt-8">
+            <WatchPosterGrid items={items} showKindFilter />
           </div>
         </div>
       </main>

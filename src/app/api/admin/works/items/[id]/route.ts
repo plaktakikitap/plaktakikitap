@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updateWorksItem, deleteWorksItem } from "@/lib/works";
 import type { WorksItemType, WorksVisibility } from "@/lib/works";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 function parseBody(body: unknown): Record<string, unknown> | null {
   if (!body || typeof body !== "object") return null;
@@ -25,6 +26,9 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   const { id } = await params;
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
   try {
@@ -43,6 +47,9 @@ export async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   const { id } = await params;
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
   const result = await deleteWorksItem(id);

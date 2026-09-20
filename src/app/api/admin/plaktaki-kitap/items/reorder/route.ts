@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { reorderPlaktakiKitapItems } from "@/lib/plaktaki-kitap";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   try {
     const body = await req.json();
     if (!Array.isArray(body?.orderedIds)) {

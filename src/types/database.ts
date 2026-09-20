@@ -63,6 +63,12 @@ export interface Series {
   favorite_order?: number | null;
   /** İzlenme tarihi; "Son izlediğim" ve raf sırası */
   watched_at?: string | null;
+  /** Yapım yılı (ilk sezon) */
+  year?: number | null;
+  /** Tür etiketleri */
+  genre_tags?: string[] | null;
+  /** 0–5 puan */
+  rating_5?: number | null;
   /** Dizi yaratıcısı veya yönetmeni */
   creator_or_director?: string | null;
   /** Ön kapak (poster) görseli */

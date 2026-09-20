@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updateWriting, deleteWriting } from "@/lib/writings";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 export async function PATCH(
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   try {
     const { id } = await context.params;
     const body = await req.json();
@@ -31,6 +35,9 @@ export async function DELETE(
   _req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   const { id } = await context.params;
   const ok = await deleteWriting(id);
   if (!ok) return NextResponse.json({ error: "Delete failed" }, { status: 500 });

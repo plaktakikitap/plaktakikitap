@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { formatRelativeTimeTr } from "@/lib/format-relative-time";
 import type { LastFmNowPlaying as LastFmTrack } from "@/types/now-playing";
@@ -86,12 +85,10 @@ export default function LastFmNowPlaying({ initial }: { initial: LastFmTrack }) 
                 }}
               >
                 {track.albumArt ? (
-                  <Image
+                  <img
                     src={track.albumArt}
                     alt=""
-                    fill
-                    className="object-cover"
-                    sizes="32px"
+                    className="h-full w-full object-cover"
                   />
                 ) : (
                   <span className="text-[0.5rem] font-medium text-amber-200/50">♪</span>

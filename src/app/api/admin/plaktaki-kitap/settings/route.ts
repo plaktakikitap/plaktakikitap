@@ -1,13 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPlaktakiKitapSettings, updatePlaktakiKitapSettings } from "@/lib/plaktaki-kitap";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 export async function GET() {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   const settings = await getPlaktakiKitapSettings();
   if (!settings) return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json(settings);
 }
 
 export async function PATCH(req: NextRequest) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   try {
     const body = await req.json();
     if (!body || typeof body !== "object") {

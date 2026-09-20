@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getWorksAdmin, createWorksItem } from "@/lib/works";
 import type { WorksItemType, WorksVisibility } from "@/lib/works";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 export async function GET() {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   const items = await getWorksAdmin();
   return NextResponse.json(items);
 }
@@ -43,6 +47,9 @@ function parseBody(body: unknown): {
 }
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   try {
     const body = await req.json();
     const input = parseBody(body);

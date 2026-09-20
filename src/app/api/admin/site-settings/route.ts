@@ -3,13 +3,18 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { SiteSettingsValue } from "@/lib/site-settings";
 import { getSiteSettings } from "@/lib/site-settings";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   try {
     const settings = await getSiteSettings();
-    return NextResponse.json(settings);
+    const { admin_password_hash: _hash, ...safe } = settings;
+    return NextResponse.json(safe);
   } catch (e) {
     const msg =
       e instanceof Error && e.message.includes("NEXT_PUBLIC_SUPABASE_URL")
@@ -22,8 +27,13 @@ export async function GET() {
 }
 
 export async function PATCH(req: NextRequest) {
+  const denied = await requireAdminApi();
+  if (denied) return denied;
+
   try {
     const body = (await req.json()) as Partial<SiteSettingsValue>;
+    const { admin_password_hash: _ignore, ...safeBody } = body as SiteSettingsValue &
+      Record<string, unknown>;
     const supabase = createAdminClient();
 
     const { data: existing } = await supabase
@@ -34,7 +44,13 @@ export async function PATCH(req: NextRequest) {
       .maybeSingle();
 
     const current = (existing?.value as Record<string, unknown> | null) ?? {};
-    const next = { ...current, ...body };
+    const next = { ...current, ...safeBody };
+    // Preserve existing hash; never overwrite via generic PATCH
+    if (current.admin_password_hash != null) {
+      next.admin_password_hash = current.admin_password_hash;
+    } else {
+      delete next.admin_password_hash;
+    }
 
     if (existing?.id) {
       const { error } = await supabase

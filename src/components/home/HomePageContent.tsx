@@ -3,7 +3,9 @@
 import HeroSection from "@/components/HeroSection";
 import { IntroCards } from "@/components/home/IntroCards";
 import MessyBulletJournal from "@/components/planner/MessyBulletJournal";
+import { KaralamalarHomeSection } from "@/components/karalamalar/KaralamalarHomeSection";
 import type { Video } from "@/types/videos";
+import type { Karalama } from "@/lib/karalamalar";
 
 interface HomePageContentProps {
   children?: React.ReactNode;
@@ -13,6 +15,7 @@ interface HomePageContentProps {
   introSubtitle?: string | null;
   introPhotoEymenUrl?: string | null;
   introPhotoPlaktakikitapUrl?: string | null;
+  karalamalarPreview?: Karalama[];
 }
 
 export function HomePageContent({
@@ -23,6 +26,7 @@ export function HomePageContent({
   introSubtitle = "yanii... nam-ı diğer Plaktaki Kitap",
   introPhotoEymenUrl = "/images/eymen-studio.jpg",
   introPhotoPlaktakikitapUrl = "/images/logo.png",
+  karalamalarPreview = [],
 }: HomePageContentProps) {
   return (
     <>
@@ -40,6 +44,8 @@ export function HomePageContent({
             latestVideoThumb={latestVideoThumb}
           />
         </div>
+
+        <KaralamalarHomeSection items={karalamalarPreview} />
 
         {/* Bullet journal — messy ajanda (flip + modal + previews) */}
         <section id="ajanda" className="scroll-mt-6">

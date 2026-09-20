@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updatePlannerEntryAdmin } from "@/lib/planner-admin";
+import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 export async function PATCH(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const denied = await requireAdminApi(request);
+  if (denied) return denied;
+
   try {
     const { id } = await params;
-    const body = await _request.json();
+    const body = await request.json();
 
     const updates: Parameters<typeof updatePlannerEntryAdmin>[1] = {};
     if (body.title !== undefined) updates.title = body.title;
@@ -15,7 +19,8 @@ export async function PATCH(
     if (body.tags !== undefined) updates.tags = body.tags;
     if (body.mood !== undefined) updates.mood = body.mood;
     if (body.summaryQuote !== undefined) updates.summaryQuote = body.summaryQuote;
-    if (body.stickerSelection !== undefined) updates.stickerSelection = body.stickerSelection;
+    if (body.stickerSelection !== undefined)
+      updates.stickerSelection = body.stickerSelection;
 
     const result = await updatePlannerEntryAdmin(id, updates);
     if (result.error) {

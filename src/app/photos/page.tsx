@@ -5,7 +5,8 @@ import SiteBackground from "@/components/SiteBackground";
 import { PhotosContent } from "@/components/photos/PhotosContent";
 import { PhotosPageSkeleton } from "@/components/photos/PhotosPageSkeleton";
 
-export const revalidate = 60;
+/** Public photo URLs do not expire; longer ISR is safe. */
+export const revalidate = 300;
 
 export default async function PhotosPage() {
   return (
