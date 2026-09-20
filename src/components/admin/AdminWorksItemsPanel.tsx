@@ -4,11 +4,16 @@ import { useRouter } from "next/navigation";
 import { useState, useRef } from "react";
 import type { WorksItem, WorksItemType } from "@/types/works";
 import { AdminImageUpload } from "./AdminImageUpload";
-import { FileText, Loader2 } from "lucide-react";
-
-const inputClass = "w-full rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-500";
-const labelClass = "mb-1 block text-sm font-medium text-[var(--muted)]";
-const btnClass = "rounded-lg bg-[var(--accent)] px-3 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50";
+import {
+  Briefcase,
+  FileText,
+  Loader2,
+  Plus,
+  Trash2,
+  GripVertical,
+  Upload,
+  ExternalLink,
+} from "lucide-react";
 
 const TABS: { id: WorksItemType | "cv"; label: string }[] = [
   { id: "youtube", label: "Videolar" },
@@ -20,6 +25,16 @@ const TABS: { id: WorksItemType | "cv"; label: string }[] = [
   { id: "cv_role", label: "CV Roller" },
   { id: "cv", label: "CV PDF" },
 ];
+
+const TAB_LABELS: Record<WorksItemType | "cv", string> = Object.fromEntries(
+  TABS.map((t) => [t.id, t.label])
+) as Record<WorksItemType | "cv", string>;
+
+const VISIBILITY_OPTIONS = [
+  { value: "public", label: "Herkese açık" },
+  { value: "unlisted", label: "Listelenmez" },
+  { value: "private", label: "Gizli" },
+] as const;
 
 type Props = {
   items: WorksItem[];
@@ -35,7 +50,9 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
   const [cvUrl, setCvUrl] = useState(cvDownloadUrl);
   const [certificatePdfUrl, setCertificatePdfUrl] = useState<string | null>(null);
   const [pdfUploading, setPdfUploading] = useState(false);
+  const [cvPdfUploading, setCvPdfUploading] = useState(false);
   const pdfInputRef = useRef<HTMLInputElement>(null);
+  const cvPdfInputRef = useRef<HTMLInputElement>(null);
 
   const filtered =
     tab === "cv" ? [] : items.filter((i) => (tab === "photo" ? i.type === tab : i.type === tab));
@@ -93,7 +110,7 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
     setLoading(false);
     if (!res.ok) {
       const j = await res.json().catch(() => ({}));
-      setError(j.error ?? "Hata");
+      setError(j.error ?? "Kaydedilemedi.");
       return;
     }
     form.reset();
@@ -114,11 +131,11 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
     setPdfUploading(false);
     e.target.value = "";
     if (res.ok && data.url) setCertificatePdfUrl(data.url);
-    else setError(data.error ?? "PDF yükleme başarısız");
+    else setError(data.error ?? "PDF yükleme başarısız.");
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Silmek istediğinize emin misiniz?")) return;
+    if (!confirm("Bu öğeyi silmek istediğinize emin misiniz?")) return;
     setLoading(true);
     await fetch(`/api/admin/works/items/${id}`, { method: "DELETE" });
     setLoading(false);
@@ -134,193 +151,528 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
     if (res.ok) await refetch();
   }
 
-  async function saveCvUrl(e: React.FormEvent) {
-    e.preventDefault();
+  async function saveCvUrl(url?: string) {
+    const value = (url ?? cvUrl).trim();
     setLoading(true);
+    setError(null);
     const res = await fetch("/api/admin/works/settings", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ key: "cv_download_url", value: cvUrl }),
+      body: JSON.stringify({ key: "cv_download_url", value }),
     });
     setLoading(false);
-    if (res.ok) router.refresh();
-    else setError("Kaydetme hatası");
+    if (res.ok) {
+      setCvUrl(value);
+      router.refresh();
+    } else {
+      setError("Kaydetme hatası.");
+    }
+    return res.ok;
   }
+
+  async function handleCvPdfSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.type !== "application/pdf") {
+      setError("Lütfen PDF dosyası seçin.");
+      e.target.value = "";
+      return;
+    }
+    setCvPdfUploading(true);
+    setError(null);
+    const formData = new FormData();
+    formData.set("file", file);
+    formData.set("folder", "cv");
+    const res = await fetch("/api/admin/upload/file", { method: "POST", body: formData });
+    const data = await res.json().catch(() => ({}));
+    setCvPdfUploading(false);
+    e.target.value = "";
+    if (!res.ok || !data.url) {
+      setError(data.error ?? "PDF yükleme başarısız.");
+      return;
+    }
+    setCvUrl(data.url);
+    const saved = await saveCvUrl(data.url);
+    if (!saved) setError("PDF yüklendi ancak kaydedilemedi. Linki elle kaydedin.");
+  }
+
+  async function handleCvFormSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    await saveCvUrl();
+  }
+
+  const activeTabLabel = TAB_LABELS[tab];
 
   return (
     <div className="space-y-6">
-      {error && <p className="rounded bg-red-500/10 px-3 py-2 text-sm text-red-600">{error}</p>}
+      {error ? <p className="admin-error">{error}</p> : null}
 
-      <div className="flex flex-wrap gap-2 border-b border-[var(--card-border)] pb-2">
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            onClick={() => setTab(t.id)}
-            className={`rounded px-3 py-1.5 text-sm ${tab === t.id ? "bg-[var(--accent-soft)] text-[var(--accent)]" : "text-[var(--muted)] hover:text-[var(--foreground)]"}`}
-          >
-            {t.label}
-          </button>
-        ))}
+      <div className="admin-bento-card p-2">
+        <div className="flex flex-wrap gap-1.5">
+          {TABS.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => setTab(t.id)}
+              className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                tab === t.id
+                  ? "bg-[rgba(212,175,55,0.15)] text-[#d4af37] shadow-[0_0_20px_rgba(212,175,55,0.12)]"
+                  : "text-white/50 hover:bg-white/[0.04] hover:text-white/80"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {tab === "cv" ? (
-        <section className="rounded-xl border border-[var(--card-border)] bg-[var(--card)] p-4">
-          <h3 className="mb-3 font-medium">CV İndir linki</h3>
-          <form onSubmit={saveCvUrl} className="flex flex-wrap items-end gap-3">
-            <div className="min-w-[280px] flex-1">
-              <label className={labelClass}>PDF URL</label>
-              <input type="text" className={inputClass} value={cvUrl} onChange={(e) => setCvUrl(e.target.value)} placeholder="https://..." />
+        <section className="admin-bento-card p-6 sm:p-8">
+          <div className="mb-6 flex items-center gap-3 border-b border-white/[0.06] pb-5">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(212,175,55,0.12)] text-[#d4af37]">
+              <FileText className="h-5 w-5" />
             </div>
-            <button type="submit" className={btnClass} disabled={loading}>Kaydet</button>
+            <div>
+              <h3 className="admin-section-title">CV PDF</h3>
+              <p className="mt-0.5 text-sm text-white/45">
+                Bilgisayarınızdan yükleyin veya bir link girin
+              </p>
+            </div>
+          </div>
+          <form onSubmit={handleCvFormSubmit} className="space-y-5">
+            <div>
+              <label className="admin-label">PDF yükle</label>
+              <input
+                type="file"
+                ref={cvPdfInputRef}
+                accept="application/pdf"
+                className="hidden"
+                onChange={handleCvPdfSelect}
+              />
+              <button
+                type="button"
+                onClick={() => cvPdfInputRef.current?.click()}
+                disabled={loading || cvPdfUploading}
+                className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-white/20 bg-white/[0.04] px-4 py-8 text-sm text-white/65 transition-colors hover:border-[rgba(212,175,55,0.35)] hover:bg-white/[0.06] hover:text-white disabled:opacity-50"
+              >
+                {cvPdfUploading ? (
+                  <>
+                    <Loader2 className="h-6 w-6 animate-spin text-[#d4af37]" />
+                    PDF yükleniyor…
+                  </>
+                ) : (
+                  <>
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(212,175,55,0.12)] text-[#d4af37]">
+                      <Upload className="h-6 w-6" />
+                    </div>
+                    Bilgisayardan CV PDF seçin
+                  </>
+                )}
+              </button>
+              <p className="admin-hint">En fazla 15 MB. Yükleme sonrası otomatik kaydedilir.</p>
+            </div>
+
+            {cvUrl ? (
+              <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3">
+                <p className="text-xs font-medium uppercase tracking-wide text-white/40">Aktif CV</p>
+                <a
+                  href={cvUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 inline-flex items-center gap-1.5 break-all text-sm text-[#d4af37] hover:text-[#f4d03f]"
+                >
+                  {cvUrl.split("/").pop() ?? cvUrl}
+                  <ExternalLink className="h-3.5 w-3.5 shrink-0 opacity-70" />
+                </a>
+              </div>
+            ) : null}
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center" aria-hidden>
+                <div className="w-full border-t border-white/[0.08]" />
+              </div>
+              <div className="relative flex justify-center">
+                <span className="bg-transparent px-3 text-xs uppercase tracking-wide text-white/35">
+                  veya link girin
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <label className="admin-label" htmlFor="cv-pdf-url">
+                PDF URL
+              </label>
+              <input
+                id="cv-pdf-url"
+                type="url"
+                className="admin-input"
+                value={cvUrl}
+                onChange={(e) => setCvUrl(e.target.value)}
+                placeholder="https://..."
+              />
+              <p className="admin-hint">Harici bir depolama linki de kullanabilirsiniz.</p>
+            </div>
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="admin-btn-gold disabled:opacity-50"
+                disabled={loading || cvPdfUploading}
+              >
+                {loading ? "Kaydediliyor…" : "Linki kaydet"}
+              </button>
+            </div>
           </form>
         </section>
       ) : (
         <>
-          <ul className="space-y-2">
-            {filtered.map((item) => (
-              <li key={item.id} className="flex items-center justify-between rounded-lg bg-[var(--background)] px-3 py-2 text-sm">
-                <span className="truncate">{item.title}</span>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    className="w-14 rounded border border-[var(--card-border)] bg-[var(--background)] px-2 py-1 text-xs"
-                    defaultValue={item.sort_order}
-                    onBlur={(e) => {
-                      const v = parseInt(e.target.value, 10);
-                      if (!Number.isNaN(v)) handleSortOrder(item.id, v);
-                    }}
-                  />
-                  <button type="button" onClick={() => handleDelete(item.id)} className="text-red-500 hover:underline" disabled={loading}>
-                    Sil
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <section className="admin-bento-card p-5 sm:p-6">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <h3 className="admin-section-title">{activeTabLabel}</h3>
+              <span className="rounded-full bg-white/[0.06] px-2.5 py-0.5 text-xs text-white/45">
+                {filtered.length} öğe
+              </span>
+            </div>
 
-          <form onSubmit={handleCreate} className="mt-4 space-y-3 rounded-xl border border-[var(--card-border)] bg-[var(--card)] p-4">
-            <h3 className="font-medium">Yeni ekle</h3>
-            <div>
-              <label className={labelClass}>Başlık *</label>
-              <input name="title" type="text" className={inputClass} required />
-            </div>
-            <div>
-              <label className={labelClass}>Alt başlık</label>
-              <input name="subtitle" type="text" className={inputClass} />
-            </div>
-            {(tab === "youtube" || tab === "project" || tab === "experience" || tab === "software") && (
-              <div>
-                <label className={labelClass}>URL</label>
-                <input name="url" type="text" className={inputClass} />
-              </div>
-            )}
-            {tab === "certificate" && (
-              <div>
-                <label className={labelClass}>URL (manuel link, isteğe bağlı)</label>
-                <input name="url" type="text" className={inputClass} placeholder="https://..." disabled={!!certificatePdfUrl} />
-              </div>
-            )}
-            {tab === "photo" && (
-              <div>
-                <label className={labelClass}>Görsel (fotoğraf / çizim)</label>
-                <AdminImageUpload name="image_url" placeholder="Bilgisayar veya telefondan fotoğraf / çizim yükle" />
-              </div>
-            )}
-            {tab === "certificate" && (
-              <>
-                <div>
-                  <label className={labelClass}>Görsel (sertifika fotoğrafı veya rozet)</label>
-                  <AdminImageUpload name="image_url" placeholder="Bilgisayar veya telefondan fotoğraf yükle" />
-                </div>
-                <div>
-                  <label className={labelClass}>PDF sertifika (isteğe bağlı)</label>
-                  <input type="file" ref={pdfInputRef} accept="application/pdf" className="hidden" onChange={handleCertificatePdfSelect} />
-                  <button
-                    type="button"
-                    onClick={() => pdfInputRef.current?.click()}
-                    disabled={loading || pdfUploading}
-                    className="flex items-center gap-2 rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-50 disabled:opacity-50"
+            {filtered.length === 0 ? (
+              <p className="text-sm text-white/45">Bu sekmede henüz içerik yok.</p>
+            ) : (
+              <ul className="space-y-2">
+                {filtered.map((item) => (
+                  <li
+                    key={item.id}
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-3 py-3 sm:px-4"
                   >
-                    {pdfUploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileText className="h-4 w-4" />}
-                    {pdfUploading ? "Yükleniyor…" : certificatePdfUrl ? "PDF yüklendi ✓" : "Bilgisayar veya telefondan PDF yükle"}
-                  </button>
-                  {certificatePdfUrl && (
-                    <p className="mt-1 text-xs text-[var(--muted)]">Eklediğinizde bu link kaydedilecek. İsterseniz yeni PDF seçebilirsiniz.</p>
-                  )}
-                </div>
-              </>
+                    <div className="flex min-w-0 flex-1 items-center gap-3">
+                      <GripVertical className="hidden h-4 w-4 shrink-0 text-white/25 sm:block" aria-hidden />
+                      <div className="min-w-0">
+                        <p className="truncate font-medium text-white/90">{item.title}</p>
+                        {item.subtitle ? (
+                          <p className="mt-0.5 truncate text-xs text-white/45">{item.subtitle}</p>
+                        ) : null}
+                        <div className="mt-1 flex flex-wrap gap-1.5">
+                          {item.is_featured ? (
+                            <span className="rounded-md bg-[rgba(212,175,55,0.12)] px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-[#d4af37]">
+                              Öne çıkan
+                            </span>
+                          ) : null}
+                          <span className="rounded-md bg-white/[0.06] px-1.5 py-0.5 text-[10px] text-white/40">
+                            {VISIBILITY_OPTIONS.find((v) => v.value === item.visibility)?.label ??
+                              item.visibility}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5">
+                        <label className="sr-only" htmlFor={`sort-${item.id}`}>
+                          Sıra
+                        </label>
+                        <span className="text-[10px] uppercase tracking-wide text-white/35">Sıra</span>
+                        <input
+                          id={`sort-${item.id}`}
+                          type="number"
+                          className="admin-input w-16 !min-h-0 px-2 py-1.5 text-center text-sm"
+                          defaultValue={item.sort_order}
+                          onBlur={(e) => {
+                            const v = parseInt(e.target.value, 10);
+                            if (!Number.isNaN(v)) handleSortOrder(item.id, v);
+                          }}
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(item.id)}
+                        className="rounded-lg p-2 text-white/50 transition-colors hover:bg-red-500/15 hover:text-red-400"
+                        disabled={loading}
+                        aria-label="Sil"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             )}
-            {(tab === "project" || tab === "experience") && (
-              <>
+          </section>
+
+          <form onSubmit={handleCreate} className="admin-bento-card p-6 sm:p-8">
+            <div className="mb-6 flex items-center gap-3 border-b border-white/[0.06] pb-5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(212,175,55,0.12)] text-[#d4af37]">
+                <Plus className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="admin-section-title">Yeni {activeTabLabel.toLowerCase()} ekle</h3>
+                <p className="mt-0.5 text-sm text-white/45">Formu doldurup kaydedin</p>
+              </div>
+            </div>
+
+            <div className="space-y-5">
+              <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label className={labelClass}>Rol (meta.role)</label>
-                  <input name="role" type="text" className={inputClass} />
+                  <label className="admin-label" htmlFor="works-title">
+                    Başlık *
+                  </label>
+                  <input
+                    id="works-title"
+                    name="title"
+                    type="text"
+                    className="admin-input admin-input-lg"
+                    required
+                  />
                 </div>
                 <div>
-                  <label className={labelClass}>Metrik (meta.metrics)</label>
-                  <input name="metrics" type="text" className={inputClass} placeholder="Haftada X içerik" />
+                  <label className="admin-label" htmlFor="works-subtitle">
+                    Alt başlık
+                  </label>
+                  <input id="works-subtitle" name="subtitle" type="text" className="admin-input" />
                 </div>
-              </>
-            )}
-            {tab === "software" && (
-              <>
+              </div>
+
+              {(tab === "youtube" || tab === "project" || tab === "experience" || tab === "software") && (
                 <div>
-                  <label className={labelClass}>Stack (virgülle)</label>
-                  <input name="stack" type="text" className={inputClass} placeholder="React, Node" />
+                  <label className="admin-label" htmlFor="works-url">
+                    URL
+                  </label>
+                  <input
+                    id="works-url"
+                    name="url"
+                    type="url"
+                    className="admin-input"
+                    placeholder="https://..."
+                  />
                 </div>
+              )}
+
+              {tab === "certificate" && (
                 <div>
-                  <label className={labelClass}>GitHub URL</label>
-                  <input name="github_url" type="text" className={inputClass} />
+                  <label className="admin-label" htmlFor="works-cert-url">
+                    URL (isteğe bağlı)
+                  </label>
+                  <input
+                    id="works-cert-url"
+                    name="url"
+                    type="url"
+                    className="admin-input"
+                    placeholder="https://..."
+                    disabled={!!certificatePdfUrl}
+                  />
+                  <p className="admin-hint">PDF yüklerseniz bu alan devre dışı kalır.</p>
                 </div>
-              </>
-            )}
-            {tab === "certificate" && (
-              <>
+              )}
+
+              {tab === "photo" && (
                 <div>
-                  <label className={labelClass}>Veren (meta.issuer)</label>
-                  <input name="issuer" type="text" className={inputClass} />
+                  <label className="admin-label">Görsel</label>
+                  <AdminImageUpload
+                    name="image_url"
+                    placeholder="Fotoğraf veya çizim yükleyin"
+                  />
                 </div>
-                <div>
-                  <label className={labelClass}>Yıl (meta.year)</label>
-                  <input name="year" type="text" className={inputClass} />
-                </div>
-              </>
-            )}
-            {tab === "cv_role" && (
-              <>
-                <div>
-                  <label className={labelClass}>Kurum (meta.org)</label>
-                  <input name="org" type="text" className={inputClass} />
-                </div>
-                <div className="grid grid-cols-2 gap-2">
+              )}
+
+              {tab === "certificate" && (
+                <>
                   <div>
-                    <label className={labelClass}>Başlangıç yılı</label>
-                    <input name="start_year" type="text" className={inputClass} />
+                    <label className="admin-label">Görsel</label>
+                    <AdminImageUpload
+                      name="image_url"
+                      placeholder="Sertifika fotoğrafı veya rozet yükleyin"
+                    />
                   </div>
                   <div>
-                    <label className={labelClass}>Bitiş yılı</label>
-                    <input name="end_year" type="text" className={inputClass} />
+                    <label className="admin-label">PDF sertifika</label>
+                    <input
+                      type="file"
+                      ref={pdfInputRef}
+                      accept="application/pdf"
+                      className="hidden"
+                      onChange={handleCertificatePdfSelect}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => pdfInputRef.current?.click()}
+                      disabled={loading || pdfUploading}
+                      className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-white/20 bg-white/[0.04] px-4 py-4 text-sm text-white/65 transition-colors hover:border-[rgba(212,175,55,0.35)] hover:bg-white/[0.06] hover:text-white disabled:opacity-50"
+                    >
+                      {pdfUploading ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <FileText className="h-4 w-4 text-[#d4af37]" />
+                      )}
+                      {pdfUploading
+                        ? "Yükleniyor…"
+                        : certificatePdfUrl
+                          ? "PDF yüklendi — değiştirmek için tıklayın"
+                          : "PDF dosyası seçin"}
+                    </button>
+                    {certificatePdfUrl ? (
+                      <p className="admin-hint">Kayıt sırasında PDF linki otomatik eklenir.</p>
+                    ) : null}
+                  </div>
+                </>
+              )}
+
+              {(tab === "project" || tab === "experience") && (
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label className="admin-label" htmlFor="works-role">
+                      Rol
+                    </label>
+                    <input id="works-role" name="role" type="text" className="admin-input" />
+                  </div>
+                  <div>
+                    <label className="admin-label" htmlFor="works-metrics">
+                      Metrik
+                    </label>
+                    <input
+                      id="works-metrics"
+                      name="metrics"
+                      type="text"
+                      className="admin-input"
+                      placeholder="Haftada X içerik"
+                    />
                   </div>
                 </div>
-              </>
-            )}
-            <div>
-              <label className={labelClass}>Açıklama</label>
-              <textarea name="description" className={inputClass} rows={2} />
+              )}
+
+              {tab === "software" && (
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label className="admin-label" htmlFor="works-stack">
+                      Teknoloji yığını
+                    </label>
+                    <input
+                      id="works-stack"
+                      name="stack"
+                      type="text"
+                      className="admin-input"
+                      placeholder="React, Node, …"
+                    />
+                    <p className="admin-hint">Virgülle ayırın.</p>
+                  </div>
+                  <div>
+                    <label className="admin-label" htmlFor="works-github">
+                      GitHub URL
+                    </label>
+                    <input
+                      id="works-github"
+                      name="github_url"
+                      type="url"
+                      className="admin-input"
+                      placeholder="https://github.com/..."
+                    />
+                  </div>
+                </div>
+              )}
+
+              {tab === "certificate" && (
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label className="admin-label" htmlFor="works-issuer">
+                      Veren kurum
+                    </label>
+                    <input id="works-issuer" name="issuer" type="text" className="admin-input" />
+                  </div>
+                  <div>
+                    <label className="admin-label" htmlFor="works-year">
+                      Yıl
+                    </label>
+                    <input id="works-year" name="year" type="text" className="admin-input" placeholder="2024" />
+                  </div>
+                </div>
+              )}
+
+              {tab === "cv_role" && (
+                <>
+                  <div>
+                    <label className="admin-label" htmlFor="works-org">
+                      Kurum
+                    </label>
+                    <input id="works-org" name="org" type="text" className="admin-input" />
+                  </div>
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <div>
+                      <label className="admin-label" htmlFor="works-start-year">
+                        Başlangıç yılı
+                      </label>
+                      <input id="works-start-year" name="start_year" type="text" className="admin-input" />
+                    </div>
+                    <div>
+                      <label className="admin-label" htmlFor="works-end-year">
+                        Bitiş yılı
+                      </label>
+                      <input
+                        id="works-end-year"
+                        name="end_year"
+                        type="text"
+                        className="admin-input"
+                        placeholder="Devam ediyorsa boş bırakın"
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+
+              <div>
+                <label className="admin-label" htmlFor="works-description">
+                  Açıklama
+                </label>
+                <textarea
+                  id="works-description"
+                  name="description"
+                  className="admin-input min-h-[5.5rem] resize-y py-3"
+                  rows={3}
+                />
+              </div>
+
+              <div className="flex flex-wrap items-center gap-5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+                <label className="flex cursor-pointer items-center gap-2.5 text-sm text-white/70">
+                  <input
+                    name="featured"
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-white/20 bg-white text-[#d4af37] focus:ring-[rgba(212,175,55,0.5)]"
+                  />
+                  Öne çıkan
+                </label>
+                <div className="flex flex-1 items-center gap-3 sm:max-w-xs">
+                  <label className="admin-label !mb-0 shrink-0" htmlFor="works-visibility">
+                    Görünürlük
+                  </label>
+                  <select
+                    id="works-visibility"
+                    name="visibility"
+                    className="admin-input admin-select !min-h-0 py-2"
+                    defaultValue="public"
+                  >
+                    {VISIBILITY_OPTIONS.map((v) => (
+                      <option key={v.value} value={v.value}>
+                        {v.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
-            <div className="flex flex-wrap gap-4">
-              <label className="flex items-center gap-2">
-                <input name="featured" type="checkbox" className="rounded" />
-                <span className="text-sm">Öne çıkan</span>
-              </label>
-              <select name="visibility" className="rounded border border-[var(--card-border)] bg-[var(--background)] px-2 py-1 text-sm">
-                <option value="public">Public</option>
-                <option value="unlisted">Unlisted</option>
-                <option value="private">Private</option>
-              </select>
+
+            <div className="mt-8 flex justify-end">
+              <button
+                type="submit"
+                className="admin-btn-gold inline-flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Ekleniyor…
+                  </>
+                ) : (
+                  <>
+                    <Briefcase className="h-4 w-4" />
+                    Ekle
+                  </>
+                )}
+              </button>
             </div>
-            <button type="submit" className={btnClass} disabled={loading}>Ekle</button>
           </form>
         </>
       )}

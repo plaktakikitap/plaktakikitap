@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Instagram,
@@ -11,7 +10,13 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { getLucideIcon } from "@/lib/lucide-icons";
-import { ContactModal } from "./ContactModal";
+
+const DEFAULT_MAIL = "plaktakikitap@gmail.com";
+
+function resolveMailHref(url?: string): string {
+  const address = url?.replace(/^mailto:/i, "").trim() || DEFAULT_MAIL;
+  return `mailto:${address}`;
+}
 
 /** X (Twitter) marka ikonu — Lucide'da yok, kendi SVG */
 function XIcon({ className, size = 20 }: { className?: string; size?: number }) {
@@ -59,14 +64,14 @@ const SPOTIFY_GLOW = "0 0 24px rgba(30, 215, 96, 0.35), 0 0 20px rgba(212, 175, 
 
 function SocialButton({
   href,
-  onClick,
   isSpotify,
+  isMail = false,
   children,
   isSkeleton = false,
 }: {
   href?: string | null;
-  onClick?: () => void;
   isSpotify: boolean;
+  isMail?: boolean;
   children: React.ReactNode;
   isSkeleton?: boolean;
 }) {
@@ -84,28 +89,24 @@ function SocialButton({
     </div>
   );
 
-  if (onClick) {
+  if (isSkeleton) {
     return (
-      <motion.button
-        type="button"
-        onClick={onClick}
-        className="!flex !h-10 !w-10 !shrink-0 !rounded-xl !border-0 !bg-transparent !p-0 md:!h-11 md:!w-11"
-        disabled={isSkeleton}
-        aria-label={isSkeleton ? undefined : "İletişim"}
-        {...motionProps}
+      <div
+        className="!flex !h-10 !w-10 !shrink-0 !cursor-not-allowed !opacity-40 md:!h-11 md:!w-11"
+        aria-hidden
       >
         {inner}
-      </motion.button>
+      </div>
     );
   }
 
   return (
     <motion.a
-      href={isSkeleton ? "#" : (href ?? "#")}
-      target="_blank"
-      rel="noreferrer"
+      href={href ?? "#"}
+      target={isMail ? undefined : "_blank"}
+      rel={isMail ? undefined : "noreferrer"}
       className="!flex !h-10 !w-10 !shrink-0 !rounded-xl !no-underline !text-white/90 md:!h-11 md:!w-11"
-      aria-label={isSkeleton ? undefined : "Sosyal medya"}
+      aria-label={isMail ? "E-posta gönder" : "Sosyal medya"}
       {...motionProps}
     >
       {inner}
@@ -114,25 +115,24 @@ function SocialButton({
 }
 
 export function SocialLinksSection({ links }: SocialLinksSectionProps) {
-  const [mailOpen, setMailOpen] = useState(false);
-  const [mailUrl, setMailUrl] = useState<string | undefined>();
-
   const activeLinks = links
     .filter((l) => l.is_active)
     .sort((a, b) => a.order_index - b.order_index);
 
   const showDefault = activeLinks.length === 0;
   const items = showDefault
-    ? DEFAULT_PLATFORMS.map((p, i) => ({
-        id: `default-${i}`,
-        platform: p.platform,
-        url: "#",
-        icon: p.icon,
-        isMail: p.platform === "mail",
-        isSpotify: p.platform === "spotify",
-        onClick: p.platform === "mail" ? () => setMailOpen(true) : undefined,
-        isSkeleton: true,
-      }))
+    ? DEFAULT_PLATFORMS.map((p, i) => {
+        const isMail = p.platform === "mail";
+        return {
+          id: `default-${i}`,
+          platform: p.platform,
+          url: isMail ? resolveMailHref() : "#",
+          icon: p.icon,
+          isMail,
+          isSpotify: p.platform === "spotify",
+          isSkeleton: !isMail,
+        };
+      })
     : activeLinks.map((link) => {
         const iconOrName = link.icon_name ?? link.platform;
         const key = (iconOrName ?? "").toLowerCase().trim();
@@ -144,43 +144,33 @@ export function SocialLinksSection({ links }: SocialLinksSectionProps) {
         return {
           id: link.id,
           platform: link.platform,
-          url: link.url,
+          url: isMail ? resolveMailHref(link.url) : link.url,
           icon: Icon,
           isMail,
           isSpotify,
-          onClick: isMail
-            ? () => {
-                setMailUrl(link.url?.replace(/^mailto:/i, "").trim() || undefined);
-                setMailOpen(true);
-              }
-            : undefined,
           isSkeleton: false,
         };
       });
 
   return (
-    <>
-      <div className="!flex !items-center !justify-end !gap-3">
-        <span className="!text-xs !text-white/40">Bana ulaşın</span>
-        <div className="!flex !flex-wrap !items-center !justify-end !gap-2">
-          {items.map((item) => {
-            const Icon = item.icon;
-            return (
-              <SocialButton
-                key={item.id}
-                href={item.isMail ? undefined : item.url}
-                onClick={item.onClick}
-                isSpotify={item.isSpotify}
-                isSkeleton={item.isSkeleton}
-              >
-                <Icon className="!h-5 !w-5 md:!h-5 md:!w-5" strokeWidth={1.8} size={20} />
-              </SocialButton>
-            );
-          })}
-        </div>
+    <div className="!flex !items-center !justify-end !gap-3">
+      <span className="!text-xs !text-white/40">Bana ulaşın</span>
+      <div className="!flex !flex-wrap !items-center !justify-end !gap-2">
+        {items.map((item) => {
+          const Icon = item.icon;
+          return (
+            <SocialButton
+              key={item.id}
+              href={item.url}
+              isMail={item.isMail}
+              isSpotify={item.isSpotify}
+              isSkeleton={item.isSkeleton}
+            >
+              <Icon className="!h-5 !w-5 md:!h-5 md:!w-5" strokeWidth={1.8} size={20} />
+            </SocialButton>
+          );
+        })}
       </div>
-
-      <ContactModal isOpen={mailOpen} onClose={() => setMailOpen(false)} mailTo={mailUrl} />
-    </>
+    </div>
   );
 }

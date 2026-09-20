@@ -1038,3 +1038,14 @@ export async function adminStartMusicPlaylist() {
   revalidatePath("/");
   return { success: true };
 }
+
+// --- Site içi mesajlar (Beni Tanıyın formu) ---
+
+export async function adminDeleteMesaj(id: string) {
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("mesajlar").delete().eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/secretgate/mesajlar");
+  return { success: true };
+}

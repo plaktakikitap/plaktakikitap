@@ -45,6 +45,23 @@ export function ReadingLogContent({
         />
       </section>
 
+      <aside className="mt-10 rounded-xl border border-[rgba(201,166,90,0.15)] bg-white/[0.03] px-4 py-5 sm:px-6 sm:py-6">
+        <p className="text-[0.7rem] font-medium uppercase tracking-[0.12em] text-[#c9a65a]/80">
+          Not
+        </p>
+        <div className="mt-3 space-y-3 text-sm leading-relaxed text-white/65">
+          <p>
+            Tüm okuduğum kitapları giremedim, girdiklerimin de kapak fotoğraflarını girmeye üşendim.
+            Bir çoğunun yorumu da yok zaten… Onun için biraz garip bir sayfa.
+          </p>
+          <p>
+            Bu siteyi kurduktan itibaren düzene oturacak bu iş de :) Düzen ve kendini takip iyidir.
+            Kitap yorumu yazmak iyidir. Gelecekte dönüp bakmak iyidir. Kalıcı yapar.
+          </p>
+          <p className="font-display italic text-[#f3ead9]/80">Herkese iyi okumalar!</p>
+        </div>
+      </aside>
+
       <section className="mt-12">
         <h2 className="mb-4 font-editorial text-xl font-medium text-white/90">
           Kitaplık{totalBookCount != null ? ` (${totalBookCount})` : ""}
