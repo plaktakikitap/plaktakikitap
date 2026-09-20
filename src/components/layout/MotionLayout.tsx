@@ -16,17 +16,9 @@ export function MotionLayout({ children }: { children: React.ReactNode }) {
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.div
           key={pathname}
-          initial={
-            isHome
-              ? { opacity: 0, scale: 0.97, filter: "blur(6px)" }
-              : { opacity: 0 }
-          }
-          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-          exit={
-            isIntro
-              ? { opacity: 0, scale: 1.04, filter: "blur(4px)" }
-              : { opacity: 0, scale: 0.99 }
-          }
+          initial={isHome ? { opacity: 0, y: 12 } : { opacity: 0 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={isIntro ? { opacity: 0, y: -8 } : { opacity: 0 }}
           transition={MORPH_TRANSITION}
           className="min-h-full w-full"
         >

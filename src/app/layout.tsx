@@ -7,6 +7,7 @@ import SiteBackground from "@/components/SiteBackground";
 import { MaintenanceGate } from "@/components/MaintenanceGate";
 import { SiteSoundVolumeHydrate } from "@/components/SiteSoundVolumeHydrate";
 import Footer from "@/components/Footer";
+import { CurrentlyReading } from "@/components/CurrentlyReading";
 import { PageTransition } from "@/components/PageTransition";
 import { ScrollVinylIndicator } from "@/components/ScrollVinylIndicator";
 import IntroAnimation from "@/components/IntroAnimation";
@@ -131,7 +132,7 @@ export default function RootLayout({
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1523513721493697"
           crossOrigin="anonymous"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
       </head>
       <body
@@ -150,6 +151,7 @@ export default function RootLayout({
                 <MotionLayout>{children}</MotionLayout>
               </div>
             </PageTransition>
+            <CurrentlyReading />
             <Footer />
           </MainWrapper>
         </IntroAnimation>

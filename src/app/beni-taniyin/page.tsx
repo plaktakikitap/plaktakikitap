@@ -1,7 +1,6 @@
 import { supabaseServer } from "@/lib/supabase-server";
 import { AboutTimeline } from "@/components/about/AboutTimeline";
 import { BeniTaniyinShell } from "@/components/about/BeniTaniyinShell";
-import MesajFormu from "@/components/MesajFormu";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 
@@ -33,7 +32,6 @@ export default async function BeniTaniyinPage() {
             titleClassName="text-white font-bold"
           />
           <AboutTimeline entries={entries} />
-          <MesajFormu />
         </div>
       </BeniTaniyinShell>
     </PageTransitionTarget>

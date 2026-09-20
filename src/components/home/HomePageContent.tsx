@@ -2,6 +2,7 @@
 
 import HeroSection from "@/components/HeroSection";
 import { IntroCards } from "@/components/home/IntroCards";
+import { VinylScrollStage } from "@/components/home/VinylScrollStage";
 import MessyBulletJournal from "@/components/planner/MessyBulletJournal";
 import { KaralamalarHomeSection } from "@/components/karalamalar/KaralamalarHomeSection";
 import type { Video } from "@/types/videos";
@@ -28,35 +29,60 @@ export function HomePageContent({
   introPhotoPlaktakikitapUrl = "/images/logo.png",
   karalamalarPreview = [],
 }: HomePageContentProps) {
+  const title = (introTitle ?? "hoş geldiniz, ben eymen").toLocaleLowerCase(
+    "tr-TR"
+  );
+  const subtitle = (
+    introSubtitle ?? "nam-ı diğer plaktaki kitap"
+  ).toLocaleLowerCase("tr-TR");
+
   return (
     <>
-      <main className="relative min-h-screen text-[#F3EBDD]">
-        <HeroSection
-          photoSrc={introPhotoEymenUrl ?? "/images/eymen-studio.jpg"}
+      <main
+        className="vinyl-page-bg relative min-h-screen text-[#F3EBDD]"
+        style={{
+          minHeight: "100vh",
+          position: "relative",
+        }}
+      >
+        {/* Masaüstü: scroll ile plak → içerik */}
+        <VinylScrollStage
+          title={title}
+          subtitle={subtitle}
           logoSrc={introPhotoPlaktakikitapUrl ?? "/images/logo.png"}
-          title={introTitle ?? undefined}
-          subtitle={introSubtitle ?? undefined}
-        />
+          latestVideo={latestVideo}
+          latestVideoThumb={latestVideoThumb}
+          karalamalarPreview={karalamalarPreview}
+        >
+          {children}
+        </VinylScrollStage>
 
-        <div className="mx-auto mt-4 w-full max-w-6xl px-2 sm:mt-6 sm:px-6">
-          <IntroCards
-            latestVideo={latestVideo}
-            latestVideoThumb={latestVideoThumb}
+        {/* Mobil: mevcut hero + kartlar */}
+        <div className="md:hidden">
+          <HeroSection
+            photoSrc={introPhotoEymenUrl ?? "/images/eymen-studio.jpg"}
+            logoSrc={introPhotoPlaktakikitapUrl ?? "/images/logo.png"}
+            title={introTitle ?? undefined}
+            subtitle={introSubtitle ?? undefined}
           />
+
+          <div className="mx-auto mt-4 w-full max-w-6xl px-2 sm:mt-6 sm:px-6">
+            <IntroCards
+              latestVideo={latestVideo}
+              latestVideoThumb={latestVideoThumb}
+            />
+          </div>
+
+          <KaralamalarHomeSection items={karalamalarPreview} />
+
+          <section id="ajanda" className="scroll-mt-6">
+            <MessyBulletJournal />
+          </section>
+
+          {children}
         </div>
 
-        <KaralamalarHomeSection items={karalamalarPreview} />
-
-        {/* Bullet journal — messy ajanda (flip + modal + previews) */}
-        <section id="ajanda" className="scroll-mt-6">
-          <MessyBulletJournal />
-        </section>
-
-        {/* Şu an paneli — Spotify + Okuyorum */}
-        {children}
-
-        {/* Bottom spacing */}
-        <div className="h-24" />
+        <div className="h-24 md:hidden" />
       </main>
     </>
   );

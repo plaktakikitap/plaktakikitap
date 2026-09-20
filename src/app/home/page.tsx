@@ -6,7 +6,6 @@ import type { Video } from "@/types/videos";
 import type { Karalama } from "@/lib/karalamalar";
 import { HomePageContent } from "@/components/home/HomePageContent";
 import { EntrySeedHandler } from "@/components/home/EntrySeedHandler";
-import NowPanel from "@/components/NowPanel";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
@@ -39,9 +38,7 @@ export default async function HomePage() {
         introPhotoEymenUrl={siteSettings?.intro_photo_eymen_url}
         introPhotoPlaktakikitapUrl={siteSettings?.intro_photo_plaktakikitap_url}
         karalamalarPreview={karalamalarPreview}
-      >
-        <NowPanel />
-      </HomePageContent>
+      />
     </>
   );
 }

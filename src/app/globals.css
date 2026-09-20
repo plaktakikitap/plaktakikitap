@@ -369,6 +369,50 @@ h1, h2, h3, .font-editorial {
   animation: sparkle 4s ease-in-out infinite;
 }
 
+/* Plak ana sayfa — site laciverti + yumuşak derinlik */
+.vinyl-page-bg {
+  background-color: #050a12 !important;
+  background-image:
+    radial-gradient(1200px 600px at 50% 15%, rgba(255, 255, 255, 0.06), transparent 60%),
+    radial-gradient(900px 500px at 20% 80%, rgba(255, 255, 255, 0.04), transparent 65%),
+    radial-gradient(900px 500px at 80% 80%, rgba(255, 255, 255, 0.04), transparent 65%),
+    radial-gradient(circle at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.45) 92%) !important;
+}
+
+@keyframes floatNote {
+  0% {
+    transform: translateY(0) rotate(-6deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-18px) rotate(6deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) rotate(-6deg);
+    opacity: 0.5;
+  }
+}
+
+/* Şu an okuyorum — eğik kapak */
+.currently-reading-cover {
+  aspect-ratio: 2 / 3;
+  max-height: 220px;
+  transform: rotate(3deg);
+  box-shadow: 6px 8px 20px rgba(0, 0, 0, 0.45);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.currently-reading-cover:hover,
+.currently-reading-cover:focus-within {
+  transform: rotate(0deg);
+  box-shadow: 10px 14px 32px rgba(0, 0, 0, 0.55);
+}
+@media (prefers-reduced-motion: reduce) {
+  .currently-reading-cover {
+    transition: none;
+  }
+}
+
 /* Soft grain overlay */
 body::before {
   content: "";
