@@ -11,6 +11,8 @@ import { WatchLogStats } from "@/components/watch-log/WatchLogStats";
 import { FavoriteVitrinFilms } from "@/components/watch-log/FavoriteVitrinFilms";
 import { WatchPosterGrid } from "@/components/watch-log/WatchPosterGrid";
 import { filmToPosterItem } from "@/lib/watch-log-poster";
+import { SonYorumlarim } from "@/components/son-yorumlarim/SonYorumlarim";
+import { watchItemsToSonYorumlar } from "@/lib/son-yorumlarim";
 
 export const dynamic = "force-dynamic";
 
@@ -42,6 +44,7 @@ export default async function IzlemeGunlugumFilmlerPage() {
   }
 
   const posterItems = films.map(filmToPosterItem);
+  const sonYorumlar = watchItemsToSonYorumlar(posterItems, "film");
   const lastFilmTitle =
     posterItems.length > 0
       ? [...posterItems].sort((a, b) => {
@@ -70,6 +73,10 @@ export default async function IzlemeGunlugumFilmlerPage() {
             subtitle="izlediğim filmler ve yorumlarım"
             subtitleClassName="text-white/70"
           />
+
+          <div className="mt-8">
+            <SonYorumlarim items={sonYorumlar} tip="film" />
+          </div>
 
           <WatchLogStats
             variant="film"

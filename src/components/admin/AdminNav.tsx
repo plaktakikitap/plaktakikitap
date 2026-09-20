@@ -40,10 +40,12 @@ import {
   Wallet,
   Flame,
   Languages as LanguagesIcon,
+  Smartphone,
 } from "lucide-react";
 
 const primaryLinks = [
   { href: "/secretgate/planner", label: "Ajanda", icon: Calendar },
+  { href: "/secretgate/icerik", label: "İçerik", icon: Smartphone },
   { href: "/secretgate/karalamalar", label: "Karalamalar", icon: Feather },
   { href: "/secretgate/film-dizi", label: "Film & Dizi", icon: Film },
   { href: "/secretgate/photos", label: "Fotoğraflar", icon: Camera },

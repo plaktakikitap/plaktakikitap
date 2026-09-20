@@ -12,6 +12,8 @@ import { FavoriteVitrinSeries } from "@/components/watch-log/FavoriteVitrinSerie
 import { WatchPosterGrid } from "@/components/watch-log/WatchPosterGrid";
 import { seriesToPosterItem } from "@/lib/watch-log-poster";
 import type { ContentItem, Series } from "@/types/database";
+import { SonYorumlarim } from "@/components/son-yorumlarim/SonYorumlarim";
+import { watchItemsToSonYorumlar } from "@/lib/son-yorumlarim";
 
 export const dynamic = "force-dynamic";
 
@@ -45,6 +47,7 @@ export default async function IzlemeGunlugumDizilerPage() {
   }
 
   const posterItems = seriesList.map(seriesToPosterItem);
+  const sonYorumlar = watchItemsToSonYorumlar(posterItems, "dizi");
   const lastSeriesTitle =
     posterItems.length > 0
       ? [...posterItems].sort((a, b) => {
@@ -73,6 +76,10 @@ export default async function IzlemeGunlugumDizilerPage() {
             subtitle="izlediğim diziler ve yorumlarım"
             subtitleClassName="text-white/70"
           />
+
+          <div className="mt-8">
+            <SonYorumlarim items={sonYorumlar} tip="dizi" />
+          </div>
 
           <WatchLogStats
             variant="series"

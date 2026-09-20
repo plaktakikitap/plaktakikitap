@@ -1,6 +1,8 @@
 import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ReadingLogContent } from "@/components/reading/ReadingLogContent";
+import { SonYorumlarim } from "@/components/son-yorumlarim/SonYorumlarim";
+import { booksToSonYorumlar } from "@/lib/son-yorumlarim";
 import {
   getPublicBooks,
   getCurrentReading,
@@ -28,6 +30,7 @@ export default async function ReadingsPage() {
   }
 
   const booksOldestFirst = [...books].reverse();
+  const sonYorumlar = booksToSonYorumlar(books);
 
   return (
     <PageTransitionTarget layoutId="card-/readings">
@@ -40,6 +43,10 @@ export default async function ReadingsPage() {
             subtitle="şu an okuduklarım ve yıllık hedefim"
             subtitleClassName="text-white/70"
           />
+
+          <div className="mt-8">
+            <SonYorumlarim items={sonYorumlar} tip="kitap" />
+          </div>
 
           <ReadingLogContent
             books={booksOldestFirst}

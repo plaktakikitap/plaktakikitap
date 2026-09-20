@@ -6,6 +6,7 @@ import {
   getBooksReadThisMonthList,
 } from "@/lib/db/queries";
 import { AdminDashboardThisMonth } from "@/components/admin/AdminDashboardThisMonth";
+import { AdminIcerikOzetWidget } from "@/components/admin/AdminIcerikOzetWidget";
 import { AdminSetupRequired } from "@/components/admin/AdminSetupRequired";
 import { AdminSiteSounds } from "@/components/admin/AdminSiteSounds";
 
@@ -30,6 +31,7 @@ export default async function AdminDashboardPage() {
 
   return (
     <div>
+      <AdminIcerikOzetWidget />
       <AdminDashboardThisMonth
         filmCount={cinemaStats.filmWatchedThisMonth}
         seriesCount={cinemaStats.seriesWatchedThisMonth}

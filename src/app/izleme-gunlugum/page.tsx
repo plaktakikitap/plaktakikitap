@@ -13,6 +13,8 @@ import {
   seriesToPosterItem,
   type WatchPosterItem,
 } from "@/lib/watch-log-poster";
+import { SonYorumlarim } from "@/components/son-yorumlarim/SonYorumlarim";
+import { watchItemsToSonYorumlar } from "@/lib/son-yorumlarim";
 
 export const dynamic = "force-dynamic";
 
@@ -55,6 +57,8 @@ export default async function IzlemeGunlugumPage() {
     // empty
   }
 
+  const sonYorumlar = watchItemsToSonYorumlar(items, "izleme");
+
   return (
     <PageTransitionTarget layoutId="card-/izleme-gunlugum">
       <main className="relative min-h-screen text-white">
@@ -66,6 +70,10 @@ export default async function IzlemeGunlugumPage() {
             subtitle="izlediğim filmler, diziler ve onlara dair düşüncelerim"
             subtitleClassName="text-white/70"
           />
+
+          <div className="mt-8">
+            <SonYorumlarim items={sonYorumlar} tip="izleme" />
+          </div>
 
           <WatchLogStats
             variant="film"
