@@ -1,0 +1,25 @@
+---
+description: Intro gate (Make Your Choice) — dokunma; siyah özel karşılama sayfası
+alwaysApply: true
+---
+
+# Intro gate — dokunma
+
+`/` rotası bir **karşılama / giriş sayfasıdır**. Site genelindeki krem palet, tipografi, nav, arama, footer ve diğer UI yenilikleri **bu sayfaya uygulanmaz**.
+
+## Korunan dosyalar (bilerek değiştirme)
+
+- `src/app/page.tsx` — Make Your Choice (aktif intro)
+- `src/components/intro/**` — alternatif / eski intro parçaları
+
+## Beklenen durum (bilinçli istisna)
+
+- Arka plan ve kenarlar **siyah**
+- Metin + plak/kitap ikonları **beyaz**
+- Bu sayfada **Nav yok** (fotoğraf + arama yok)
+- Bu sayfada **Footer yok**
+- Sadece MAKE YOUR CHOICE + seçim UI — başka chrome yok
+
+## Kural
+
+Kullanıcı **açıkça** intro gate’i değiştirmemi istemedikçe bu dosyalara / bu rotanın görünümüne **dokunma**. Krem site yeniliklerini, global CSS başlık renklerini veya layout chrome’unu buraya taşıma.
