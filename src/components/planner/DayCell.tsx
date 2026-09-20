@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { PlannerDaySummary } from "@/lib/planner";
+import { HandDrawnCircleOverlay } from "./HandDrawnCircleOverlay";
 
 const TEXT_PREVIEW_LEN = 40;
 
@@ -39,6 +41,7 @@ export function DayCell({
     : "";
   const firstImageUrl = summary?.firstImageUrl ?? null;
   const extraCount = summary ? Math.max(0, summary.entryCount - 1) : 0;
+  const [hovered, setHovered] = useState(false);
 
   return (
     <button
@@ -47,9 +50,12 @@ export function DayCell({
         "dayCell group relative flex min-h-[72px] flex-col rounded-lg border border-black/10 bg-white/40 p-1.5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/70 hover:shadow-md",
         today && "today"
       )}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       onClick={() => onDayClick(dateStr, monthName, day)}
       aria-label={`${day} ${monthName} — günlük detayı`}
     >
+      <HandDrawnCircleOverlay active={hovered} variant={day} />
       <div className="relative z-[1] flex justify-end">
         <span className="text-xs font-semibold text-black/80">{day}</span>
       </div>
