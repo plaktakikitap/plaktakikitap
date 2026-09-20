@@ -41,43 +41,45 @@ export function WatchLogStats({
       className="mb-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-stretch"
     >
       {/* Son İzlediğim */}
-      <div className="min-w-0 flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-4 backdrop-blur-sm sm:min-w-[200px]">
-        <p className="text-xs uppercase tracking-wider text-white/50">
+      <div className="min-w-0 flex-1 rounded-xl border border-ink/10 bg-ink/5 px-4 py-4 backdrop-blur-sm sm:min-w-[200px]">
+        <p className="text-xs uppercase tracking-wider text-ink/50">
           Son İzlediğim
         </p>
-        <p className="mt-1 truncate font-medium text-white/95">
+        <p className="mt-1 truncate font-medium text-ink/95">
           {lastTitle ?? "—"}
         </p>
       </div>
 
       {/* Toplam: X film/dizi */}
-      <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-4 backdrop-blur-sm">
-        <Icon className="h-6 w-6 shrink-0 text-amber-400/80" aria-hidden />
+      <div className="flex items-center gap-3 rounded-xl border border-ink/10 bg-ink/5 px-4 py-4 backdrop-blur-sm">
+        <Icon className="h-6 w-6 shrink-0 text-gold/70" aria-hidden />
         <div>
-          <p className="text-2xl font-semibold tabular-nums text-white">
+          <p className="text-2xl font-semibold tabular-nums text-ink">
             {totalCount}
           </p>
-          <p className="text-xs text-white/60">Toplam {labelPlural}</p>
+          <p className="text-xs text-ink/60">Toplam {labelPlural}</p>
         </div>
       </div>
 
       {/* Toplam süre */}
-      <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-4 backdrop-blur-sm">
-        <Clock className="h-6 w-6 shrink-0 text-amber-400/80" aria-hidden />
+      <div className="flex items-center gap-3 rounded-xl border border-ink/10 bg-ink/5 px-4 py-4 backdrop-blur-sm">
+        <Clock className="h-6 w-6 shrink-0 text-gold/70" aria-hidden />
         <div>
-          <p className="text-xs text-white/60">Toplam süre</p>
-          <p className="mt-0.5 font-medium text-white/95">{totalTimeStr}</p>
+          <p className="text-xs text-ink/60">
+            Film izleyerek geçirilen toplam tahmini süre
+          </p>
+          <p className="mt-0.5 font-medium text-ink/95">{totalTimeStr}</p>
         </div>
       </div>
 
       {/* Bu ay / Bu yıl izlenen */}
-      <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-4 backdrop-blur-sm">
-        <Calendar className="h-6 w-6 shrink-0 text-amber-400/80" aria-hidden />
+      <div className="flex items-center gap-3 rounded-xl border border-ink/10 bg-ink/5 px-4 py-4 backdrop-blur-sm">
+        <Calendar className="h-6 w-6 shrink-0 text-gold/70" aria-hidden />
         <div>
-          <p className="text-xs text-white/60">
+          <p className="text-xs text-ink/60">
             {thisYearCount != null ? "Bu yıl izlenen" : "Bu ay izlenen"}
           </p>
-          <p className="mt-0.5 font-semibold tabular-nums text-white/95">
+          <p className="mt-0.5 font-semibold tabular-nums text-ink/95">
             {thisYearCount != null ? thisYearCount : thisMonthCount}
           </p>
         </div>

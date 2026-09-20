@@ -32,7 +32,7 @@ export function VideosGrid({ videos }: VideosGridProps) {
 
   if (videos.length === 0) {
     return (
-      <p className="py-16 text-center text-white/60">
+      <p className="py-16 text-center text-ink/60">
         Henüz video eklenmemiş.
       </p>
     );
@@ -49,11 +49,11 @@ export function VideosGrid({ videos }: VideosGridProps) {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: Math.min(i * 0.05, 0.2) }}
-              className="group relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black/40 shadow-xl backdrop-blur-sm"
+              className="group relative aspect-video w-full overflow-hidden rounded-xl border border-ink/10 bg-black/40 shadow-xl backdrop-blur-sm"
             >
               {isPlak ? (
                 <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-amber-900/40 to-black/80">
-                  <Disc3 className="h-24 w-24 text-amber-200/80" strokeWidth={1.2} aria-hidden />
+                  <Disc3 className="h-24 w-24 text-gold/80" strokeWidth={1.2} aria-hidden />
                 </div>
               ) : (
                 <Image
@@ -66,24 +66,24 @@ export function VideosGrid({ videos }: VideosGridProps) {
                 />
               )}
               <div
-                className="absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-white/10 bg-[#050A14]/75 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-0"
+                className="absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-ink/10 bg-ink/75 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-0"
                 onClick={() => setModalVideo(video)}
                 onKeyDown={(e) => e.key === "Enter" && setModalVideo(video)}
                 role="button"
                 tabIndex={0}
                 aria-label={isPlak ? `Dinle: ${video.title}` : `İzle: ${video.title}`}
               >
-                <span className="line-clamp-2 max-w-full px-3 text-center text-sm font-medium text-white/95">
+                <span className="line-clamp-2 max-w-full px-3 text-center text-sm font-medium text-ink/95">
                   {video.title || (isPlak ? "Sesli kitap" : "Video")}
                 </span>
-                <span className="flex items-center gap-1 text-xs text-white/70">
+                <span className="flex items-center gap-1 text-xs text-ink/70">
                   {isPlak ? "Plaktaki Kitap · dinle" : "Plaktaki Kitap · izle"}
                 </span>
                 <div className="rounded-full bg-white/20 p-3">
                   {isPlak ? (
-                    <Disc3 className="h-6 w-6 fill-white text-white" strokeWidth={1.5} aria-hidden />
+                    <Disc3 className="h-6 w-6 fill-white text-ink" strokeWidth={1.5} aria-hidden />
                   ) : (
-                    <Play className="h-6 w-6 fill-white text-white" />
+                    <Play className="h-6 w-6 fill-white text-ink" />
                   )}
                 </div>
               </div>

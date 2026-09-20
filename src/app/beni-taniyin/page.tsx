@@ -29,7 +29,7 @@ export default async function BeniTaniyinPage() {
           <PageHeader
             layoutId="nav-/beni-taniyin"
             title="Beni Tanıyın"
-            titleClassName="text-white font-bold"
+            titleClassName="text-ink font-bold"
           />
           <AboutTimeline entries={entries} />
         </div>

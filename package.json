@@ -16,7 +16,8 @@
     "cleanup:letterboxd": "tsx scripts/cleanup-letterboxd-films.ts",
     "apply:letterboxd-ratings": "tsx scripts/apply-letterboxd-ratings.ts",
     "apply:letterboxd-reviews": "tsx scripts/apply-letterboxd-reviews.ts",
-    "import:letterboxd": "tsx scripts/import-letterboxd-to-films.ts"
+    "import:letterboxd": "tsx scripts/import-letterboxd-to-films.ts",
+    "fetch:posters": "tsx scripts/fetch-posters.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.126.0",

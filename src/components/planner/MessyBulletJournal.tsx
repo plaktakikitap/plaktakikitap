@@ -110,6 +110,13 @@ export default function MessyBulletJournal() {
   const [canvasByMonth, setCanvasByMonth] = useState<Record<string, PlannerCanvasItem[]>>({});
   const [plannerItemsByMonth, setPlannerItemsByMonth] = useState<Record<string, PlannerItem[]>>({});
 
+  const loadedMonthsRef = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    loadedMonthsRef.current = new Set();
+  }, [year]);
+
+  /** Yalnızca görünür ay ±1 — 48 isteği ~12’ye düşürür */
   useEffect(() => {
     const defaults = {
       show_coffee_stain: true,
@@ -118,8 +125,15 @@ export default function MessyBulletJournal() {
       show_curled_corner: true,
       custom_fields: [] as { label: string; content: string }[],
     };
-    Array.from({ length: 12 }, (_, m) => m).forEach((monthIdx) => {
+    const months = [monthIndex - 1, monthIndex, monthIndex + 1].filter(
+      (m) => m >= 0 && m <= 11
+    );
+
+    for (const monthIdx of months) {
       const key = `${year}-${monthIdx}`;
+      if (loadedMonthsRef.current.has(key)) continue;
+      loadedMonthsRef.current.add(key);
+
       fetch(`/api/planner/settings?year=${year}&month=${monthIdx + 1}`)
         .then((r) => r.json())
         .then((data) =>
@@ -137,13 +151,8 @@ export default function MessyBulletJournal() {
         .catch(() =>
           setPageSettings((prev) => ({ ...prev, [key]: defaults }))
         );
-    });
-  }, [year]);
 
-  useEffect(() => {
-    Array.from({ length: 12 }, (_, m) => m).forEach((m) => {
-      const key = `${year}-${m}`;
-      fetch(`/api/planner/entries?year=${year}&month=${m}`)
+      fetch(`/api/planner/entries?year=${year}&month=${monthIdx}`)
         .then((r) => r.json())
         .then((data) =>
           setSummaryCache((prev) => ({ ...prev, [key]: data ?? [] }))
@@ -151,26 +160,19 @@ export default function MessyBulletJournal() {
         .catch(() =>
           setSummaryCache((prev) => ({ ...prev, [key]: [] }))
         );
-    });
-  }, [year]);
 
-  useEffect(() => {
-    Array.from({ length: 12 }, (_, m) => m).forEach((monthIdx) => {
-      const key = `${year}-${monthIdx}`;
       fetch(`/api/planner/canvas?year=${year}&month=${monthIdx + 1}`)
         .then((r) => r.json())
         .then((data) =>
-          setCanvasByMonth((prev) => ({ ...prev, [key]: Array.isArray(data) ? data : [] }))
+          setCanvasByMonth((prev) => ({
+            ...prev,
+            [key]: Array.isArray(data) ? data : [],
+          }))
         )
         .catch(() =>
           setCanvasByMonth((prev) => ({ ...prev, [key]: [] }))
         );
-    });
-  }, [year]);
 
-  useEffect(() => {
-    Array.from({ length: 12 }, (_, monthIdx) => {
-      const key = `${year}-${monthIdx}`;
       fetch(`/api/planner/items?year=${year}&month=${monthIdx + 1}`)
         .then((r) => r.json())
         .then((data) =>
@@ -182,8 +184,8 @@ export default function MessyBulletJournal() {
         .catch(() =>
           setPlannerItemsByMonth((prev) => ({ ...prev, [key]: [] }))
         );
-    });
-  }, [year]);
+    }
+  }, [year, monthIndex]);
 
   const summaryByDateFor = useCallback(
     (m: number) => {

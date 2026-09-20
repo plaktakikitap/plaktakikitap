@@ -16,10 +16,10 @@ export function VideosContent({ videos }: VideosContentProps) {
         animate={{ opacity: 1, y: 0 }}
         className="mb-10 text-center"
       >
-        <h1 className="font-editorial text-3xl font-semibold text-white sm:text-4xl">
+        <h1 className="font-editorial text-3xl font-semibold text-ink sm:text-4xl">
           Videolar
         </h1>
-        <p className="mt-2 text-sm text-white/60">
+        <p className="mt-2 text-sm text-ink/60">
           Plaktaki Kitap
         </p>
       </motion.header>

@@ -34,14 +34,14 @@ export default async function ReadingsPage() {
 
   return (
     <PageTransitionTarget layoutId="card-/readings">
-      <main className="relative min-h-screen text-white">
+      <main className="relative min-h-screen text-ink">
         <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
           <PageHeader
             layoutId="nav-/readings"
             title="Okuma Günlüğüm"
-            titleClassName="!text-white font-bold"
+            titleClassName="!text-ink font-bold"
             subtitle="şu an okuduklarım ve yıllık hedefim"
-            subtitleClassName="text-white/70"
+            subtitleClassName="text-ink/70"
           />
 
           <div className="mt-8">

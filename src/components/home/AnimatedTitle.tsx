@@ -24,13 +24,30 @@ const INTRO_VOICE_URL = "/audio/intro-voice.mp3";
 const WAVEFORM_BAR_COUNT = 50;
 const WAVEFORM_MAX_HEIGHT_PX = 60;
 
+/** Ses yoksa dekoratif yedek dalga */
+function fallbackWaveform(count = WAVEFORM_BAR_COUNT): number[] {
+  return Array.from({ length: count }, (_, i) => {
+    const t = i / Math.max(count - 1, 1);
+    return (
+      0.25 +
+      0.55 * Math.abs(Math.sin(t * Math.PI * 3.2)) *
+        (0.65 + 0.35 * Math.sin(t * Math.PI * 7))
+    );
+  });
+}
+
 async function extractWaveformFromAudio(url: string): Promise<number[]> {
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`Ses dosyası yüklenemedi: ${response.status}`);
+    // Dosya henüz yüklenmemiş olabilir — hata fırlatma, yedek kullan
+    return fallbackWaveform();
   }
 
   const arrayBuffer = await response.arrayBuffer();
+  if (arrayBuffer.byteLength < 128) {
+    return fallbackWaveform();
+  }
+
   const audioContext = new AudioContext();
 
   try {
@@ -54,6 +71,8 @@ async function extractWaveformFromAudio(url: string): Promise<number[]> {
 
     const peak = Math.max(...amplitudes, 0.0001);
     return amplitudes.map((value) => value / peak);
+  } catch {
+    return fallbackWaveform();
   } finally {
     await audioContext.close();
   }
@@ -78,7 +97,7 @@ function TitleWaveform({
             style={{
               width: 2,
               height: Math.max(4, amplitude * WAVEFORM_MAX_HEIGHT_PX),
-              backgroundColor: "rgba(201,166,90,0.12)",
+              backgroundColor: "rgba(184,147,74,0.12)",
               borderRadius: 1,
               transformOrigin: "center center",
             }}
@@ -240,8 +259,8 @@ export default function AnimatedTitle({
       .then((data) => {
         if (!cancelled) setWaveformData(data);
       })
-      .catch((error) => {
-        console.error("AnimatedTitle waveform analizi başarısız:", error);
+      .catch(() => {
+        if (!cancelled) setWaveformData(fallbackWaveform());
       });
 
     return () => {

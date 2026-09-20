@@ -14,7 +14,8 @@ import { VinylRecord } from "@/components/VinylRecord";
 import { NowPlaying } from "@/components/NowPlaying";
 import { NAV_CARDS } from "@/components/home/nav-cards";
 import { KaralamalarHomeSection } from "@/components/karalamalar/KaralamalarHomeSection";
-import MessyBulletJournal from "@/components/planner/MessyBulletJournal";
+import { LazyAjanda } from "@/components/home/LazyAjanda";
+import { NavCardIllustration } from "@/components/home/NavCardIllustration";
 import type { Video } from "@/types/videos";
 import type { Karalama } from "@/lib/karalamalar";
 
@@ -190,23 +191,22 @@ function NoteCard({
   );
 
   if (!card) return null;
-  const Icon = card.Icon;
 
   const inner = (
     <Link
       href={card.href}
-      className="group block w-[168px] rounded-xl border border-[rgba(192,160,96,0.28)] bg-[rgba(12,16,28,0.9)] px-3 py-3 shadow-[0_8px_28px_rgba(0,0,0,0.45)] backdrop-blur-sm transition hover:border-[rgba(192,160,96,0.55)] hover:bg-[rgba(18,24,40,0.95)]"
+      className="group block w-[168px] rounded-xl border border-rule bg-card px-3 py-3 shadow-[0_8px_24px_rgba(26,22,18,0.08)] backdrop-blur-sm transition hover:border-gold/40 hover:bg-[color-mix(in_srgb,var(--cream)_92%,white)]"
     >
       <div className="flex items-start gap-2">
-        <Icon
-          className="mt-0.5 h-4 w-4 shrink-0 transition group-hover:scale-110"
-          style={{ color: `rgb(${card.accentColor})` }}
+        <NavCardIllustration
+          visual={card.visual}
+          className="mt-0.5 h-9 w-9 shrink-0 transition group-hover:scale-105"
         />
-        <div>
-          <div className="font-editorial text-[0.82rem] leading-snug text-[#e8e0d0]">
+        <div className="min-w-0">
+          <div className="type-4 font-editorial leading-snug text-ink">
             {card.title}
           </div>
-          <div className="mt-0.5 text-[0.65rem] leading-snug text-[rgba(200,190,170,0.55)]">
+          <div className="type-4 mt-1 leading-snug text-ink-muted">
             {card.subtitle}
           </div>
         </div>
@@ -269,22 +269,27 @@ export function VinylScrollStage({
   }, []);
 
   useEffect(() => {
+    let raf = 0;
     const update = () => {
+      raf = 0;
       const el = runwayRef.current;
       if (!el) return;
       const total = Math.max(1, el.offsetHeight - window.innerHeight);
       const p = Math.min(1, Math.max(0, -el.getBoundingClientRect().top / total));
       scrollYProgress.set(p);
     };
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(update);
+    };
     update();
     const opts: AddEventListenerOptions = { passive: true };
-    window.addEventListener("scroll", update, opts);
-    document.addEventListener("scroll", update, opts);
-    window.addEventListener("resize", update);
+    window.addEventListener("scroll", onScroll, opts);
+    window.addEventListener("resize", onScroll);
     return () => {
-      window.removeEventListener("scroll", update);
-      document.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
     };
   }, [scrollYProgress]);
 
@@ -327,9 +332,8 @@ export function VinylScrollStage({
           y: reduceMotion ? 0 : stageY,
           opacity: reduceMotion ? 1 : stageOpacity,
           pointerEvents: reduceMotion ? "auto" : stagePE,
-          backgroundColor: "#050a12",
-          backgroundImage:
-            "radial-gradient(1200px 600px at 50% 15%, rgba(255,255,255,0.06), transparent 60%), radial-gradient(900px 500px at 20% 80%, rgba(255,255,255,0.04), transparent 65%)",
+          backgroundColor: "var(--cream)",
+          backgroundImage: "none",
         }}
       >
           <motion.div
@@ -345,25 +349,17 @@ export function VinylScrollStage({
             }}
           >
             <h1
-              className="font-editorial"
+              className="type-2 font-editorial"
               style={{
-                fontSize: "clamp(1.2rem, 3vw, 2rem)",
                 margin: 0,
                 letterSpacing: "0.04em",
                 fontWeight: 400,
-                color: "#e8e0d0",
+                color: "var(--ink)",
               }}
             >
               {title}
             </h1>
-            <p
-              style={{
-                fontSize: "0.72rem",
-                letterSpacing: "0.18em",
-                color: "#c0a060",
-                marginTop: "4px",
-              }}
-            >
+            <p className="section-eyebrow mt-2">
               {subtitle}
             </p>
           </motion.div>
@@ -439,7 +435,7 @@ export function VinylScrollStage({
                           left: x,
                           top: y,
                           fontSize: size,
-                          color: "rgba(192,160,96,0.82)",
+                          color: "rgba(140,102,64,0.45)",
                           animation: reduceMotion
                             ? undefined
                             : `floatNote ${2.2 + i * 0.25}s ease-in-out infinite`,
@@ -533,7 +529,7 @@ export function VinylScrollStage({
   );
 
   return (
-    <div className="vinyl-page-bg relative hidden md:block">
+    <div className="vinyl-page-bg relative hidden md:block overflow-clip">
       <div
         aria-hidden
         style={{
@@ -550,16 +546,16 @@ export function VinylScrollStage({
             opacity: 0.22,
             mixBlendMode: "overlay",
             backgroundImage:
-              "radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px)",
+              "radial-gradient(rgba(90,68,48,0.08) 1px, transparent 1px)",
             backgroundSize: "22px 22px",
           }}
         />
         {[
-          { left: "18%", top: "22%", size: 12, delay: "0s" },
-          { left: "82%", top: "28%", size: 12, delay: "1.2s" },
-          { left: "12%", top: "65%", size: 16, delay: "2.4s" },
-          { left: "88%", top: "72%", size: 12, delay: "0.8s" },
-          { left: "45%", top: "12%", size: 12, delay: "1.8s" },
+          { left: "18%", top: "22%", size: 10, delay: "0s" },
+          { left: "82%", top: "28%", size: 10, delay: "1.2s" },
+          { left: "12%", top: "65%", size: 14, delay: "2.4s" },
+          { left: "88%", top: "72%", size: 10, delay: "0.8s" },
+          { left: "45%", top: "12%", size: 10, delay: "1.8s" },
         ].map((s, i) => (
           <div
             key={i}
@@ -570,34 +566,31 @@ export function VinylScrollStage({
               width: s.size,
               height: s.size,
               background:
-                "radial-gradient(circle at center, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.4) 40%, transparent 65%)",
-              boxShadow: "0 0 8px rgba(255,255,255,0.3)",
+                "radial-gradient(circle at center, rgba(192,160,96,0.55) 0%, rgba(168,140,110,0.2) 45%, transparent 70%)",
+              boxShadow: "0 0 10px rgba(168,140,110,0.2)",
               animationDelay: s.delay,
             }}
           />
         ))}
       </div>
 
-      {/* Daha uzun pist → daha fazla kaydırma; içerik üstüne biner */}
-      <div ref={runwayRef} style={{ height: reduceMotion ? "100vh" : "195vh" }} />
+      {/* Pist + çekim: marginTop ≈ -(runway - 100vh) olmalı; taşma overflow-clip ile kesilir */}
+      <div ref={runwayRef} style={{ height: reduceMotion ? "100vh" : "185vh" }} />
 
       {mounted ? createPortal(stage, document.body) : null}
 
       <section
-        className="relative z-[4]"
+        className="relative z-[4] section-block px-[4vw]"
         style={{
-          marginTop: reduceMotion ? 0 : "-88vh",
-          paddingTop: "2rem",
-          paddingBottom: "4rem",
-          paddingLeft: "4vw",
-          paddingRight: "4vw",
+          marginTop: reduceMotion ? 0 : "-85vh",
         }}
       >
         <KaralamalarHomeSection items={karalamalarPreview} />
-        <section id="ajanda" className="scroll-mt-6">
-          <MessyBulletJournal />
-        </section>
-        <div style={{ maxWidth: 1100, margin: "2rem auto 0" }}>{children}</div>
+        <div className="py-8">
+          <hr className="section-divider" aria-hidden />
+        </div>
+        <LazyAjanda />
+        <div className="mx-auto mt-8 max-w-[1100px]">{children}</div>
       </section>
     </div>
   );

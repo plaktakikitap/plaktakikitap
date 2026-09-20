@@ -14,9 +14,9 @@ function GlassCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:rounded-3xl">
+    <div className="rounded-2xl border border-ink/10 bg-ink/5 shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:rounded-3xl">
       <div className="px-4 pt-4 sm:px-6 sm:pt-6">
-        <p className="text-sm tracking-wide text-white/70">{title}</p>
+        <p className="text-sm tracking-wide text-ink/70">{title}</p>
       </div>
       <div className="px-4 pb-4 pt-3 sm:px-6 sm:pb-6 sm:pt-4">{children}</div>
     </div>
@@ -79,7 +79,7 @@ export default async function NowPanel() {
         {/* Reading */}
         <GlassCard title={readingTitle}>
           <div className="flex items-center gap-4">
-            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-white/10">
+            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-ink/10 bg-ink/5">
               {reading?.cover_url ? (
                 <Image
                   src={reading.cover_url}
@@ -92,19 +92,19 @@ export default async function NowPanel() {
             </div>
 
             <div className="min-w-0 flex-1">
-              <p className="truncate font-medium text-white/90">
+              <p className="truncate font-medium text-ink/90">
                 {reading?.book_title ?? "—"}
               </p>
-              <p className="truncate text-sm text-white/60">
+              <p className="truncate text-sm text-ink/60">
                 {reading?.author ?? " "}
               </p>
 
               {reading?.note ? (
-                <p className="mt-2 line-clamp-2 text-xs text-white/55">
+                <p className="mt-2 line-clamp-2 text-xs text-ink/55">
                   {reading.note}
                 </p>
               ) : (
-                <p className="mt-2 text-xs text-white/35">not: —</p>
+                <p className="mt-2 text-xs text-ink/35">not: —</p>
               )}
             </div>
           </div>

@@ -24,7 +24,7 @@ export function PageHeader({ layoutId, title, subtitle, titleClassName, subtitle
         {title}
       </h1>
       {subtitle && (
-        <p className={cn("mt-1 text-[var(--muted)]", subtitleClassName)}>
+        <p className={cn("mt-1 text-ink-muted", subtitleClassName)}>
           {subtitle}
         </p>
       )}

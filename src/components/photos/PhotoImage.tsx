@@ -14,7 +14,7 @@ export function PhotoImage({ alt, className, ...props }: PhotoImageProps) {
   if (failed || !props.src) {
     return (
       <span
-        className={`flex items-center justify-center bg-white/5 text-center text-xs text-white/40 ${className ?? ""}`}
+        className={`flex items-center justify-center bg-ink/5 text-center text-xs text-ink/40 ${className ?? ""}`}
         style={
           "fill" in props && props.fill
             ? { position: "absolute", inset: 0 }

@@ -133,7 +133,7 @@ export function SatelliteCards({
           <div
             style={{
               background: card.color,
-              border: "1px solid rgba(201,166,90,0.45)",
+              border: "1px solid rgba(184,147,74,0.45)",
               borderRadius: 6,
               padding: 10,
               boxShadow: "0 12px 28px rgba(0,0,0,0.55)",

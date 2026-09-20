@@ -27,7 +27,7 @@ export function TranslationsAcademiaSection({
       transition={{ duration: 0.4, delay: 0.15 }}
       className="mb-14"
     >
-      <h2 className="font-editorial text-xl font-medium text-white sm:text-2xl mb-6">
+      <h2 className="font-editorial text-xl font-medium text-ink sm:text-2xl mb-6">
         Akademik Profil
       </h2>
       {profileUrl?.trim() && (
@@ -35,12 +35,12 @@ export function TranslationsAcademiaSection({
           href={profileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="mb-6 flex items-center gap-3 rounded-xl border border-amber-400/20 bg-white/5 px-5 py-4 backdrop-blur-sm transition-all hover:border-amber-400/35 hover:shadow-[0_0_24px_-6px_rgba(212,182,90,0.15)]"
+          className="mb-6 flex items-center gap-3 rounded-xl border border-amber-400/20 bg-ink/5 px-5 py-4 backdrop-blur-sm transition-all hover:border-amber-400/35 hover:shadow-[0_0_24px_-6px_rgba(212,182,90,0.15)]"
         >
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/20 text-white">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gold-soft text-ink">
             <GraduationCap className="h-5 w-5" />
           </span>
-          <span className="font-medium text-white">Academia.edu</span>
+          <span className="font-medium text-ink">Academia.edu</span>
           <ExternalLink className="ml-auto h-4 w-4 text-[var(--muted)]" />
         </a>
       )}
@@ -57,9 +57,9 @@ export function TranslationsAcademiaSection({
                 href={item.external_url ?? "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between gap-3 rounded-lg border border-amber-400/10 bg-white/5 px-4 py-3 text-sm transition hover:border-amber-400/25 hover:bg-white/10"
+                className="flex items-center justify-between gap-3 rounded-lg border border-amber-400/10 bg-ink/5 px-4 py-3 text-sm transition hover:border-amber-400/25 hover:bg-ink/5"
               >
-                <span className="font-medium text-white">
+                <span className="font-medium text-ink">
                   {item.title}
                 </span>
                 <ExternalLink className="h-4 w-4 shrink-0 text-[var(--muted)]" />

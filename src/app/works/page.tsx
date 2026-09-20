@@ -17,7 +17,7 @@ export default async function WorksPage() {
 
   return (
     <PageTransitionTarget layoutId="card-/works">
-      <main className="relative min-h-screen text-white">
+      <main className="relative min-h-screen bg-transparent text-ink">
         <WorksContent items={items} cvDownloadUrl={cvDownloadUrl} />
       </main>
     </PageTransitionTarget>

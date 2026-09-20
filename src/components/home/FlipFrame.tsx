@@ -220,14 +220,14 @@ function BoxLockDetail() {
         width="16"
         height="14"
         rx="2"
-        stroke="rgba(201,166,90,0.35)"
+        stroke="rgba(184,147,74,0.35)"
         strokeWidth="1"
       />
       <circle
         cx="20"
         cy="12"
         r="5"
-        stroke="rgba(201,166,90,0.4)"
+        stroke="rgba(184,147,74,0.4)"
         strokeWidth="1"
       />
       <line
@@ -235,7 +235,7 @@ function BoxLockDetail() {
         y1="17"
         x2="20"
         y2="24"
-        stroke="rgba(201,166,90,0.3)"
+        stroke="rgba(184,147,74,0.3)"
         strokeWidth="0.75"
       />
     </svg>

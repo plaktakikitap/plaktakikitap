@@ -30,7 +30,7 @@ function VinylWithTonearm() {
           </radialGradient>
           <radialGradient id="pt-vinyl-label" cx="40%" cy="35%" r="65%">
             <stop offset="0%" stopColor="#e2c878" />
-            <stop offset="55%" stopColor="#c9a65a" />
+            <stop offset="55%" stopColor="#b8934a" />
             <stop offset="100%" stopColor="#8a6d32" />
           </radialGradient>
         </defs>
@@ -109,7 +109,7 @@ function VinylWithTonearm() {
           }}
         />
         <div
-          className="absolute left-[48px] top-[-1px] rounded-full bg-[#1a1a1a] ring-1 ring-[#c9a65a]/40"
+          className="absolute left-[48px] top-[-1px] rounded-full bg-[#1a1a1a] ring-1 ring-gold/40"
           style={{ width: 10, height: 10 }}
         />
       </motion.div>

@@ -1,11 +1,44 @@
 "use client";
 
-import { useState, useCallback, useRef, useLayoutEffect } from "react";
+import { useState, useCallback, useRef, useLayoutEffect, type CSSProperties } from "react";
 import { motion, LayoutGroup } from "framer-motion";
 import type { Book } from "@/types/database";
 import styles from "./BookShelf.module.css";
 
-const BASE_SPINE_HEIGHT_PX = 300;
+const BOOK_COLORS = [
+  "#C9B99A", // sıcak kum
+  "#B5C4B1", // adaçayı yeşili
+  "#C4B5C0", // soluk lavanta
+  "#C4B9A8", // açık kahve
+  "#B8C4C0", // gri-yeşil
+  "#C8BCB0", // grège
+  "#BFC4B5", // zeytin-gri
+  "#C4BCCA", // soluk mor
+  "#C0C4B8", // açık haki
+  "#CAB8B8", // soluk rose
+] as const;
+
+const HEX_RE = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+
+/** Title'dan deterministik pastel renk (aynı kitap → aynı renk) */
+function colorFromTitle(title: string): string {
+  let hash = 0;
+  for (let i = 0; i < title.length; i++) {
+    hash = (hash * 31 + title.charCodeAt(i)) >>> 0;
+  }
+  return BOOK_COLORS[hash % BOOK_COLORS.length]!;
+}
+
+/** Supabase spine_color / cover_color doluysa onu, değilse paletten */
+function resolveBookColor(book: Book): string {
+  const coverColor = (book as { cover_color?: string | null }).cover_color;
+  const fromDb =
+    (typeof book.spine_color === "string" && book.spine_color.trim()) ||
+    (typeof coverColor === "string" && coverColor.trim()) ||
+    "";
+  if (fromDb && HEX_RE.test(fromDb)) return fromDb;
+  return colorFromTitle(book.title || book.id);
+}
 
 const ROW_SLOP_PX = 15;
 
@@ -33,17 +66,32 @@ function measureShelfTops(containerEl: HTMLElement): number[] {
   return rows;
 }
 
-const MIN_SPINE_WIDTH_PX = 34;
-const MAX_SPINE_WIDTH_PX = 78;
+const MIN_PAGES = 50;
+const MAX_PAGES = 1000;
+const MIN_WIDTH = 18;
+const MAX_WIDTH = 52;
+const DEFAULT_WIDTH = 28;
 
-/** width = clamp(34, 34 + Math.sqrt(page_count) * 2.6, 78) — daha geniş sırtlar, okunaklı yazı */
-function spineWidthPx(book: { page_count?: number | null; pages?: number | null }): number {
-  const pages = book.page_count ?? book.pages ?? 100;
-  const w = 34 + Math.sqrt(pages) * 2.6;
-  return Math.round(Math.max(MIN_SPINE_WIDTH_PX, Math.min(MAX_SPINE_WIDTH_PX, w)));
+function resolvePageCount(book: {
+  page_count?: number | null;
+  pages?: number | null;
+  num_pages?: number | null;
+}): number {
+  for (const n of [book.page_count, book.pages, book.num_pages]) {
+    // 1 = import placeholder, gerçek sayfa sayısı değil
+    if (typeof n === "number" && Number.isFinite(n) && n > 1) return n;
+  }
+  return 0;
 }
 
-/** Deterministic height offset from book id hash: -6px .. +6px (stable across re-renders) */
+function spineWidthPx(pages: number): number {
+  if (!pages) return DEFAULT_WIDTH;
+  const width =
+    MIN_WIDTH + ((pages - MIN_PAGES) / (MAX_PAGES - MIN_PAGES)) * (MAX_WIDTH - MIN_WIDTH);
+  return Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, width));
+}
+
+/** Deterministic height offset from book id hash: -6px .. +6px */
 function spineHeightVariationPx(id: string): number {
   let h = 0;
   for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 1000;
@@ -51,7 +99,6 @@ function spineHeightVariationPx(id: string): number {
   return Math.round(t * 12 - 6);
 }
 
-/** Page-load shelving: shelf starts empty, spines appear left-to-right with stagger (deterministic, no random) */
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -83,32 +130,12 @@ interface BookShelfProps {
   onSelectBook?: (book: Book) => void;
 }
 
-/** Görselin en-boy oranına göre sırt genişliği ve yüksekliği (kırpma yok). */
-function spineSizeFromAspect(
-  naturalWidth: number,
-  naturalHeight: number
-): { widthPx: number; heightPx: number } {
-  if (naturalHeight <= 0) return { widthPx: spineWidthPx({ pages: 100 }), heightPx: BASE_SPINE_HEIGHT_PX };
-  const aspect = naturalWidth / naturalHeight;
-  let widthPx = Math.round(BASE_SPINE_HEIGHT_PX * aspect);
-  widthPx = Math.max(MIN_SPINE_WIDTH_PX, Math.min(MAX_SPINE_WIDTH_PX, widthPx));
-  const heightPx = Math.round(widthPx / aspect);
-  return { widthPx, heightPx };
-}
-
+/**
+ * Kitaplık — tüm kitaplar pastel sırt + başlık (yan kapak görselleri kullanılmaz).
+ */
 export function BookShelf({ books, onSelectBook }: BookShelfProps) {
-  const [failedImageIds, setFailedImageIds] = useState<Set<string>>(() => new Set());
-  const [imageDimensions, setImageDimensions] = useState<Record<string, { w: number; h: number }>>({});
   const [shelfTops, setShelfTops] = useState<number[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const handleImageError = useCallback((bookId: string) => {
-    setFailedImageIds((prev) => new Set(prev).add(bookId));
-  }, []);
-
-  const handleImageLoad = useCallback((bookId: string, w: number, h: number) => {
-    if (w > 0 && h > 0) setImageDimensions((prev) => ({ ...prev, [bookId]: { w, h } }));
-  }, []);
 
   const updateShelfTops = useCallback(() => {
     const el = containerRef.current;
@@ -134,7 +161,7 @@ export function BookShelf({ books, onSelectBook }: BookShelfProps) {
 
   if (books.length === 0) {
     return (
-      <p className="py-12 text-center text-white/50">
+      <p className="py-12 text-center text-ink/50">
         Henüz kitap eklenmemiş. Kitaplar burada sırt görünümüyle listelenir.
       </p>
     );
@@ -155,16 +182,9 @@ export function BookShelf({ books, onSelectBook }: BookShelfProps) {
         >
           {books.map((book) => {
             const heightVariationPx = spineHeightVariationPx(book.id);
-            const spineImage = book.spine_url || book.cover_url;
-            const usePlaceholder = !spineImage || failedImageIds.has(book.id);
-            const dims = imageDimensions[book.id];
-            const fromImage = dims != null;
-            const { widthPx, heightPx: heightFromImage } = fromImage
-              ? spineSizeFromAspect(dims.w, dims.h)
-              : { widthPx: spineWidthPx(book), heightPx: BASE_SPINE_HEIGHT_PX };
-            const heightStyle = fromImage
-              ? `${heightFromImage + heightVariationPx}px`
-              : `calc(clamp(260px, 28vw, 430px) + ${heightVariationPx}px)`;
+            const widthPx = spineWidthPx(resolvePageCount(book));
+            const heightStyle = `calc(clamp(260px, 28vw, 430px) + ${heightVariationPx}px)`;
+            const bookColor = resolveBookColor(book);
 
             return (
               <motion.article
@@ -182,41 +202,37 @@ export function BookShelf({ books, onSelectBook }: BookShelfProps) {
                   title={`${book.title}${book.author ? ` — ${book.author}` : ""}`}
                 >
                   <div
-                    className={`${styles.spine} ${usePlaceholder ? styles.spinePlaceholderOuter : ""}`}
+                    className={`${styles.spine} ${styles.spinePlaceholderOuter}`}
                     style={{
-                      width: widthPx,
-                      minWidth: widthPx,
+                      width: `${widthPx}px`,
+                      minWidth: `${widthPx}px`,
+                      maxWidth: `${widthPx}px`,
                       height: heightStyle,
                       minHeight: heightStyle,
+                      ["--spine-color" as string]: bookColor,
                     }}
                   >
                     <div className={styles.spineInner}>
-                      {!usePlaceholder ? (
-                        <img
-                          src={spineImage!}
-                          alt=""
-                          className={styles.spineImage}
-                          loading="lazy"
-                          onLoad={(e) => {
-                            const img = e.currentTarget;
-                            handleImageLoad(book.id, img.naturalWidth, img.naturalHeight);
-                          }}
-                          onError={() => handleImageError(book.id)}
-                        />
-                      ) : (
-                        <div className={styles.spinePlaceholder}>
-                          <span className={styles.spineTitleText} aria-hidden>
-                            {book.title}
-                          </span>
-                        </div>
-                      )}
+                      <div className={styles.spinePlaceholder}>
+                        <span className={styles.spineTint} aria-hidden />
+                        <span
+                          className={styles.spineTitleText}
+                          style={
+                            {
+                              "--title-chars": Math.max(book.title.length, 1),
+                            } as CSSProperties
+                          }
+                        >
+                          {book.title}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </button>
               </motion.article>
             );
           })}
-      </motion.div>
+        </motion.div>
       </LayoutGroup>
       {shelfTops.map((topPx, i) => (
         <div

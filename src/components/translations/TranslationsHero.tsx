@@ -27,7 +27,7 @@ export function TranslationsHero({ settings }: { settings: TranslationsSettingsR
       >
         <div className="absolute inset-0 pointer-events-none rounded-xl border border-amber-400/20" aria-hidden />
         <div className="relative">
-          <div className="font-serif text-sm italic leading-relaxed text-white/75 sm:text-base max-w-none">
+          <div className="font-serif text-sm font-medium italic leading-relaxed text-ink/75 sm:text-base max-w-none">
             {settings.intro_body.split("\n").map((p, i) => (
               <p key={i} className={i > 0 ? "mt-3" : ""}>
                 {p}
@@ -36,7 +36,7 @@ export function TranslationsHero({ settings }: { settings: TranslationsSettingsR
           </div>
           {settings.intro_signature?.trim() && (
             <p
-              className="mt-5 text-right text-base italic text-amber-800/80 dark:text-amber-200/80"
+              className="mt-5 text-right text-base italic text-amber-800/80 dark:text-gold/80"
               style={{ fontFamily: "var(--font-handwriting), cursive" }}
             >
               — {settings.intro_signature}

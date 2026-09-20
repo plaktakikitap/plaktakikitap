@@ -42,19 +42,19 @@ export function ReadingLogHeaderCards({
               }
             : undefined
         }
-        className={`group relative rounded-2xl border border-white/10 bg-white/5 p-5 text-left shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-xl sm:rounded-3xl sm:p-6 ${
+        className={`group relative rounded-2xl border border-ink/10 bg-ink/5 p-5 text-left shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-xl sm:rounded-3xl sm:p-6 ${
           canFilterReading
-            ? "cursor-pointer transition hover:border-white/20 hover:bg-white/[0.07]"
+            ? "cursor-pointer transition hover:border-ink/20 hover:bg-white/[0.07]"
             : ""
         }`}
       >
-        <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-white/60">
+        <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-ink/60">
           Şu an okuyorum
         </h2>
         {currentReading ? (
           <div className="flex flex-wrap items-center gap-4 sm:gap-6">
             <div className="relative shrink-0">
-              <div className="relative h-32 w-24 overflow-hidden rounded-xl border border-white/10 bg-white/10 shadow-lg sm:h-40 sm:w-28">
+              <div className="relative h-32 w-24 overflow-hidden rounded-xl border border-ink/10 bg-ink/5 shadow-lg sm:h-40 sm:w-28">
                 {currentReading.cover_url ? (
                   <Image
                     src={currentReading.cover_url}
@@ -65,14 +65,14 @@ export function ReadingLogHeaderCards({
                     unoptimized
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center text-2xl text-white/30">
+                  <div className="flex h-full w-full items-center justify-center text-2xl text-ink/30">
                     📖
                   </div>
                 )}
               </div>
               {readingCount > 1 && (
                 <span
-                  className="absolute -right-1.5 -top-1.5 flex h-7 w-7 items-center justify-center rounded-full border-2 border-[var(--background)] bg-amber-500/90 text-xs font-bold text-white shadow-lg"
+                  className="absolute -right-1.5 -top-1.5 flex h-7 w-7 items-center justify-center rounded-full border-2 border-[var(--background)] bg-amber-500/90 text-xs font-bold text-ink shadow-lg"
                   title={`${readingCount} kitap okunuyor`}
                 >
                   +{readingCount - 1}
@@ -80,23 +80,23 @@ export function ReadingLogHeaderCards({
               )}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="font-semibold text-white/95 group-hover:text-white">
+              <p className="font-semibold text-ink/95 group-hover:text-ink">
                 {currentReading.title}
               </p>
               {currentReading.author && (
-                <p className="mt-0.5 text-sm text-white/70">
+                <p className="mt-0.5 text-sm text-ink/70">
                   {currentReading.author}
                 </p>
               )}
               <div className="mt-3">
-                <div className="flex items-center justify-between gap-2 text-xs text-white/60">
+                <div className="flex items-center justify-between gap-2 text-xs text-ink/60">
                   <span>İlerleme</span>
-                  <span className="tabular-nums text-white/80">
+                  <span className="tabular-nums text-ink/80">
                     %{Math.round(progressPercent)}
                   </span>
                 </div>
                 <div
-                  className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-white/15"
+                  className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-ink/[0.06]"
                   role="progressbar"
                   aria-valuenow={Math.round(progressPercent)}
                   aria-valuemin={0}
@@ -111,21 +111,21 @@ export function ReadingLogHeaderCards({
             </div>
           </div>
         ) : (
-          <p className="py-6 text-center text-white/50">
+          <p className="py-6 text-center text-ink/50">
             Şu an okunan kitap yok. Admin panelinden ekleyebilirsiniz.
           </p>
         )}
       </div>
 
       {/* Sağ: Yıllık hedef */}
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-xl sm:rounded-3xl sm:p-6">
-        <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-white/60">
+      <div className="rounded-2xl border border-ink/10 bg-ink/5 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-xl sm:rounded-3xl sm:p-6">
+        <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-ink/60">
           Yıllık hedef
         </h2>
         <div className="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap">
-          <p className="text-2xl font-semibold tabular-nums text-white/95 sm:text-3xl">
-            {goalCount} <span className="text-white/60">/</span> {goalTarget}{" "}
-            <span className="text-base font-normal text-white/70 sm:text-lg">
+          <p className="text-2xl font-semibold tabular-nums text-ink/95 sm:text-3xl">
+            {goalCount} <span className="text-ink/60">/</span> {goalTarget}{" "}
+            <span className="text-base font-normal text-ink/70 sm:text-lg">
               kitap
             </span>
           </p>
@@ -134,12 +134,12 @@ export function ReadingLogHeaderCards({
             size={100}
             strokeWidth={8}
             centerLabel={`%${goalPercent}`}
-            centerLabelClassName="text-white"
+            centerLabelClassName="text-ink"
             fillColor="rgba(251, 191, 36, 0.9)"
             trackColor="rgba(255,255,255,0.12)"
           />
         </div>
-        <p className="mt-2 text-xs text-white/50">
+        <p className="mt-2 text-xs text-ink/50">
           Hedefin %{goalPercent}&apos;i tamamlandı
         </p>
       </div>

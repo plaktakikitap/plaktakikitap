@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getBookById } from "@/lib/db/queries";
 import { AdminReadingLogBookForm } from "@/components/admin/AdminReadingLogBookForm";
+import { AdminBookQuotes } from "@/components/admin/AdminBookQuotes";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -23,6 +24,7 @@ export default async function AdminReadingLogEditPage({ params }: PageProps) {
       <h1 className="mt-4 text-2xl font-bold">Kitap düzenle</h1>
       <p className="mt-1 text-sm text-[var(--muted)]">{book.title}</p>
       <AdminReadingLogBookForm book={book} />
+      <AdminBookQuotes bookId={book.id} />
     </div>
   );
 }

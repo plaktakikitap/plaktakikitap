@@ -26,7 +26,7 @@ export function KaralamalarList({ items }: { items: Karalama[] }) {
 
   if (items.length === 0) {
     return (
-      <p className="py-16 text-center text-sm text-[#9a9488]">
+      <p className="py-16 text-center text-sm text-ink-muted">
         Henüz {SECTION_NAME} yok.
       </p>
     );
@@ -38,7 +38,7 @@ export function KaralamalarList({ items }: { items: Karalama[] }) {
         <div key={k.id}>
           <article className="mb-12">
             <h2
-              className="m-0 mb-3 text-[1.15rem] font-semibold tracking-[-0.01em] text-[#f3ead9]"
+              className="m-0 mb-3 text-[1.15rem] font-semibold tracking-[-0.01em] text-ink"
               style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
             >
               <Link
@@ -48,18 +48,18 @@ export function KaralamalarList({ items }: { items: Karalama[] }) {
                 {k.baslik}
               </Link>
             </h2>
-            <div className="max-w-[680px] whitespace-pre-wrap text-[0.95rem] leading-[1.75] text-[#c8bfb0]">
+            <div className="max-w-[680px] whitespace-pre-wrap text-[0.95rem] leading-[1.75] text-ink-muted">
               {k.icerik}
             </div>
             <time
               dateTime={k.olusturma_tarihi}
-              className="mt-3 block text-[0.78rem] tracking-[0.03em] text-[#6b6560]"
+              className="mt-3 block text-[0.78rem] tracking-[0.03em] text-ink-muted"
             >
               {formatDate(k.olusturma_tarihi)}
             </time>
           </article>
           {idx < shown.length - 1 || hasMore ? (
-            <hr className="mb-12 border-0 border-t border-[rgba(201,166,90,0.1)]" />
+            <hr className="mb-12 border-0 border-t border-[rgba(184,147,74,0.1)]" />
           ) : null}
         </div>
       ))}
@@ -69,7 +69,7 @@ export function KaralamalarList({ items }: { items: Karalama[] }) {
           <button
             type="button"
             onClick={() => setVisible((v) => v + PAGE_SIZE)}
-            className="text-[0.78rem] tracking-[0.12em] text-[#9a9488] transition hover:text-[#c9a65a]"
+            className="text-[0.78rem] tracking-[0.12em] text-ink-muted transition hover:text-gold"
           >
             daha fazla
           </button>

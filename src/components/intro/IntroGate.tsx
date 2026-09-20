@@ -8,7 +8,7 @@ export function IntroGate() {
     <>
       <IntroGateBackground />
 
-      <main className="relative flex min-h-screen flex-col items-center justify-center px-6 py-16 text-[#F3EBDD]">
+      <main className="relative flex min-h-screen flex-col items-center justify-center px-6 py-16 text-ink">
         {/* Center-top text */}
         <h2
           className="mb-12 text-center font-display text-2xl font-medium tracking-tight sm:mb-16 sm:text-3xl md:text-4xl"

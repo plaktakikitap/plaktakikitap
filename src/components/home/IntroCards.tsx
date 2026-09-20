@@ -5,12 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { NavCard } from "@/components/home/NavCard";
 import { NAV_CARDS } from "@/components/home/nav-cards";
 import type { Video as VideoType } from "@/types/videos";
-
-/** Merkezden dışarıya gecikme; 8 kart */
-const STAGGER_FROM_CENTER = [0.08, 0, 0.08, 0.08, 0, 0.08, 0.08, 0];
-
-/** Y salınımı için farklı süreler (saniye) */
-const FLOAT_DURATIONS = [4.2, 3.8, 4.6, 3.5, 4.0, 3.9, 3.7, 4.1];
+import { cn } from "@/lib/utils";
 
 interface IntroCardsProps {
   latestVideo?: VideoType | null;
@@ -18,8 +13,9 @@ interface IntroCardsProps {
 }
 
 export function IntroCards({
-  latestVideo,
-  latestVideoThumb,
+  // reserved for future featured video card
+  latestVideo: _latestVideo,
+  latestVideoThumb: _latestVideoThumb,
 }: IntroCardsProps = {}) {
   const ref = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -39,38 +35,29 @@ export function IntroCards({
   return (
     <section ref={ref} className="px-4 pt-5 pb-16 md:pt-6 md:pb-20">
       <div className="mx-auto max-w-5xl">
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {/* Bento: mobilde full width; sm+ 4 kolon, featured 2 kolon */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {NAV_CARDS.map((card, i) => (
             <motion.div
               key={card.href}
               layoutId={`card-${card.href}`}
-              initial={{ opacity: 0, scale: 0.92 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={
                 isVisible || reduce
-                  ? {
-                      opacity: 1,
-                      scale: 1,
-                      y: reduce ? 0 : [0, -6, 0],
-                    }
-                  : { opacity: 0, scale: 0.92, y: 0 }
+                  ? { opacity: 1, y: 0 }
+                  : { opacity: 0, y: 12 }
               }
               transition={{
-                opacity: { duration: 0.4, delay: STAGGER_FROM_CENTER[i] },
-                scale: {
-                  duration: 0.45,
-                  delay: STAGGER_FROM_CENTER[i],
-                  ease: [0.22, 1, 0.36, 1],
-                },
-                y: reduce
-                  ? {}
-                  : {
-                      duration: FLOAT_DURATIONS[i],
-                      repeat: Infinity,
-                      repeatType: "reverse",
-                      delay: i * 0.3,
-                    },
+                duration: 0.4,
+                delay: reduce ? 0 : i * 0.05,
+                ease: [0.22, 1, 0.36, 1],
               }}
-              className="relative flex justify-center overflow-visible"
+              className={cn(
+                "min-w-0",
+                card.featured
+                  ? "sm:col-span-2 lg:col-span-2"
+                  : "sm:col-span-1"
+              )}
             >
               <NavCard card={card} />
             </motion.div>

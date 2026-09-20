@@ -14,7 +14,7 @@ export function WorksYouTubeGallery({ videos }: { videos: Video[] }) {
 
   return (
     <section className="mb-16">
-      <h2 className="mb-6 font-editorial text-2xl font-medium text-white sm:text-3xl">
+      <h2 className="mb-6 font-editorial text-2xl font-medium text-ink sm:text-3xl">
         YouTube
       </h2>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -24,7 +24,7 @@ export function WorksYouTubeGallery({ videos }: { videos: Video[] }) {
           return (
             <div
               key={v.id}
-              className="group relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black/30 shadow-xl"
+              className="group relative aspect-video w-full overflow-hidden rounded-xl border border-ink/10 bg-black/30 shadow-xl"
             >
               <iframe
                 src={`https://www.youtube.com/embed/${embedId}?rel=0`}
@@ -34,10 +34,10 @@ export function WorksYouTubeGallery({ videos }: { videos: Video[] }) {
                 className="absolute inset-0 h-full w-full"
               />
               <div
-                className="absolute inset-0 flex items-center justify-center rounded-xl border border-white/10 bg-[#050A14]/85 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-0"
+                className="absolute inset-0 flex items-center justify-center rounded-xl border border-ink/10 bg-ink/85 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-0"
                 aria-hidden
               >
-                <span className="rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white/90 backdrop-blur-sm">
+                <span className="rounded-lg bg-ink/5 px-4 py-2 text-sm font-medium text-ink/90 backdrop-blur-sm">
                   {v.title || "Video"}
                 </span>
               </div>

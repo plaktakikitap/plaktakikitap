@@ -23,7 +23,7 @@ function ScrollVinylSvg() {
         </radialGradient>
         <radialGradient id={labelId} cx="40%" cy="35%" r="65%">
           <stop offset="0%" stopColor="#e2c878" />
-          <stop offset="55%" stopColor="#c9a65a" />
+          <stop offset="55%" stopColor="#b8934a" />
           <stop offset="100%" stopColor="#8a6d32" />
         </radialGradient>
       </defs>
@@ -118,7 +118,7 @@ export function ScrollVinylIndicator() {
           transform: `rotate(${rotation}deg)`,
           transition: reduceMotion ? "none" : "transform 0.12s linear",
           filter:
-            "drop-shadow(0 2px 8px rgba(0,0,0,0.45)) drop-shadow(0 0 12px rgba(201,166,90,0.15))",
+            "drop-shadow(0 2px 8px rgba(0,0,0,0.45)) drop-shadow(0 0 12px rgba(184,147,74,0.15))",
         }}
       >
         <ScrollVinylSvg />

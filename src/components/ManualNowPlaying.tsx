@@ -110,12 +110,12 @@ export default function ManualNowPlaying({
   if (validTracks.length === 0) {
     return (
       <div className="flex items-center gap-4">
-        <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/10">
-          <div className="h-10 w-10 rounded-full border-2 border-white/20 bg-transparent" />
+        <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-ink/10 bg-ink/5">
+          <div className="h-10 w-10 rounded-full border-2 border-ink/20 bg-transparent" />
         </div>
         <div className="min-w-0 flex-1">
-          <p className="truncate font-medium text-white/90">Henüz şarkı yok</p>
-          <p className="truncate text-sm text-white/50">
+          <p className="truncate font-medium text-ink/90">Henüz şarkı yok</p>
+          <p className="truncate text-sm text-ink/50">
             Admin panelden ekleyin
           </p>
         </div>
@@ -136,7 +136,7 @@ export default function ManualNowPlaying({
           <button
             type="button"
             onClick={handlePlayPause}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/30"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/20 text-ink hover:bg-white/30"
             aria-label={isPlaying ? "Duraklat" : "Oynat"}
           >
             {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5 ml-0.5" />}
@@ -177,7 +177,7 @@ export default function ManualNowPlaying({
                   unoptimized
                 />
               ) : (
-                <span className="text-[0.5rem] font-medium text-amber-200/50">♪</span>
+                <span className="text-[0.5rem] font-medium text-gold/50">♪</span>
               )}
             </div>
             <div
@@ -221,17 +221,17 @@ export default function ManualNowPlaying({
 
         {/* Sağ: şarkı adı, sanatçı, süre */}
         <div className="min-w-0 flex-1">
-          <p className="truncate font-medium text-white/90">{track.title}</p>
-          <p className="truncate text-sm text-white/60">{track.artist}</p>
+          <p className="truncate font-medium text-ink/90">{track.title}</p>
+          <p className="truncate text-sm text-ink/60">{track.artist}</p>
 
           <div className="mt-2 flex items-center justify-between gap-2">
-            <div className="h-1 flex-1 overflow-hidden rounded-full bg-white/10">
+            <div className="h-1 flex-1 overflow-hidden rounded-full bg-ink/5">
               <div
                 className="h-full rounded-full bg-white/40 transition-all duration-1000"
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <span className="shrink-0 text-xs tabular-nums text-white/55">
+            <span className="shrink-0 text-xs tabular-nums text-ink/55">
               {formatTime(currentSec)} / {formatTime(duration)}
             </span>
           </div>

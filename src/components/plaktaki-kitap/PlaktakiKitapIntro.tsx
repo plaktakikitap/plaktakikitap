@@ -56,13 +56,13 @@ export function PlaktakiKitapIntro({ settings }: PlaktakiKitapIntroProps) {
       className="mb-2"
     >
       {/* Açıklama kutucuğu */}
-      <div className="rounded-xl border border-amber-400/15 bg-white/5 px-5 py-3 backdrop-blur-sm sm:px-6 sm:py-3.5">
+      <div className="rounded-xl border border-amber-400/15 bg-ink/5 px-5 py-3 backdrop-blur-sm sm:px-6 sm:py-3.5">
         {settings.intro_text ? (
-          <p className="whitespace-pre-line font-serif text-sm italic leading-relaxed text-white/75 sm:text-base">
+          <p className="whitespace-pre-line font-serif text-sm italic leading-relaxed text-ink/75 sm:text-base">
             {settings.intro_text}
           </p>
         ) : (
-          <p className="font-serif text-sm italic leading-relaxed text-white/75 sm:text-base">
+          <p className="font-serif text-sm italic leading-relaxed text-ink/75 sm:text-base">
             Kanal tanıtım metni burada görünecek. Admin panelinden düzenleyebilirsiniz.
           </p>
         )}
@@ -76,7 +76,7 @@ export function PlaktakiKitapIntro({ settings }: PlaktakiKitapIntroProps) {
               href={settings.youtube_channel_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-500/10 px-4 py-2.5 text-sm font-medium text-amber-200 transition hover:border-amber-400/50 hover:bg-amber-500/20 hover:text-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400/50"
+              className="inline-flex items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-500/10 px-4 py-2.5 text-sm font-medium text-gold transition hover:border-amber-400/50 hover:bg-gold-soft hover:text-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400/50"
             >
               <Youtube className="h-4 w-4" aria-hidden />
               YouTube Kanalıma Buradan Ulaşabilirsiniz
@@ -87,7 +87,7 @@ export function PlaktakiKitapIntro({ settings }: PlaktakiKitapIntroProps) {
               href={settings.spotify_profile_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-[#1DB954]/40 bg-[#1DB954]/20 px-3.5 py-1.5 text-sm font-medium text-white/95 transition hover:border-[#1DB954]/60 hover:bg-[#1DB954]/30 hover:text-white focus:outline-none focus:ring-2 focus:ring-[#1DB954]/50"
+              className="inline-flex items-center gap-2 rounded-full border border-[#1DB954]/40 bg-[#1DB954]/20 px-3.5 py-1.5 text-sm font-medium text-ink/95 transition hover:border-[#1DB954]/60 hover:bg-[#1DB954]/30 hover:text-ink focus:outline-none focus:ring-2 focus:ring-[#1DB954]/50"
             >
               <SpotifyIcon className="h-5 w-5 shrink-0" />
               Seslendirdiğim kitapları Spotify&apos;dan da dinleyebilirsiniz!
@@ -144,7 +144,7 @@ export function PlaktakiKitapIntro({ settings }: PlaktakiKitapIntroProps) {
               ) : (
                 <span className="relative text-lg font-semibold text-amber-100/90">—</span>
               )}
-              <span className="relative text-[0.65rem] font-medium uppercase tracking-wider text-amber-200/80 sm:text-[0.75rem]">abone</span>
+              <span className="relative text-[0.65rem] font-medium uppercase tracking-wider text-gold/80 sm:text-[0.75rem]">abone</span>
             </div>
         </div>
       </div>

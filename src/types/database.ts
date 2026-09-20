@@ -104,8 +104,29 @@ export interface Book {
   visibility?: Visibility;
   /** Öne çıkan "şu an okuyorum" (en fazla bir kitap true) */
   is_featured_current?: boolean;
+  /** Yan cilt rengi (hex); CurrentlyReading stack */
+  spine_color?: string | null;
   /** Legacy alias for spine width calc */
   pages?: number | null;
+}
+
+/** Portföy öğesi — portfolio_items tablosu */
+export interface PortfolioItem {
+  id: string;
+  title: string;
+  client: string | null;
+  category: string | null;
+  image_url: string | null;
+  created_at: string;
+}
+
+/** Kitap alıntısı — quotes tablosu (books.id FK) */
+export interface BookQuote {
+  id: string;
+  book_id: string;
+  text: string;
+  page_number: number | null;
+  created_at: string;
 }
 
 export interface Translation {

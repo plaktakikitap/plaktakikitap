@@ -23,12 +23,12 @@ export default function SpotifyNowPlaying() {
       href={profileUrl}
       target="_blank"
       rel="noreferrer"
-      className="group block w-full max-w-[420px] rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-md transition hover:bg-white/8"
+      className="group block w-full max-w-[420px] rounded-2xl border border-ink/10 bg-ink/5 p-4 backdrop-blur-md transition hover:bg-white/8"
     >
-      <div className="text-xs tracking-wide text-white/70">{label}</div>
+      <div className="text-xs tracking-wide text-ink/70">{label}</div>
 
       <div className="mt-3 flex gap-3">
-        <div className="relative h-14 w-14 overflow-hidden rounded-xl bg-white/10">
+        <div className="relative h-14 w-14 overflow-hidden rounded-xl bg-ink/5">
           {albumArt ? (
             <Image src={albumArt} alt="" fill className="object-cover" sizes="56px" />
           ) : null}
@@ -36,9 +36,9 @@ export default function SpotifyNowPlaying() {
 
         <div className="min-w-0">
           <div className="truncate text-base font-semibold">{title}</div>
-          <div className="truncate text-sm text-white/70">{artist}</div>
+          <div className="truncate text-sm text-ink/70">{artist}</div>
 
-          <div className="mt-2 flex items-center gap-2 text-[11px] text-white/55">
+          <div className="mt-2 flex items-center gap-2 text-[11px] text-ink/55">
             <span
               className={`inline-block h-2 w-2 rounded-full ${
                 isPlaying ? "bg-emerald-400" : "bg-white/30"

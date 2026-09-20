@@ -19,7 +19,7 @@ export function WorksCV({
 }) {
   return (
     <section className="mb-8">
-      <h2 className="mb-6 font-editorial text-2xl font-medium text-white sm:text-3xl">
+      <h2 className="mb-6 font-editorial text-2xl font-medium text-ink sm:text-3xl">
         Özgeçmiş
       </h2>
 
@@ -40,12 +40,12 @@ export function WorksCV({
                   aria-hidden
                 />
                 <div>
-                  <p className="font-medium text-white">
+                  <p className="font-medium text-ink">
                     {e.role} · {e.company}
                   </p>
-                  <p className="text-sm text-amber-200/90">{e.period}</p>
+                  <p className="text-sm text-gold/90">{e.period}</p>
                   {e.description && (
-                    <p className="mt-1 text-sm leading-relaxed text-white/70">
+                    <p className="mt-1 text-sm leading-relaxed text-ink/70">
                       {e.description}
                     </p>
                   )}

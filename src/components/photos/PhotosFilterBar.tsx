@@ -21,7 +21,7 @@ export function PhotosFilterBar({
 }: PhotosFilterBarProps) {
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="mr-1 text-xs font-medium uppercase tracking-wider text-white/50">
+      <span className="mr-1 text-xs font-medium uppercase tracking-wider text-ink/50">
         İçerik
       </span>
       {CONTENT_TAGS.map((tag) => (
@@ -31,8 +31,8 @@ export function PhotosFilterBar({
           onClick={() => onContentTagChange(contentTag === tag ? null : tag)}
           className={`rounded-full px-3 py-1.5 text-sm transition-colors ${
             contentTag === tag
-              ? "bg-white/25 text-white"
-              : "bg-white/10 text-white/80 hover:bg-white/20"
+              ? "bg-white/25 text-ink"
+              : "bg-ink/5 text-ink/80 hover:bg-white/20"
           }`}
         >
           #{tag}
@@ -40,7 +40,7 @@ export function PhotosFilterBar({
       ))}
       {cameraOptions.length > 0 && (
         <>
-          <span className="ml-4 mr-1 text-xs font-medium uppercase tracking-wider text-white/50">
+          <span className="ml-4 mr-1 text-xs font-medium uppercase tracking-wider text-ink/50">
             Kamera
           </span>
           {cameraOptions.map((cam) => (
@@ -50,8 +50,8 @@ export function PhotosFilterBar({
               onClick={() => onCameraTagChange(cameraTag === cam ? null : cam)}
               className={`rounded-full px-3 py-1.5 text-sm transition-colors ${
                 cameraTag === cam
-                  ? "bg-amber-500/30 text-amber-200"
-                  : "bg-white/10 text-white/80 hover:bg-white/20"
+                  ? "bg-amber-500/30 text-gold"
+                  : "bg-ink/5 text-ink/80 hover:bg-white/20"
               }`}
             >
               #{cam}

@@ -3,58 +3,87 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Krem site paleti — tek kaynak
+ * cream / ink / ink-muted / gold / rule
+ */
 :root {
-  --muted: oklch(0.55 0 0);
-  --accent: oklch(0.65 0.18 55);
-  --accent-soft: #fef3c7;
-  --card: oklch(1 0 0);
-  --card-border: #e7e5e4;
+  --cream: #f5f0e8;
+  --ink: #1a1612;
+  --ink-muted: #6b6158;
+  --gold: #b8934a;
+  --gold-soft: rgba(184, 147, 74, 0.14);
+  --rule: rgba(0, 0, 0, 0.06);
+  --rule-strong: rgba(0, 0, 0, 0.08);
+  --section-label: rgba(26, 22, 18, 0.35);
+  --section-pad: clamp(80px, 12vh, 140px);
+
+  /* Tipografi ölçeği — yalnızca bu 4 boyut */
+  --type-1: 3rem;
+  --type-2: 1.8rem;
+  --type-3: 1.1rem;
+  --type-4: 0.75rem;
+  --leading-body: 1.7;
+  --leading-heading: 1.2;
+
+  --background: var(--cream);
+  --foreground: var(--ink);
+  --muted: #e8e0d4;
+  --muted-foreground: var(--ink-muted);
+  --accent: var(--gold);
+  --accent-soft: var(--gold-soft);
+  --accent-foreground: var(--ink);
+  --card: #faf6f0;
+  --card-foreground: var(--ink);
+  --card-border: var(--rule);
+  --popover: #faf6f0;
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--cream);
+  --secondary: #ebe4d8;
+  --secondary-foreground: var(--ink);
+  --destructive: oklch(0.55 0.2 25);
+  --border: var(--rule);
+  --input: rgba(0, 0, 0, 0.08);
+  --ring: var(--gold);
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #faf6f0;
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--ink);
+  --sidebar-primary-foreground: var(--cream);
+  --sidebar-accent: #ebe4d8;
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--rule);
+  --sidebar-ring: var(--gold);
+
+  --admin-focus-ring: rgba(184, 147, 74, 0.5);
 }
 
 @theme inline {
+  --color-cream: var(--cream);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-rule: var(--rule);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-serif), Georgia, serif;
+  --font-sans: var(--font-sans), "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-display), "Cormorant Garamond", Georgia, serif;
   --font-display: var(--font-display), "Cormorant Garamond", Georgia, serif;
   --font-playfair: var(--font-playfair), "Playfair Display", Georgia, serif;
   --font-handwriting: var(--font-handwriting), "Caveat", cursive;
   --font-handwriting-title: var(--font-handwriting-title), "Permanent Marker", cursive;
   --font-handwriting-alt: var(--font-handwriting-alt), "Patrick Hand", cursive;
   --font-handwriting-doodle: var(--font-handwriting-doodle), "Nothing You Could Do", cursive;
-  /* El yazısı mürekkep efekti — kağıda hafifçe yayılmış */
   --ink-effect: blur(0.2px);
   --ink-opacity: 0.9;
-  /* Mürekkep dağılması (ink-bleed) — metinlerde çok hafif */
   --ink-bleed: 0 0 0.3px rgba(0, 0, 0, 0.35);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -94,38 +123,85 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --muted: #a8a29e;
-    --accent: #f59e0b;
-    --accent-soft: #422006;
-    --card: #1c1917;
-    --card-border: #292524;
-  }
-}
-
 html {
-  overflow-x: hidden;
+  overflow-x: clip;
+  overscroll-behavior-y: none;
 }
 
 body {
   font-family: var(--font-sans);
-  overflow-x: hidden;
+  font-size: 1rem;
+  line-height: var(--leading-body);
+  background-color: var(--cream);
+  color: var(--ink);
+  overflow-x: clip;
+  overscroll-behavior-y: none;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Editorial typography */
-h1, h2, h3, .font-editorial {
-  font-family: var(--font-serif);
+/* Serif başlıklar = Cormorant Garamond; body = Inter
+   (renk burada zorlanmaz — text-* utility'leri çalışsın) */
+h1,
+h2,
+h3,
+h4,
+.font-editorial,
+.font-display,
+.font-serif {
+  font-family: var(--font-display);
+  line-height: var(--leading-heading);
 }
 
-.font-display {
+/* Tipografi ölçeği — 3 / 1.8 / 1.1 / 0.75 */
+.type-1,
+h1.type-scale {
+  font-size: var(--type-1);
+  line-height: var(--leading-heading);
   font-family: var(--font-display);
 }
 
-/* Admin panel: altın sarısı focus ring (The Glass Logic) */
-:root {
-  --admin-focus-ring: rgba(212, 175, 55, 0.5);
+.type-2,
+h2.type-scale {
+  font-size: var(--type-2);
+  line-height: var(--leading-heading);
+  font-family: var(--font-display);
+}
+
+.type-3,
+h3.type-scale {
+  font-size: var(--type-3);
+  line-height: var(--leading-heading);
+  font-family: var(--font-display);
+}
+
+.type-4 {
+  font-size: var(--type-4);
+  line-height: var(--leading-heading);
+}
+
+/* Bölüm ritmi — renk değil boşluk + tipografi */
+.section-block {
+  padding-block: var(--section-pad);
+}
+
+.section-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: var(--leading-heading);
+  color: var(--section-label);
+}
+
+.section-rule,
+.section-divider {
+  display: block;
+  height: 1px;
+  width: 120px;
+  margin-inline: auto;
+  border: 0;
+  background: var(--rule-strong);
 }
 /* Admin form: açık kutu + koyu yazı — her ortamda okunaklı */
 .admin-input {
@@ -282,8 +358,8 @@ h1, h2, h3, .font-editorial {
   color: #1c1917;
 }
 .admin-rte-btn[data-active="true"] {
-  border-color: rgba(201, 166, 90, 0.55);
-  background: rgba(201, 166, 90, 0.18);
+  border-color: rgba(184, 147, 74, 0.55);
+  background: rgba(184, 147, 74, 0.18);
   color: #8a6427;
 }
 .admin-rte-divider {
@@ -369,14 +445,27 @@ h1, h2, h3, .font-editorial {
   animation: sparkle 4s ease-in-out infinite;
 }
 
-/* Plak ana sayfa — site laciverti + yumuşak derinlik */
+@keyframes sparkle-brown {
+  0%, 100% { opacity: 0.2; transform: scale(0.85); }
+  40% { opacity: 0.7; transform: scale(1.2); }
+  70% { opacity: 0.35; transform: scale(1); }
+}
+
+.animate-sparkle-brown {
+  animation: sparkle-brown 4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-sparkle-brown {
+    animation: none;
+    opacity: 0.35;
+  }
+}
+
+/* Plak ana sayfa — krem zemin (token) */
 .vinyl-page-bg {
-  background-color: #050a12 !important;
-  background-image:
-    radial-gradient(1200px 600px at 50% 15%, rgba(255, 255, 255, 0.06), transparent 60%),
-    radial-gradient(900px 500px at 20% 80%, rgba(255, 255, 255, 0.04), transparent 65%),
-    radial-gradient(900px 500px at 80% 80%, rgba(255, 255, 255, 0.04), transparent 65%),
-    radial-gradient(circle at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.45) 92%) !important;
+  background-color: var(--cream) !important;
+  background-image: none !important;
 }
 
 @keyframes floatNote {
@@ -394,41 +483,372 @@ h1, h2, h3, .font-editorial {
   }
 }
 
-/* Şu an okuyorum — eğik kapak */
-.currently-reading-cover {
-  aspect-ratio: 2 / 3;
-  max-height: 220px;
-  transform: rotate(3deg);
-  box-shadow: 6px 8px 20px rgba(0, 0, 0, 0.45);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* Şu an okuyorum — fade-in */
+@keyframes currently-reading-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-.currently-reading-cover:hover,
-.currently-reading-cover:focus-within {
-  transform: rotate(0deg);
-  box-shadow: 10px 14px 32px rgba(0, 0, 0, 0.55);
+.currently-reading-fade {
+  animation: currently-reading-fade 0.5s ease forwards;
+}
+
+/* Minik açık kitap — sayfa flap */
+@keyframes currently-reading-page-flap {
+  0%,
+  100% {
+    transform: rotateY(0deg);
+  }
+  50% {
+    transform: rotateY(-18deg);
+  }
+}
+@keyframes currently-reading-page-fly {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate(1.5px, -1.5px) rotate(8deg);
+    opacity: 0.75;
+  }
+}
+.currently-reading-page {
+  transform-origin: 9px 8px;
+  transform-box: fill-box;
+  animation: currently-reading-page-flap 2.8s ease-in-out infinite;
+}
+.currently-reading-page-fly {
+  transform-origin: 12px 3px;
+  animation: currently-reading-page-fly 2.2s ease-in-out infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-  .currently-reading-cover {
-    transition: none;
+  .currently-reading-fade {
+    animation: none;
+    opacity: 1;
+  }
+  .currently-reading-page,
+  .currently-reading-page-fly {
+    animation: none;
   }
 }
 
-/* Soft grain overlay */
+/* Şu an okuyorum — cilt yığını + kapak */
+.currently-reading-spine {
+  position: absolute;
+}
+.currently-reading-cover {
+  position: relative;
+}
+@media (prefers-reduced-motion: reduce) {
+  .currently-reading-spine,
+  .currently-reading-cover,
+  .currently-reading [style*="transition"] {
+    transition: none !important;
+  }
+}
+
+/* Film/dizi detay modal — koyu panel, krem yazı (zorunlu) */
+.watch-detail-modal {
+  color: #f5f0e8 !important;
+  background: rgba(26, 22, 18, 0.94) !important;
+  border-color: rgba(245, 240, 232, 0.18) !important;
+}
+.watch-detail-modal h2,
+.watch-detail-modal p,
+.watch-detail-modal span,
+.watch-detail-modal label,
+.watch-detail-modal button,
+.watch-detail-modal input {
+  color: #f5f0e8 !important;
+}
+.watch-detail-modal .watch-detail-muted {
+  color: rgba(245, 240, 232, 0.55) !important;
+}
+.watch-detail-modal .watch-detail-body {
+  color: rgba(245, 240, 232, 0.92) !important;
+}
+.watch-detail-modal input::placeholder {
+  color: rgba(245, 240, 232, 0.4) !important;
+}
+
+/* Yaptıklarım — kategori renkleri */
+.works-page {
+  --color-all: #f5f0e8;
+  --color-gonulluluk: #fdf6e3;
+  --color-yazilim: #eef2f8;
+  --color-sertifika: #eff4ef;
+  --color-resim: #f5eef0;
+  --color-projeler: #f0edf8;
+  --works-bg: var(--color-all);
+  --works-active-bg: color-mix(in srgb, var(--works-bg) 78%, #3d3530 12%);
+  min-height: 100vh;
+  background-color: var(--works-bg);
+  transition: background-color 0.5s ease;
+}
+.works-page[data-category="all"] {
+  --works-bg: var(--color-all);
+}
+.works-page[data-category="project"] {
+  --works-bg: var(--color-projeler);
+}
+.works-page[data-category="software"] {
+  --works-bg: var(--color-yazilim);
+}
+.works-page[data-category="certificate"] {
+  --works-bg: var(--color-sertifika);
+}
+.works-page[data-category="art"] {
+  --works-bg: var(--color-resim);
+}
+
+.works-filter-btn {
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.35s ease, color 0.35s ease, box-shadow 0.35s ease;
+  background: transparent;
+  color: #8b7b6b;
+}
+.works-filter-btn:hover {
+  color: #3d3530;
+}
+.works-filter-btn.is-active {
+  background: var(--works-active-bg);
+  color: #3d3530;
+  box-shadow: inset 0 0 0 1px rgba(61, 53, 48, 0.08);
+}
+
+/* Portfolyo masonry */
+.portfolio-masonry {
+  column-count: 1;
+  column-gap: 1rem;
+}
+@media (min-width: 768px) {
+  .portfolio-masonry {
+    column-count: 2;
+  }
+}
+@media (min-width: 1024px) {
+  .portfolio-masonry {
+    column-count: 3;
+  }
+}
+.portfolio-card {
+  position: relative;
+  display: block;
+  break-inside: avoid;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.portfolio-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+.portfolio-card-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1rem 1.1rem;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.portfolio-card:hover .portfolio-card-overlay,
+.portfolio-card:focus-within .portfolio-card-overlay {
+  opacity: 1;
+}
+.portfolio-card-title {
+  margin: 0;
+  font-family: var(--font-sans), Inter, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: #fff;
+}
+.portfolio-card-client {
+  margin: 0.2rem 0 0;
+  font-family: var(--font-sans), Inter, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Polaroid sertifika kartları */
+.works-polaroid-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+@media (min-width: 640px) {
+  .works-polaroid-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .works-polaroid-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.works-polaroid {
+  position: relative;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  background: #fefefe;
+  padding: 12px 12px 40px;
+  border-radius: 2px;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  box-shadow:
+    2px 4px 12px rgba(0, 0, 0, 0.12),
+    0 1px 3px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease;
+  transform-origin: center center;
+}
+.works-polaroid:nth-child(6n + 1) {
+  transform: rotate(-2deg);
+}
+.works-polaroid:nth-child(6n + 2) {
+  transform: rotate(1.5deg);
+}
+.works-polaroid:nth-child(6n + 3) {
+  transform: rotate(-1deg);
+}
+.works-polaroid:nth-child(6n + 4) {
+  transform: rotate(2.5deg);
+}
+.works-polaroid:nth-child(6n + 5) {
+  transform: rotate(-1.5deg);
+}
+.works-polaroid:nth-child(6n + 6) {
+  transform: rotate(0.8deg);
+}
+.works-polaroid:hover,
+.works-polaroid:focus-visible {
+  z-index: 10;
+  transform: rotate(0deg) scale(1.06) translateY(-8px);
+  box-shadow: 8px 16px 32px rgba(0, 0, 0, 0.15);
+  outline: none;
+}
+.works-polaroid-media {
+  display: flex;
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #f5f0e8;
+}
+.works-polaroid-media img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+.works-polaroid-caption {
+  margin-top: 8px;
+  text-align: center;
+}
+.works-polaroid-title {
+  margin: 0;
+  font-family: var(--font-sans), Inter, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #3d3530;
+  line-height: 1.35;
+}
+.works-polaroid-meta {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-sans), Inter, sans-serif;
+  font-size: 0.65rem;
+  font-weight: 400;
+  color: #8b7b6b;
+  line-height: 1.3;
+}
+
+/* Yazılım kartları — site önizleme */
+.works-site-preview {
+  position: relative;
+  min-height: 160px;
+  height: 160px;
+  flex-shrink: 0;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px 8px 0 0;
+  background: #e8e0d5;
+}
+.works-site-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  opacity: 0;
+}
+.works-site-preview img.is-loaded {
+  opacity: 1;
+}
+.works-site-preview-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    #e8e0d5 0%,
+    #f3ebe3 45%,
+    #e8e0d5 90%
+  );
+  background-size: 200% 100%;
+  animation: works-preview-shimmer 1.2s ease-in-out infinite;
+}
+@keyframes works-preview-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+.works-site-preview-placeholder {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background: #e8e0d5;
+  padding: 0 1rem;
+  text-align: center;
+  font-family: var(--font-sans), Inter, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #8b7b6b;
+}
+
+/* Soft grain overlay — krem zeminde çok hafif */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.35;
+  opacity: 0.12;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  mix-blend-mode: overlay;
-}
-
-@media (prefers-color-scheme: dark) {
-  body::before {
-    opacity: 0.15;
-  }
+  mix-blend-mode: multiply;
 }
 
 /* Components: cards, chips, tags */
@@ -699,7 +1119,7 @@ body::before {
 
 .now-playing-strip-divider {
   width: 1px;
-  background: rgba(201, 166, 90, 0.15);
+  background: rgba(184, 147, 74, 0.15);
 }
 
 @media (max-width: 480px) {

@@ -11,7 +11,10 @@ export function Nav() {
   // Admin paneli kendi nav'ına sahip
   if (pathname.startsWith("/secretgate")) return null;
 
-  const isHome = pathname === "/" || pathname === "/home";
+  // Intro gate — özel sayfa: arama ve fotoğraf yok
+  if (pathname === "/") return null;
+
+  const isHome = pathname === "/home";
 
   return (
     <nav
@@ -34,7 +37,7 @@ export function Nav() {
             className="mb-0.5 h-1 w-1 rounded-full bg-[rgba(192,160,96,0.7)] shadow-[0_0_4px_rgba(192,160,96,0.4)]"
           />
           <Image
-            src="/images/eymen-studio.jpg"
+            src="/images/eymen-nav.jpg"
             alt=""
             width={40}
             height={40}

@@ -59,7 +59,7 @@ function IntroVinylDisk({
           </radialGradient>
           <radialGradient id="intro-vinyl-label" cx="40%" cy="35%" r="65%">
             <stop offset="0%" stopColor="#e2c878" />
-            <stop offset="55%" stopColor="#c9a65a" />
+            <stop offset="55%" stopColor="#b8934a" />
             <stop offset="100%" stopColor="#8a6d32" />
           </radialGradient>
         </defs>
@@ -130,7 +130,7 @@ function IntroTonearm({ phase }: { phase: number }) {
         }}
       />
       <div
-        className="absolute left-[58px] top-[-1px] rounded-full bg-[#1a1a1a] ring-1 ring-[#c9a65a]/40"
+        className="absolute left-[58px] top-[-1px] rounded-full bg-[#1a1a1a] ring-1 ring-gold/40"
         style={{ width: 11, height: 11 }}
       />
     </motion.div>
@@ -145,7 +145,7 @@ function SoundRipples({ active }: { active: boolean }) {
       {[0, 1, 2].map((i) => (
         <motion.div
           key={i}
-          className="pointer-events-none absolute left-1/2 top-1/2 h-[120px] w-[120px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#c9a65a]"
+          className="pointer-events-none absolute left-1/2 top-1/2 h-[120px] w-[120px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-gold"
           initial={{ scale: 0.55, opacity: 0.55 }}
           animate={{ scale: 2.4, opacity: 0 }}
           transition={{
@@ -261,7 +261,7 @@ function IntroAnimationOverlay({
       <button
         type="button"
         onClick={finish}
-        className="pointer-events-auto absolute bottom-6 right-6 font-sans text-[13px] tracking-wide text-[#9a9488] transition hover:text-[#c9a65a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a65a]/50"
+        className="pointer-events-auto absolute bottom-6 right-6 font-sans text-[13px] tracking-wide text-ink-muted transition hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50"
       >
         atla →
       </button>

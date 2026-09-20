@@ -55,29 +55,29 @@ export default async function KaralamaDetailPage({
   if (!item) notFound();
 
   return (
-    <main className="relative min-h-screen text-[#f3ead9]">
+    <main className="relative min-h-screen text-ink">
       <article className="animate-page-fade-in mx-auto max-w-[720px] px-4 py-12 sm:px-6 sm:py-16">
         <Link
           href={SECTION_PATH}
-          className="mb-10 inline-block text-[0.78rem] tracking-[0.08em] text-[#9a9488] no-underline transition hover:text-[#c9a65a]"
+          className="mb-10 inline-block text-[0.78rem] tracking-[0.08em] text-ink-muted no-underline transition hover:text-gold"
         >
           ← {SECTION_NAME}
         </Link>
 
         <h1
-          className="m-0 mb-3 text-[1.15rem] font-semibold tracking-[-0.01em] text-[#f3ead9] sm:text-[1.35rem]"
+          className="m-0 mb-3 text-[1.15rem] font-semibold tracking-[-0.01em] text-ink sm:text-[1.35rem]"
           style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
         >
           {item.baslik}
         </h1>
 
-        <div className="max-w-[680px] whitespace-pre-wrap text-[0.95rem] leading-[1.75] text-[#c8bfb0]">
+        <div className="max-w-[680px] whitespace-pre-wrap text-[0.95rem] leading-[1.75] text-ink/80">
           {item.icerik}
         </div>
 
         <time
           dateTime={item.olusturma_tarihi}
-          className="mt-3 block text-[0.78rem] tracking-[0.03em] text-[#6b6560]"
+          className="mt-3 block text-[0.78rem] tracking-[0.03em] text-ink-muted"
         >
           {formatDate(item.olusturma_tarihi)}
         </time>

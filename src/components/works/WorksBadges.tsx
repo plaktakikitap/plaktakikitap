@@ -10,7 +10,7 @@ export function WorksBadges({ badges }: { badges: Badge[] }) {
 
   return (
     <section className="mb-16">
-      <h2 className="mb-6 font-editorial text-2xl font-medium text-white sm:text-3xl">
+      <h2 className="mb-6 font-editorial text-2xl font-medium text-ink sm:text-3xl">
         Sertifikalar
       </h2>
       <div className="flex flex-wrap items-center justify-center gap-6">
@@ -24,7 +24,7 @@ export function WorksBadges({ badges }: { badges: Badge[] }) {
                 scale: 1.08,
                 boxShadow: "0 0 24px rgba(212,175,55,0.4), 0 0 48px rgba(212,175,55,0.2)",
               }}
-              className="flex flex-col items-center gap-2 rounded-2xl border border-white/15 bg-white/5 p-4 backdrop-blur-sm transition-shadow"
+              className="flex flex-col items-center gap-2 rounded-2xl border border-ink/15 bg-ink/5 p-4 backdrop-blur-sm transition-shadow"
             >
               {b.image_url ? (
                 <img
@@ -33,11 +33,11 @@ export function WorksBadges({ badges }: { badges: Badge[] }) {
                   className="h-14 w-14 object-contain sm:h-16 sm:w-16"
                 />
               ) : (
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-amber-500/20 text-2xl sm:h-16 sm:w-16">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gold-soft text-2xl sm:h-16 sm:w-16">
                   🏆
                 </div>
               )}
-              <span className="max-w-[100px] text-center text-xs font-medium text-white/90">
+              <span className="max-w-[100px] text-center text-xs font-medium text-ink/90">
                 {b.title}
               </span>
             </motion.div>
@@ -49,7 +49,7 @@ export function WorksBadges({ badges }: { badges: Badge[] }) {
                 href={b.link_url}
                 target="_blank"
                 rel="noreferrer"
-                className="focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050A14]"
+                className="focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
               >
                 {content}
               </Link>

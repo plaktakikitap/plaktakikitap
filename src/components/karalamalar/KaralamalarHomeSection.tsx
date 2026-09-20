@@ -28,18 +28,13 @@ export function KaralamalarHomeSection({ items }: { items: Karalama[] }) {
   if (items.length === 0) return null;
 
   return (
-    <section className="mx-auto mt-10 w-full max-w-[720px] px-4 sm:mt-14 sm:px-6">
-      <p className="mb-8 text-[0.7rem] font-medium lowercase tracking-[0.15em] text-[#9a9488]">
-        {SECTION_NAME}
-      </p>
+    <section className="mx-auto w-full max-w-[720px] px-4 sm:px-6">
+      <p className="section-eyebrow mb-8">{SECTION_NAME}</p>
 
       {items.map((item, idx) => (
         <div key={item.id}>
           <article className="mb-10">
-            <h3
-              className="m-0 mb-2 text-[1.05rem] font-semibold tracking-[-0.01em] text-[#f3ead9]"
-              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
-            >
+            <h3 className="type-3 m-0 mb-2 font-editorial font-medium tracking-[-0.01em] text-ink">
               <Link
                 href={`${SECTION_PATH}/${item.slug}`}
                 className="text-inherit no-underline"
@@ -47,18 +42,18 @@ export function KaralamalarHomeSection({ items }: { items: Karalama[] }) {
                 {item.baslik}
               </Link>
             </h3>
-            <p className="m-0 max-w-[680px] text-[0.9rem] leading-[1.7] text-[#c8bfb0]">
+            <p className="m-0 max-w-[680px] text-[1rem] leading-[1.7] text-ink-muted">
               {preview(item.icerik, 120)}
             </p>
             <time
               dateTime={item.olusturma_tarihi}
-              className="mt-2 block text-[0.75rem] tracking-[0.03em] text-[#6b6560]"
+              className="type-4 mt-2 block tracking-[0.03em] text-ink-muted"
             >
               {formatDate(item.olusturma_tarihi)}
             </time>
           </article>
           {idx < items.length - 1 ? (
-            <hr className="mb-10 border-0 border-t border-[rgba(201,166,90,0.1)]" />
+            <hr className="section-divider mb-10" />
           ) : null}
         </div>
       ))}
@@ -66,7 +61,7 @@ export function KaralamalarHomeSection({ items }: { items: Karalama[] }) {
       <p className="mt-2">
         <Link
           href={SECTION_PATH}
-          className="text-[0.8rem] tracking-[0.06em] text-[#9a9488] no-underline transition hover:text-[#c9a65a]"
+          className="type-4 tracking-[0.06em] text-ink-muted no-underline transition hover:text-gold"
         >
           tümü →
         </Link>

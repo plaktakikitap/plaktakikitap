@@ -125,12 +125,12 @@ export function AramaKutusu() {
       <button
         type="button"
         onClick={() => setAcik(true)}
-        className="inline-flex items-center gap-2 rounded-md border border-[rgba(201,166,90,0.15)] bg-white/[0.04] px-3 py-1.5 text-[0.82rem] text-[#9a9488] transition hover:border-[rgba(201,166,90,0.3)] hover:text-[#c9a65a]"
+        className="inline-flex items-center gap-2 rounded-md border border-rule bg-card px-3 py-1.5 text-[0.82rem] text-ink-muted transition hover:border-gold/40 hover:text-gold"
         aria-label="Ara"
       >
         <Search className="h-3.5 w-3.5" />
         <span className="hidden sm:inline">Ara</span>
-        <kbd className="hidden rounded border border-white/10 bg-white/[0.06] px-1.5 py-0.5 font-sans text-[0.7rem] text-[#6b6560] sm:inline">
+        <kbd className="hidden rounded border border-ink/10 bg-white/[0.06] px-1.5 py-0.5 font-sans text-[0.7rem] text-ink-muted sm:inline">
           ⌘K
         </kbd>
       </button>
@@ -160,27 +160,27 @@ export function AramaKutusu() {
               }
               transition={reduceMotion ? { duration: 0 } : { duration: 0.2 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-[92%] max-w-[560px] overflow-hidden rounded-xl border border-[rgba(201,166,90,0.25)] bg-[#111009] shadow-[0_24px_48px_rgba(0,0,0,0.6)]"
+              className="w-[92%] max-w-[560px] overflow-hidden rounded-xl border border-gold/30 bg-cream shadow-[0_24px_48px_rgba(0,0,0,0.6)]"
             >
-              <div className="flex items-center gap-3 border-b border-[rgba(201,166,90,0.1)] px-4 py-3.5 sm:px-5">
-                <Search className="h-4 w-4 shrink-0 text-[#9a9488]" />
+              <div className="flex items-center gap-3 border-b border-rule px-4 py-3.5 sm:px-5">
+                <Search className="h-4 w-4 shrink-0 text-ink-muted" />
                 <input
                   ref={inputRef}
                   value={sorgu}
                   onChange={(e) => setSorgu(e.target.value)}
                   onKeyDown={onKeyDown}
                   placeholder="Kitap, film, dizi, karalama ara..."
-                  className="min-w-0 flex-1 border-0 bg-transparent text-base text-[#f3ead9] outline-none placeholder:text-[#6b6560]"
+                  className="min-w-0 flex-1 border-0 bg-transparent text-base text-ink outline-none placeholder:text-ink-muted"
                 />
                 {yukleniyor ? (
-                  <span className="shrink-0 text-[0.8rem] text-[#9a9488]">
+                  <span className="shrink-0 text-[0.8rem] text-ink-muted">
                     arıyor...
                   </span>
                 ) : null}
                 <button
                   type="button"
                   onClick={kapat}
-                  className="rounded border border-white/10 bg-white/[0.06] px-1.5 py-0.5 font-sans text-[0.72rem] text-[#6b6560]"
+                  className="rounded border border-ink/10 bg-white/[0.06] px-1.5 py-0.5 font-sans text-[0.72rem] text-ink-muted"
                 >
                   ESC
                 </button>
@@ -198,11 +198,11 @@ export function AramaKutusu() {
                           onClick={() => sonucaGit(s.url)}
                           onMouseEnter={() => setSecili(idx)}
                           className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left transition ${
-                            active ? "bg-[rgba(201,166,90,0.07)]" : ""
+                            active ? "bg-[rgba(184,147,74,0.07)]" : ""
                           }`}
                         >
                           {s.gorsel ? (
-                            <span className="relative h-11 w-8 shrink-0 overflow-hidden rounded-[3px] bg-white/5">
+                            <span className="relative h-11 w-8 shrink-0 overflow-hidden rounded-[3px] bg-ink/5">
                               <Image
                                 src={s.gorsel}
                                 alt=""
@@ -213,14 +213,14 @@ export function AramaKutusu() {
                               />
                             </span>
                           ) : (
-                            <span className="h-11 w-8 shrink-0 rounded-[3px] bg-[rgba(201,166,90,0.1)]" />
+                            <span className="h-11 w-8 shrink-0 rounded-[3px] bg-gold-soft" />
                           )}
                           <span className="min-w-0 flex-1">
-                            <span className="block truncate text-[0.9rem] text-[#f3ead9]">
+                            <span className="block truncate text-[0.9rem] text-ink">
                               {s.baslik}
                             </span>
                             {s.altyazi ? (
-                              <span className="mt-0.5 block truncate text-[0.78rem] text-[#9a9488]">
+                              <span className="mt-0.5 block truncate text-[0.78rem] text-ink-muted">
                                 {s.altyazi}
                               </span>
                             ) : null}
@@ -242,12 +242,12 @@ export function AramaKutusu() {
               ) : null}
 
               {sorgu.trim().length >= 2 && !yukleniyor && sonuclar.length === 0 ? (
-                <div className="px-5 py-8 text-center text-[0.88rem] text-[#9a9488]">
+                <div className="px-5 py-8 text-center text-[0.88rem] text-ink-muted">
                   &ldquo;{sorgu.trim()}&rdquo; için sonuç bulunamadı
                 </div>
               ) : null}
 
-              <div className="flex gap-4 border-t border-[rgba(201,166,90,0.08)] px-5 py-2.5 text-[0.72rem] text-[#6b6560]">
+              <div className="flex gap-4 border-t border-[rgba(184,147,74,0.08)] px-5 py-2.5 text-[0.72rem] text-ink-muted">
                 <span>↵ git</span>
                 <span>↑↓ seç</span>
                 <span>ESC kapat</span>

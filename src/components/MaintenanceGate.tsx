@@ -22,15 +22,15 @@ export function MaintenanceGate() {
   if (show !== true) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#050A14] text-white">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-cream text-ink">
       <div className="mx-auto max-w-md px-6 text-center">
         <h1 className="text-2xl font-semibold tracking-tight">Yapım Aşamasında</h1>
-        <p className="mt-3 text-white/70">
+        <p className="mt-3 text-ink/70">
           Site şu an güncelleniyor. Kısa süre sonra tekrar ziyaret edebilirsiniz.
         </p>
         <a
           href="/secretgate/login"
-          className="mt-6 inline-block rounded-xl bg-amber-500/20 px-4 py-2 text-sm text-amber-400 hover:bg-amber-500/30"
+          className="mt-6 inline-block rounded-xl bg-gold-soft px-4 py-2 text-sm text-amber-400 hover:bg-amber-500/30"
         >
           Yönetici girişi
         </a>

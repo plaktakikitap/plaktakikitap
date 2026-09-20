@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Source_Serif_4, DM_Sans, Cinzel, Inter, Caveat, Permanent_Marker, Patrick_Hand, Nothing_You_Could_Do, Playfair_Display } from "next/font/google";
+import { Cormorant_Garamond, Cinzel, Inter, Caveat, Permanent_Marker, Patrick_Hand, Nothing_You_Could_Do, Playfair_Display } from "next/font/google";
 import { Nav } from "@/components/layout/Nav";
 import { MainWrapper } from "@/components/layout/MainWrapper";
 import { MotionLayout } from "@/components/layout/MotionLayout";
@@ -7,7 +7,7 @@ import SiteBackground from "@/components/SiteBackground";
 import { MaintenanceGate } from "@/components/MaintenanceGate";
 import { SiteSoundVolumeHydrate } from "@/components/SiteSoundVolumeHydrate";
 import Footer from "@/components/Footer";
-import { CurrentlyReading } from "@/components/CurrentlyReading";
+import { FooterGate } from "@/components/layout/FooterGate";
 import { PageTransition } from "@/components/PageTransition";
 import { ScrollVinylIndicator } from "@/components/ScrollVinylIndicator";
 import IntroAnimation from "@/components/IntroAnimation";
@@ -19,17 +19,12 @@ import "./globals.css";
 const cormorant = Cormorant_Garamond({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
-const sourceSerif = Source_Serif_4({
-  variable: "--font-serif",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const dmSans = DM_Sans({
+const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
   display: "swap",
@@ -39,12 +34,6 @@ const cinzel = Cinzel({
   variable: "--font-cinzel",
   subsets: ["latin"],
   weight: ["400", "600"],
-  display: "swap",
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
   display: "swap",
 });
 
@@ -132,11 +121,11 @@ export default function RootLayout({
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1523513721493697"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
       </head>
       <body
-        className={`${cormorant.variable} ${sourceSerif.variable} ${dmSans.variable} ${cinzel.variable} ${inter.variable} ${caveat.variable} ${permanentMarker.variable} ${patrickHand.variable} ${nothingYouCouldDo.variable} ${playfair.variable} min-h-screen antialiased`}
+        className={`${cormorant.variable} ${inter.variable} ${cinzel.variable} ${caveat.variable} ${permanentMarker.variable} ${patrickHand.variable} ${nothingYouCouldDo.variable} ${playfair.variable} min-h-screen antialiased`}
       >
         <GlobalVinylCursor />
         <IntroAnimation>
@@ -151,8 +140,9 @@ export default function RootLayout({
                 <MotionLayout>{children}</MotionLayout>
               </div>
             </PageTransition>
-            <CurrentlyReading />
-            <Footer />
+            <FooterGate>
+              <Footer />
+            </FooterGate>
           </MainWrapper>
         </IntroAnimation>
         <Analytics />

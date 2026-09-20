@@ -185,7 +185,7 @@ export default function PlannerFlipbook() {
         <div className="relative overflow-hidden rounded-[28px] shadow-[0_30px_120px_rgba(0,0,0,0.55)]" data-flipping={flipInProgress}>
           {/* Defter kalınlığı — alt sayfa çıkıntısı */}
           <div
-            className="pointer-events-none absolute -bottom-3 left-10 right-10 h-10 rounded-b-[28px] bg-white/10 blur-[2px]"
+            className="pointer-events-none absolute -bottom-3 left-10 right-10 h-10 rounded-b-[28px] bg-ink/5 blur-[2px]"
             aria-hidden
           />
           <div

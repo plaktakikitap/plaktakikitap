@@ -25,7 +25,7 @@ export function NowPlaying() {
       style={{
         fontSize: "0.72rem",
         letterSpacing: "0.12em",
-        color: "rgba(154,148,136,0.85)",
+        color: "var(--ink-muted)",
         margin: 0,
       }}
       aria-live="polite"

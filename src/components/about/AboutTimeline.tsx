@@ -174,8 +174,8 @@ function NarrativeBlock({
         style={cardStyle}
         transition={{ duration: reduceMotion ? 0 : 0.8, ease: CARD_EASE }}
       >
-        <h3 className="text-sm font-semibold text-white/95 md:text-lg">{entry.year_or_period}</h3>
-        <p className="mt-1.5 whitespace-pre-wrap text-xs leading-relaxed text-white/75 md:mt-2 md:text-sm">
+        <h3 className="text-sm font-semibold text-ink/95 md:text-lg">{entry.year_or_period}</h3>
+        <p className="mt-1.5 whitespace-pre-wrap text-xs leading-relaxed text-ink/75 md:mt-2 md:text-sm">
           {entry.paragraph_text}
         </p>
       </motion.div>
@@ -216,12 +216,12 @@ function ContinuingPulse({ reduceMotion }: { reduceMotion: boolean }) {
         <motion.div
           animate={{ scale: [1, 2.5], opacity: [0.6, 0] }}
           transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut" }}
-          className="absolute inset-0 rounded-full bg-[#c9a65a]"
+          className="absolute inset-0 rounded-full bg-gold"
           aria-hidden
         />
       )}
       <div
-        className="relative z-[1] h-3 w-3 rounded-full bg-[#c9a65a] shadow-[0_0_10px_rgba(201,166,90,0.45)]"
+        className="relative z-[1] h-3 w-3 rounded-full bg-gold shadow-[0_0_10px_rgba(184,147,74,0.45)]"
         aria-hidden
       />
     </div>
@@ -243,7 +243,7 @@ function TimelineContinuing({ reduceMotion }: { reduceMotion: boolean }) {
       >
         <ContinuingPulse reduceMotion={reduceMotion} />
       </div>
-      <p className="pl-8 text-[0.85rem] italic tracking-[0.05em] text-[#9a9488] md:pl-0 md:pt-12 md:text-center">
+      <p className="pl-8 text-[0.85rem] italic tracking-[0.05em] text-ink-muted md:pl-0 md:pt-12 md:text-center">
         hâlâ devam ediyor...
       </p>
     </motion.div>
@@ -345,7 +345,7 @@ export function AboutTimeline({ entries }: { entries: TimelineEntry[] }) {
       className="relative mx-auto max-w-5xl overflow-visible px-3 py-10 sm:px-4 sm:py-16"
     >
       {sorted.length === 0 ? (
-        <div className="py-24 text-center text-white/50">
+        <div className="py-24 text-center text-ink/50">
           Henüz timeline içeriği yok. Admin panelinden ekleyebilirsiniz.
         </div>
       ) : (
@@ -362,15 +362,15 @@ export function AboutTimeline({ entries }: { entries: TimelineEntry[] }) {
         />
         {reduceMotion ? (
           <div
-            className="absolute left-0 top-0 h-full w-0.5 bg-[#c9a65a]"
+            className="absolute left-0 top-0 h-full w-0.5 bg-gold"
             aria-hidden
           />
         ) : (
           <motion.div
-            className="absolute left-0 top-0 h-full w-0.5 origin-top bg-[#c9a65a]"
+            className="absolute left-0 top-0 h-full w-0.5 origin-top bg-gold"
             style={{
               scaleY: lineScale,
-              boxShadow: "0 0 10px rgba(201,166,90,0.45)",
+              boxShadow: "0 0 10px rgba(184,147,74,0.45)",
             }}
             aria-hidden
           />

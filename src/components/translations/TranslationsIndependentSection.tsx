@@ -19,7 +19,7 @@ export function TranslationsIndependentSection({
       transition={{ duration: 0.4, delay: 0.1 }}
       className="mb-14"
     >
-      <h2 className="font-editorial text-xl font-medium text-white sm:text-2xl mb-2">
+      <h2 className="font-editorial text-xl font-medium text-ink sm:text-2xl mb-2">
         Kendi Kendime Çevirilerim
       </h2>
       <p className="text-sm text-[var(--muted)] mb-6">
@@ -49,18 +49,18 @@ function IndependentCard({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.05 * index }}
-      className="group rounded-xl border border-amber-400/15 bg-white/5 backdrop-blur-sm p-4 sm:p-5 transition-all duration-200 hover:border-amber-400/25 hover:shadow-[0_0_24px_-6px_rgba(212,182,90,0.15)]"
+      className="group rounded-xl border border-amber-400/15 bg-ink/5 backdrop-blur-sm p-4 sm:p-5 transition-all duration-200 hover:border-amber-400/25 hover:shadow-[0_0_24px_-6px_rgba(212,182,90,0.15)]"
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <h3 className="font-editorial font-medium text-white">
+          <h3 className="font-editorial text-base font-semibold text-ink sm:text-lg">
             {item.title}
           </h3>
           {item.year != null && (
-            <p className="mt-0.5 text-sm text-[var(--muted)]">{item.year}</p>
+            <p className="mt-0.5 font-editorial text-xs text-ink-muted">{item.year}</p>
           )}
           {item.description?.trim() && (
-            <p className="mt-2 text-sm text-[var(--muted)] line-clamp-2">
+            <p className="mt-1.5 font-editorial text-xs leading-relaxed text-ink-muted line-clamp-2">
               {item.description}
             </p>
           )}
@@ -71,7 +71,7 @@ function IndependentCard({
                   {item.tags!.map((t) => (
                     <span
                       key={t}
-                      className="rounded-full bg-amber-500/15 px-2 py-0.5 text-xs text-white"
+                      className="rounded-full bg-amber-500/15 px-2 py-0.5 text-xs text-ink"
                     >
                       {t}
                     </span>
@@ -102,7 +102,7 @@ function IndependentCard({
               href={item.external_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-amber-400/30 bg-amber-500/15 px-3 py-1.5 text-sm font-medium text-white hover:bg-amber-500/25 transition"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-amber-400/30 bg-amber-500/15 px-3 py-1.5 text-sm font-medium text-ink hover:bg-amber-500/25 transition"
             >
               <ExternalLink className="h-3.5 w-3.5" />
               Okumak için
@@ -113,7 +113,7 @@ function IndependentCard({
               href={item.file_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--card-border)] bg-white/5 px-3 py-1.5 text-sm text-[var(--foreground)] hover:bg-white/10 transition"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--card-border)] bg-ink/5 px-3 py-1.5 text-sm text-[var(--foreground)] hover:bg-ink/5 transition"
             >
               <FileText className="h-3.5 w-3.5" />
               PDF

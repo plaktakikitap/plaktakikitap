@@ -33,7 +33,7 @@ export function TranslationsTabBar() {
 
   return (
     <nav
-      className="mb-8 flex gap-0.5 rounded-xl border border-amber-400/15 bg-white/5 p-1 backdrop-blur-sm sm:gap-1"
+      className="mb-8 flex gap-0.5 rounded-xl border border-amber-400/15 bg-ink/5 p-1 backdrop-blur-sm sm:gap-1"
       role="tablist"
     >
       {TABS.map(({ value, label, icon: Icon }) => (
@@ -45,8 +45,8 @@ export function TranslationsTabBar() {
           onClick={() => setTab(value)}
           className={`flex shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition sm:gap-2 sm:px-4 sm:py-2 sm:text-sm ${
             tab === value
-              ? "bg-amber-500/25 text-white"
-              : "text-white/70 hover:bg-white/5 hover:text-white"
+              ? "bg-amber-500/25 text-ink"
+              : "text-ink/70 hover:bg-ink/5 hover:text-ink"
           }`}
         >
           <Icon className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />

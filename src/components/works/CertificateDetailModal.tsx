@@ -71,10 +71,10 @@ export function CertificateDetailModal({ item, onClose }: CertificateDetailModal
         exit={{ opacity: 0, scale: 0.96, y: 8 }}
         transition={{ type: "spring", damping: 28, stiffness: 300 }}
         onClick={(e) => e.stopPropagation()}
-        className="relative flex w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-white/20 bg-white/[0.08] shadow-[0_25px_80px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:flex-row"
+        className="relative flex w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-ink/20 bg-white/[0.08] shadow-[0_25px_80px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:flex-row"
       >
         {/* Sol: görsel */}
-        <div className="flex shrink-0 items-center justify-center bg-white/5 p-6 sm:w-[45%]">
+        <div className="flex shrink-0 items-center justify-center bg-ink/5 p-6 sm:w-[45%]">
           {item.image_url ? (
             <img
               src={item.image_url}
@@ -93,7 +93,7 @@ export function CertificateDetailModal({ item, onClose }: CertificateDetailModal
           <button
             type="button"
             onClick={onClose}
-            className="absolute right-3 top-3 rounded-full p-1.5 text-white/70 transition hover:bg-white/15 hover:text-white"
+            className="absolute right-3 top-3 rounded-full p-1.5 text-ink/70 transition hover:bg-ink/[0.06] hover:text-ink"
             aria-label="Kapat"
           >
             <X className="h-5 w-5" />
@@ -101,29 +101,29 @@ export function CertificateDetailModal({ item, onClose }: CertificateDetailModal
 
           <h2
             id="cert-modal-title"
-            className="pr-8 font-editorial text-xl font-semibold leading-tight text-white sm:text-2xl"
+            className="pr-8 font-editorial text-xl font-semibold leading-tight text-ink sm:text-2xl"
           >
             {item.title}
           </h2>
 
           {issuer && (
-            <p className="mt-2 text-sm text-white/80">
-              <span className="text-white/50">Veren kurum:</span> {issuer}
+            <p className="mt-2 text-sm text-ink/80">
+              <span className="text-ink/50">Veren kurum:</span> {issuer}
             </p>
           )}
 
           {dateObtained && (
-            <p className="mt-1 text-sm text-white/80">
-              <span className="text-white/50">Tarih:</span> {dateObtained}
+            <p className="mt-1 text-sm text-ink/80">
+              <span className="text-ink/50">Tarih:</span> {dateObtained}
             </p>
           )}
 
           {description ? (
             <div className="mt-4 flex-1 overflow-y-auto pr-1">
-              <p className="text-xs font-semibold uppercase tracking-wider text-white/50">
+              <p className="text-xs font-semibold uppercase tracking-wider text-ink/50">
                 Açıklama
               </p>
-              <p className="mt-1.5 text-sm leading-relaxed text-white/90 whitespace-pre-wrap">
+              <p className="mt-1.5 text-sm leading-relaxed text-ink/90 whitespace-pre-wrap">
                 {description}
               </p>
             </div>
@@ -134,7 +134,7 @@ export function CertificateDetailModal({ item, onClose }: CertificateDetailModal
               href={linkUrl}
               target="_blank"
               rel="noreferrer"
-              className="mt-4 inline-flex items-center gap-2 self-start rounded-lg border border-amber-400/40 bg-amber-500/20 px-4 py-2 text-sm font-medium text-amber-200 transition hover:bg-amber-500/30 hover:text-amber-100"
+              className="mt-4 inline-flex items-center gap-2 self-start rounded-lg border border-amber-400/40 bg-gold-soft px-4 py-2 text-sm font-medium text-gold transition hover:bg-amber-500/30 hover:text-amber-100"
             >
               <ExternalLink className="h-4 w-4" aria-hidden />
               Siteye git

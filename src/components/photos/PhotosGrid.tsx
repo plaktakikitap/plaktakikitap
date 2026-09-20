@@ -101,7 +101,7 @@ export function PhotosGrid({ photos, categoryFilter = null }: PhotosGridProps) {
           />
         </span>
       </button>
-      <figcaption className="mt-1.5 flex min-w-0 items-center justify-between gap-2 px-0.5 text-[11px] tracking-wide text-white/30 transition-opacity duration-200 md:group-hover:text-white/60">
+      <figcaption className="mt-1.5 flex min-w-0 items-center justify-between gap-2 px-0.5 text-[11px] tracking-wide text-ink-muted/70 transition-opacity duration-200 md:group-hover:text-ink-muted">
         <span className="min-w-0 truncate">
           {photo.caption?.trim() || "\u00A0"}
         </span>
@@ -117,7 +117,7 @@ export function PhotosGrid({ photos, categoryFilter = null }: PhotosGridProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="py-16 text-center text-white/60"
+          className="py-16 text-center text-ink/60"
         >
           Bu filtreye uygun fotoğraf yok.
         </motion.p>

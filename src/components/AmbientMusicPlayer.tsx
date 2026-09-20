@@ -140,10 +140,10 @@ export function AmbientMusicPlayer() {
 
   // Ses site açılışında asla otomatik başlamaz; sadece Play’e basılınca kaldığı yerden çalar.
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:rounded-3xl">
+    <div className="rounded-2xl border border-ink/10 bg-ink/5 shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:rounded-3xl">
       <audio ref={audioRef} preload="metadata" />
       <div className="px-4 pt-4 sm:px-6 sm:pt-6">
-        <p className="text-sm tracking-wide text-white/70">Şu an dinliyorum</p>
+        <p className="text-sm tracking-wide text-ink/70">Şu an dinliyorum</p>
       </div>
       <div className="px-4 pb-4 pt-3 sm:px-6 sm:pb-6 sm:pt-4">
         <div className="flex items-center gap-4">
@@ -181,7 +181,7 @@ export function AmbientMusicPlayer() {
                     unoptimized
                   />
                 ) : (
-                  <span className="text-[0.5rem] font-medium text-amber-200/50">♪</span>
+                  <span className="text-[0.5rem] font-medium text-gold/50">♪</span>
                 )}
               </div>
               <div
@@ -226,16 +226,16 @@ export function AmbientMusicPlayer() {
             </svg>
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate font-medium text-white/90">{track.title}</p>
-            <p className="truncate text-sm text-white/60">{track.artist}</p>
+            <p className="truncate font-medium text-ink/90">{track.title}</p>
+            <p className="truncate text-sm text-ink/60">{track.artist}</p>
             {isPlaying && (
-              <p className="mt-2 text-xs text-white/50">
+              <p className="mt-2 text-xs text-ink/50">
                 Şu an çalan: {track.title} — {track.artist}
               </p>
             )}
           </div>
         </div>
-        <p className="mt-3 text-sm italic text-white/70">
+        <p className="mt-3 text-sm italic text-ink/70">
           {isPlaying
             ? "Benimle birlikte dinlemeye devam edebilirsin"
             : "Play’e basınca playlist kaldığı yerden sesli çalar (tüm gün aynı zaman çizgisi)."}
@@ -244,7 +244,7 @@ export function AmbientMusicPlayer() {
           <button
             type="button"
             onClick={isPlaying ? handlePause : handlePlay}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-500/90 text-white hover:bg-amber-500 shadow-md hover:shadow-lg transition"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-500/90 text-ink hover:bg-amber-500 shadow-md hover:shadow-lg transition"
             aria-label={isPlaying ? "Duraklat" : "Oynat"}
           >
             {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5 ml-0.5" />}
@@ -252,18 +252,18 @@ export function AmbientMusicPlayer() {
           <button
             type="button"
             onClick={toggleMute}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white/80 hover:bg-white/20"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-ink/5 text-ink/80 hover:bg-white/20"
             aria-label={muted ? "Sesi aç" : "Sessiz"}
           >
             {muted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
           </button>
-          <div className="flex-1 overflow-hidden rounded-full bg-white/10">
+          <div className="flex-1 overflow-hidden rounded-full bg-ink/5">
             <div
               className="h-1.5 rounded-full bg-white/40 transition-all duration-1000"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <span className="shrink-0 text-xs tabular-nums text-white/55">
+          <span className="shrink-0 text-xs tabular-nums text-ink/55">
             {formatTime(progressSec)} / {formatTime(duration)}
           </span>
         </div>

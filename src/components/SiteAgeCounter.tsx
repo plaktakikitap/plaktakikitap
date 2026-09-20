@@ -61,7 +61,7 @@ export default function SiteAgeCounter() {
 
   return (
     <motion.div
-      className="mx-auto max-w-6xl px-4 pt-6 text-center text-[0.8rem] tracking-[0.02em] text-[#9a9488] sm:px-6 sm:pb-1"
+      className="mx-auto max-w-6xl px-4 pt-6 text-center text-[0.8rem] tracking-[0.02em] text-ink-muted sm:px-6 sm:pb-1"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-50px" }}
@@ -70,7 +70,7 @@ export default function SiteAgeCounter() {
     >
       Bu site {launchLabel}&apos;dan beri yaşıyor
       {" — "}
-      <span className="text-[#c9a65a] [font-variant-numeric:tabular-nums]">
+      <span className="text-gold [font-variant-numeric:tabular-nums]">
         {displayValue.toLocaleString("tr-TR")}
       </span>
       {" gündür burada"}

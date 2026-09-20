@@ -75,7 +75,7 @@ export function Stage() {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative min-h-[calc(100vh-3.5rem)] overflow-hidden bg-[#F9F9F9]"
+      className="relative min-h-[calc(100vh-3.5rem)] overflow-hidden bg-cream"
     >
       {/* Very soft 2% grain */}
       <div
@@ -237,7 +237,7 @@ function FloatingCard({
               ease: "easeInOut",
             },
           }}
-          className="flex items-center justify-center rounded-xl border border-white/80 px-5 py-2.5 backdrop-blur-md"
+          className="flex items-center justify-center rounded-xl border border-ink/80 px-5 py-2.5 backdrop-blur-md"
         >
           <span className="text-sm font-medium text-[var(--foreground)]">
             {node.label}

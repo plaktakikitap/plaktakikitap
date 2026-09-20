@@ -47,6 +47,9 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "lastfm.freetls.fastly.net", pathname: "/**" },
       { protocol: "https", hostname: "lastfm-img.freetls.fastly.net", pathname: "/**" },
       { protocol: "https", hostname: "*.freetls.fastly.net", pathname: "/**" },
+      { protocol: "https", hostname: "1000kitap.com", pathname: "/**" },
+      { protocol: "https", hostname: "cdn.1000kitap.com", pathname: "/**" },
+      { protocol: "https", hostname: "*.1000kitap.com", pathname: "/**" },
     ],
   },
 };

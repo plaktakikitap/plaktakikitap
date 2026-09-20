@@ -50,9 +50,9 @@ export default function LastFmNowPlaying({ initial }: { initial: LastFmTrack }) 
   const cardTitle = track.isNowPlaying ? "Şu an dinliyorum:" : "Son dinlediğim:";
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:rounded-3xl">
+    <div className="rounded-2xl border border-ink/10 bg-ink/5 shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:rounded-3xl">
       <div className="px-4 pt-4 sm:px-6 sm:pt-6">
-        <p className="text-sm tracking-wide text-white/70">{cardTitle}</p>
+        <p className="text-sm tracking-wide text-ink/70">{cardTitle}</p>
       </div>
       <div className="px-4 pb-4 pt-3 sm:px-6 sm:pb-6 sm:pt-4">
         <div className="flex items-center gap-4">
@@ -91,7 +91,7 @@ export default function LastFmNowPlaying({ initial }: { initial: LastFmTrack }) 
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <span className="text-[0.5rem] font-medium text-amber-200/50">♪</span>
+                  <span className="text-[0.5rem] font-medium text-gold/50">♪</span>
                 )}
               </div>
               <div
@@ -122,12 +122,12 @@ export default function LastFmNowPlaying({ initial }: { initial: LastFmTrack }) 
           </div>
 
           <div className="min-w-0 flex-1">
-            <p className="truncate font-medium text-white/90">{track.title}</p>
-            <p className="truncate text-sm text-white/60">{track.artist}</p>
-            <p className="mt-2 text-xs text-white/40">
+            <p className="truncate font-medium text-ink/90">{track.title}</p>
+            <p className="truncate text-sm text-ink/60">{track.artist}</p>
+            <p className="mt-2 text-xs text-ink/40">
               {playedAgo ? (
                 <>
-                  <span className="text-white/50">{playedAgo}</span>
+                  <span className="text-ink/50">{playedAgo}</span>
                   {" · "}
                 </>
               ) : null}

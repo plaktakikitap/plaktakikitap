@@ -1,12 +1,23 @@
 "use client";
 
-import HeroSection from "@/components/HeroSection";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { IntroCards } from "@/components/home/IntroCards";
-import { VinylScrollStage } from "@/components/home/VinylScrollStage";
-import MessyBulletJournal from "@/components/planner/MessyBulletJournal";
 import { KaralamalarHomeSection } from "@/components/karalamalar/KaralamalarHomeSection";
+import { LazyAjanda } from "@/components/home/LazyAjanda";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import type { Video } from "@/types/videos";
 import type { Karalama } from "@/lib/karalamalar";
+
+const VinylScrollStage = dynamic(
+  () =>
+    import("@/components/home/VinylScrollStage").then((m) => m.VinylScrollStage),
+  { ssr: false }
+);
+
+const HeroSection = dynamic(() => import("@/components/HeroSection"), {
+  ssr: false,
+});
 
 interface HomePageContentProps {
   children?: React.ReactNode;
@@ -29,6 +40,13 @@ export function HomePageContent({
   introPhotoPlaktakikitapUrl = "/images/logo.png",
   karalamalarPreview = [],
 }: HomePageContentProps) {
+  const isMd = useMediaQuery("(min-width: 768px)");
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
   const title = (introTitle ?? "hoş geldiniz, ben eymen").toLocaleLowerCase(
     "tr-TR"
   );
@@ -37,15 +55,13 @@ export function HomePageContent({
   ).toLocaleLowerCase("tr-TR");
 
   return (
-    <>
-      <main
-        className="vinyl-page-bg relative min-h-screen text-[#F3EBDD]"
-        style={{
-          minHeight: "100vh",
-          position: "relative",
-        }}
-      >
-        {/* Masaüstü: scroll ile plak → içerik */}
+    <main
+      className="vinyl-page-bg relative min-h-screen overflow-clip text-ink"
+      style={{ minHeight: "100vh", position: "relative" }}
+    >
+      {!hydrated ? (
+        <div className="min-h-screen" aria-hidden />
+      ) : isMd ? (
         <VinylScrollStage
           title={title}
           subtitle={subtitle}
@@ -56,9 +72,8 @@ export function HomePageContent({
         >
           {children}
         </VinylScrollStage>
-
-        {/* Mobil: mevcut hero + kartlar */}
-        <div className="md:hidden">
+      ) : (
+        <div>
           <HeroSection
             photoSrc={introPhotoEymenUrl ?? "/images/eymen-studio.jpg"}
             logoSrc={introPhotoPlaktakikitapUrl ?? "/images/logo.png"}
@@ -67,23 +82,30 @@ export function HomePageContent({
           />
 
           <div className="mx-auto mt-4 w-full max-w-6xl px-2 sm:mt-6 sm:px-6">
+            <p className="section-eyebrow mb-6 text-center">keşfet</p>
             <IntroCards
               latestVideo={latestVideo}
               latestVideoThumb={latestVideoThumb}
             />
           </div>
 
+          <div className="py-8">
+            <hr className="section-divider" aria-hidden />
+          </div>
+
           <KaralamalarHomeSection items={karalamalarPreview} />
 
-          <section id="ajanda" className="scroll-mt-6">
-            <MessyBulletJournal />
+          <div className="py-8">
+            <hr className="section-divider" aria-hidden />
+          </div>
+
+          <section className="section-block px-4">
+            <p className="section-eyebrow mb-8 text-center">ajanda</p>
+            <LazyAjanda />
           </section>
-
-          {children}
+          <div className="mx-auto max-w-6xl px-4 pb-8">{children}</div>
         </div>
-
-        <div className="h-24 md:hidden" />
-      </main>
-    </>
+      )}
+    </main>
   );
 }

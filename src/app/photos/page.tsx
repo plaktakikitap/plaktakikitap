@@ -11,7 +11,7 @@ export const revalidate = 300;
 export default async function PhotosPage() {
   return (
     <PageTransitionTarget layoutId="card-/photos">
-      <main className="relative min-h-screen text-white">
+      <main className="relative min-h-screen text-ink">
         <SiteBackground />
         <Suspense fallback={<PhotosPageSkeleton />}>
           <PhotosPageInner />

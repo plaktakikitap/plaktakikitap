@@ -72,7 +72,7 @@ export function VideoModal({ video, onClose }: VideoModalProps) {
             ref={closeRef}
             type="button"
             onClick={onClose}
-            className="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2.5 text-white transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50"
+            className="absolute right-4 top-4 z-10 rounded-full bg-ink/5 p-2.5 text-ink transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50"
             aria-label="Kapat"
           >
             <X className="h-5 w-5" />
@@ -97,13 +97,13 @@ export function VideoModal({ video, onClose }: VideoModalProps) {
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-black/60">
-                    <span className="text-sm text-white/60">Yükleniyor…</span>
+                    <span className="text-sm text-ink/60">Yükleniyor…</span>
                   </div>
                 )}
               </div>
-              <div className="flex flex-col gap-3 border-t border-white/10 bg-black/60 px-4 py-4 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-3 border-t border-ink/10 bg-black/60 px-4 py-4 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between">
                 {video.title ? (
-                  <p id="video-modal-title" className="min-w-0 flex-1 text-sm font-medium text-white/95 line-clamp-2">
+                  <p id="video-modal-title" className="min-w-0 flex-1 text-sm font-medium text-ink/95 line-clamp-2">
                     {video.title}
                   </p>
                 ) : (
@@ -113,7 +113,7 @@ export function VideoModal({ video, onClose }: VideoModalProps) {
                   href={getYouTubeWatchUrl(videoId)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-500/15 px-4 py-2.5 text-sm font-medium text-amber-200 shadow-sm transition hover:border-amber-400/50 hover:bg-amber-500/25 hover:text-amber-100 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50"
+                  className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-500/15 px-4 py-2.5 text-sm font-medium text-gold shadow-sm transition hover:border-amber-400/50 hover:bg-amber-500/25 hover:text-amber-100 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50"
                 >
                   <ExternalLink className="h-4 w-4" aria-hidden />
                   YouTube&apos;da İzle ve Yorum Yap

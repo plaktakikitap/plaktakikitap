@@ -52,8 +52,8 @@ export default async function TranslationsPage({
             layoutId="nav-/translations"
             title="Çevirilerim"
             subtitle="Kitap çevirileri ve projeler"
-            titleClassName="text-white"
-            subtitleClassName="text-white/80"
+            titleClassName="text-ink"
+            subtitleClassName="text-ink/80"
           />
         </div>
         <Suspense fallback={null}>

@@ -144,7 +144,7 @@ export function HeroScrollFrame({
         role={isPinned ? "button" : undefined}
         tabIndex={isPinned ? 0 : undefined}
         aria-label={isPinned ? "Ana sayfanın başına dön" : undefined}
-        className={isPinned ? "cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#c9a65a]/50" : undefined}
+        className={isPinned ? "cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-gold/50" : undefined}
       >
         {children}
       </motion.div>

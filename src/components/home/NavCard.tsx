@@ -1,126 +1,75 @@
 "use client";
 
 import Link from "next/link";
-import { useLayoutEffect, useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { useState } from "react";
+import { useReducedMotion } from "framer-motion";
 import type { NavCardItem } from "@/components/home/nav-cards";
+import { NavCardIllustration } from "@/components/home/NavCardIllustration";
+import { cn } from "@/lib/utils";
 
-/** Yuvarlatılmış dikdörtgen — viewBox 0 0 100 100, kart boyutuna responsive ölçeklenir. */
-const BORDER_PATH =
-  "M 8,1 H 92 Q 99,1 99,8 V 92 Q 99,99 92,99 H 8 Q 1,99 1,92 V 8 Q 1,1 8,1 Z";
-
-function GoldThreadBorder({
-  active,
-  reduceMotion,
+export function NavCard({
+  card,
+  className,
 }: {
-  active: boolean;
-  reduceMotion: boolean;
+  card: NavCardItem;
+  className?: string;
 }) {
-  const pathRef = useRef<SVGPathElement>(null);
-  const [pathLength, setPathLength] = useState(0);
-
-  useLayoutEffect(() => {
-    const node = pathRef.current;
-    if (node) {
-      setPathLength(node.getTotalLength());
-    }
-  }, []);
-
-  const dashReady = pathLength > 0;
-
-  return (
-    <svg
-      className="pointer-events-none absolute inset-0 h-full w-full"
-      viewBox="0 0 100 100"
-      preserveAspectRatio="none"
-      aria-hidden
-    >
-      <motion.path
-        ref={pathRef}
-        d={BORDER_PATH}
-        fill="none"
-        stroke="#c9a65a"
-        strokeWidth={1.5}
-        vectorEffect="non-scaling-stroke"
-        initial={false}
-        animate={{
-          strokeDashoffset: active && dashReady ? 0 : pathLength,
-          opacity: active ? 1 : 0,
-        }}
-        style={{ strokeDasharray: dashReady ? pathLength : 1 }}
-        transition={
-          reduceMotion
-            ? { duration: 0 }
-            : { duration: 0.45, ease: "easeInOut" }
-        }
-      />
-    </svg>
-  );
-}
-
-export function NavCard({ card }: { card: NavCardItem }) {
   const reduceMotion = useReducedMotion();
   const [hovered, setHovered] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, {
-    amount: 0.5,
-    margin: "-100px",
-  });
-  const Icon = card.Icon;
-  const glowTransition = reduceMotion
-    ? { duration: 0 }
-    : { duration: 1.2, ease: "easeInOut" as const };
 
   return (
-    <div ref={containerRef} className="relative w-full">
-      <motion.div
-        aria-hidden
-        style={{
-          position: "absolute",
-          inset: "-60px",
-          borderRadius: "50%",
-          background: `radial-gradient(circle, rgba(${card.accentColor}, 0.08) 0%, rgba(${card.accentColor}, 0) 70%)`,
-          pointerEvents: "none",
-          zIndex: 0,
-        }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isInView ? 1 : 0 }}
-        transition={glowTransition}
-      />
-
-      <Link
-        href={card.href}
-        className="group relative z-[1] flex w-full min-h-[156px] flex-col items-center justify-center overflow-hidden rounded-[10px] border border-[rgba(201,166,90,0.15)] bg-[rgba(255,255,255,0.03)] px-7 py-[2.75rem] text-center transition-colors duration-300 hover:bg-[rgba(201,166,90,0.04)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a65a]/40"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        onFocus={() => setHovered(true)}
-        onBlur={() => setHovered(false)}
+    <Link
+      href={card.href}
+      className={cn(
+        "group relative flex h-full min-h-[160px] flex-col overflow-hidden rounded-2xl border border-rule bg-[#FDFAF5] p-5 transition-all duration-300 ease-out",
+        "hover:-translate-y-1 hover:border-gold/30 hover:shadow-[0_12px_32px_rgba(26,22,18,0.1)]",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40",
+        card.featured && "min-h-[200px] sm:min-h-[220px] sm:flex-row sm:items-center sm:gap-6 sm:p-6",
+        className
+      )}
+      style={{
+        transform:
+          hovered && !reduceMotion ? "translateY(-4px)" : undefined,
+        boxShadow: hovered
+          ? "0 14px 36px rgba(26,22,18,0.12)"
+          : "0 2px 8px rgba(26,22,18,0.04)",
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
+    >
+      <div
+        className={cn(
+          "mb-4 flex shrink-0 items-center justify-center",
+          card.featured && "mb-0 sm:mb-0 sm:w-[42%]"
+        )}
       >
-        <GoldThreadBorder active={hovered} reduceMotion={!!reduceMotion} />
+        <NavCardIllustration
+          visual={card.visual}
+          className={
+            card.featured
+              ? "h-20 w-28 sm:h-24 sm:w-36"
+              : "h-14 w-14"
+          }
+        />
+      </div>
 
-        <motion.div
-          className="relative z-[1] flex flex-col items-center gap-3.5"
-          animate={hovered && !reduceMotion ? { y: -4 } : { y: 0 }}
-          transition={reduceMotion ? { duration: 0 } : { duration: 0.3 }}
-        >
-          <Icon
-            className="h-[30px] w-[30px] shrink-0"
-            stroke="#e8dcc0"
-            strokeWidth={1.5}
-            aria-hidden
-          />
-          <span className="flex flex-col gap-1">
-            <span className="font-sans text-[1.125rem] font-medium leading-snug tracking-tight text-[#f3ead9]">
-              {card.title}
-            </span>
-            {card.subtitle ? (
-              <span className="font-sans text-[0.9rem] font-normal leading-snug tracking-wide text-[#9a9488]">
-                {card.subtitle}
-              </span>
-            ) : null}
+      <div
+        className={cn(
+          "mt-auto flex min-w-0 flex-col gap-1",
+          card.featured && "sm:mt-0 sm:flex-1 sm:justify-center"
+        )}
+      >
+        <span className="font-sans text-[1.05rem] font-semibold leading-snug tracking-tight text-ink">
+          {card.title}
+        </span>
+        {card.subtitle ? (
+          <span className="line-clamp-2 font-sans text-[0.8rem] font-normal leading-[1.5] text-ink-muted">
+            {card.subtitle}
           </span>
-        </motion.div>
-      </Link>
-    </div>
+        ) : null}
+      </div>
+    </Link>
   );
 }

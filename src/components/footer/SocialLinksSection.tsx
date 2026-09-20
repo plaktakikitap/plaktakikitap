@@ -47,7 +47,6 @@ interface SocialLinksSectionProps {
   links: SocialLink[];
 }
 
-/** Varsayılan platformlar — veri gelmezse skeleton göster */
 const DEFAULT_PLATFORMS: { platform: string; icon: LucideIcon | typeof XIcon }[] = [
   { platform: "instagram", icon: Instagram },
   { platform: "x", icon: XIcon },
@@ -57,10 +56,9 @@ const DEFAULT_PLATFORMS: { platform: string; icon: LucideIcon | typeof XIcon }[]
   { platform: "mail", icon: Mail },
 ];
 
-/** Altın glow — rgba(212, 175, 55, 0.4) */
-const GOLD_GLOW = "0 0 20px rgba(212, 175, 55, 0.4)";
-/** Spotify — yeşilimsi altın */
-const SPOTIFY_GLOW = "0 0 24px rgba(30, 215, 96, 0.35), 0 0 20px rgba(212, 175, 55, 0.25)";
+const GOLD_GLOW = "0 0 16px rgba(184,147,74,0.28)";
+const SPOTIFY_GLOW =
+  "0 0 18px rgba(30,215,96,0.28), 0 0 12px rgba(184,147,74,0.18)";
 
 function SocialButton({
   href,
@@ -77,14 +75,11 @@ function SocialButton({
 }) {
   const glowStyle = isSpotify ? SPOTIFY_GLOW : GOLD_GLOW;
   const motionProps = {
-    whileHover: { scale: 1.1, y: -5, boxShadow: glowStyle } as const,
+    whileHover: { scale: 1.08, y: -3, boxShadow: glowStyle } as const,
     whileTap: { scale: 0.95 } as const,
   };
   const inner = (
-    <div
-      className="!flex !h-10 !w-10 !cursor-pointer !items-center !justify-center !rounded-xl !border !border-[rgba(212,175,55,0.2)] !bg-white/5 !backdrop-blur-md !text-white/80 transition-all duration-300 hover:!border-[rgba(212,175,55,0.5)] hover:!text-white hover:!opacity-100 md:!h-11 md:!w-11"
-      style={{ boxShadow: "none" }}
-    >
+    <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-rule bg-card text-ink transition-colors duration-200 hover:border-gold/45 hover:bg-gold-soft hover:text-ink md:h-11 md:w-11">
       {children}
     </div>
   );
@@ -92,7 +87,7 @@ function SocialButton({
   if (isSkeleton) {
     return (
       <div
-        className="!flex !h-10 !w-10 !shrink-0 !cursor-not-allowed !opacity-40 md:!h-11 md:!w-11"
+        className="flex h-10 w-10 shrink-0 cursor-not-allowed opacity-40 md:h-11 md:w-11"
         aria-hidden
       >
         {inner}
@@ -105,7 +100,7 @@ function SocialButton({
       href={href ?? "#"}
       target={isMail ? undefined : "_blank"}
       rel={isMail ? undefined : "noreferrer"}
-      className="!flex !h-10 !w-10 !shrink-0 !rounded-xl !no-underline !text-white/90 md:!h-11 md:!w-11"
+      className="flex h-10 w-10 shrink-0 rounded-xl text-ink no-underline md:h-11 md:w-11"
       aria-label={isMail ? "E-posta gönder" : "Sosyal medya"}
       {...motionProps}
     >
@@ -136,7 +131,11 @@ export function SocialLinksSection({ links }: SocialLinksSectionProps) {
     : activeLinks.map((link) => {
         const iconOrName = link.icon_name ?? link.platform;
         const key = (iconOrName ?? "").toLowerCase().trim();
-        const isX = key === "x" || key === "twitter" || key === "x.com" || key.replace(/[^a-z]/g, "") === "x";
+        const isX =
+          key === "x" ||
+          key === "twitter" ||
+          key === "x.com" ||
+          key.replace(/[^a-z]/g, "") === "x";
         const Icon = isX ? XIcon : getLucideIcon(iconOrName);
         const isMail = link.platform.toLowerCase() === "mail";
         const isSpotify = link.platform.toLowerCase() === "spotify";
@@ -153,9 +152,11 @@ export function SocialLinksSection({ links }: SocialLinksSectionProps) {
       });
 
   return (
-    <div className="!flex !items-center !justify-end !gap-3">
-      <span className="!text-xs !text-white/40">Bana ulaşın</span>
-      <div className="!flex !flex-wrap !items-center !justify-end !gap-2">
+    <div className="flex items-center justify-end gap-3">
+      <span className="shrink-0 text-xs font-medium tracking-[0.08em] text-ink-muted">
+        Bana ulaşın
+      </span>
+      <div className="flex flex-wrap items-center justify-end gap-2">
         {items.map((item) => {
           const Icon = item.icon;
           return (
@@ -166,7 +167,7 @@ export function SocialLinksSection({ links }: SocialLinksSectionProps) {
               isSpotify={item.isSpotify}
               isSkeleton={item.isSkeleton}
             >
-              <Icon className="!h-5 !w-5 md:!h-5 md:!w-5" strokeWidth={1.8} size={20} />
+              <Icon className="h-5 w-5 text-current" strokeWidth={1.8} size={20} />
             </SocialButton>
           );
         })}

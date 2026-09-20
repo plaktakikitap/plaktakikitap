@@ -53,7 +53,7 @@ export function IntroButtons() {
             >
               <Link
                 href={btn.href}
-                className="block whitespace-nowrap rounded-full border border-[#F3EBDD]/25 bg-[rgba(10,14,24,0.6)] px-4 py-2.5 text-center font-sans text-xs font-normal tracking-[0.04em] text-[#F3EBDD] shadow-lg backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[rgba(243,235,221,0.12)] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3EBDD]/40 md:px-5 md:py-3 md:text-sm"
+                className="block whitespace-nowrap rounded-full border border-rule bg-card px-4 py-2.5 text-center font-sans text-xs font-normal tracking-[0.04em] text-ink shadow-[0_4px_16px_rgba(26,22,18,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:border-gold/40 hover:bg-[color-mix(in_srgb,var(--cream)_92%,white)] hover:shadow-[0_8px_24px_rgba(26,22,18,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 md:px-5 md:py-3 md:text-sm"
               >
                 {btn.label}
               </Link>

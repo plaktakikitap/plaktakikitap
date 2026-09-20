@@ -14,7 +14,7 @@ export function PageTransitionTarget({ layoutId, children }: Props) {
       layoutId={layoutId}
       initial={false}
       transition={{ type: "spring", damping: 28, stiffness: 300 }}
-      className="min-h-screen w-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-[12px]"
+      className="min-h-screen w-full overflow-hidden rounded-2xl border border-ink/10 bg-ink/5 backdrop-blur-[12px]"
     >
       <div className="h-full w-full">{children}</div>
     </motion.div>

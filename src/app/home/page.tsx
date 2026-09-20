@@ -6,6 +6,9 @@ import type { Video } from "@/types/videos";
 import type { Karalama } from "@/lib/karalamalar";
 import { HomePageContent } from "@/components/home/HomePageContent";
 import { EntrySeedHandler } from "@/components/home/EntrySeedHandler";
+import { CurrentlyReading } from "@/components/CurrentlyReading";
+import { HomeSectionDivider } from "@/components/home/HomeSectionDivider";
+
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
@@ -30,6 +33,7 @@ export default async function HomePage() {
         <EntrySeedHandler />
       </Suspense>
 
+      {/* Bölüm 1 — pikap / ana sahne */}
       <HomePageContent
         latestVideo={latestVideo}
         latestVideoThumb={latestVideoThumb}
@@ -39,6 +43,12 @@ export default async function HomePage() {
         introPhotoPlaktakikitapUrl={siteSettings?.intro_photo_plaktakikitap_url}
         karalamalarPreview={karalamalarPreview}
       />
+
+      {/* Bölüm 2 — kitap (üstünde ayırıcı) */}
+      <CurrentlyReading showTopDivider />
+
+      {/* Footer öncesi ayırıcı */}
+      <HomeSectionDivider />
     </>
   );
 }

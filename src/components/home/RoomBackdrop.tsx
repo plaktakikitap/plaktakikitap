@@ -192,7 +192,7 @@ function WindowSilhouette() {
 }
 
 function BookshelfSilhouette() {
-  const stroke = "rgba(201,166,90,0.06)";
+  const stroke = "rgba(184,147,74,0.06)";
 
   return (
     <svg
@@ -233,7 +233,7 @@ function BookshelfSilhouette() {
 }
 
 function TurntableSilhouette() {
-  const stroke = "rgba(201,166,90,0.08)";
+  const stroke = "rgba(184,147,74,0.08)";
 
   return (
     <svg

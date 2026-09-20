@@ -56,12 +56,12 @@ export default async function IzlemeGunlugumFilmlerPage() {
 
   return (
     <PageTransitionTarget layoutId="card-/izleme-gunlugum/filmler">
-      <main className="relative min-h-screen text-white">
+      <main className="relative min-h-screen text-ink">
         <div className="mx-auto max-w-6xl px-3 py-8 sm:px-6 sm:py-10">
           <div className="mb-6 sm:mb-8">
             <Link
               href="/izleme-gunlugum"
-              className="text-sm text-white/60 transition-colors hover:text-white/90"
+              className="text-sm text-ink/60 transition-colors hover:text-ink/90"
             >
               ← İzleme Günlüğüm
             </Link>
@@ -69,9 +69,9 @@ export default async function IzlemeGunlugumFilmlerPage() {
           <PageHeader
             layoutId="nav-/izleme-gunlugum/filmler"
             title="Filmler"
-            titleClassName="!text-white font-bold"
+            titleClassName="!text-ink font-bold"
             subtitle="izlediğim filmler ve yorumlarım"
-            subtitleClassName="text-white/70"
+            subtitleClassName="text-ink/70"
           />
 
           <div className="mt-8">

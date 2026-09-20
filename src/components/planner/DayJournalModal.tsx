@@ -123,7 +123,7 @@ export function DayJournalModal({
           scale: 0.98,
           transition: { duration: 0.18 },
         }}
-        className="relative max-h-[88vh] w-full max-w-xl overflow-hidden rounded-xl border border-black/12 border-white/20 bg-[#F3EAD7]/95 shadow-2xl ring-1 ring-white/10"
+        className="relative max-h-[88vh] w-full max-w-xl overflow-hidden rounded-xl border border-black/12 border-ink/20 bg-[#F3EAD7]/95 shadow-2xl ring-1 ring-white/10"
         style={{
           transformStyle: "preserve-3d",
           perspective: 1200,

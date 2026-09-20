@@ -87,7 +87,7 @@ export function Deck({ slides }: DeckProps) {
     slides[activeIndex]?.id ? MOOD_OVERLAYS[slides[activeIndex].id] ?? "transparent" : "transparent";
 
   return (
-    <div className="relative bg-[#F9F9F9]">
+    <div className="relative bg-cream">
       {/* Grain + vignette */}
       <div
         className="pointer-events-none fixed inset-0 z-20"

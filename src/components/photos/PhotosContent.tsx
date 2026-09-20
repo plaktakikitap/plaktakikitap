@@ -50,22 +50,22 @@ export function PhotosContent({ photos }: PhotosContentProps) {
         animate={{ opacity: 1, y: 0 }}
         className="mb-10 text-center"
       >
-        <h1 className="font-editorial text-3xl font-semibold text-white sm:text-4xl">
+        <h1 className="font-editorial text-3xl font-semibold text-ink sm:text-4xl">
           Fotoğraf
         </h1>
-        <p className="mt-2 text-sm text-white/60">
+        <p className="mt-2 text-sm text-ink/60">
           sadece gördüğüm şeyleri kalıcı hale getirmeyi ve detaylara bakmayı, fark etmiş olmayı seviyorum.
         </p>
         {photos.length > 0 && (
-          <div className="mt-3 flex justify-end gap-3 text-[11px] tracking-wide text-white/40">
+          <div className="mt-3 flex justify-end gap-3 text-[11px] tracking-wide text-ink/40">
             {FILTER_OPTIONS.map(({ value, label }) => (
               <button
                 key={label}
                 type="button"
                 onClick={() => setCategory(value)}
-                className={`transition-colors hover:text-white/60 ${
+                className={`transition-colors hover:text-ink/60 ${
                   category === value
-                    ? "text-white/80 underline underline-offset-2"
+                    ? "text-ink/80 underline underline-offset-2"
                     : ""
                 }`}
               >
@@ -82,7 +82,7 @@ export function PhotosContent({ photos }: PhotosContentProps) {
         transition={{ delay: 0.05 }}
       >
         {photos.length === 0 ? (
-          <p className="py-16 text-center text-white/60">
+          <p className="py-16 text-center text-ink/60">
             Henüz fotoğraf eklenmemiş.
           </p>
         ) : (

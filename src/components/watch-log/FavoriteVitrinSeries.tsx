@@ -27,7 +27,7 @@ export function FavoriteVitrinSeries({ seriesList }: FavoriteVitrinSeriesProps) 
         background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(251,191,36,0.12) 0%, transparent 55%)",
       }}
     >
-      <h2 className="mb-6 text-center font-editorial text-xl font-medium text-white/90 sm:text-2xl">
+      <h2 className="mb-6 text-center font-editorial text-xl font-medium text-ink/90 sm:text-2xl">
         Eymen&apos;in Favori 5&apos;lisi
       </h2>
       <div className="flex flex-wrap items-end justify-center gap-4 sm:gap-6">
@@ -59,7 +59,7 @@ export function FavoriteVitrinSeries({ seriesList }: FavoriteVitrinSeriesProps) 
                   ) : (
                     <>
                       <Tv className="h-10 w-10 text-amber-400/70 sm:h-12 sm:w-12 relative z-10" />
-                      <p className="mt-2 line-clamp-3 text-center font-editorial text-sm font-medium text-white/95 relative z-10">
+                      <p className="mt-2 line-clamp-3 text-center font-editorial text-sm font-medium text-ink/95 relative z-10">
                         {item.title}
                       </p>
                     </>
@@ -74,14 +74,14 @@ export function FavoriteVitrinSeries({ seriesList }: FavoriteVitrinSeriesProps) 
                 )}
               </div>
               {s.poster_url && (
-                <p className="mt-2 line-clamp-2 text-center font-editorial text-sm font-medium text-white/95 w-full px-1">
+                <p className="mt-2 line-clamp-2 text-center font-editorial text-sm font-medium text-ink/95 w-full px-1">
                   {item.title}
                 </p>
               )}
-              <span className="mt-2 rounded-full border border-amber-400/40 bg-amber-950/30 px-2.5 py-0.5 font-serif text-[10px] uppercase tracking-wider text-amber-200/90 backdrop-blur-sm sm:text-xs">
+              <span className="mt-2 rounded-full border border-amber-400/40 bg-amber-950/30 px-2.5 py-0.5 font-serif text-[10px] uppercase tracking-wider text-gold/90 backdrop-blur-sm sm:text-xs">
                 Eymen&apos;in Seçimi
               </span>
-              <div className="mt-1.5 flex flex-col items-center gap-0.5 font-editorial text-[11px] text-white/70 sm:text-xs">
+              <div className="mt-1.5 flex flex-col items-center gap-0.5 font-editorial text-[11px] text-ink/70 sm:text-xs">
                 <span>Bölüm: {s.episodes_watched}</span>
                 <span>Sezon: {s.seasons_watched > 0 ? `${s.seasons_watched} izlendi` : "—"}{s.total_seasons != null ? ` / ${s.total_seasons} toplam` : ""}</span>
               </div>

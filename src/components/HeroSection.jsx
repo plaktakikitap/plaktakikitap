@@ -38,10 +38,10 @@ function randomBetween(min, max) {
 function PixelPoseSvg({ variant = 0 }) {
   const skin = "#e8dcc8";
   const hair = "#2a2218";
-  const shirt = "#c9a65a";
+  const shirt = "var(--gold)";
   const pants = "#4a4035";
   const book = "#fff7c2";
-  const bookEdge = "#c9a65a";
+  const bookEdge = "var(--gold)";
   const outline = "#1a1510";
 
   const poses = [
@@ -208,10 +208,10 @@ function EasterEggCharacter() {
                   }
                   className="pointer-events-none absolute bottom-full right-0 mb-2 w-[min(220px,calc(100vw-2rem))]"
                 >
-                  <div className="relative rounded-xl border border-[#c9a65a]/35 bg-[#f7f0e2] px-3 py-2 text-left text-[11px] leading-snug text-[#3a3228] shadow-[0_8px_24px_rgba(0,0,0,0.35)]">
+                  <div className="relative rounded-xl border border-gold/35 bg-card px-3 py-2 text-left text-[11px] leading-snug text-ink shadow-[0_8px_24px_rgba(0,0,0,0.35)]">
                     {quote}
                     <span
-                      className="absolute -bottom-1.5 right-4 h-3 w-3 rotate-45 border-b border-r border-[#c9a65a]/35 bg-[#f7f0e2]"
+                      className="absolute -bottom-1.5 right-4 h-3 w-3 rotate-45 border-b border-r border-gold/35 bg-card"
                       aria-hidden
                     />
                   </div>
@@ -222,7 +222,7 @@ function EasterEggCharacter() {
             <button
               type="button"
               onClick={handleClick}
-              className="pointer-events-auto cursor-pointer rounded-md p-0.5 transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a65a]/60"
+              className="pointer-events-auto cursor-pointer rounded-md p-0.5 transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
               aria-label="Gizli karakter — tıkla"
             >
               <CharacterVisual poseIndex={poseIndex} />
@@ -301,7 +301,7 @@ export default function HeroSection({
 
           <AnimatedTitle
             text={title}
-            className="home-hero-h1 shrink-0 px-2 text-center font-display text-[28px] font-medium leading-[1.1] tracking-[-0.02em] text-[#F3EBDD] min-[400px]:text-[34px] sm:px-8 sm:text-[52px] md:text-[72px] lg:text-[80px]"
+            className="home-hero-h1 type-1 shrink-0 px-2 text-center font-display font-medium tracking-[-0.02em] text-ink sm:px-8"
           />
 
           <div className="hidden flex-1 justify-end sm:flex">
@@ -313,7 +313,7 @@ export default function HeroSection({
           initial={reduce ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.22, ease: EASE }}
-          className="mt-3 text-center font-sans text-xs font-normal tracking-[0.02em] text-[#F3EBDD]/85 sm:mt-5 sm:text-sm md:text-base"
+          className="mt-3 text-center font-sans type-4 font-normal tracking-[0.02em] text-ink-muted sm:mt-5"
         >
           {subtitle}
         </motion.p>

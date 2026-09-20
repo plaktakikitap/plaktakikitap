@@ -8,7 +8,7 @@ interface CircularProgressProps {
   /** Metin çemberin ortasında (örn. "%45") */
   centerLabel?: string;
   className?: string;
-  /** Merkez etiket için ek class (örn. text-white) */
+  /** Merkez etiket için ek class (örn. text-ink) */
   centerLabelClassName?: string;
   /** Track (arka) rengi */
   trackColor?: string;

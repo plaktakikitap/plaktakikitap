@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import type { WorksItem } from "@/types/works";
 import { FilterBar, filterItemsByType, type WorksFilter } from "./FilterBar";
@@ -42,17 +43,26 @@ export function WorksContent({ items, cvDownloadUrl }: WorksContentProps) {
   const hasAny = filtered.length > 0 || (filter === "all" && cvRoles.length > 0);
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
+    <div className="works-page" data-category={filter}>
+      <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
       <motion.header
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         className="mb-10 text-center"
       >
-        <h1 className="font-editorial text-3xl font-semibold text-white sm:text-4xl">
+        <h1 className="font-editorial text-3xl font-semibold text-ink sm:text-4xl">
           Bazı Projelerim
         </h1>
-        <p className="mt-2 text-sm text-white/60">
+        <p className="mt-2 text-sm text-ink/60">
           Videolar, sanat, projeler ve sertifikalar
+        </p>
+        <p className="mt-3">
+          <Link
+            href="/portfolyo"
+            className="text-sm font-medium text-gold underline-offset-4 transition hover:underline"
+          >
+            Portfolyo →
+          </Link>
         </p>
       </motion.header>
 
@@ -71,14 +81,14 @@ export function WorksContent({ items, cvDownloadUrl }: WorksContentProps) {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
         >
-          <h2 className="mb-4 font-editorial text-lg font-medium text-white/90">
+          <h2 className="mb-4 font-editorial text-lg font-medium text-ink/90">
             Öne çıkanlar
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {featured.slice(0, 3).map((item) => (
               <div
                 key={item.id}
-                className="rounded-xl border border-amber-400/20 bg-white/5 px-4 py-3 text-sm text-white/90"
+                className="rounded-xl border border-amber-400/20 bg-ink/5 px-4 py-3 text-sm text-ink/90"
               >
                 {item.title}
                 {item.type === "youtube" && " (Video)"}
@@ -90,7 +100,7 @@ export function WorksContent({ items, cvDownloadUrl }: WorksContentProps) {
       )}
 
       {!hasAny && filter !== "all" && (
-        <p className="py-12 text-center text-sm text-white/50">
+        <p className="py-12 text-center text-sm text-ink/50">
           Bu filtrede içerik bulunamadı.
         </p>
       )}
@@ -105,6 +115,7 @@ export function WorksContent({ items, cvDownloadUrl }: WorksContentProps) {
       {filter === "all" || filter === "software" ? <SoftwareCards items={software} /> : null}
       {filter === "all" || filter === "certificate" ? <BadgeCloud items={certificate} /> : null}
       {filter === "all" ? <CVTimeline items={cvRoles} cvDownloadUrl={cvDownloadUrl} /> : null}
+      </div>
     </div>
   );
 }

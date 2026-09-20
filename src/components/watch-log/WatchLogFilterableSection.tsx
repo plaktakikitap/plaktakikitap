@@ -130,39 +130,39 @@ export function WatchLogFilterableSection({ films, onSelectFilm }: WatchLogFilte
 
   return (
     <section>
-      <div className="mb-3 flex flex-wrap items-center gap-2 text-sm text-white/60">
+      <div className="mb-3 flex flex-wrap items-center gap-2 text-sm text-ink/60">
         <span className="mr-1">Raf sırası:</span>
         <button
           type="button"
           onClick={() => setSortKey("date-asc")}
-          className={`rounded-lg px-3 py-1.5 transition-colors ${shelfNewestAtEnd ? "bg-amber-400/20 text-amber-200" : "hover:bg-white/10 hover:text-white/80"}`}
+          className={`rounded-lg px-3 py-1.5 transition-colors ${shelfNewestAtEnd ? "bg-gold-soft text-gold" : "hover:bg-ink/5 hover:text-ink/80"}`}
         >
           En yeni en sonda
         </button>
         <button
           type="button"
           onClick={() => setSortKey("date-desc")}
-          className={`rounded-lg px-3 py-1.5 transition-colors ${shelfNewestFirst ? "bg-amber-400/20 text-amber-200" : "hover:bg-white/10 hover:text-white/80"}`}
+          className={`rounded-lg px-3 py-1.5 transition-colors ${shelfNewestFirst ? "bg-gold-soft text-gold" : "hover:bg-ink/5 hover:text-ink/80"}`}
         >
           En yeni en başta
         </button>
       </div>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <h2 className="font-editorial text-xl font-medium text-white/90">
+        <h2 className="font-editorial text-xl font-medium text-ink/90">
           Koleksiyon
         </h2>
         <div className="relative" ref={dropdownRef}>
           <button
             type="button"
             onClick={() => setDropdownOpen((o) => !o)}
-            className="flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 text-sm font-medium text-white/90 backdrop-blur-md transition-all hover:border-amber-400/30 hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50"
+            className="flex items-center gap-2 rounded-xl border border-ink/20 bg-ink/5 px-4 py-2.5 text-sm font-medium text-ink/90 backdrop-blur-md transition-all hover:border-gold/40 hover:bg-ink/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50"
             aria-expanded={dropdownOpen}
             aria-haspopup="true"
           >
             <Filter className="h-4 w-4 text-amber-400/90" aria-hidden />
             Filtrele
             <ChevronDown
-              className={`h-4 w-4 text-white/60 transition-transform ${dropdownOpen ? "rotate-180" : ""}`}
+              className={`h-4 w-4 text-ink/60 transition-transform ${dropdownOpen ? "rotate-180" : ""}`}
               aria-hidden
             />
           </button>
@@ -173,11 +173,11 @@ export function WatchLogFilterableSection({ films, onSelectFilm }: WatchLogFilte
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.15 }}
-                className="absolute right-0 top-full z-20 mt-2 w-64 overflow-hidden rounded-xl border border-white/20 bg-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.4)] backdrop-blur-xl"
+                className="absolute right-0 top-full z-20 mt-2 w-64 overflow-hidden rounded-xl border border-ink/20 bg-ink/5 shadow-[0_20px_60px_rgba(0,0,0,0.4)] backdrop-blur-xl"
               >
                 <div className="max-h-[70vh] overflow-y-auto py-2">
                   <div className="px-3 pb-1 pt-1">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-white/50">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-ink/50">
                       Tür
                     </p>
                     <button
@@ -185,7 +185,7 @@ export function WatchLogFilterableSection({ films, onSelectFilm }: WatchLogFilte
                       onClick={() => {
                         setGenreFilter(null);
                       }}
-                      className="mt-1.5 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-white/90 transition-colors hover:bg-white/10"
+                      className="mt-1.5 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-ink/90 transition-colors hover:bg-ink/5"
                     >
                       {genreFilter == null && (
                         <Check className="h-4 w-4 shrink-0 text-amber-400" aria-hidden />
@@ -200,7 +200,7 @@ export function WatchLogFilterableSection({ films, onSelectFilm }: WatchLogFilte
                         onClick={() => {
                           setGenreFilter(g);
                         }}
-                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-white/90 transition-colors hover:bg-white/10"
+                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-ink/90 transition-colors hover:bg-ink/5"
                       >
                         {genreFilter === g ? (
                           <Check className="h-4 w-4 shrink-0 text-amber-400" aria-hidden />
@@ -211,9 +211,9 @@ export function WatchLogFilterableSection({ films, onSelectFilm }: WatchLogFilte
                       </button>
                     ))}
                   </div>
-                  <div className="my-1 border-t border-white/10" />
+                  <div className="my-1 border-t border-ink/10" />
                   <div className="px-3 pb-2 pt-1">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-white/50">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-ink/50">
                       Sırala
                     </p>
                     {SORT_OPTIONS.map((opt) => (
@@ -223,7 +223,7 @@ export function WatchLogFilterableSection({ films, onSelectFilm }: WatchLogFilte
                         onClick={() => {
                           setSortKey(opt.value);
                         }}
-                        className="mt-1.5 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-white/90 transition-colors hover:bg-white/10"
+                        className="mt-1.5 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-ink/90 transition-colors hover:bg-ink/5"
                       >
                         {sortKey === opt.value ? (
                           <Check className="h-4 w-4 shrink-0 text-amber-400" aria-hidden />
@@ -235,7 +235,7 @@ export function WatchLogFilterableSection({ films, onSelectFilm }: WatchLogFilte
                     ))}
                   </div>
                 </div>
-                <div className="border-t border-white/10 px-3 py-2 text-xs text-white/50">
+                <div className="border-t border-ink/10 px-3 py-2 text-xs text-ink/50">
                   {genreFilter != null && <span className="mr-2">Tür: {genreFilter}</span>}
                   <span>{currentSortLabel}</span>
                 </div>

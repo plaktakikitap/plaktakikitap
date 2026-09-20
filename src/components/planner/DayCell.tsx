@@ -85,7 +85,7 @@ export function DayCell({
             )}
             {extraCount > 0 && (
               <span
-                className="absolute bottom-0 right-9 flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500/95 px-1 text-[9px] font-semibold text-white shadow-sm"
+                className="absolute bottom-0 right-9 flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500/95 px-1 text-[9px] font-semibold text-ink shadow-sm"
                 style={{ transform: "rotate(8deg)" }}
               >
                 +{extraCount}

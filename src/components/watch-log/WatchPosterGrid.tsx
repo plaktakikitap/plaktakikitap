@@ -14,6 +14,47 @@ import { SeriesDetailModal } from "./SeriesDetailModal";
 
 type KindFilter = "all" | WatchKind;
 type RatingFilter = "all" | "3" | "5";
+type SortKey =
+  | "title-asc"
+  | "title-desc"
+  | "rating-asc"
+  | "rating-desc"
+  | "watched-desc"
+  | "watched-asc";
+
+const SORT_OPTIONS: { value: SortKey; label: string }[] = [
+  { value: "watched-desc", label: "En son izlenen" },
+  { value: "watched-asc", label: "İlk izlenen" },
+  { value: "title-asc", label: "A–Z" },
+  { value: "title-desc", label: "Z–A" },
+  { value: "rating-desc", label: "En yüksek puan" },
+  { value: "rating-asc", label: "En düşük puan" },
+];
+
+function compareWatchItems(a: WatchPosterItem, b: WatchPosterItem, sort: SortKey): number {
+  const titleA = a.title.localeCompare(b.title, "tr", { sensitivity: "base" });
+  const titleB = -titleA;
+  const ratingA = a.rating ?? -1;
+  const ratingB = b.rating ?? -1;
+  const timeA = a.watchedAt ? new Date(a.watchedAt).getTime() : 0;
+  const timeB = b.watchedAt ? new Date(b.watchedAt).getTime() : 0;
+
+  switch (sort) {
+    case "title-asc":
+      return titleA;
+    case "title-desc":
+      return titleB;
+    case "rating-asc":
+      return ratingA - ratingB || titleA;
+    case "rating-desc":
+      return ratingB - ratingA || titleA;
+    case "watched-asc":
+      return timeA - timeB || titleA;
+    case "watched-desc":
+    default:
+      return timeB - timeA || titleA;
+  }
+}
 
 function PosterCard({
   item,
@@ -34,7 +75,7 @@ function PosterCard({
       <button
         type="button"
         onClick={onOpen}
-        className="relative aspect-[2/3] w-full overflow-hidden rounded-[5px] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a65a]/60"
+        className="relative aspect-[2/3] w-full overflow-hidden rounded-[5px] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
       >
         {showPoster ? (
           <Image
@@ -53,7 +94,7 @@ function PosterCard({
             }}
           >
             <span
-              className="text-2xl font-medium tracking-wide text-[#c9a65a] sm:text-3xl"
+              className="text-2xl font-medium tracking-wide text-gold sm:text-3xl"
               style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
             >
               {initialsFromTitle(item.title)}
@@ -63,10 +104,10 @@ function PosterCard({
 
         <div className="pointer-events-none absolute inset-0 flex flex-col justify-between bg-black/0 p-2.5 opacity-0 transition-all duration-[250ms] ease-out group-hover:bg-black/75 group-hover:opacity-100">
           <div>
-            <p className="text-[11px] font-semibold leading-snug text-white">
+            <p className="text-[11px] font-semibold leading-snug text-cream">
               {item.title}
               {item.year != null ? (
-                <span className="ml-1 font-normal text-white/50">{item.year}</span>
+                <span className="ml-1 font-normal text-cream/50">{item.year}</span>
               ) : null}
             </p>
             {item.rating != null ? (
@@ -76,7 +117,7 @@ function PosterCard({
             ) : null}
           </div>
           {preview ? (
-            <p className="line-clamp-3 text-[10px] italic leading-relaxed text-white/70">
+            <p className="line-clamp-3 text-[10px] italic leading-relaxed text-cream/70">
               {preview}
             </p>
           ) : null}
@@ -84,7 +125,7 @@ function PosterCard({
       </button>
 
       <div className="mt-1.5 px-0.5">
-        <p className="line-clamp-2 text-[0.72rem] leading-snug text-[#9a9488]">
+        <p className="line-clamp-2 text-[0.72rem] leading-snug text-ink-muted">
           {item.title}
         </p>
         {item.rating != null ? (
@@ -109,6 +150,7 @@ export function WatchPosterGrid({
   const [kind, setKind] = useState<KindFilter>(initialKind);
   const [yearFilter, setYearFilter] = useState<string>("all");
   const [ratingFilter, setRatingFilter] = useState<RatingFilter>("all");
+  const [sortKey, setSortKey] = useState<SortKey>("watched-desc");
   const [selectedFilm, setSelectedFilm] = useState<FilmItem | null>(null);
   const [selectedSeries, setSelectedSeries] = useState<SeriesItem | null>(null);
 
@@ -137,18 +179,14 @@ export function WatchPosterGrid({
     } else if (ratingFilter === "5") {
       list = list.filter((i) => (i.rating ?? 0) >= 5);
     }
-    return [...list].sort((a, b) => {
-      const ta = a.watchedAt ? new Date(a.watchedAt).getTime() : 0;
-      const tb = b.watchedAt ? new Date(b.watchedAt).getTime() : 0;
-      return tb - ta;
-    });
-  }, [items, kind, yearFilter, ratingFilter]);
+    return [...list].sort((a, b) => compareWatchItems(a, b, sortKey));
+  }, [items, kind, yearFilter, ratingFilter, sortKey]);
 
   const pill = (active: boolean) =>
     `rounded-full px-3 py-1.5 text-xs transition ${
       active
-        ? "bg-[#c9a65a]/25 text-[#f3ead9] ring-1 ring-[#c9a65a]/40"
-        : "bg-white/5 text-white/55 hover:bg-white/10 hover:text-white/80"
+        ? "bg-gold/25 text-ink ring-1 ring-gold/40"
+        : "bg-ink/5 text-ink/55 hover:bg-ink/5 hover:text-ink/80"
     }`;
 
   return (
@@ -172,14 +210,14 @@ export function WatchPosterGrid({
                 {label}
               </button>
             ))}
-            <span className="mx-1 h-4 w-px bg-white/15" aria-hidden />
+            <span className="mx-1 h-4 w-px bg-ink/[0.06]" aria-hidden />
           </>
         ) : null}
 
         <select
           value={yearFilter}
           onChange={(e) => setYearFilter(e.target.value)}
-          className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-white/80 outline-none focus:border-[#c9a65a]/40"
+          className="rounded-full border border-ink/15 bg-ink/5 px-3 py-1.5 text-xs text-ink/80 outline-none focus:border-gold/40"
           aria-label="İzleme yılı"
         >
           <option value="all">Tüm yıllar</option>
@@ -193,7 +231,7 @@ export function WatchPosterGrid({
         <select
           value={ratingFilter}
           onChange={(e) => setRatingFilter(e.target.value as RatingFilter)}
-          className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-white/80 outline-none focus:border-[#c9a65a]/40"
+          className="rounded-full border border-ink/15 bg-ink/5 px-3 py-1.5 text-xs text-ink/80 outline-none focus:border-gold/40"
           aria-label="Minimum puan"
         >
           <option value="all">Tüm puanlar</option>
@@ -201,13 +239,26 @@ export function WatchPosterGrid({
           <option value="3">★★★ ve üzeri</option>
         </select>
 
-        <span className="ml-auto text-[11px] text-white/40">
+        <select
+          value={sortKey}
+          onChange={(e) => setSortKey(e.target.value as SortKey)}
+          className="rounded-full border border-ink/15 bg-ink/5 px-3 py-1.5 text-xs text-ink/80 outline-none focus:border-gold/40"
+          aria-label="Sıralama"
+        >
+          {SORT_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+
+        <span className="ml-auto text-[11px] text-ink/40">
           {filtered.length} kayıt
         </span>
       </div>
 
       {filtered.length === 0 ? (
-        <p className="py-16 text-center text-sm text-[#9a9488]">
+        <p className="py-16 text-center text-sm text-ink-muted">
           Bu filtreye uygun kayıt yok.
         </p>
       ) : (

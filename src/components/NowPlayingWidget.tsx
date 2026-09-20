@@ -42,7 +42,7 @@ export function NowPlayingWidget() {
   if (loading || !data?.title) return null;
 
   const content = (
-    <div className="flex items-center gap-4 rounded-xl border border-white/20 bg-white/5 p-4 backdrop-blur-[12px]">
+    <div className="flex items-center gap-4 rounded-xl border border-ink/20 bg-ink/5 p-4 backdrop-blur-[12px]">
       {data.albumArt ? (
         <img
           src={data.albumArt}
@@ -50,17 +50,17 @@ export function NowPlayingWidget() {
           className="h-14 w-14 rounded-lg object-cover"
         />
       ) : (
-        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-white/10">
-          <Music className="h-7 w-7 text-white/70" />
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-ink/5">
+          <Music className="h-7 w-7 text-ink/70" />
         </div>
       )}
       <div className="min-w-0 flex-1">
-        <div className="text-xs font-medium uppercase tracking-wider text-white/60">
+        <div className="text-xs font-medium uppercase tracking-wider text-ink/60">
           {data.isPlaying ? "Şu an dinliyorum" : "En son dinlediğim"}
         </div>
-        <div className="truncate font-medium text-white">{data.title}</div>
+        <div className="truncate font-medium text-ink">{data.title}</div>
         {data.artist && (
-          <div className="truncate text-sm text-white/75">{data.artist}</div>
+          <div className="truncate text-sm text-ink/75">{data.artist}</div>
         )}
       </div>
     </div>

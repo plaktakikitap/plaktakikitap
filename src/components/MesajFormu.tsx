@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const inputBase =
-  "min-w-0 rounded-md border bg-white/[0.04] px-2.5 py-2 text-[0.82rem] text-[#f3ead9] outline-none transition-colors placeholder:text-[#9a9488]/70 focus:border-[rgba(201,166,90,0.55)]";
+  "min-w-0 rounded-md border bg-card px-2.5 py-2 text-[0.82rem] text-ink outline-none transition-colors placeholder:text-ink-muted/70 focus:border-[rgba(184,147,74,0.55)]";
 
 function isFormValid(isim: string, mesaj: string) {
   return isim.trim().length >= 2 && mesaj.trim().length >= 5;
@@ -73,15 +73,15 @@ export default function MesajFormu() {
       className="mx-auto mb-12 max-w-xl px-4 sm:max-w-2xl"
     >
       <div className="mb-3 text-center">
-        <h3 className="font-display text-base font-bold text-[#f3ead9] sm:text-lg">
+        <h3 className="font-display text-base font-bold text-ink sm:text-lg">
           Bana bir şey söylemek ister misin?
         </h3>
-        <p className="mt-1 font-display text-sm italic text-[#9a9488] sm:text-base">
+        <p className="mt-1 font-display text-sm italic text-ink-muted sm:text-base">
           Buradan da yazabilirsin..
         </p>
       </div>
 
-      <div className="rounded-lg border border-[rgba(201,166,90,0.18)] bg-white/[0.025] px-3 py-3 sm:px-4 sm:py-3.5">
+      <div className="rounded-lg border border-[rgba(184,147,74,0.18)] bg-white/[0.025] px-3 py-3 sm:px-4 sm:py-3.5">
         <AnimatePresence>
           {uyariAcik && (
             <motion.div
@@ -109,11 +109,11 @@ export default function MesajFormu() {
               transition={{ duration: 0.3 }}
               className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 py-1 text-center text-[0.82rem]"
             >
-              <span className="text-[#c9a65a]">✦ Mesajın ulaştı, teşekkürler.</span>
+              <span className="text-gold">✦ Mesajın ulaştı, teşekkürler.</span>
               <button
                 type="button"
                 onClick={() => setDurum("bos")}
-                className="text-[0.75rem] text-[#9a9488] underline-offset-2 hover:text-[#c9a65a] hover:underline"
+                className="text-[0.75rem] text-ink-muted underline-offset-2 hover:text-gold hover:underline"
               >
                 Yeni mesaj
               </button>
@@ -142,7 +142,7 @@ export default function MesajFormu() {
                   className={`${inputBase} w-[5.5rem] shrink-0 sm:w-24 ${
                     isimHatali
                       ? "border-[#b85c38]/60"
-                      : "border-[rgba(201,166,90,0.2)]"
+                      : "border-rule"
                   }`}
                 />
                 <input
@@ -160,7 +160,7 @@ export default function MesajFormu() {
                   className={`${inputBase} flex-1 ${
                     mesajHatali
                       ? "border-[#b85c38]/60"
-                      : "border-[rgba(201,166,90,0.2)]"
+                      : "border-rule"
                   }`}
                 />
                 <motion.button
@@ -169,8 +169,8 @@ export default function MesajFormu() {
                   whileTap={durum !== "gonderiliyor" ? { scale: 0.97 } : undefined}
                   className={`shrink-0 rounded-md px-3 py-2 text-[0.78rem] font-medium tracking-[0.02em] transition-colors sm:px-3.5 sm:text-[0.82rem] ${
                     durum === "gonderiliyor"
-                      ? "cursor-wait bg-[rgba(201,166,90,0.12)] text-[#9a9488]"
-                      : "cursor-pointer bg-gradient-to-br from-[#c9a65a] to-[#8a6427] text-[#0a0908]"
+                      ? "cursor-wait bg-[rgba(184,147,74,0.12)] text-ink-muted"
+                      : "cursor-pointer bg-gradient-to-br from-gold to-[#8a6a2e] text-ink"
                   }`}
                 >
                   {durum === "gonderiliyor" ? "…" : "Gönder"}
@@ -185,7 +185,7 @@ export default function MesajFormu() {
                 )}
                 <span
                   className={`text-[0.68rem] tabular-nums ${
-                    mesaj.length > 450 ? "text-[#c9a65a]" : "text-[#9a9488]/60"
+                    mesaj.length > 450 ? "text-gold" : "text-ink-muted/60"
                   }`}
                 >
                   {mesaj.length}/500

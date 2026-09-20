@@ -98,7 +98,7 @@ export function WatchLogGrid({ films, onSelectFilm }: WatchLogGridProps) {
 
   if (films.length === 0) {
     return (
-      <p className="py-12 text-center text-white/50">
+      <p className="py-12 text-center text-ink/50">
         Henüz film eklenmemiş. Admin panelinden ekleyebilirsiniz.
       </p>
     );
@@ -177,13 +177,13 @@ export function WatchLogGrid({ films, onSelectFilm }: WatchLogGridProps) {
                       </div>
                     </motion.div>
                     <p
-                      className={`${styles.spineTitle} mt-2 origin-top truncate text-center text-[10px] leading-tight text-white/70 group-hover:text-white/90 sm:text-xs`}
+                      className={`${styles.spineTitle} mt-2 origin-top truncate text-center text-[10px] leading-tight text-ink/70 group-hover:text-ink/90 sm:text-xs`}
                       title={item.title}
                     >
                       {item.title}
                     </p>
                     {totalViews > 1 && (
-                      <span className="mt-0.5 inline-block rounded bg-white/15 px-1.5 py-0.5 text-[9px] font-medium text-white/70">
+                      <span className="mt-0.5 inline-block rounded bg-ink/[0.06] px-1.5 py-0.5 text-[9px] font-medium text-ink/70">
                         x{totalViews}
                       </span>
                     )}

@@ -90,7 +90,7 @@ export function ReadingLogBooksSection({
         {/* Tag pill when active */}
         <div className="flex flex-wrap items-center gap-2">
           {filterTag ? (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/40 bg-amber-400/20 px-2.5 py-1 text-sm text-amber-200">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/40 bg-gold-soft px-2.5 py-1 text-sm text-gold">
               <button
                 type="button"
                 onClick={() => setFilterTag(null)}
@@ -106,19 +106,19 @@ export function ReadingLogBooksSection({
 
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <label className="relative">
-            <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+            <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/40" />
             <input
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Başlık / yazar..."
-              className="w-40 rounded-lg border border-white/20 bg-white/10 py-1.5 pl-8 pr-2.5 text-sm text-white placeholder:text-white/40 focus:border-amber-400/50 focus:outline-none focus:ring-1 focus:ring-amber-400/30 sm:w-48"
+              className="w-40 rounded-lg border border-ink/20 bg-ink/5 py-1.5 pl-8 pr-2.5 text-sm text-ink placeholder:text-ink/40 focus:border-amber-400/50 focus:outline-none focus:ring-1 focus:ring-amber-400/30 sm:w-48"
             />
           </label>
           <select
             value={statusFilter}
             onChange={(e) => onStatusFilterChange(e.target.value as StatusFilterValue)}
-            className="rounded-lg border border-white/20 bg-white/10 py-1.5 pl-3 pr-8 text-sm text-white focus:border-amber-400/50 focus:outline-none focus:ring-1 focus:ring-amber-400/30"
+            className="rounded-lg border border-ink/20 bg-ink/5 py-1.5 pl-3 pr-8 text-sm text-ink focus:border-amber-400/50 focus:outline-none focus:ring-1 focus:ring-amber-400/30"
           >
             {STATUS_OPTIONS.map((opt) => (
               <option key={opt.value || "all"} value={opt.value}>
@@ -129,7 +129,7 @@ export function ReadingLogBooksSection({
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortValue)}
-            className="rounded-lg border border-white/20 bg-white/10 py-1.5 pl-3 pr-8 text-sm text-white focus:border-amber-400/50 focus:outline-none focus:ring-1 focus:ring-amber-400/30"
+            className="rounded-lg border border-ink/20 bg-ink/5 py-1.5 pl-3 pr-8 text-sm text-ink focus:border-amber-400/50 focus:outline-none focus:ring-1 focus:ring-amber-400/30"
           >
             {SORT_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>

@@ -20,17 +20,17 @@ import type {
   OkumaStatsPayload,
 } from "@/app/api/okuma-istatistikleri/route";
 
-const GOLD = "#c9a65a";
-const MUTED = "#9a9488";
-const CREAM = "#f3ead9";
+const GOLD = "#b8934a";
+const MUTED = "#6b6158";
+const INK = "#1a1612";
 const TOOLTIP_STYLE = {
-  background: "#1a1714",
-  border: "1px solid rgba(201,166,90,0.3)",
+  background: "#faf6f0",
+  border: "1px solid rgba(0,0,0,0.06)",
   borderRadius: 8,
-  color: CREAM,
+  color: INK,
   fontSize: 12,
 };
-const GRID_STROKE = "rgba(201,166,90,0.1)";
+const GRID_STROKE = "rgba(0,0,0,0.06)";
 
 const MONTH_SHORT = [
   "Oca",
@@ -63,7 +63,7 @@ const MONTH_FULL = [
 ];
 
 const PIE_COLORS = [
-  "#c9a65a",
+  "#b8934a",
   "#8b7355",
   "#d4b87a",
   "#6b5a42",
@@ -105,14 +105,11 @@ type YearFilter = "all" | number;
 
 function StatCard({ value, label }: { value: string; label: string }) {
   return (
-    <div className="rounded-xl border border-[rgba(201,166,90,0.15)] bg-[rgba(255,255,255,0.03)] px-4 py-5 text-center sm:px-6 sm:py-6">
-      <p
-        className="font-editorial text-3xl font-medium tracking-tight sm:text-4xl"
-        style={{ color: CREAM }}
-      >
+    <div className="rounded-xl border border-rule bg-card px-4 py-5 text-center sm:px-6 sm:py-6">
+      <p className="font-editorial text-3xl font-medium tracking-tight text-ink sm:text-4xl">
         {value}
       </p>
-      <p className="mt-2 text-[0.7rem] uppercase tracking-[0.14em]" style={{ color: MUTED }}>
+      <p className="section-eyebrow mt-2">
         {label}
       </p>
     </div>
@@ -121,7 +118,7 @@ function StatCard({ value, label }: { value: string; label: string }) {
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="mb-4 font-editorial text-lg font-medium text-[#f3ead9]/90 sm:text-xl">
+    <h2 className="mb-4 font-editorial text-lg font-medium text-ink/90 sm:text-xl">
       {children}
     </h2>
   );
@@ -303,14 +300,14 @@ export function OkumaIstatistikleriContent() {
               style={
                 active
                   ? {
-                      background: "rgba(201,166,90,0.2)",
-                      color: CREAM,
-                      border: "1px solid rgba(201,166,90,0.45)",
+                      background: "rgba(184,147,74,0.2)",
+                      color: INK,
+                      border: "1px solid rgba(184,147,74,0.45)",
                     }
                   : {
                       background: "transparent",
                       color: MUTED,
-                      border: "1px solid rgba(201,166,90,0.15)",
+                      border: "1px solid rgba(184,147,74,0.15)",
                     }
               }
             >
@@ -338,7 +335,7 @@ export function OkumaIstatistikleriContent() {
       {year === "all" && yearChartData.length > 0 ? (
         <section>
           <SectionTitle>Yıllara göre</SectionTitle>
-          <div className="h-56 w-full rounded-xl border border-[rgba(201,166,90,0.15)] bg-[rgba(255,255,255,0.03)] p-3 sm:h-64 sm:p-4">
+          <div className="h-56 w-full rounded-xl border border-rule bg-card p-3 sm:h-64 sm:p-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={yearChartData}>
                 <CartesianGrid stroke={GRID_STROKE} vertical={false} />
@@ -357,7 +354,7 @@ export function OkumaIstatistikleriContent() {
                 />
                 <Tooltip
                   contentStyle={TOOLTIP_STYLE}
-                  cursor={{ fill: "rgba(201,166,90,0.08)" }}
+                  cursor={{ fill: "rgba(184,147,74,0.08)" }}
                   formatter={(value) => [`${value} kitap`, ""]}
                   labelFormatter={(label) => String(label)}
                 />
@@ -375,7 +372,7 @@ export function OkumaIstatistikleriContent() {
             ? `${data.currentYear} — ay ay`
             : `${year} — ay ay`}
         </SectionTitle>
-        <div className="h-44 w-full rounded-xl border border-[rgba(201,166,90,0.15)] bg-[rgba(255,255,255,0.03)] p-3 sm:h-52 sm:p-4">
+        <div className="h-44 w-full rounded-xl border border-rule bg-card p-3 sm:h-52 sm:p-4">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={monthChartData}>
               <CartesianGrid stroke={GRID_STROKE} vertical={false} />
@@ -394,7 +391,7 @@ export function OkumaIstatistikleriContent() {
               />
               <Tooltip
                 contentStyle={TOOLTIP_STYLE}
-                cursor={{ fill: "rgba(201,166,90,0.08)" }}
+                cursor={{ fill: "rgba(184,147,74,0.08)" }}
                 formatter={(value) => [`${value} kitap`, ""]}
                 labelFormatter={(_, payload) => {
                   const row = payload?.[0]?.payload as { full?: string } | undefined;
@@ -410,13 +407,13 @@ export function OkumaIstatistikleriContent() {
       {/* Bölüm 4 — Puan dağılımı */}
       <section>
         <SectionTitle>Puan dağılımı</SectionTitle>
-        <div className="space-y-2.5 rounded-xl border border-[rgba(201,166,90,0.15)] bg-[rgba(255,255,255,0.03)] p-4 sm:p-5">
+        <div className="space-y-2.5 rounded-xl border border-rule bg-card p-4 sm:p-5">
           {ratingChartData.map((row) => {
             const maxR = Math.max(...ratingChartData.map((r) => r.count), 1);
             const pct = (row.count / maxR) * 100;
             return (
               <div key={row.rating} className="flex items-center gap-3">
-                <span className="w-8 shrink-0 text-right font-editorial text-sm" style={{ color: CREAM }}>
+                <span className="w-8 shrink-0 text-right font-editorial text-sm" style={{ color: INK }}>
                   {row.rating}★
                 </span>
                 <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-white/[0.06]">
@@ -442,11 +439,11 @@ export function OkumaIstatistikleriContent() {
             Henüz yeterli veri yok.
           </p>
         ) : (
-          <ul className="space-y-3 rounded-xl border border-[rgba(201,166,90,0.15)] bg-[rgba(255,255,255,0.03)] p-4 sm:p-5">
+          <ul className="space-y-3 rounded-xl border border-rule bg-card p-4 sm:p-5">
             {stats.topAuthors.map((a, i) => (
               <li key={a.name}>
                 <div className="mb-1 flex items-baseline justify-between gap-2">
-                  <span className="text-sm" style={{ color: CREAM }}>
+                  <span className="text-sm" style={{ color: INK }}>
                     <span className="mr-2 tabular-nums" style={{ color: MUTED }}>
                       {i + 1}.
                     </span>
@@ -479,7 +476,7 @@ export function OkumaIstatistikleriContent() {
             Tür / etiket verisi yok.
           </p>
         ) : (
-          <div className="grid gap-4 rounded-xl border border-[rgba(201,166,90,0.15)] bg-[rgba(255,255,255,0.03)] p-4 sm:grid-cols-2 sm:p-5">
+          <div className="grid gap-4 rounded-xl border border-rule bg-card p-4 sm:grid-cols-2 sm:p-5">
             <div className="h-48 sm:h-56">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -511,7 +508,7 @@ export function OkumaIstatistikleriContent() {
                     className="h-2.5 w-2.5 shrink-0 rounded-full"
                     style={{ background: PIE_COLORS[i % PIE_COLORS.length] }}
                   />
-                  <span style={{ color: CREAM }}>{g.name}</span>
+                  <span style={{ color: INK }}>{g.name}</span>
                   <span className="ml-auto tabular-nums" style={{ color: MUTED }}>
                     {g.count}
                   </span>
@@ -537,7 +534,7 @@ export function OkumaIstatistikleriContent() {
                 href={`/readings?book=${book.id}`}
                 className="group w-[88px] shrink-0 sm:w-[100px]"
               >
-                <div className="relative aspect-[2/3] overflow-hidden rounded-md border border-[rgba(201,166,90,0.2)] bg-white/[0.04]">
+                <div className="relative aspect-[2/3] overflow-hidden rounded-md border border-rule bg-card">
                   {book.cover_url ? (
                     <Image
                       src={book.cover_url}
@@ -552,7 +549,7 @@ export function OkumaIstatistikleriContent() {
                     </div>
                   )}
                 </div>
-                <p className="mt-1.5 line-clamp-2 text-[0.7rem] leading-snug" style={{ color: CREAM }}>
+                <p className="mt-1.5 line-clamp-2 text-[0.7rem] leading-snug" style={{ color: INK }}>
                   {book.title}
                 </p>
               </Link>
@@ -565,34 +562,34 @@ export function OkumaIstatistikleriContent() {
       {(stats.longestReview || stats.shortestReview) && (
         <section className="grid gap-4 sm:grid-cols-2">
           {stats.longestReview ? (
-            <div className="rounded-xl border border-[rgba(201,166,90,0.15)] bg-[rgba(255,255,255,0.03)] p-4">
+            <div className="rounded-xl border border-rule bg-card p-4">
               <p className="text-[0.65rem] uppercase tracking-[0.14em]" style={{ color: MUTED }}>
                 En uzun yorum
               </p>
-              <p className="mt-2 font-editorial text-base" style={{ color: CREAM }}>
+              <p className="mt-2 font-editorial text-base" style={{ color: INK }}>
                 {stats.longestReview.title}
               </p>
               <p className="mt-1 text-xs" style={{ color: MUTED }}>
                 {stats.longestReview.length} karakter
               </p>
-              <p className="mt-3 line-clamp-4 text-sm leading-relaxed text-white/55">
+              <p className="mt-3 line-clamp-4 text-sm leading-relaxed text-ink/55">
                 {stats.longestReview.review}
               </p>
             </div>
           ) : null}
           {stats.shortestReview &&
           stats.shortestReview.id !== stats.longestReview?.id ? (
-            <div className="rounded-xl border border-[rgba(201,166,90,0.15)] bg-[rgba(255,255,255,0.03)] p-4">
+            <div className="rounded-xl border border-rule bg-card p-4">
               <p className="text-[0.65rem] uppercase tracking-[0.14em]" style={{ color: MUTED }}>
                 En kısa yorum
               </p>
-              <p className="mt-2 font-editorial text-base" style={{ color: CREAM }}>
+              <p className="mt-2 font-editorial text-base" style={{ color: INK }}>
                 {stats.shortestReview.title}
               </p>
               <p className="mt-1 text-xs" style={{ color: MUTED }}>
                 {stats.shortestReview.length} karakter
               </p>
-              <p className="mt-3 line-clamp-4 text-sm leading-relaxed text-white/55">
+              <p className="mt-3 line-clamp-4 text-sm leading-relaxed text-ink/55">
                 {stats.shortestReview.review}
               </p>
             </div>
@@ -602,7 +599,7 @@ export function OkumaIstatistikleriContent() {
 
       {/* Bölüm 8 — Rastgele not */}
       {funFact ? (
-        <aside className="rounded-xl border border-[rgba(201,166,90,0.2)] bg-[rgba(201,166,90,0.06)] px-5 py-4">
+        <aside className="rounded-xl border border-rule bg-[rgba(184,147,74,0.06)] px-5 py-4">
           <p
             className="text-[0.65rem] uppercase tracking-[0.16em]"
             style={{ color: GOLD }}
@@ -611,7 +608,7 @@ export function OkumaIstatistikleriContent() {
           </p>
           <p
             className="mt-2 font-editorial text-base italic leading-relaxed sm:text-lg"
-            style={{ color: CREAM }}
+            style={{ color: INK }}
           >
             {funFact}
           </p>

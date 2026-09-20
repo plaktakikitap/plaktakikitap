@@ -26,7 +26,7 @@ export function SeriesCollectionWithModal({ seriesList }: SeriesCollectionWithMo
 
   if (seriesList.length === 0) {
     return (
-      <p className="py-12 text-center text-white/50">
+      <p className="py-12 text-center text-ink/50">
         Henüz dizi eklenmemiş. Admin panelinden ekleyebilirsiniz.
       </p>
     );
@@ -59,10 +59,10 @@ export function SeriesCollectionWithModal({ seriesList }: SeriesCollectionWithMo
               <button
                 type="button"
                 onClick={() => setSelected(item)}
-                className="flex w-full gap-4 rounded-xl border border-white/10 bg-white/5 p-0 text-left backdrop-blur-sm transition hover:border-white/20 hover:bg-white/10 overflow-hidden"
+                className="flex w-full gap-4 rounded-xl border border-ink/10 bg-ink/5 p-0 text-left backdrop-blur-sm transition hover:border-ink/20 hover:bg-ink/5 overflow-hidden"
               >
                 <div className="w-20 shrink-0">
-                  <div className="aspect-[2/3] w-full overflow-hidden bg-white/5">
+                  <div className="aspect-[2/3] w-full overflow-hidden bg-ink/5">
                     {series.poster_url ? (
                       <img
                         src={series.poster_url}
@@ -70,7 +70,7 @@ export function SeriesCollectionWithModal({ seriesList }: SeriesCollectionWithMo
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center text-white/40">
+                      <div className="flex h-full w-full items-center justify-center text-ink/40">
                         <Tv className="h-8 w-8" />
                       </div>
                     )}
@@ -84,20 +84,20 @@ export function SeriesCollectionWithModal({ seriesList }: SeriesCollectionWithMo
                   )}
                 </div>
                 <div className="min-w-0 flex-1 py-4 pr-4">
-                  <p className="font-medium text-white/95">{item.title}</p>
+                  <p className="font-medium text-ink/95">{item.title}</p>
                   {totalViews > 1 && (
-                    <span className="ml-2 inline-block rounded bg-white/15 px-1.5 py-0.5 text-[9px] font-medium text-white/70">
+                    <span className="ml-2 inline-block rounded bg-ink/[0.06] px-1.5 py-0.5 text-[9px] font-medium text-ink/70">
                       x{totalViews}
                     </span>
                   )}
-                  <p className="mt-1 text-xs text-white/60">
+                  <p className="mt-1 text-xs text-ink/60">
                     {series.episodes_watched} bölüm
                     {series.seasons_watched > 0 && ` · ${series.seasons_watched} sezon`}
                     {series.total_seasons != null && ` / ${series.total_seasons} toplam`}
                     {totalMin > 0 && ` · ${totalMin} dk`}
                   </p>
                   {item.description && (
-                    <p className="mt-2 line-clamp-2 text-sm text-white/70">
+                    <p className="mt-2 line-clamp-2 text-sm text-ink/70">
                       {item.description}
                     </p>
                   )}

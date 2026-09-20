@@ -22,12 +22,12 @@ export type VinylIz = {
   baslangicAci: number;
 };
 
-/** Gerçek site rotaları (kullanıcı etiketleri korunur). */
+/** Gerçek site rotaları — plak üzerindeki tam bölüm adları */
 export const IZLER: VinylIz[] = [
   {
     id: "beni-taniyin",
     baslik: "Beni Tanıyın",
-    etiket: "Tanıyın",
+    etiket: "Beni Tanıyın",
     aciklama: "kimdir bu eymen?",
     url: "/beni-taniyin",
     baslangicAci: 0,
@@ -35,15 +35,15 @@ export const IZLER: VinylIz[] = [
   {
     id: "okuma",
     baslik: "Okuma Günlüğüm",
-    etiket: "Okuma",
+    etiket: "Okuma Günlüğüm",
     aciklama: "altını çizdiklerim",
-    url: "/okuma-gunlugum",
+    url: "/readings",
     baslangicAci: 45,
   },
   {
     id: "izleme",
     baslik: "İzleme Günlüğüm",
-    etiket: "İzleme",
+    etiket: "İzleme Günlüğüm",
     aciklama: "filmler, diziler",
     url: "/izleme-gunlugum",
     baslangicAci: 90,
@@ -51,7 +51,7 @@ export const IZLER: VinylIz[] = [
   {
     id: "fotograflar",
     baslik: "Fotoğraflar",
-    etiket: "Foto",
+    etiket: "Fotoğraflar",
     aciklama: "gözümden dünya",
     url: "/photos",
     baslangicAci: 135,
@@ -59,31 +59,31 @@ export const IZLER: VinylIz[] = [
   {
     id: "yaptiklarim",
     baslik: "Yaptıklarım",
-    etiket: "Yaptıklar",
+    etiket: "Yaptıklarım",
     aciklama: "üretimler, projeler",
-    url: "/yaptiklarim",
+    url: "/works",
     baslangicAci: 180,
   },
   {
     id: "cevirilerim",
     baslik: "Çevirilerim",
-    etiket: "Çeviriler",
+    etiket: "Çevirilerim",
     aciklama: "kitaplarım",
     url: "/translations",
     baslangicAci: 225,
   },
   {
-    id: "karalamalar",
-    baslik: "Karalamalar",
-    etiket: "Karalama",
-    aciklama: "kafama esen notlar",
-    url: "/karalamalar",
+    id: "plaktaki-kitap",
+    baslik: "Plaktaki Kitap Videoları",
+    etiket: "Plaktaki Kitap Videoları",
+    aciklama: "Plaktaki Kitap",
+    url: "/plaktaki-kitap",
     baslangicAci: 270,
   },
   {
     id: "yazilarim",
     baslik: "Yazılarım",
-    etiket: "Yazılar",
+    etiket: "Yazılarım",
     aciklama: "düşünceler, denemeler",
     url: "/writings",
     baslangicAci: 315,
@@ -134,35 +134,56 @@ function grooveRadii(count = 28): number[] {
   return radii;
 }
 
-/** İz adı — label dışındaki halkada, her zaman dik (okunaklı) */
+/** En iç halka — etiket yay yarıçapı (logo çemberinin hemen dışı) */
+const LABEL_ARC_R = LABEL_R + 12;
+
+/** İz dilimi boyunca kavisli yay path (saat yönü) */
+function segmentArcPath(
+  startAngle: number,
+  endAngle: number,
+  r = LABEL_ARC_R
+): string {
+  const pad = 3.5;
+  const a0 = startAngle + pad;
+  const a1 = endAngle - pad;
+  const start = polarToCartesian(CX, CY, r, a0);
+  const end = polarToCartesian(CX, CY, r, a1);
+  const large = a1 - a0 > 180 ? 1 : 0;
+  return `M ${start.x} ${start.y} A ${r} ${r} 0 ${large} 1 ${end.x} ${end.y}`;
+}
+
+/** İz adı — en iç çemberde, dilim yayı boyunca kavisli */
 function IzYazisi({
-  angle,
+  id,
   text,
   active,
 }: {
-  angle: number;
+  id: string;
   text: string;
   active: boolean;
 }) {
-  const pos = polarToCartesian(CX, CY, LABEL_R + 28, angle);
+  const pathId = `vinyl-iz-arc-${id}`;
+  const long = text.length > 16;
+  const fontSize = active ? (long ? 7.2 : 8.2) : long ? 6.6 : 7.4;
 
   return (
     <text
-      x={pos.x}
-      y={pos.y}
-      textAnchor="middle"
-      dominantBaseline="middle"
-      fill={active ? "#e8c878" : "rgba(245,235,215,0.95)"}
-      fontSize={active ? 13 : 11}
+      fill={active ? "rgba(232,200,120,0.78)" : "rgba(232,224,208,0.32)"}
+      fontSize={fontSize}
       fontFamily="var(--font-display), Georgia, serif"
-      fontWeight={600}
-      letterSpacing="1.2"
-      stroke="rgba(5,10,18,0.82)"
-      strokeWidth={3.5}
-      paintOrder="stroke fill"
+      fontWeight={500}
+      letterSpacing={long ? "0.15" : "0.4"}
       style={{ userSelect: "none", pointerEvents: "none" }}
     >
-      {text.toUpperCase()}
+      <textPath
+        href={`#${pathId}`}
+        startOffset="50%"
+        textAnchor="middle"
+        method="align"
+        spacing="auto"
+      >
+        {text}
+      </textPath>
     </text>
   );
 }
@@ -215,7 +236,9 @@ export function VinylRecord({
     []
   );
 
-  const grooves = useMemo(() => grooveRadii(32), []);
+  const grooves = useMemo(() => grooveRadii(12), []);
+  const onScreenRef = useRef(true);
+  const kickRafRef = useRef<() => void>(() => {});
 
   const updateCenter = useCallback(() => {
     const el = wrapRef.current;
@@ -270,29 +293,86 @@ export function VinylRecord({
       } else {
         targetSpeedRef.current = AUTO_SPEED;
       }
+      kickRafRef.current();
     },
     [reduceMotion]
   );
 
-  // Otomatik dönme — hedef hıza yumuşak yaklaşma + CSS transform
+  // Otomatik dönme — ekranda değilken / sekme gizliyken / hız 0 iken rAF durur
   useEffect(() => {
     if (reduceMotion) {
       speedRef.current = 0;
       targetSpeedRef.current = 0;
+      return;
     }
-    const animate = () => {
-      // ~1sn'de tam geçiş (0.016 lerp)
-      speedRef.current +=
-        (targetSpeedRef.current - speedRef.current) * 0.016;
 
-      if (!isDraggingRef.current) {
+    let cancelled = false;
+    const el = wrapRef.current;
+
+    const loop = () => {
+      if (cancelled) return;
+      speedRef.current += (targetSpeedRef.current - speedRef.current) * 0.016;
+      if (Math.abs(speedRef.current) < 0.0004) speedRef.current = 0;
+
+      if (!isDraggingRef.current && speedRef.current !== 0) {
         applyRotation(rotationRef.current + speedRef.current);
       }
-      rafRef.current = requestAnimationFrame(animate);
+
+      const keepGoing =
+        onScreenRef.current &&
+        !document.hidden &&
+        (isDraggingRef.current ||
+          speedRef.current !== 0 ||
+          targetSpeedRef.current !== 0);
+
+      if (keepGoing) {
+        rafRef.current = requestAnimationFrame(loop);
+      } else {
+        rafRef.current = null;
+      }
     };
-    rafRef.current = requestAnimationFrame(animate);
+
+    const kick = () => {
+      if (cancelled || rafRef.current != null) return;
+      if (!onScreenRef.current || document.hidden) return;
+      rafRef.current = requestAnimationFrame(loop);
+    };
+    kickRafRef.current = kick;
+
+    const io =
+      el &&
+      new IntersectionObserver(
+        ([entry]) => {
+          onScreenRef.current = !!entry?.isIntersecting;
+          if (onScreenRef.current) kick();
+          else if (rafRef.current != null) {
+            cancelAnimationFrame(rafRef.current);
+            rafRef.current = null;
+          }
+        },
+        { rootMargin: "40px" }
+      );
+    if (el && io) io.observe(el);
+
+    const onVis = () => {
+      if (document.hidden) {
+        if (rafRef.current != null) {
+          cancelAnimationFrame(rafRef.current);
+          rafRef.current = null;
+        }
+      } else {
+        kick();
+      }
+    };
+    document.addEventListener("visibilitychange", onVis);
+    kick();
+
     return () => {
+      cancelled = true;
+      document.removeEventListener("visibilitychange", onVis);
+      io?.disconnect();
       if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
     };
   }, [applyRotation, reduceMotion]);
 
@@ -366,6 +446,7 @@ export function VinylRecord({
     const angle = getAngleFromEvent(e.clientX, e.clientY);
     dragStartRef.current = { angle, rotation: rotationRef.current };
     setHover(null);
+    kickRafRef.current();
   };
 
   const onPointerMove = (e: ReactPointerEvent) => {
@@ -465,34 +546,6 @@ export function VinylRecord({
                 <stop offset="85%" stopColor="transparent" />
                 <stop offset="100%" stopColor="#0a0908" />
               </radialGradient>
-              <filter
-                id="vinyl-glow"
-                x="-20%"
-                y="-20%"
-                width="140%"
-                height="140%"
-              >
-                <feDropShadow
-                  dx="0"
-                  dy="0"
-                  stdDeviation="4"
-                  floodColor="rgba(201,166,90,0.65)"
-                />
-              </filter>
-              <filter
-                id="vinyl-label-glow"
-                x="-50%"
-                y="-50%"
-                width="200%"
-                height="200%"
-              >
-                <feDropShadow
-                  dx="0"
-                  dy="0"
-                  stdDeviation="2.5"
-                  floodColor="rgba(201,166,90,0.6)"
-                />
-              </filter>
               <clipPath id="labelClip">
                 <circle cx={CX} cy={CY} r={LABEL_R - 2} />
               </clipPath>
@@ -500,6 +553,15 @@ export function VinylRecord({
                 <stop offset="0%" stopColor="rgba(192,160,96,0.15)" />
                 <stop offset="100%" stopColor="rgba(192,160,96,0)" />
               </radialGradient>
+              {/* Kavisli yazı yayları — en iç halka */}
+              {IZLER.map((iz) => (
+                <path
+                  key={`arc-${iz.id}`}
+                  id={`vinyl-iz-arc-${iz.id}`}
+                  d={segmentArcPath(iz.baslangicAci, iz.baslangicAci + SEGMENT)}
+                  fill="none"
+                />
+              ))}
             </defs>
 
             {/* Dış kenar */}
@@ -508,7 +570,7 @@ export function VinylRecord({
               cy={CY}
               r={OUTER_R + 6}
               fill="#0d0b09"
-              stroke="rgba(201,166,90,0.45)"
+              stroke="rgba(184,147,74,0.45)"
               strokeWidth="1.5"
             />
             <circle cx={CX} cy={CY} r={OUTER_R} fill="url(#vinyl-surface)" />
@@ -535,18 +597,17 @@ export function VinylRecord({
                   d={iz.d}
                   fill={
                     isActive
-                      ? "rgba(201,166,90,0.12)"
+                      ? "rgba(184,147,74,0.12)"
                       : i % 2 === 0
                         ? "rgba(255,255,255,0.015)"
                         : "rgba(0,0,0,0.12)"
                   }
                   stroke={
                     isActive
-                      ? "rgba(201,166,90,0.55)"
-                      : "rgba(201,166,90,0.08)"
+                      ? "rgba(184,147,74,0.55)"
+                      : "rgba(184,147,74,0.08)"
                   }
                   strokeWidth={isActive ? 1.2 : 0.4}
-                  filter={isActive ? "url(#vinyl-glow)" : undefined}
                   style={{ transition: "fill 0.2s ease, stroke 0.2s ease" }}
                 />
               );
@@ -556,11 +617,11 @@ export function VinylRecord({
             <circle cx={CX} cy={CY} r={OUTER_R} fill="url(#vinyl-highlight)" />
             <circle cx={CX} cy={CY} r={OUTER_R} fill="url(#vinyl-vignette)" />
 
-            {/* İz yazıları — label dışı, radyal */}
+            {/* İz yazıları — en iç çemberde kavisli */}
             {paths.map((iz, i) => (
               <IzYazisi
                 key={`label-${iz.id}`}
-                angle={iz.midAngle}
+                id={iz.id}
                 text={iz.etiket}
                 active={hoveredIz === i}
               />
@@ -691,21 +752,14 @@ export function VinylRecord({
             className="pointer-events-none fixed right-[4%] top-1/2 z-30 hidden -translate-y-1/2 text-right md:block"
           >
             <div
-              className="font-editorial text-[1.8rem] font-normal leading-tight"
-              style={{ color: "#f3ead9" }}
+              className="font-editorial text-[1.8rem] font-normal leading-tight text-ink"
             >
               {active.baslik}
             </div>
-            <div
-              className="mt-1.5 text-[0.85rem]"
-              style={{ color: "#9a9488" }}
-            >
+            <div className="mt-1.5 text-[0.85rem] text-ink-muted">
               {active.aciklama}
             </div>
-            <div
-              className="mt-3 text-[0.65rem] uppercase tracking-[0.18em]"
-              style={{ color: "rgba(201,166,90,0.7)" }}
-            >
+            <div className="mt-3 text-[0.65rem] uppercase tracking-[0.18em] text-gold/70">
               tıkla · aç
             </div>
           </motion.div>

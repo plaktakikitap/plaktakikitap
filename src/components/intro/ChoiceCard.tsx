@@ -64,7 +64,7 @@ export default function ChoiceCard({ href, src, alt, label, glow }: Props) {
           />
         </div>
 
-        <div className="mt-6 text-sm tracking-wide text-[#F3EBDD]/85">
+        <div className="mt-6 text-sm tracking-wide text-ink/85">
           {label}
         </div>
       </motion.div>

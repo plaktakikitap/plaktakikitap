@@ -23,7 +23,7 @@ export function ScrollIndicator() {
   const reduce = useReducedMotion();
   return (
     <motion.span
-      className="flex shrink-0 text-[#F3EBDD]/55"
+      className="flex shrink-0 text-ink/55"
       animate={
         reduce
           ? false
@@ -52,11 +52,11 @@ export function ScrollHint() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: reduce ? 0 : 1.2, duration: 0.6 }}
     >
-      <span className="font-sans text-sm font-normal tracking-[0.12em] text-[#F3EBDD]/65 uppercase">
+      <span className="font-sans text-sm font-normal tracking-[0.12em] text-ink/65 uppercase">
         Aşağı kaydır
       </span>
       <motion.span
-        className="block text-[#F3EBDD]/55"
+        className="block text-ink/55"
         animate={reduce ? false : { y: [0, 6, 0] }}
         transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
       >

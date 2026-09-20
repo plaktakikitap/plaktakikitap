@@ -41,7 +41,7 @@ export function FavoriteVitrinFilms({ films, onSelectFilm }: FavoriteVitrinFilms
           background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(251,191,36,0.12) 0%, transparent 55%)",
         }}
       >
-        <h2 className="mb-6 text-center font-editorial text-xl font-medium text-white/90 sm:text-2xl">
+        <h2 className="mb-6 text-center font-editorial text-xl font-medium text-ink/90 sm:text-2xl">
           Eymen&apos;in Favori 5&apos;lisi
         </h2>
         <div className="flex flex-wrap items-end justify-center gap-4 sm:gap-6">
@@ -73,16 +73,16 @@ export function FavoriteVitrinFilms({ films, onSelectFilm }: FavoriteVitrinFilms
                         className="h-full w-full object-cover object-center"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center text-white/30">
+                      <div className="flex h-full w-full items-center justify-center text-ink/30">
                         <FilmIcon className="h-12 w-12" />
                       </div>
                     )}
                   </div>
                 </div>
-                <span className="mt-2 rounded-full border border-amber-400/40 bg-amber-950/30 px-2.5 py-0.5 font-serif text-[10px] uppercase tracking-wider text-amber-200/90 backdrop-blur-sm sm:text-xs">
+                <span className="mt-2 rounded-full border border-amber-400/40 bg-amber-950/30 px-2.5 py-0.5 font-serif text-[10px] uppercase tracking-wider text-gold/90 backdrop-blur-sm sm:text-xs">
                   Eymen&apos;in Seçimi
                 </span>
-                <p className="mt-1 max-w-[clamp(80px,18vw,140px)] truncate text-center text-xs text-white/80 group-hover:text-white/95">
+                <p className="mt-1 max-w-[clamp(80px,18vw,140px)] truncate text-center text-xs text-ink/80 group-hover:text-ink/95">
                   {item.title}
                 </p>
               </motion.button>

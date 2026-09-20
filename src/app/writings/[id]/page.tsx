@@ -41,30 +41,30 @@ export default async function WritingDetailPage({
 
   return (
     <PageTransitionTarget layoutId="card-/writings">
-      <main className="relative min-h-screen text-white">
+      <main className="relative min-h-screen text-ink">
         <article className="animate-page-fade-in mx-auto max-w-2xl px-4 py-10 sm:px-6">
           <Link
             href="/writings"
-            className="mb-6 inline-flex items-center gap-2 text-sm text-white/60 no-underline hover:text-white"
+            className="mb-6 inline-flex items-center gap-2 text-sm text-ink/60 no-underline hover:text-ink"
           >
             <ArrowLeft className="h-4 w-4" />
             Yazılarım
           </Link>
 
           <header className="mb-8">
-            <h1 className="font-editorial text-2xl font-semibold text-white sm:text-3xl">
+            <h1 className="font-editorial text-2xl font-semibold text-ink sm:text-3xl">
               {writing.title}
             </h1>
             <time
               dateTime={writing.published_at}
-              className="mt-2 block text-sm text-white/60"
+              className="mt-2 block text-sm text-ink/60"
             >
               {formatDate(writing.published_at)}
             </time>
           </header>
 
           <div
-            className="yazilarim-body font-serif text-white [&_p]:mb-4 [&_p]:leading-relaxed [&_h2]:mb-3 [&_h2]:mt-6 [&_h2]:font-editorial [&_h2]:text-xl [&_h2]:text-white [&_h3]:mb-2 [&_h3]:mt-4 [&_h3]:font-editorial [&_h3]:text-lg [&_h3]:text-white [&_ul]:list-inside [&_ul]:list-disc [&_ul]:space-y-1 [&_ol]:list-inside [&_ol]:list-decimal [&_ol]:space-y-1 [&_blockquote]:border-l-2 [&_blockquote]:border-white/30 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-white/80 [&_a]:text-amber-300 [&_a]:underline [&_a:hover]:no-underline"
+            className="yazilarim-body font-serif text-ink [&_p]:mb-4 [&_p]:leading-relaxed [&_h2]:mb-3 [&_h2]:mt-6 [&_h2]:font-editorial [&_h2]:text-xl [&_h2]:text-ink [&_h3]:mb-2 [&_h3]:mt-4 [&_h3]:font-editorial [&_h3]:text-lg [&_h3]:text-ink [&_ul]:list-inside [&_ul]:list-disc [&_ul]:space-y-1 [&_ol]:list-inside [&_ol]:list-decimal [&_ol]:space-y-1 [&_blockquote]:border-l-2 [&_blockquote]:border-ink/30 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-ink/80 [&_a]:text-amber-300 [&_a]:underline [&_a:hover]:no-underline"
             dangerouslySetInnerHTML={{ __html: writing.body }}
           />
         </article>

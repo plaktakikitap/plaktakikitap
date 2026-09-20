@@ -52,18 +52,18 @@ export default function IntroGate() {
     <main className="relative min-h-screen flex items-center justify-center bg-black px-6">
       {/* Mobil: lacivert + parıltılı arka plan (ana sayfa ile aynı) */}
       <div className="fixed inset-0 -z-10 md:hidden" aria-hidden>
-        <div className="absolute inset-0" style={{ backgroundColor: "#050A14" }} />
+        <div className="absolute inset-0" style={{ backgroundColor: "#000" }} />
         <div
           className="absolute inset-0"
           style={{
-            background: "radial-gradient(900px 600px at 50% 18%, rgba(255,255,255,0.08), transparent 60%)",
+            background: "radial-gradient(900px 600px at 50% 18%, rgba(184,147,74,0.06), transparent 60%)",
           }}
         />
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "linear-gradient(180deg, rgba(0,0,0,0.2) 0%, transparent 30%, transparent 60%, rgba(0,0,0,0.75) 100%)",
+              "linear-gradient(180deg, rgba(26,22,18,0.03) 0%, transparent 30%, transparent 60%, rgba(26,22,18,0.08) 100%)",
           }}
         />
         <div
@@ -103,16 +103,17 @@ export default function IntroGate() {
       <div className="flex md:hidden w-full flex-col items-center justify-center gap-8 py-12" lang="en">
         <div className="flex flex-col items-center gap-1">
           <h1
-            className="text-center text-3xl font-semibold tracking-[0.12em] text-[#F3EBDD] uppercase"
+            className="text-center text-3xl font-semibold tracking-[0.12em] text-white uppercase"
             style={{
               fontFamily: "var(--font-cinzel), serif",
+              color: "#ffffff",
               textShadow: "0 0 12px rgba(255,255,255,0.15), 0 10px 30px rgba(0,0,0,0.4)",
             }}
           >
             MAKE YOUR CHOICE
           </h1>
           <p
-            className="text-sm font-normal tracking-[0.04em] text-[#F3EBDD] opacity-80"
+            className="text-sm font-normal tracking-[0.04em] text-white/80"
             style={{ fontFamily: "var(--font-inter), sans-serif" }}
           >
             Plaktaki Kitap edition
@@ -136,7 +137,7 @@ export default function IntroGate() {
           style={{ filter: !selected ? BASE_SHADOW : undefined }}
           className="flex size-24 items-center justify-center rounded-full touch-manipulation"
         >
-          <Disc3 size={80} strokeWidth={1.5} className="text-[#F3EBDD]" />
+          <Disc3 size={80} strokeWidth={1.5} className="text-white" />
         </motion.button>
         <motion.button
           type="button"
@@ -156,7 +157,7 @@ export default function IntroGate() {
           style={{ filter: !selected ? BASE_SHADOW : undefined }}
           className="flex size-24 items-center justify-center rounded-xl touch-manipulation"
         >
-          <Book size={72} strokeWidth={1.5} className="text-[#F3EBDD]" />
+          <Book size={72} strokeWidth={1.5} className="text-white" />
         </motion.button>
       </div>
 
@@ -175,23 +176,24 @@ export default function IntroGate() {
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(900px 600px at 50% 20%, rgba(255,255,255,0.10), transparent 60%), linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.75))",
+              "radial-gradient(900px 600px at 50% 20%, rgba(255,255,255,0.10), transparent 60%), linear-gradient(180deg, rgba(0,0,0,0.25), rgba(26,22,18,0.08))",
           }}
         />
 
         {/* Title + Subtitle */}
         <div className="absolute top-[12%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-1">
           <h1
-            className="text-center text-4xl md:text-6xl font-semibold tracking-[0.12em] text-[#F3EBDD] uppercase"
+            className="text-center text-4xl md:text-6xl font-semibold tracking-[0.12em] text-white uppercase"
             style={{
               fontFamily: "var(--font-cinzel), serif",
+              color: "#ffffff",
               textShadow: "0 0 12px rgba(255,255,255,0.15), 0 10px 30px rgba(0,0,0,0.4)",
             }}
           >
             MAKE YOUR CHOICE
           </h1>
           <p
-            className="text-sm md:text-base font-normal tracking-[0.04em] text-[#F3EBDD] opacity-80"
+            className="text-sm md:text-base font-normal tracking-[0.04em] text-white/80"
             style={{ fontFamily: "var(--font-inter), sans-serif" }}
           >
             plaktaki kitap edition
@@ -233,7 +235,7 @@ export default function IntroGate() {
             style={{ filter: !selected ? BASE_SHADOW : undefined }}
             className="flex size-full items-center justify-center rounded-full p-3"
           >
-            <Disc3 size={200} strokeWidth={1.5} className="text-[#F3EBDD]" />
+            <Disc3 size={200} strokeWidth={1.5} className="text-white" />
           </motion.button>
         </div>
 
@@ -276,7 +278,7 @@ export default function IntroGate() {
             style={{ filter: !selected ? BASE_SHADOW : undefined }}
             className="flex size-full items-center justify-center rounded-xl p-3"
           >
-            <Book size={190} strokeWidth={1.5} className="text-[#F3EBDD]" />
+            <Book size={190} strokeWidth={1.5} className="text-white" />
           </motion.button>
         </div>
 

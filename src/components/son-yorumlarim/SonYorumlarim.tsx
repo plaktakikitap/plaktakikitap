@@ -75,7 +75,7 @@ function SonYorumKart({
     <button
       type="button"
       onClick={onOpen}
-      className="flex w-full gap-3 rounded-lg border border-[rgba(201,166,90,0.12)] bg-white/[0.03] p-4 text-left transition duration-200 hover:scale-[1.01] hover:border-[rgba(201,166,90,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a65a]/50"
+      className="flex w-full gap-3 rounded-lg border border-rule bg-card p-4 text-left transition duration-200 hover:scale-[1.01] hover:border-gold/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50"
     >
       <div className="relative h-20 w-[60px] shrink-0 overflow-hidden rounded-[4px] bg-[#1a1714]">
         {showCover ? (
@@ -89,18 +89,18 @@ function SonYorumKart({
             onError={() => setImgFailed(true)}
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-[10px] text-[#c9a65a]/70">
+          <div className="flex h-full w-full items-center justify-center text-[10px] text-gold/70">
             {item.tip === "kitap" ? "kitap" : item.tip === "film" ? "film" : "dizi"}
           </div>
         )}
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-white/90">{item.baslik}</p>
+        <p className="truncate text-sm font-medium text-ink/90">{item.baslik}</p>
         {item.yazar ? (
-          <p className="mt-0.5 truncate text-xs text-white/50">{item.yazar}</p>
+          <p className="mt-0.5 truncate text-xs text-ink/50">{item.yazar}</p>
         ) : item.yil != null ? (
-          <p className="mt-0.5 text-xs text-white/50">{item.yil}</p>
+          <p className="mt-0.5 text-xs text-ink/50">{item.yil}</p>
         ) : null}
         {item.puan != null ? (
           <div className="mt-1.5">
@@ -108,7 +108,7 @@ function SonYorumKart({
           </div>
         ) : null}
         {item.yorum ? (
-          <p className="mt-2 text-[0.7rem] italic leading-relaxed text-white/55">
+          <p className="mt-2 text-[0.7rem] italic leading-relaxed text-ink/55">
             {truncateYorum(item.yorum)}
           </p>
         ) : null}
@@ -200,13 +200,13 @@ export function SonYorumlarim({
   return (
     <>
       <section
-        className="mb-12 rounded-[10px] border border-[rgba(201,166,90,0.1)] bg-white/[0.02] p-6"
+        className="mb-12 rounded-[10px] border border-rule bg-card p-6"
         tabIndex={0}
         onKeyDown={onKeyDown}
         aria-label={`Son yorumlarım — ${titleHint}`}
       >
         <div className="mb-4 flex items-center justify-between gap-3">
-          <h2 className="text-[0.75rem] font-medium uppercase tracking-[0.18em] text-[#9a9488]">
+          <h2 className="section-eyebrow">
             son yorumlarım
           </h2>
           {showArrows ? (
@@ -215,7 +215,7 @@ export function SonYorumlarim({
                 type="button"
                 aria-label="Önceki"
                 onClick={() => go(-1)}
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-[rgba(201,166,90,0.2)] bg-[rgba(201,166,90,0.1)] text-[#c9a65a] transition hover:bg-[rgba(201,166,90,0.25)]"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-rule bg-gold-soft text-gold transition hover:bg-gold/25"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
@@ -223,7 +223,7 @@ export function SonYorumlarim({
                 type="button"
                 aria-label="Sonraki"
                 onClick={() => go(1)}
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-[rgba(201,166,90,0.2)] bg-[rgba(201,166,90,0.1)] text-[#c9a65a] transition hover:bg-[rgba(201,166,90,0.25)]"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-rule bg-gold-soft text-gold transition hover:bg-gold/25"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>

@@ -1,20 +1,21 @@
 "use client";
 
-import Link from "next/link";
-import { Download } from "lucide-react";
+import { Mail } from "lucide-react";
 import type { WorksItem } from "@/types/works";
+
+const CV_MAIL = "plaktakikitap@gmail.com";
 
 interface CVTimelineProps {
   items: WorksItem[];
   cvDownloadUrl: string;
 }
 
-export function CVTimeline({ items, cvDownloadUrl }: CVTimelineProps) {
+export function CVTimeline({ items }: CVTimelineProps) {
   const roles = items.filter((i) => i.type === "cv_role");
 
   return (
     <section className="mb-12">
-      <h2 className="mb-6 font-editorial text-2xl font-medium text-white sm:text-3xl">
+      <h2 className="mb-6 font-editorial text-2xl font-medium text-ink sm:text-3xl">
         Özgeçmiş
       </h2>
 
@@ -48,11 +49,11 @@ export function CVTimeline({ items, cvDownloadUrl }: CVTimelineProps) {
                     aria-hidden
                   />
                   <div>
-                    <p className="font-medium text-white">{item.title}</p>
-                    {org ? <p className="text-sm text-amber-200/90">{org}</p> : null}
-                    <p className="text-xs text-white/60">{period}</p>
+                    <p className="font-medium text-ink">{item.title}</p>
+                    {org ? <p className="text-sm text-ink/70">{org}</p> : null}
+                    <p className="text-xs text-ink/50">{period}</p>
                     {item.description && (
-                      <p className="mt-1 text-sm leading-relaxed text-white/70">
+                      <p className="mt-1 text-sm leading-relaxed text-ink/70">
                         {item.description}
                       </p>
                     )}
@@ -64,21 +65,13 @@ export function CVTimeline({ items, cvDownloadUrl }: CVTimelineProps) {
         </div>
       )}
 
-      {cvDownloadUrl && (
-        <Link
-          href={cvDownloadUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-2 rounded-xl border border-amber-400/50 bg-amber-400/15 px-5 py-3 font-medium text-amber-100 transition hover:bg-amber-400/25 hover:border-amber-400/70"
-        >
-          <Download className="h-5 w-5" />
-          CV İndir
-        </Link>
-      )}
-
-      {roles.length === 0 && !cvDownloadUrl && (
-        <p className="text-sm text-white/50">Henüz özgeçmiş bilgisi eklenmedi.</p>
-      )}
+      <a
+        href={`mailto:${CV_MAIL}`}
+        className="inline-flex items-center gap-2 rounded-xl border border-ink/20 bg-ink/5 px-5 py-3 font-medium text-ink transition hover:border-ink/35 hover:bg-ink/10"
+      >
+        <Mail className="h-5 w-5" />
+        CV&apos;mi istemek için bana ulaşınız.
+      </a>
     </section>
   );
 }

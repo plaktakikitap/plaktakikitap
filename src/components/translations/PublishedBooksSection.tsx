@@ -12,7 +12,7 @@ interface PublishedBooksSectionProps {
 
 function LanguageCapsule({ source, target }: { source: string; target: string }) {
   return (
-    <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2.5 py-0.5 font-light tracking-widest text-amber-800 dark:bg-amber-400/20 dark:text-amber-200">
+    <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2.5 py-0.5 font-light tracking-widest text-amber-800 dark:bg-gold-soft dark:text-gold">
       {source.toUpperCase()} → {target.toUpperCase()}
     </span>
   );
@@ -139,22 +139,16 @@ function BookDetailModal({
           )}
           {book.translator_note?.trim() && (
             <div
-              className="mt-4 rounded-lg border border-amber-200/60 bg-[#f5f0e6] bg-[length:200px_200px] p-4 shadow-inner dark:border-amber-800/40 dark:bg-[#2c2820]"
+              className="mt-4 rounded-lg border border-amber-200/60 bg-card bg-[length:200px_200px] p-4 shadow-inner dark:border-amber-800/40 dark:bg-[#2c2820]"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E")`,
               }}
             >
-              <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-amber-800/80 dark:text-amber-200/80">
+              <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-amber-800/80 dark:text-gold/80">
                 Çevirmenin Notu
               </h4>
               <p className="whitespace-pre-wrap text-sm leading-relaxed text-[var(--foreground)]">
                 {book.translator_note.trim()}
-              </p>
-              <p
-                className="mt-3 text-right text-sm italic text-amber-900/70 dark:text-amber-100/70"
-                style={{ fontFamily: "var(--font-handwriting), cursive" }}
-              >
-                — Çevirmen
               </p>
             </div>
           )}
@@ -200,7 +194,7 @@ function CardContent({ book }: { book: PublishedBook }) {
       </div>
       {!book.is_released && (
         <div
-          className="absolute inset-x-0 top-0 flex items-center justify-center bg-black/50 py-2 text-xs font-medium uppercase tracking-wider text-white/95 backdrop-blur-[2px]"
+          className="absolute inset-x-0 top-0 flex items-center justify-center bg-black/50 py-2 text-xs font-medium uppercase tracking-wider text-ink/95 backdrop-blur-[2px]"
           aria-hidden
         >
           Çok Yakında
@@ -208,7 +202,7 @@ function CardContent({ book }: { book: PublishedBook }) {
       )}
       {book.is_released && book.amazon_url && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-          <span className="inline-flex items-center gap-2 rounded-md border border-white/40 bg-white/20 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
+          <span className="inline-flex items-center gap-2 rounded-md border border-ink/40 bg-white/20 px-4 py-2 text-sm font-medium text-ink backdrop-blur-sm">
             <ShoppingCart className="h-4 w-4" />
             Satın Al
           </span>

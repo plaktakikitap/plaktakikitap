@@ -12,7 +12,7 @@ export default async function PlaktakiKitapPage() {
 
   return (
     <PageTransitionTarget layoutId="card-/plaktaki-kitap">
-      <main className="relative min-h-screen text-white">
+      <main className="relative min-h-screen text-ink">
         <PlaktakiKitapContent settings={settings} items={items} />
       </main>
     </PageTransitionTarget>

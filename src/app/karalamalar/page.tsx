@@ -20,9 +20,9 @@ export default async function KaralamalarPage() {
 
   return (
     <PageTransitionTarget layoutId={`card-${SECTION_PATH}`}>
-      <main className="relative min-h-screen text-[#f3ead9]">
+      <main className="relative min-h-screen text-ink">
         <div className="animate-page-fade-in mx-auto max-w-[720px] px-4 py-12 sm:px-6 sm:py-16">
-          <p className="mb-10 text-[0.7rem] font-medium lowercase tracking-[0.15em] text-[#9a9488]">
+          <p className="mb-10 text-[0.7rem] font-medium lowercase tracking-[0.15em] text-ink-muted">
             {SECTION_NAME}
           </p>
           <KaralamalarList items={items} />
