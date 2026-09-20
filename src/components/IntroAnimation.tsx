@@ -3,6 +3,7 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type ReactNode,
@@ -16,6 +17,24 @@ import {
 } from "framer-motion";
 
 const INTRO_SEEN_KEY = "plaktakikitap_intro_seen";
+
+function shouldPlayIntro(pathname: string): boolean {
+  if (pathname !== "/") return false;
+  try {
+    return sessionStorage.getItem(INTRO_SEEN_KEY) !== "true";
+  } catch {
+    // Depolama kapalıysa intro'yu yine de göster
+    return true;
+  }
+}
+
+function markIntroSeen(): void {
+  try {
+    sessionStorage.setItem(INTRO_SEEN_KEY, "true");
+  } catch {
+    /* private mode / blocked storage */
+  }
+}
 const TOTAL_MS = 2300;
 const EASE = [0.42, 0, 0.58, 1] as const;
 
@@ -257,36 +276,13 @@ export default function IntroAnimation({ children }: { children: ReactNode }) {
   const reduceMotion = useReducedMotion();
   const [status, setStatus] = useState<IntroStatus>("pending");
 
-  const markSeen = useCallback(() => {
-    try {
-      localStorage.setItem(INTRO_SEEN_KEY, "true");
-    } catch {
-      /* private mode / blocked storage */
-    }
+  const finishIntro = useCallback(() => {
+    markIntroSeen();
+    setStatus("idle");
   }, []);
 
-  const finishIntro = useCallback(() => {
-    markSeen();
-    setStatus("idle");
-  }, [markSeen]);
-
-  useEffect(() => {
-    if (pathname !== "/") {
-      setStatus("idle");
-      return;
-    }
-
-    try {
-      if (localStorage.getItem(INTRO_SEEN_KEY) === "true") {
-        setStatus("idle");
-        return;
-      }
-    } catch {
-      setStatus("idle");
-      return;
-    }
-
-    setStatus("playing");
+  useLayoutEffect(() => {
+    setStatus(shouldPlayIntro(pathname) ? "playing" : "idle");
   }, [pathname]);
 
   if (pathname !== "/") {

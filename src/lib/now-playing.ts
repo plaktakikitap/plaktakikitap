@@ -1,12 +1,17 @@
 import "server-only";
 
 import { supabaseServer } from "@/lib/supabase-server";
-import { getPlaylistTracksForNowPlaying, type NowPlayingTrack } from "@/lib/spotify";
+import {
+  getPlaylistTracksForNowPlaying,
+  getSpotifyNowPlaying,
+  type NowPlayingTrack,
+} from "@/lib/spotify";
 import { getMusicCurrentState } from "@/lib/music";
 import { getCurrentReading } from "@/lib/db/queries";
+import { getNowPlaying, type LastFmNowPlaying } from "@/lib/lastfm";
 import type { NowPlayingBook, NowPlayingData } from "@/types/now-playing";
 
-export type { NowPlayingBook, NowPlayingData };
+export type { NowPlayingBook, NowPlayingData, LastFmNowPlaying };
 
 /** Admin panelde eklenen şarkılar manual_now_playing tablosunda; sırayla gösterilmek üzere buradan alınır. */
 export async function getManualNowTracks(): Promise<NowPlayingTrack[]> {
@@ -52,6 +57,49 @@ export async function getNowPlayingData(): Promise<NowPlayingData> {
     : null;
 
   return { book };
+}
+
+/**
+ * Hero şeridi müzik verisi: önce Last.fm, yoksa admin manuel şarkılar, sonra Spotify.
+ */
+export async function getStripMusicNowPlaying(): Promise<LastFmNowPlaying | null> {
+  try {
+    const lastfm = await getNowPlaying();
+    if (lastfm) return lastfm;
+  } catch {
+    /* Last.fm yapılandırılmamış veya geçici hata */
+  }
+
+  try {
+    const manual = await getManualNowTracks();
+    if (manual.length > 0) {
+      const track = manual[0];
+      return {
+        title: track.title,
+        artist: track.artist,
+        albumArt: track.cover_url,
+        isNowPlaying: false,
+      };
+    }
+  } catch {
+    /* Supabase yok veya tablo boş */
+  }
+
+  try {
+    const spotify = await getSpotifyNowPlaying();
+    if (spotify.title) {
+      return {
+        title: spotify.title,
+        artist: spotify.artist ?? "",
+        albumArt: spotify.albumArt,
+        isNowPlaying: spotify.isPlaying,
+      };
+    }
+  } catch {
+    /* Spotify yapılandırılmamış */
+  }
+
+  return null;
 }
 
 /** NowPanel müzik bölümü için genişletilmiş veri. */

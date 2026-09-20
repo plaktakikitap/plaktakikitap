@@ -18,26 +18,43 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 const REPEL_THRESHOLD = 80;
 const REPEL_MAX = 14;
 const SPRING = { stiffness: 150, damping: 15 };
+const WORD_STAGGER = 0.15;
+const LETTER_STAGGER = 0.03;
 
 type CharRegistration = {
   element: HTMLSpanElement;
   setOffset: (x: number, y: number) => void;
 };
 
-function getWordStaggerDelays(text: string): number[] {
-  let wordIndex = 0;
-  let charInWord = 0;
+type WordLetters = {
+  word: string;
+  wordIndex: number;
+  letters: {
+    char: string;
+    letterIndex: number;
+    globalIndex: number;
+    delay: number;
+  }[];
+};
 
-  return text.split("").map((char) => {
-    const delay = wordIndex * 0.1 + charInWord * 0.02;
-    if (char === " ") {
-      wordIndex += 1;
-      charInWord = 0;
-    } else {
-      charInWord += 1;
-    }
-    return delay;
-  });
+function buildWordLetters(text: string): WordLetters[] {
+  const words = text.split(" ").filter((word) => word.length > 0);
+  let globalIndex = 0;
+
+  return words.map((word, wordIndex) => ({
+    word,
+    wordIndex,
+    letters: [...word].map((char, letterIndex) => {
+      const entry = {
+        char,
+        letterIndex,
+        globalIndex,
+        delay: wordIndex * WORD_STAGGER + letterIndex * LETTER_STAGGER,
+      };
+      globalIndex += 1;
+      return entry;
+    }),
+  }));
 }
 
 function CharLetter({
@@ -84,6 +101,7 @@ function CharLetter({
   return (
     <motion.span
       ref={ref}
+      className="hero-letter"
       initial={reduceMotion ? false : { opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
@@ -93,13 +111,10 @@ function CharLetter({
       }}
       style={{
         display: "inline-block",
-        ...(repelActive
-          ? { x: springX, y: springY }
-          : {}),
+        ...(repelActive ? { x: springX, y: springY } : {}),
       }}
-      aria-hidden={char === " " ? true : undefined}
     >
-      {char === " " ? "\u0020" : char}
+      {char}
     </motion.span>
   );
 }
@@ -113,8 +128,11 @@ export default function AnimatedTitle({
 }) {
   const reduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLHeadingElement>(null);
-  const chars = useMemo(() => text.split(""), [text]);
-  const delays = useMemo(() => getWordStaggerDelays(text), [text]);
+  const wordLetters = useMemo(() => buildWordLetters(text), [text]);
+  const letterCount = useMemo(
+    () => wordLetters.reduce((sum, entry) => sum + entry.letters.length, 0),
+    [wordLetters]
+  );
 
   const registrationsRef = useRef<(CharRegistration | null)[]>([]);
   const layoutsRef = useRef<{ cx: number; cy: number }[]>([]);
@@ -124,9 +142,15 @@ export default function AnimatedTitle({
   const [entryDone, setEntryDone] = useState(false);
   const [repelEnabled, setRepelEnabled] = useState(false);
 
-  const maxEntryDelay = delays.length
-    ? Math.max(...delays) + 0.12 + 0.55
-    : 0.67;
+  const maxEntryDelay = useMemo(() => {
+    let max = 0;
+    for (const entry of wordLetters) {
+      for (const letter of entry.letters) {
+        if (letter.delay > max) max = letter.delay;
+      }
+    }
+    return max + 0.12 + 0.55;
+  }, [wordLetters]);
 
   useEffect(() => {
     if (reduceMotion) {
@@ -230,19 +254,28 @@ export default function AnimatedTitle({
     };
   }, [repelEnabled]);
 
-  registrationsRef.current.length = chars.length;
+  registrationsRef.current.length = letterCount;
 
   return (
     <h1 ref={containerRef} className={className}>
-      {chars.map((char, index) => (
-        <CharLetter
-          key={`${index}-${char}`}
-          char={char}
-          delay={delays[index] ?? 0}
-          reduceMotion={!!reduceMotion}
-          repelActive={repelEnabled}
-          onRegister={registerChar(index)}
-        />
+      {wordLetters.map(({ letters, wordIndex }) => (
+        <span key={wordIndex}>
+          {wordIndex > 0 ? " " : null}
+          <span
+            style={{ display: "inline-block", whiteSpace: "nowrap" }}
+          >
+            {letters.map(({ char, letterIndex, globalIndex, delay }) => (
+              <CharLetter
+                key={`${wordIndex}-${letterIndex}`}
+                char={char}
+                delay={delay}
+                reduceMotion={!!reduceMotion}
+                repelActive={repelEnabled}
+                onRegister={registerChar(globalIndex)}
+              />
+            ))}
+          </span>
+        </span>
       ))}
     </h1>
   );
