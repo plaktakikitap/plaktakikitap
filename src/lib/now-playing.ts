@@ -8,8 +8,8 @@ import {
 } from "@/lib/spotify";
 import { getMusicCurrentState } from "@/lib/music";
 import { getCurrentReading } from "@/lib/db/queries";
-import { getNowPlaying, type LastFmNowPlaying } from "@/lib/lastfm";
-import type { NowPlayingBook, NowPlayingData } from "@/types/now-playing";
+import { getNowPlaying } from "@/lib/lastfm";
+import type { NowPlayingBook, NowPlayingData, LastFmNowPlaying } from "@/types/now-playing";
 
 export type { NowPlayingBook, NowPlayingData, LastFmNowPlaying };
 
@@ -60,7 +60,7 @@ export async function getNowPlayingData(): Promise<NowPlayingData> {
 }
 
 /**
- * Hero şeridi müzik verisi: önce Last.fm, yoksa admin manuel şarkılar, sonra Spotify.
+ * NowPanel müzik verisi: önce Last.fm, yoksa admin manuel şarkılar, sonra Spotify.
  */
 export async function getStripMusicNowPlaying(): Promise<LastFmNowPlaying | null> {
   try {
@@ -104,6 +104,13 @@ export async function getStripMusicNowPlaying(): Promise<LastFmNowPlaying | null
 
 /** NowPanel müzik bölümü için genişletilmiş veri. */
 export async function getNowPanelMusicData() {
+  let lastFmTrack: LastFmNowPlaying | null = null;
+  try {
+    lastFmTrack = await getStripMusicNowPlaying();
+  } catch {
+    lastFmTrack = null;
+  }
+
   let musicState: Awaited<ReturnType<typeof getMusicCurrentState>>;
   try {
     musicState = await getMusicCurrentState();
@@ -139,5 +146,5 @@ export async function getNowPanelMusicData() {
     ? `https://open.spotify.com/playlist/${playlistId}`
     : null;
 
-  return { musicState, tracks, useAmbient, playlistUrl };
+  return { musicState, tracks, useAmbient, playlistUrl, lastFmTrack };
 }

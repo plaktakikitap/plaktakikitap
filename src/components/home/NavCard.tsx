@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useLayoutEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import type { NavCardItem } from "@/components/home/nav-cards";
 
 /** Yuvarlatılmış dikdörtgen — viewBox 0 0 100 100, kart boyutuna responsive ölçeklenir. */
@@ -61,41 +61,66 @@ function GoldThreadBorder({
 export function NavCard({ card }: { card: NavCardItem }) {
   const reduceMotion = useReducedMotion();
   const [hovered, setHovered] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, {
+    amount: 0.5,
+    margin: "-100px",
+  });
   const Icon = card.Icon;
+  const glowTransition = reduceMotion
+    ? { duration: 0 }
+    : { duration: 1.2, ease: "easeInOut" as const };
 
   return (
-    <Link
-      href={card.href}
-      className="group relative flex w-full min-h-[156px] flex-col items-center justify-center overflow-hidden rounded-[10px] border border-[rgba(201,166,90,0.15)] bg-[rgba(255,255,255,0.03)] px-7 py-[2.75rem] text-center transition-colors duration-300 hover:bg-[rgba(201,166,90,0.04)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a65a]/40"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onFocus={() => setHovered(true)}
-      onBlur={() => setHovered(false)}
-    >
-      <GoldThreadBorder active={hovered} reduceMotion={!!reduceMotion} />
-
+    <div ref={containerRef} className="relative w-full">
       <motion.div
-        className="relative z-[1] flex flex-col items-center gap-3.5"
-        animate={hovered && !reduceMotion ? { y: -4 } : { y: 0 }}
-        transition={reduceMotion ? { duration: 0 } : { duration: 0.3 }}
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: "-60px",
+          borderRadius: "50%",
+          background: `radial-gradient(circle, rgba(${card.accentColor}, 0.08) 0%, rgba(${card.accentColor}, 0) 70%)`,
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isInView ? 1 : 0 }}
+        transition={glowTransition}
+      />
+
+      <Link
+        href={card.href}
+        className="group relative z-[1] flex w-full min-h-[156px] flex-col items-center justify-center overflow-hidden rounded-[10px] border border-[rgba(201,166,90,0.15)] bg-[rgba(255,255,255,0.03)] px-7 py-[2.75rem] text-center transition-colors duration-300 hover:bg-[rgba(201,166,90,0.04)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a65a]/40"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        onFocus={() => setHovered(true)}
+        onBlur={() => setHovered(false)}
       >
-        <Icon
-          className="h-[30px] w-[30px] shrink-0"
-          stroke="#e8dcc0"
-          strokeWidth={1.5}
-          aria-hidden
-        />
-        <span className="flex flex-col gap-1">
-          <span className="font-sans text-[1.125rem] font-medium leading-snug tracking-tight text-[#f3ead9]">
-            {card.title}
-          </span>
-          {card.subtitle ? (
-            <span className="font-sans text-[0.9rem] font-normal leading-snug tracking-wide text-[#9a9488]">
-              {card.subtitle}
+        <GoldThreadBorder active={hovered} reduceMotion={!!reduceMotion} />
+
+        <motion.div
+          className="relative z-[1] flex flex-col items-center gap-3.5"
+          animate={hovered && !reduceMotion ? { y: -4 } : { y: 0 }}
+          transition={reduceMotion ? { duration: 0 } : { duration: 0.3 }}
+        >
+          <Icon
+            className="h-[30px] w-[30px] shrink-0"
+            stroke="#e8dcc0"
+            strokeWidth={1.5}
+            aria-hidden
+          />
+          <span className="flex flex-col gap-1">
+            <span className="font-sans text-[1.125rem] font-medium leading-snug tracking-tight text-[#f3ead9]">
+              {card.title}
             </span>
-          ) : null}
-        </span>
-      </motion.div>
-    </Link>
+            {card.subtitle ? (
+              <span className="font-sans text-[0.9rem] font-normal leading-snug tracking-wide text-[#9a9488]">
+                {card.subtitle}
+              </span>
+            ) : null}
+          </span>
+        </motion.div>
+      </Link>
+    </div>
   );
 }

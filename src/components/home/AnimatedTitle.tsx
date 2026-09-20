@@ -20,6 +20,89 @@ const REPEL_MAX = 14;
 const SPRING = { stiffness: 150, damping: 15 };
 const WORD_STAGGER = 0.15;
 const LETTER_STAGGER = 0.03;
+const INTRO_VOICE_URL = "/audio/intro-voice.mp3";
+const WAVEFORM_BAR_COUNT = 50;
+const WAVEFORM_MAX_HEIGHT_PX = 60;
+
+async function extractWaveformFromAudio(url: string): Promise<number[]> {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Ses dosyası yüklenemedi: ${response.status}`);
+  }
+
+  const arrayBuffer = await response.arrayBuffer();
+  const audioContext = new AudioContext();
+
+  try {
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    const samples = audioBuffer.getChannelData(0);
+    const samplesPerBar = Math.floor(samples.length / WAVEFORM_BAR_COUNT);
+    const amplitudes: number[] = [];
+
+    for (let i = 0; i < WAVEFORM_BAR_COUNT; i++) {
+      const start = i * samplesPerBar;
+      const end =
+        i === WAVEFORM_BAR_COUNT - 1
+          ? samples.length
+          : start + samplesPerBar;
+      let sum = 0;
+      for (let j = start; j < end; j++) {
+        sum += Math.abs(samples[j] ?? 0);
+      }
+      amplitudes.push(sum / Math.max(end - start, 1));
+    }
+
+    const peak = Math.max(...amplitudes, 0.0001);
+    return amplitudes.map((value) => value / peak);
+  } finally {
+    await audioContext.close();
+  }
+}
+
+function TitleWaveform({
+  data,
+  reduceMotion,
+}: {
+  data: number[];
+  reduceMotion: boolean;
+}) {
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
+      aria-hidden
+    >
+      <div className="flex items-center justify-center gap-[3px]">
+        {data.map((amplitude, index) => (
+          <motion.div
+            key={index}
+            style={{
+              width: 2,
+              height: Math.max(4, amplitude * WAVEFORM_MAX_HEIGHT_PX),
+              backgroundColor: "rgba(201,166,90,0.12)",
+              borderRadius: 1,
+              transformOrigin: "center center",
+            }}
+            animate={
+              reduceMotion
+                ? { scaleY: 1 }
+                : { scaleY: [1, 1.15, 0.9, 1] }
+            }
+            transition={
+              reduceMotion
+                ? { duration: 0 }
+                : {
+                    duration: 2 + (index % 3) * 0.4,
+                    repeat: Infinity,
+                    delay: index * 0.04,
+                    ease: "easeInOut",
+                  }
+            }
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 type CharRegistration = {
   element: HTMLSpanElement;
@@ -141,6 +224,38 @@ export default function AnimatedTitle({
 
   const [entryDone, setEntryDone] = useState(false);
   const [repelEnabled, setRepelEnabled] = useState(false);
+  const [waveformData, setWaveformData] = useState<number[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  const displayWaveform = useMemo(
+    () =>
+      isMobile ? waveformData.filter((_, index) => index % 2 === 0) : waveformData,
+    [isMobile, waveformData]
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    extractWaveformFromAudio(INTRO_VOICE_URL)
+      .then((data) => {
+        if (!cancelled) setWaveformData(data);
+      })
+      .catch((error) => {
+        console.error("AnimatedTitle waveform analizi başarısız:", error);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   const maxEntryDelay = useMemo(() => {
     let max = 0;
@@ -257,26 +372,31 @@ export default function AnimatedTitle({
   registrationsRef.current.length = letterCount;
 
   return (
-    <h1 ref={containerRef} className={className}>
-      {wordLetters.map(({ letters, wordIndex }) => (
-        <span key={wordIndex}>
-          {wordIndex > 0 ? " " : null}
-          <span
-            style={{ display: "inline-block", whiteSpace: "nowrap" }}
-          >
-            {letters.map(({ char, letterIndex, globalIndex, delay }) => (
-              <CharLetter
-                key={`${wordIndex}-${letterIndex}`}
-                char={char}
-                delay={delay}
-                reduceMotion={!!reduceMotion}
-                repelActive={repelEnabled}
-                onRegister={registerChar(globalIndex)}
-              />
-            ))}
+    <div className="relative w-full">
+      {displayWaveform.length > 0 ? (
+        <TitleWaveform data={displayWaveform} reduceMotion={!!reduceMotion} />
+      ) : null}
+      <h1 ref={containerRef} className={`relative z-[1] ${className}`}>
+        {wordLetters.map(({ letters, wordIndex }) => (
+          <span key={wordIndex}>
+            {wordIndex > 0 ? " " : null}
+            <span
+              style={{ display: "inline-block", whiteSpace: "nowrap" }}
+            >
+              {letters.map(({ char, letterIndex, globalIndex, delay }) => (
+                <CharLetter
+                  key={`${wordIndex}-${letterIndex}`}
+                  char={char}
+                  delay={delay}
+                  reduceMotion={!!reduceMotion}
+                  repelActive={repelEnabled}
+                  onRegister={registerChar(globalIndex)}
+                />
+              ))}
+            </span>
           </span>
-        </span>
-      ))}
-    </h1>
+        ))}
+      </h1>
+    </div>
   );
 }

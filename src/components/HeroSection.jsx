@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import {
   motion,
   useReducedMotion,
@@ -12,6 +11,7 @@ import FlipFrame from "@/components/home/FlipFrame";
 import AnimatedTitle from "@/components/home/AnimatedTitle";
 import RoomBackdrop from "@/components/home/RoomBackdrop";
 import { ScrollIndicator } from "@/components/home/ScrollHint";
+import { useTimeOfDay, TIME_PALETTES } from "@/hooks/useTimeOfDay";
 
 const EASE = [0.22, 1, 0.36, 1];
 
@@ -234,134 +234,12 @@ function EasterEggCharacter() {
   );
 }
 
-function SpinningVinylIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden
-      className="now-playing-vinyl h-5 w-5 shrink-0"
-    >
-      <circle cx="12" cy="12" r="11" fill="#1a1510" stroke="#c9a65a" strokeWidth="0.75" />
-      <circle cx="12" cy="12" r="8.5" fill="none" stroke="#3a3228" strokeWidth="0.5" opacity="0.6" />
-      <circle cx="12" cy="12" r="6" fill="none" stroke="#3a3228" strokeWidth="0.35" opacity="0.45" />
-      <circle cx="12" cy="12" r="3.5" fill="none" stroke="#3a3228" strokeWidth="0.35" opacity="0.35" />
-      <circle cx="12" cy="12" r="2" fill="#c9a65a" />
-      <circle cx="12" cy="12" r="0.75" fill="#1a1510" />
-    </svg>
-  );
-}
-
-function NowPlayingStrip({ nowPlaying }) {
-  const [song, setSong] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("/api/now-playing");
-        if (!res.ok) {
-          setSong(null);
-          return;
-        }
-        const data = await res.json();
-        setSong(data);
-      } catch {
-        setSong(null);
-      }
-    };
-
-    fetchData();
-    const interval = setInterval(fetchData, 30000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const book = nowPlaying?.book ?? null;
-
-  if (!song && !book) return null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.55, delay: 1, ease: EASE }}
-      className="now-playing-strip mx-auto mt-5 w-full max-w-[600px] sm:mt-6"
-    >
-      <div className="now-playing-strip-inner flex items-stretch gap-0 rounded-lg border border-[rgba(201,166,90,0.15)] bg-[rgba(255,255,255,0.03)] px-4 py-3 sm:px-6 sm:py-3">
-        {song ? (
-          <>
-            <div className="flex min-w-0 flex-1 items-center gap-2.5 pr-3 sm:pr-4">
-              {song.albumArt ? (
-                <div className="relative h-5 w-5 shrink-0 overflow-hidden rounded-sm border border-white/10 bg-white/5">
-                  <Image
-                    src={song.albumArt}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    sizes="20px"
-                  />
-                </div>
-              ) : (
-                <SpinningVinylIcon />
-              )}
-              <div className="min-w-0">
-                <p className="text-[11px] uppercase tracking-wide text-[#9a9488]">
-                  {song.isNowPlaying ? "şu an dinliyorum" : "son dinlediğim"}
-                </p>
-                <p className="truncate text-[12px] leading-snug text-[#F3EBDD]/90 sm:text-[13px]">
-                  {song.title}
-                </p>
-                <p className="truncate text-[12px] leading-snug text-[#9a9488] sm:text-[13px]">
-                  {song.artist}
-                </p>
-              </div>
-            </div>
-
-            {book ? (
-              <div className="now-playing-strip-divider shrink-0 self-stretch" aria-hidden />
-            ) : null}
-          </>
-        ) : null}
-
-        {book ? (
-          <div className="flex min-w-0 flex-1 items-center gap-2.5 pl-3 sm:pl-4">
-            <div className="relative h-8 w-6 shrink-0 overflow-hidden rounded-sm border border-white/10 bg-white/5">
-              {book.coverUrl ? (
-                <Image
-                  src={book.coverUrl}
-                  alt=""
-                  fill
-                  className="object-cover"
-                  unoptimized
-                  sizes="24px"
-                />
-              ) : (
-                <div className="h-full w-full bg-white/5" />
-              )}
-            </div>
-            <div className="min-w-0">
-              <p className="text-[11px] uppercase tracking-wide text-[#9a9488]">
-                şu an okuyorum
-              </p>
-              <p className="truncate text-[12px] leading-snug text-[#F3EBDD]/90 sm:text-[13px]">
-                {book.title ?? "—"}
-              </p>
-              <p className="truncate text-[12px] leading-snug text-[#9a9488] sm:text-[13px]">
-                {book.author ?? " "}
-              </p>
-            </div>
-          </div>
-        ) : null}
-      </div>
-    </motion.div>
-  );
-}
-
 /**
  * @param {{
  *   photoSrc: string;
  *   logoSrc: string;
  *   title?: string;
  *   subtitle?: string;
- *   nowPlaying?: import("@/types/now-playing").NowPlayingData | null;
  * }} props
  */
 export default function HeroSection({
@@ -369,11 +247,12 @@ export default function HeroSection({
   logoSrc,
   title = "Hoş geldiniz, ben Eymen!",
   subtitle = "yanii... nam-ı diğer Plaktaki Kitap",
-  nowPlaying = null,
 }) {
   const reduce = useReducedMotion();
   const sectionRef = useRef(null);
   const scrollEffectsEnabled = !reduce;
+  const timeOfDay = useTimeOfDay();
+  const timePalette = TIME_PALETTES[timeOfDay];
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -384,6 +263,10 @@ export default function HeroSection({
     <section
       ref={sectionRef}
       className="relative flex flex-col items-center justify-start overflow-hidden px-4 pt-10 pb-4 sm:px-6 sm:pt-14 sm:pb-6"
+      style={{
+        background: timePalette.bg,
+        transition: "background 2s ease",
+      }}
     >
       <RoomBackdrop
         scrollYProgress={scrollEffectsEnabled ? scrollYProgress : undefined}
@@ -407,6 +290,7 @@ export default function HeroSection({
             fadeMs={1600}
             altA="Eymen portre"
             altB="Plaktaki Kitap logo"
+            glowColor={timePalette.glow}
           />
         </motion.div>
 
@@ -433,8 +317,6 @@ export default function HeroSection({
         >
           {subtitle}
         </motion.p>
-
-        <NowPlayingStrip nowPlaying={nowPlaying} />
       </div>
     </section>
   );

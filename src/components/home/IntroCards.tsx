@@ -70,7 +70,7 @@ export function IntroCards({
                       delay: i * 0.3,
                     },
               }}
-              className="flex justify-center"
+              className="relative flex justify-center overflow-visible"
             >
               <NavCard card={card} />
             </motion.div>

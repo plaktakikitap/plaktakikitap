@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import { PageTransition } from "@/components/PageTransition";
 import { ScrollVinylIndicator } from "@/components/ScrollVinylIndicator";
 import IntroAnimation from "@/components/IntroAnimation";
+import { GlobalVinylCursor } from "@/components/GlobalVinylCursor";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -119,9 +120,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr">
+      <head>
+        <link rel="preload" href="/images/cursor-vinyl.png" as="image" />
+        <link rel="preload" href="/images/cursor-vinyl-hover.png" as="image" />
+      </head>
       <body
         className={`${cormorant.variable} ${sourceSerif.variable} ${dmSans.variable} ${cinzel.variable} ${inter.variable} ${caveat.variable} ${permanentMarker.variable} ${patrickHand.variable} ${nothingYouCouldDo.variable} ${playfair.variable} min-h-screen antialiased`}
       >
+        <GlobalVinylCursor />
         <IntroAnimation>
           <MaintenanceGate />
           <SiteSoundVolumeHydrate />

@@ -2,8 +2,11 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { SatelliteCards } from "@/components/home/SatelliteCards";
+import { motion, useReducedMotion, useMotionValue, useAnimationFrame, animate } from "framer-motion";
+import {
+  SatelliteCards,
+  DEFAULT_SATELLITES,
+} from "@/components/home/SatelliteCards";
 
 type Variant = "default" | "antiqueGold";
 
@@ -16,6 +19,8 @@ export type FlipFrameProps = {
   fadeMs?: number;
   altA?: string;
   altB?: string;
+  /** Stüdyo glow radial-gradient rengi (zaman dilimine göre) */
+  glowColor?: string;
 };
 
 type FrameConfig = {
@@ -71,17 +76,88 @@ const FRAME_CONFIG: Record<Variant, FrameConfig> = {
 
 const LID_EASE = [0.34, 1.56, 0.64, 1] as const;
 const FLIP_EASE = [0.22, 1, 0.36, 1] as const;
+const ROPE_LENGTH = 48;
+const ROPE_HOOK = 10;
+
+function HangingRope({ length = ROPE_LENGTH }: { length?: number }) {
+  return (
+    <div
+      className="pointer-events-none absolute left-1/2 top-0 z-[30] -translate-x-1/2"
+      style={{ width: 12, height: length + ROPE_HOOK }}
+      aria-hidden
+    >
+      <div
+        className="absolute left-1/2 top-0 -translate-x-1/2 rounded-sm"
+        style={{
+          width: 12,
+          height: 5,
+          background: "linear-gradient(180deg, #6a6a6a 0%, #3d3d3d 100%)",
+          boxShadow: "0 1px 3px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.12)",
+        }}
+      />
+      <div
+        className="absolute left-1/2 top-[4px] -translate-x-1/2 rounded-full border-[1.5px] border-[#9a7328]"
+        style={{ width: 6, height: 6 }}
+      />
+      <svg
+        className="absolute left-1/2 top-[9px] -translate-x-1/2"
+        width="5"
+        height={length}
+        viewBox={`0 0 5 ${length}`}
+        preserveAspectRatio="none"
+        overflow="visible"
+      >
+        <defs>
+          <linearGradient id="flipframe-rope" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0%" stopColor="#4a3828" />
+            <stop offset="30%" stopColor="#7a6040" />
+            <stop offset="55%" stopColor="#9a7848" />
+            <stop offset="78%" stopColor="#6b5438" />
+            <stop offset="100%" stopColor="#4a3828" />
+          </linearGradient>
+        </defs>
+        <path
+          d={`M 2.5 0 Q 3.4 ${length * 0.28} 2.5 ${length * 0.52} Q 1.6 ${length * 0.78} 2.5 ${length}`}
+          fill="none"
+          stroke="url(#flipframe-rope)"
+          strokeWidth="3.5"
+          strokeLinecap="round"
+        />
+        <path
+          d={`M 2.5 0 Q 3.4 ${length * 0.28} 2.5 ${length * 0.52} Q 1.6 ${length * 0.78} 2.5 ${length}`}
+          fill="none"
+          stroke="rgba(255,235,200,0.14)"
+          strokeWidth="0.75"
+          strokeLinecap="round"
+          strokeDasharray="1.5 3.5"
+        />
+      </svg>
+      <div
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rounded-full"
+        style={{
+          width: 16,
+          height: 7,
+          border: "2px solid #b89230",
+          background: "linear-gradient(180deg, #d4b65a 0%, #8a6427 100%)",
+          boxShadow: "0 2px 5px rgba(0,0,0,0.45)",
+        }}
+      />
+    </div>
+  );
+}
 
 function FrameGlow({
   showLogo,
   hovered,
   visible,
   reduceMotion,
+  glowColor,
 }: {
   showLogo: boolean;
   hovered: boolean;
   visible: boolean;
   reduceMotion: boolean;
+  glowColor: string;
 }) {
   if (!visible) return null;
 
@@ -95,9 +171,9 @@ function FrameGlow({
       style={{
         inset: -40,
         borderRadius: "50%",
-        background:
-          "radial-gradient(circle, rgba(180, 50, 40, 0.35) 0%, rgba(180, 50, 40, 0) 70%)",
+        background: `radial-gradient(circle, ${glowColor} 0%, rgba(0, 0, 0, 0) 70%)`,
         filter: "blur(24px)",
+        transition: "background 2s ease",
       }}
       animate={
         reduceMotion
@@ -175,6 +251,7 @@ export default function FlipFrame({
   fadeMs = 1400,
   altA = "Portrait",
   altB = "Plaktaki Kitap logo",
+  glowColor = "rgba(180, 50, 40, 0.30)",
 }: FlipFrameProps) {
   const reduce = useReducedMotion();
   const [boxOpened, setBoxOpened] = useState(false);
@@ -190,7 +267,6 @@ export default function FlipFrame({
 
   const showBoxShell = !reduce && !lidGone;
   const showBoxBody = showBoxShell;
-  const satellitesActive = Boolean(boxOpened && hovered);
 
   useEffect(() => {
     if (reduce) {
@@ -222,16 +298,45 @@ export default function FlipFrame({
     [fadeMs]
   );
 
+  const swingRotate = useMotionValue(0);
+  const swingAmplitude = useMotionValue(0.8);
+
+  useEffect(() => {
+    if (reduce) {
+      swingRotate.set(0);
+      return;
+    }
+    animate(swingAmplitude, hovered ? 2.5 : 0.8, {
+      duration: 0.55,
+      ease: FLIP_EASE,
+    });
+  }, [hovered, reduce, swingAmplitude, swingRotate]);
+
+  useAnimationFrame((time) => {
+    if (reduce) return;
+    const t = time / 1000;
+    swingRotate.set(Math.sin(t * ((2 * Math.PI) / 5)) * swingAmplitude.get());
+  });
+
   return (
     <div
       className="relative mx-auto overflow-visible"
-      style={{ width: responsiveSize, aspectRatio: "1 / 1" }}
-      onMouseEnter={() => {
-        if (boxOpened) setHovered(true);
-      }}
+      style={{ width: responsiveSize }}
+      onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <SatelliteCards active={satellitesActive} />
+      <motion.div
+        className="relative w-full"
+        style={{
+          transformOrigin: "top center",
+          rotate: swingRotate,
+          paddingTop: ROPE_LENGTH + ROPE_HOOK,
+        }}
+      >
+        <HangingRope length={ROPE_LENGTH} />
+
+        <div className="relative w-full" style={{ aspectRatio: "1 / 1" }}>
+          <SatelliteCards isActive={hovered} items={DEFAULT_SATELLITES} />
 
       {showBoxBody && (
         <div
@@ -251,6 +356,7 @@ export default function FlipFrame({
         hovered={hovered}
         visible={boxOpened}
         reduceMotion={!!reduce}
+        glowColor={glowColor}
       />
 
       <motion.div
@@ -411,6 +517,8 @@ export default function FlipFrame({
           </motion.div>
         </div>
       )}
+        </div>
+      </motion.div>
     </div>
   );
 }

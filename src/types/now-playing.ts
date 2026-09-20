@@ -7,3 +7,10 @@ export interface NowPlayingBook {
 export interface NowPlayingData {
   book: NowPlayingBook | null;
 }
+
+export interface LastFmNowPlaying {
+  title: string;
+  artist: string;
+  albumArt: string | null;
+  isNowPlaying: boolean;
+}

@@ -4,7 +4,6 @@ import HeroSection from "@/components/HeroSection";
 import { IntroCards } from "@/components/home/IntroCards";
 import MessyBulletJournal from "@/components/planner/MessyBulletJournal";
 import type { Video } from "@/types/videos";
-import type { NowPlayingData } from "@/types/now-playing";
 
 interface HomePageContentProps {
   children?: React.ReactNode;
@@ -14,7 +13,6 @@ interface HomePageContentProps {
   introSubtitle?: string | null;
   introPhotoEymenUrl?: string | null;
   introPhotoPlaktakikitapUrl?: string | null;
-  nowPlaying?: NowPlayingData | null;
 }
 
 export function HomePageContent({
@@ -25,7 +23,6 @@ export function HomePageContent({
   introSubtitle = "yanii... nam-ı diğer Plaktaki Kitap",
   introPhotoEymenUrl = "/images/eymen-studio.jpg",
   introPhotoPlaktakikitapUrl = "/images/logo.png",
-  nowPlaying = null,
 }: HomePageContentProps) {
   return (
     <>
@@ -35,7 +32,6 @@ export function HomePageContent({
           logoSrc={introPhotoPlaktakikitapUrl ?? "/images/logo.png"}
           title={introTitle ?? undefined}
           subtitle={introSubtitle ?? undefined}
-          nowPlaying={nowPlaying}
         />
 
         <div className="mx-auto mt-4 w-full max-w-6xl px-2 sm:mt-6 sm:px-6">

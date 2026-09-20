@@ -1,122 +1,163 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import type { ReactNode } from "react";
+import { motion } from "framer-motion";
 
-export type SatelliteItem = {
+export type SatelliteIconName = "book" | "music" | "camera" | "spark";
+
+export type SatelliteCardItem = {
   id: string;
   label: string;
-  /** Görsel yolu — dosya yoksa `color` placeholder kullanılır */
-  image?: string;
+  icon: SatelliteIconName;
+  rotate: number;
+  offsetX: number;
+  offsetY: number;
   color: string;
-  style: React.CSSProperties;
-  scatter: { x: number; y: number };
 };
 
-export const DEFAULT_SATELLITES: SatelliteItem[] = [
+export const DEFAULT_SATELLITES: SatelliteCardItem[] = [
   {
     id: "reading",
-    label: "Okuduğum",
-    image: "/images/satellites/reading.jpg",
-    color: "#3d2b1f",
-    style: { top: "4%", left: "-16%" },
-    scatter: { x: -32, y: -8 },
+    label: "Şu an okuyorum",
+    icon: "book",
+    rotate: -14,
+    offsetX: -190,
+    offsetY: -70,
+    color: "#6b2c2c",
   },
   {
-    id: "music",
-    label: "Dinlediğim",
-    image: "/images/satellites/music.jpg",
-    color: "#2a2438",
-    style: { top: "72%", left: "108%" },
-    scatter: { x: 34, y: 12 },
+    id: "spotify",
+    label: "Son dinlediğim",
+    icon: "music",
+    rotate: 10,
+    offsetX: 185,
+    offsetY: -95,
+    color: "#2c4a3e",
   },
   {
     id: "photo",
-    label: "Fotoğraf",
-    image: "/images/satellites/photo.jpg",
-    color: "#1f2a24",
-    style: { top: "-12%", left: "72%" },
-    scatter: { x: 18, y: -28 },
+    label: "Çektiğim kareler",
+    icon: "camera",
+    rotate: -8,
+    offsetX: -210,
+    offsetY: 110,
+    color: "#2c3a4a",
   },
   {
     id: "project",
-    label: "Proje",
-    image: "/images/satellites/project.jpg",
-    color: "#2c2418",
-    style: { top: "88%", left: "8%" },
-    scatter: { x: -20, y: 28 },
-  },
-  {
-    id: "cartoon",
-    label: "Karikatür",
-    image: "/images/satellites/cartoon.jpg",
-    color: "#352218",
-    style: { top: "18%", left: "110%" },
-    scatter: { x: 38, y: -6 },
+    label: "Üzerinde çalıştığım",
+    icon: "spark",
+    rotate: 12,
+    offsetX: 205,
+    offsetY: 95,
+    color: "#4a3a2c",
   },
 ];
 
-const SPRING = { type: "spring" as const, stiffness: 280, damping: 24 };
+function SatelliteIcon({ name }: { name: SatelliteIconName }) {
+  const icons: Record<SatelliteIconName, ReactNode> = {
+    book: (
+      <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5v-17Z" />
+    ),
+    music: (
+      <path d="M9 18V5l11-2v13M9 13l11-2M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm11-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+    ),
+    camera: (
+      <path d="M4 7h3l1.5-2h7L17 7h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Zm8 3a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z" />
+    ),
+    spark: (
+      <path d="M12 2v6M12 16v6M2 12h6M16 12h6M4.9 4.9l4.2 4.2M14.9 14.9l4.2 4.2M19.1 4.9l-4.2 4.2M9.1 14.9l-4.2 4.2" />
+    ),
+  };
 
-interface SatelliteCardsProps {
-  active: boolean;
-  items?: SatelliteItem[];
-}
-
-function SatelliteCard({
-  item,
-  index,
-}: {
-  item: SatelliteItem;
-  index: number;
-}) {
   return (
-    <motion.div
-      key={item.id}
-      className="pointer-events-none absolute z-[25] h-11 w-11 overflow-hidden rounded-md border border-[#c9a65a]/30 shadow-[0_6px_20px_rgba(0,0,0,0.45)]"
-      style={{
-        ...item.style,
-        backgroundColor: item.color,
-      }}
-      initial={{ opacity: 0, scale: 0.55, x: 0, y: 0 }}
-      animate={{
-        opacity: 1,
-        scale: 1,
-        x: item.scatter.x,
-        y: item.scatter.y,
-      }}
-      exit={{ opacity: 0, scale: 0.55, x: 0, y: 0 }}
-      transition={{
-        ...SPRING,
-        delay: index * 0.04,
-      }}
+    <svg
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      fill="none"
+      stroke="#e8dcc0"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       aria-hidden
     >
-      {item.image ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={item.image}
-          alt=""
-          className="h-full w-full object-cover"
-          onError={(event) => {
-            event.currentTarget.style.display = "none";
-          }}
-        />
-      ) : null}
-    </motion.div>
+      {icons[name] ?? icons.spark}
+    </svg>
   );
 }
 
 export function SatelliteCards({
-  active,
+  isActive,
   items = DEFAULT_SATELLITES,
-}: SatelliteCardsProps) {
+}: {
+  isActive: boolean;
+  items?: SatelliteCardItem[];
+}) {
   return (
-    <AnimatePresence>
-      {active
-        ? items.map((item, index) => (
-            <SatelliteCard key={item.id} item={item} index={index} />
-          ))
-        : null}
-    </AnimatePresence>
+    <>
+      {items.map((card, i) => (
+        <motion.div
+          key={card.id}
+          initial={{ opacity: 0, x: 0, y: 0, scale: 0.3, rotate: 0 }}
+          animate={
+            isActive
+              ? {
+                  opacity: 1,
+                  x: card.offsetX,
+                  y: card.offsetY,
+                  scale: 1,
+                  rotate: card.rotate,
+                }
+              : { opacity: 0, x: 0, y: 0, scale: 0.3, rotate: 0 }
+          }
+          transition={{
+            type: "spring",
+            stiffness: 260,
+            damping: 18,
+            mass: 0.9,
+            delay: isActive ? i * 0.05 : 0,
+          }}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            marginTop: -40,
+            marginLeft: -36,
+            width: 72,
+            zIndex: 5,
+            pointerEvents: "none",
+            visibility: isActive ? "visible" : "hidden",
+          }}
+        >
+          <div
+            style={{
+              background: card.color,
+              border: "1px solid rgba(201,166,90,0.45)",
+              borderRadius: 6,
+              padding: 10,
+              boxShadow: "0 12px 28px rgba(0,0,0,0.55)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 6,
+            }}
+          >
+            <SatelliteIcon name={card.icon} />
+            <span
+              style={{
+                fontSize: 8,
+                letterSpacing: "0.02em",
+                color: "#e8dcc0",
+                textAlign: "center",
+                lineHeight: 1.3,
+              }}
+            >
+              {card.label}
+            </span>
+          </div>
+        </motion.div>
+      ))}
+    </>
   );
 }
