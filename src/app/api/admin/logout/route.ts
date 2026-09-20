@@ -14,5 +14,11 @@ export async function POST() {
     path: "/",
     maxAge: 0,
   });
+  // Eski cookie adını da temizle
+  res.cookies.set("admin_session", "", {
+    httpOnly: true,
+    path: "/",
+    maxAge: 0,
+  });
   return res;
 }

@@ -19,6 +19,7 @@
     "import:letterboxd": "tsx scripts/import-letterboxd-to-films.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.126.0",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/utilities": "^3.2.2",
     "@supabase/ssr": "^0.8.0",
@@ -37,12 +38,13 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",
     "lucide-react": "^0.563.0",
-    "next": "16.1.6",
+    "next": "^16.3.5",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.71.1",
     "react-pageflip": "^2.0.3",
     "react-rnd": "^10.5.2",
+    "recharts": "^3.10.1",
     "server-only": "^0.0.1",
     "swr": "^2.4.0",
     "tailwind-merge": "^3.4.0",

@@ -1,44 +1,27 @@
 import "server-only";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import crypto from "crypto";
 
-const COOKIE_NAME = "admin_session";
-const SALT = "plaktakikitap-admin-v1";
-
-function getExpectedToken(): string | null {
-  const password = process.env.ADMIN_PASSWORD;
-  if (!password || password.length < 4) return null;
-  return crypto
-    .createHash("sha256")
-    .update(password + SALT)
-    .digest("hex");
-}
+/** Proje genelinde tek admin cookie adı (login ile aynı). */
+export const ADMIN_COOKIE_NAME = "pk_admin";
+const ADMIN_COOKIE_VALUE = "1";
+const MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
 export async function verifyAdminSession(): Promise<boolean> {
-  const token = getExpectedToken();
-  if (!token) return false;
-
   const cookieStore = await cookies();
-  const cookie = cookieStore.get(COOKIE_NAME);
-  return cookie?.value === token;
+  return cookieStore.get(ADMIN_COOKIE_NAME)?.value === ADMIN_COOKIE_VALUE;
 }
 
 export async function setAdminSession(password: string): Promise<boolean> {
   const expected = process.env.ADMIN_PASSWORD;
   if (!expected || password !== expected) return false;
 
-  const token = crypto
-    .createHash("sha256")
-    .update(password + SALT)
-    .digest("hex");
-
   const cookieStore = await cookies();
-  cookieStore.set(COOKIE_NAME, token, {
+  cookieStore.set(ADMIN_COOKIE_NAME, ADMIN_COOKIE_VALUE, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7, // 7 days
+    maxAge: MAX_AGE,
     path: "/",
   });
   return true;
@@ -46,7 +29,9 @@ export async function setAdminSession(password: string): Promise<boolean> {
 
 export async function clearAdminSession(): Promise<void> {
   const cookieStore = await cookies();
-  cookieStore.delete(COOKIE_NAME);
+  cookieStore.delete(ADMIN_COOKIE_NAME);
+  // Eski admin_session cookie'sini de temizle
+  cookieStore.delete("admin_session");
 }
 
 export async function requireAdminOrRedirect(): Promise<void> {
