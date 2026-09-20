@@ -7,6 +7,20 @@ export type { WorksItem, WorksItemType, WorksVisibility } from "@/types/works";
 const WORKS_MEDIA_BUCKET = "works-media";
 const SIGNED_URL_EXPIRES = 60 * 60; // 1 hour
 
+/** Storage path (works-media) veya harici https URL */
+export function isCvStoragePath(stored: string): boolean {
+  const v = stored.trim();
+  return !!v && !v.startsWith("http://") && !v.startsWith("https://");
+}
+
+/** Ziyaretçi indirme linki — storage path ise proxy API */
+export function resolveCvDownloadUrl(stored: string): string {
+  const v = stored.trim();
+  if (!v) return "";
+  if (!isCvStoragePath(v)) return v;
+  return "/api/cv/download";
+}
+
 export { parseYouTubeVideoId, getYouTubeThumbUrl } from "./works-utils";
 
 /** Create signed URL for a storage path (server-only, uses service role) */
@@ -69,7 +83,7 @@ export async function getWorksPublic(): Promise<{
     .select("value")
     .eq("key", "cv_download_url")
     .maybeSingle();
-  const cvDownloadUrl = (settings?.value as string) ?? "";
+  const cvDownloadUrl = resolveCvDownloadUrl((settings?.value as string) ?? "");
 
   return { items: withSigned, featured, byType, cvDownloadUrl };
 }
@@ -153,6 +167,32 @@ export async function updateWorksItem(
 export async function deleteWorksItem(id: string): Promise<{ ok: true } | { error: string }> {
   const supabase = createAdminClient();
   const { error } = await supabase.from("works_items").delete().eq("id", id);
+  if (error) return { error: error.message };
+  return { ok: true };
+}
+
+/** Upload CV PDF to works-media (PDF destekli bucket) */
+export async function uploadCvPdf(file: File): Promise<{ path: string } | { error: string }> {
+  const ext = file.name.split(".").pop()?.toLowerCase() || "pdf";
+  const path = `cv/${crypto.randomUUID()}.${ext}`;
+  const supabase = createAdminClient();
+  const { data, error } = await supabase.storage.from(WORKS_MEDIA_BUCKET).upload(path, file, {
+    upsert: true,
+    contentType: "application/pdf",
+  });
+  if (error) return { error: error.message };
+  return { path: data.path };
+}
+
+export async function setCvDownloadSetting(
+  value: string
+): Promise<{ ok: true } | { error: string }> {
+  const supabase = createAdminClient();
+  const { error } = await supabase
+    .from("works_settings")
+    .upsert({ key: "cv_download_url", value: value.trim(), updated_at: new Date().toISOString() }, {
+      onConflict: "key",
+    });
   if (error) return { error: error.message };
   return { ok: true };
 }

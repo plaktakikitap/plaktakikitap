@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 const BUCKET = "admin-uploads";
+const PDF_BUCKET = "works-media";
 const ALLOWED_IMAGE_TYPES = [
   "image/jpeg",
   "image/png",
@@ -54,13 +55,24 @@ export async function POST(req: NextRequest) {
     const ext = file.name.split(".").pop()?.toLowerCase() || (isPdfFile(file) ? "pdf" : "jpg");
     const path = `${folder}/${crypto.randomUUID()}.${ext}`;
     const contentType = resolveContentType(file);
+    const bucket = isPdfFile(file) ? PDF_BUCKET : BUCKET;
 
     const { data, error } = await supabase.storage
-      .from(BUCKET)
+      .from(bucket)
       .upload(path, file, { upsert: false, contentType });
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    if (isPdfFile(file)) {
+      const { data: signed } = await supabase.storage
+        .from(PDF_BUCKET)
+        .createSignedUrl(data.path, 60 * 60 * 24 * 7);
+      return NextResponse.json({
+        url: signed?.signedUrl ?? "",
+        path: data.path,
+      });
     }
 
     const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(data.path);
