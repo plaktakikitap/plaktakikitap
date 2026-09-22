@@ -131,7 +131,7 @@ export function QuickAjandaForm({
         e.preventDefault();
         formRef.current?.requestSubmit();
       }}
-      className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6"
+      className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5 sm:p-6"
     >
       <AdminRecentList items={recent.slice(0, 5)} />
 

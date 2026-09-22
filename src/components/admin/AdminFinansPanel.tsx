@@ -186,7 +186,7 @@ export function AdminFinansPanel({
         <select
           value={month}
           onChange={(e) => setMonth(e.target.value)}
-          className="rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white outline-none"
+          className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2 text-sm text-[#1a1612] outline-none"
         >
           {monthOptions.map((m) => (
             <option key={m} value={m}>
@@ -197,7 +197,7 @@ export function AdminFinansPanel({
         <button
           type="button"
           onClick={() => setShowCats((o) => !o)}
-          className="inline-flex items-center gap-1.5 text-xs text-white/50 hover:text-white/80"
+          className="inline-flex items-center gap-1.5 text-xs text-[#6b6158] hover:text-[#1a1612]/80"
         >
           <Settings2 className="h-3.5 w-3.5" />
           Kategorileri düzenle
@@ -205,19 +205,19 @@ export function AdminFinansPanel({
       </div>
 
       {showCats ? (
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+        <div className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-4">
           <form onSubmit={addCat} className="mb-4 flex flex-wrap gap-2">
             <input
               value={newCatAd}
               onChange={(e) => setNewCatAd(e.target.value)}
               placeholder="Yeni kategori"
-              className="rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white outline-none"
+              className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2 text-sm text-[#1a1612] outline-none"
               required
             />
             <select
               value={newCatTur}
               onChange={(e) => setNewCatTur(e.target.value as FinansTur)}
-              className="rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white"
+              className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2 text-sm text-[#1a1612]"
             >
               <option value="gider">Gider</option>
               <option value="gelir">Gelir</option>
@@ -239,18 +239,18 @@ export function AdminFinansPanel({
             {kategoriler.map((c) => (
               <li
                 key={c.id}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1 text-xs text-white/70"
+                className="inline-flex items-center gap-2 rounded-full border border-[#e8e0d4] px-3 py-1 text-xs text-[#1a1612]/70"
               >
                 <span
                   className="h-2.5 w-2.5 rounded-full"
                   style={{ background: c.renk }}
                 />
                 {c.ad}
-                <span className="text-white/30">{c.tur}</span>
+                <span className="text-[#6b6158]">{c.tur}</span>
                 <button
                   type="button"
                   onClick={() => void delCat(c.id)}
-                  className="text-white/30 hover:text-red-400"
+                  className="text-[#6b6158] hover:text-red-400"
                 >
                   ×
                 </button>
@@ -262,7 +262,7 @@ export function AdminFinansPanel({
 
       <form
         onSubmit={addKayit}
-        className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+        className="space-y-4 rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5"
       >
         <div className="grid grid-cols-2 gap-2">
           {(["gider", "gelir"] as const).map((t) => (
@@ -278,7 +278,7 @@ export function AdminFinansPanel({
                   ? t === "gelir"
                     ? "bg-emerald-500/25 text-emerald-300 ring-1 ring-emerald-400/40"
                     : "bg-red-500/25 text-red-300 ring-1 ring-red-400/40"
-                  : "bg-white/5 text-white/45"
+                  : "bg-[#1a1612]/5 text-[#1a1612]/40"
               }`}
             >
               {t === "gelir" ? "Gelir" : "Gider"}
@@ -294,12 +294,12 @@ export function AdminFinansPanel({
             onChange={(e) => setTutar(e.target.value)}
             placeholder="Tutar (₺)"
             required
-            className="rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 text-sm text-white outline-none"
+            className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3.5 py-2.5 text-sm text-[#1a1612] outline-none"
           />
           <select
             value={kategori}
             onChange={(e) => setKategori(e.target.value)}
-            className="rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white outline-none"
+            className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2.5 text-sm text-[#1a1612] outline-none"
           >
             <option value="">Kategori seç</option>
             {filteredCats.map((c) => (
@@ -312,13 +312,13 @@ export function AdminFinansPanel({
             type="date"
             value={tarih}
             onChange={(e) => setTarih(e.target.value)}
-            className="rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white outline-none"
+            className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2.5 text-sm text-[#1a1612] outline-none"
           />
           <input
             value={notlar}
             onChange={(e) => setNotlar(e.target.value)}
             placeholder="Not (opsiyonel)"
-            className="rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white outline-none"
+            className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2.5 text-sm text-[#1a1612] outline-none"
           />
         </div>
         <button
@@ -343,8 +343,8 @@ export function AdminFinansPanel({
             {formatTL(summary.gider)}
           </p>
         </div>
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4">
-          <p className="text-[10px] uppercase text-white/40">Net</p>
+        <div className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 px-4 py-4">
+          <p className="text-[10px] uppercase text-[#1a1612]/40">Net</p>
           <p
             className={`mt-1 text-xl font-semibold ${
               summary.net >= 0 ? "text-emerald-300" : "text-red-300"
@@ -356,8 +356,8 @@ export function AdminFinansPanel({
       </div>
 
       {summary.pie.length > 0 ? (
-        <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-          <h3 className="mb-3 text-sm text-white/60">Gider dağılımı</h3>
+        <section className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5">
+          <h3 className="mb-3 text-sm text-[#6b6158]">Gider dağılımı</h3>
           <div className="mx-auto h-56 w-full max-w-xs">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -388,15 +388,15 @@ export function AdminFinansPanel({
       ) : null}
 
       <section>
-        <h3 className="mb-3 text-sm text-white/60">Son işlemler</h3>
+        <h3 className="mb-3 text-sm text-[#6b6158]">Son işlemler</h3>
         <ul className="space-y-2">
           {monthKayitlar.slice(0, 20).map((k) => (
             <li
               key={k.id}
-              className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3"
+              className="flex items-center justify-between gap-3 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-4 py-3"
             >
               <div className="min-w-0">
-                <p className="text-sm text-white/85">
+                <p className="text-sm text-[#1a1612]/85">
                   <span
                     className={
                       k.tur === "gelir" ? "text-emerald-400" : "text-red-400"
@@ -405,9 +405,9 @@ export function AdminFinansPanel({
                     {k.tur === "gelir" ? "+" : "−"}
                     {formatTL(k.tutar)}
                   </span>
-                  <span className="ml-2 text-white/45">{k.kategori}</span>
+                  <span className="ml-2 text-[#1a1612]/40">{k.kategori}</span>
                 </p>
-                <p className="text-[11px] text-white/35">
+                <p className="text-[11px] text-[#1a1612]/40">
                   {k.tarih}
                   {k.notlar ? ` · ${k.notlar}` : ""}
                 </p>
@@ -415,7 +415,7 @@ export function AdminFinansPanel({
               <button
                 type="button"
                 onClick={() => void remove(k.id)}
-                className="text-white/35 hover:text-red-400"
+                className="text-[#1a1612]/40 hover:text-red-400"
               >
                 <Trash2 className="h-4 w-4" />
               </button>

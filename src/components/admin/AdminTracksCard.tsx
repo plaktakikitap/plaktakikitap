@@ -13,7 +13,7 @@ import { AdminImageUpload } from "./AdminImageUpload";
 export function AdminTracksCard({ tracks }: { tracks: Track[] }) {
   return (
     <div className="h-full">
-      <h3 className="admin-heading mb-5 text-sm font-medium text-white/70">
+      <h3 className="admin-heading mb-5 text-sm font-medium text-[#1a1612]/70">
         Müzikler (Şu an dinliyorum)
       </h3>
       <form action="/api/admin/tracks/add" method="POST" className="space-y-4">
@@ -55,9 +55,9 @@ export function AdminTracksCard({ tracks }: { tracks: Track[] }) {
         {tracks.map((t) => (
           <div
             key={t.id}
-            className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3"
+            className="flex items-center gap-3 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-4 py-3"
           >
-            <div className="h-8 w-8 shrink-0 overflow-hidden rounded bg-white/10">
+            <div className="h-8 w-8 shrink-0 overflow-hidden rounded bg-[#1a1612]/8">
               {t.cover_url && (
                 <img src={t.cover_url} alt="" className="h-full w-full object-cover" />
               )}
@@ -69,7 +69,7 @@ export function AdminTracksCard({ tracks }: { tracks: Track[] }) {
             <div className="flex shrink-0 gap-1">
               <form action="/api/admin/tracks/toggle" method="POST">
                 <input type="hidden" name="id" value={t.id} />
-                <button type="submit" className="text-[10px] text-white/50 hover:text-white">
+                <button type="submit" className="text-[10px] text-[#6b6158] hover:text-[#1a1612]">
                   {t.is_active ? "pasif" : "aktif"}
                 </button>
               </form>

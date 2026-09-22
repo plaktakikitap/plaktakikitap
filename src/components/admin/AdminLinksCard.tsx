@@ -29,11 +29,11 @@ export function AdminLinksCard({ links }: { links: Link[] }) {
 
   return (
     <div className="h-full">
-      <h3 className="admin-heading mb-5 text-sm font-medium text-white/70">
+      <h3 className="admin-heading mb-5 text-sm font-medium text-[#1a1612]/70">
         Footer linkleri
       </h3>
       <form action="/api/admin/links" method="POST" className="space-y-4">
-        <p className="text-xs text-white/50">
+        <p className="text-xs text-[#6b6158]">
           JSON olarak güncelliyoruz. Otomatik formatlama ve doğrulama.
         </p>
         <AdminJsonEditor

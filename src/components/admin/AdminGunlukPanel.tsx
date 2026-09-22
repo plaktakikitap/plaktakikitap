@@ -124,19 +124,19 @@ export function AdminGunlukPanel({
     <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
       <aside className="space-y-4">
         <div className="relative">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#1a1612]/40" />
           <input
             value={query}
             onChange={(e) => void doSearch(e.target.value)}
             placeholder="Ara…"
-            className="w-full rounded-xl border border-white/15 bg-white/5 py-2.5 pl-9 pr-3 text-sm text-white outline-none"
+            className="w-full rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 py-2.5 pl-9 pr-3 text-sm text-[#1a1612] outline-none"
           />
         </div>
 
         {searchResults ? (
-          <ul className="max-h-64 space-y-1 overflow-y-auto rounded-xl border border-white/10 p-2">
+          <ul className="max-h-64 space-y-1 overflow-y-auto rounded-xl border border-[#e8e0d4] p-2">
             {searchResults.length === 0 ? (
-              <li className="px-2 py-3 text-xs text-white/35">Sonuç yok</li>
+              <li className="px-2 py-3 text-xs text-[#1a1612]/40">Sonuç yok</li>
             ) : (
               searchResults.map((r) => (
                 <li key={r.id}>
@@ -147,9 +147,9 @@ export function AdminGunlukPanel({
                       setSearchResults(null);
                       setQuery("");
                     }}
-                    className="w-full rounded-lg px-2 py-2 text-left text-xs text-white/70 hover:bg-white/10"
+                    className="w-full rounded-lg px-2 py-2 text-left text-xs text-[#1a1612]/70 hover:bg-[#1a1612]/8"
                   >
-                    <span className="text-white/40">{r.tarih}</span>
+                    <span className="text-[#1a1612]/40">{r.tarih}</span>
                     <span className="mt-0.5 block truncate">{r.icerik}</span>
                   </button>
                 </li>
@@ -157,22 +157,22 @@ export function AdminGunlukPanel({
             )}
           </ul>
         ) : (
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
+          <div className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-3">
             <div className="mb-2 flex items-center justify-between">
               <button
                 type="button"
                 onClick={() => setCursor(new Date(year, month - 1, 1))}
-                className="rounded p-1 text-white/50 hover:bg-white/10"
+                className="rounded p-1 text-[#6b6158] hover:bg-[#1a1612]/8"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
-              <span className="text-xs text-white/70">
+              <span className="text-xs text-[#1a1612]/70">
                 {MONTHS[month]} {year}
               </span>
               <button
                 type="button"
                 onClick={() => setCursor(new Date(year, month + 1, 1))}
-                className="rounded p-1 text-white/50 hover:bg-white/10"
+                className="rounded p-1 text-[#6b6158] hover:bg-[#1a1612]/8"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
@@ -194,7 +194,7 @@ export function AdminGunlukPanel({
                     className={`relative rounded-lg py-1.5 text-[11px] ${
                       isSel
                         ? "bg-amber-500/25 text-amber-200"
-                        : "text-white/65 hover:bg-white/10"
+                        : "text-[#1a1612]/65 hover:bg-[#1a1612]/8"
                     }`}
                   >
                     {d}
@@ -209,9 +209,9 @@ export function AdminGunlukPanel({
         )}
       </aside>
 
-      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+      <div className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <p className="text-sm text-white/55">
+          <p className="text-sm text-[#6b6158]">
             {new Date(selected + "T12:00:00").toLocaleDateString("tr-TR", {
               weekday: "long",
               day: "numeric",
@@ -219,7 +219,7 @@ export function AdminGunlukPanel({
               year: "numeric",
             })}
             {saving ? (
-              <span className="ml-2 text-[11px] text-white/35">kaydediliyor…</span>
+              <span className="ml-2 text-[11px] text-[#1a1612]/40">kaydediliyor…</span>
             ) : null}
           </p>
           <div className="flex gap-2">
@@ -230,8 +230,8 @@ export function AdminGunlukPanel({
                 onClick={() => setRuh(m.id)}
                 className={`rounded-xl px-2.5 py-1.5 text-sm transition ${
                   ruh === m.id
-                    ? "bg-white/15 ring-1 ring-amber-400/40"
-                    : "bg-white/5 opacity-60 hover:opacity-100"
+                    ? "bg-[#1a1612]/8 ring-1 ring-amber-400/40"
+                    : "bg-[#1a1612]/5 opacity-60 hover:opacity-100"
                 }`}
                 title={m.label}
               >
@@ -244,7 +244,7 @@ export function AdminGunlukPanel({
           value={icerik}
           onChange={(e) => setIcerik(e.target.value)}
           placeholder="Bugün nasıl geçti…"
-          className="min-h-[300px] w-full resize-y rounded-xl border border-white/10 bg-transparent px-1 py-2 text-base leading-[1.8] text-white/90 outline-none placeholder:text-white/25"
+          className="min-h-[300px] w-full resize-y rounded-xl border border-[#e8e0d4] bg-transparent px-1 py-2 text-base leading-[1.8] text-[#1a1612] outline-none placeholder:text-[#6b6158]"
         />
         <div className="mt-4 flex justify-end">
           <button

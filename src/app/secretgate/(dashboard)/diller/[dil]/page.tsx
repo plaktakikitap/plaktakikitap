@@ -43,10 +43,10 @@ export default async function AdminDilPage({
   return (
     <div className={`mx-auto max-w-3xl ${amiri.variable}`}>
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold text-white">
+        <h1 className="text-2xl font-semibold text-[#1a1612]">
           {meta.bayrak} {meta.label}
         </h1>
-        <p className="mt-1 text-sm text-white/50">
+        <p className="mt-1 text-sm text-[#6b6158]">
           Kelime bankası · flashcard · notlar
         </p>
       </header>
@@ -62,7 +62,7 @@ export default async function AdminDilPage({
               className={`rounded-xl px-3 py-2 text-sm transition ${
                 active
                   ? "bg-amber-500 text-black"
-                  : "bg-white/5 text-white/55 hover:bg-white/10"
+                  : "bg-[#1a1612]/5 text-[#6b6158] hover:bg-[#1a1612]/8"
               }`}
             >
               {m.bayrak} {m.label}

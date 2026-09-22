@@ -148,7 +148,7 @@ function ElementPreview({ el, isSelected }: { el: CanvasElement; isSelected: boo
         />
       );
     case "doodle":
-      return <div className="rounded border border-dashed border-black/20 bg-white/50" style={style} />;
+      return <div className="rounded border border-dashed border-black/20 bg-[#1a1612]/50" style={style} />;
     default:
       return <div className="rounded bg-gray-200" style={style} />;
   }
@@ -205,7 +205,7 @@ function DraggableCanvasElement({
           <div className="absolute -right-2 top-0 z-10 flex flex-col gap-0.5">
             <button
               type="button"
-              className="rounded bg-red-500/90 p-0.5 text-white hover:bg-red-600"
+              className="rounded bg-red-500/90 p-0.5 text-[#1a1612] hover:bg-red-600"
               title="Sil"
               onClick={(e) => {
                 e.stopPropagation();
@@ -437,8 +437,8 @@ export function AdminPlannerCanvas({ year, monthIndex }: AdminPlannerCanvasProps
 
   if (loading) {
     return (
-      <section className="rounded-xl border border-white/20 bg-white/5 p-4">
-        <p className="text-sm text-white/70">Canvas yükleniyor…</p>
+      <section className="rounded-xl border border-[#d4c9bb] bg-[#1a1612]/5 p-4">
+        <p className="text-sm text-[#1a1612]/70">Canvas yükleniyor…</p>
       </section>
     );
   }
@@ -448,11 +448,11 @@ export function AdminPlannerCanvas({ year, monthIndex }: AdminPlannerCanvasProps
   const canvasBg = "repeating-linear-gradient(transparent, transparent 26px, rgba(0,0,0,0.035) 26px, rgba(0,0,0,0.035) 27px)";
 
   return (
-    <section className="rounded-xl border border-white/20 bg-white/5 p-4">
+    <section className="rounded-xl border border-[#d4c9bb] bg-[#1a1612]/5 p-4">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <h2 className="font-medium text-white">Sayfa canvas — {year} / {month1}</h2>
+        <h2 className="font-medium text-[#1a1612]">Sayfa canvas — {year} / {month1}</h2>
         <div className="flex flex-wrap items-center gap-2">
-          <label className="text-xs text-white/70">Eklenen öğe sayfası:</label>
+          <label className="text-xs text-[#1a1612]/70">Eklenen öğe sayfası:</label>
           <select
             value={addTargetPage}
             onChange={(e) => setAddTargetPage(e.target.value as PageSide)}
@@ -465,7 +465,7 @@ export function AdminPlannerCanvas({ year, monthIndex }: AdminPlannerCanvasProps
             <button
               type="button"
               onClick={() => setAddMenuOpen((v) => !v)}
-              className="flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/10 px-3 py-1.5 text-sm text-white/90 hover:bg-white/20"
+              className="flex items-center gap-1.5 rounded-lg border border-[#d4c9bb] bg-[#1a1612]/8 px-3 py-1.5 text-sm text-[#1a1612] hover:bg-[#1a1612]/8"
             >
               <span>Öğe ekle</span>
               <ChevronDown className="h-4 w-4" />
@@ -473,7 +473,7 @@ export function AdminPlannerCanvas({ year, monthIndex }: AdminPlannerCanvasProps
             {addMenuOpen && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setAddMenuOpen(false)} />
-                <div className="absolute right-0 top-full z-50 mt-1 min-w-[180px] rounded-lg border border-white/20 bg-[#1a1f2e] py-1 shadow-xl">
+                <div className="absolute right-0 top-full z-50 mt-1 min-w-[180px] rounded-lg border border-[#d4c9bb] bg-[#1a1f2e] py-1 shadow-xl">
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -484,7 +484,7 @@ export function AdminPlannerCanvas({ year, monthIndex }: AdminPlannerCanvasProps
                   <button
                     type="button"
                     disabled={photoUploading}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white/90 hover:bg-white/10"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-[#1a1612] hover:bg-[#1a1612]/8"
                     onClick={() => fileInputRef.current?.click()}
                   >
                     <Upload className="h-4 w-4" />
@@ -492,42 +492,42 @@ export function AdminPlannerCanvas({ year, monthIndex }: AdminPlannerCanvasProps
                   </button>
                   <button
                     type="button"
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white/90 hover:bg-white/10"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-[#1a1612] hover:bg-[#1a1612]/8"
                     onClick={() => addElement("sticky_note")}
                   >
                     <StickyNote className="h-4 w-4" /> Post-it
                   </button>
                   <button
                     type="button"
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white/90 hover:bg-white/10"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-[#1a1612] hover:bg-[#1a1612]/8"
                     onClick={() => addElement("washi_tape")}
                   >
                     <Layers className="h-4 w-4" /> Washi bant
                   </button>
                   <button
                     type="button"
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white/90 hover:bg-white/10"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-[#1a1612] hover:bg-[#1a1612]/8"
                     onClick={() => addElement("paperclip")}
                   >
                     <Paperclip className="h-4 w-4" /> Ataş
                   </button>
                   <button
                     type="button"
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white/90 hover:bg-white/10"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-[#1a1612] hover:bg-[#1a1612]/8"
                     onClick={() => addElement("sticker")}
                   >
                     <Image className="h-4 w-4" /> Sticker
                   </button>
                   <button
                     type="button"
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white/90 hover:bg-white/10"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-[#1a1612] hover:bg-[#1a1612]/8"
                     onClick={() => addElement("text_block")}
                   >
                     <Type className="h-4 w-4" /> Metin
                   </button>
                   <button
                     type="button"
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white/90 hover:bg-white/10"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-[#1a1612] hover:bg-[#1a1612]/8"
                     onClick={() => addElement("coffee_stain")}
                   >
                     <Coffee className="h-4 w-4" /> Kahve lekesi
@@ -540,14 +540,14 @@ export function AdminPlannerCanvas({ year, monthIndex }: AdminPlannerCanvasProps
             <>
               <button
                 type="button"
-                className="rounded border border-white/20 px-2 py-1 text-xs text-white/90 hover:bg-white/10"
+                className="rounded border border-[#d4c9bb] px-2 py-1 text-xs text-[#1a1612] hover:bg-[#1a1612]/8"
                 onClick={sendBackward}
               >
                 Geri
               </button>
               <button
                 type="button"
-                className="rounded border border-white/20 px-2 py-1 text-xs text-white/90 hover:bg-white/10"
+                className="rounded border border-[#d4c9bb] px-2 py-1 text-xs text-[#1a1612] hover:bg-[#1a1612]/8"
                 onClick={bringForward}
               >
                 Öne
@@ -562,7 +562,7 @@ export function AdminPlannerCanvas({ year, monthIndex }: AdminPlannerCanvasProps
                 />
               )}
               {selectedEl && (
-                <label className="flex items-center gap-1 text-xs text-white/90">
+                <label className="flex items-center gap-1 text-xs text-[#1a1612]">
                   Açı:
                   <input
                     type="number"
@@ -580,7 +580,7 @@ export function AdminPlannerCanvas({ year, monthIndex }: AdminPlannerCanvasProps
             type="button"
             disabled={saving || !spreadId}
             onClick={saveElements}
-            className="rounded-lg bg-amber-500 px-4 py-1.5 text-sm text-white disabled:opacity-50 hover:bg-amber-600"
+            className="rounded-lg bg-amber-500 px-4 py-1.5 text-sm text-[#1a1612] disabled:opacity-50 hover:bg-amber-600"
           >
             {saving ? "Kaydediliyor…" : "Kaydet"}
           </button>
@@ -637,7 +637,7 @@ export function AdminPlannerCanvas({ year, monthIndex }: AdminPlannerCanvasProps
           </div>
         </DndContext>
       </div>
-      <p className="mt-2 text-xs text-white/60">
+      <p className="mt-2 text-xs text-[#6b6158]">
         Öğeyi seçip sürükleyin; fotoğraf ve post-it için köşeden boyut değiştirebilirsiniz. Kaydet’e basın.
       </p>
     </section>

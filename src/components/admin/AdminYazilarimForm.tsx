@@ -70,13 +70,13 @@ export function AdminYazilarimForm() {
 
   return (
     <form onSubmit={handleSubmit} className="admin-bento-card p-6 sm:p-8">
-      <div className="mb-6 flex items-center gap-3 border-b border-white/[0.06] pb-5">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(212,175,55,0.12)] text-[#d4af37]">
+      <div className="mb-6 flex items-center gap-3 border-b border-[#e8e0d4] pb-5">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(184,147,74,0.12)] text-[#b8934a]">
           <PenLine className="h-5 w-5" />
         </div>
         <div>
           <h3 className="admin-section-title">Yeni yazı</h3>
-          <p className="mt-0.5 text-sm text-white/45">Başlık, kategori ve içeriği kaydet</p>
+          <p className="mt-0.5 text-sm text-[#1a1612]/40">Başlık, kategori ve içeriği kaydet</p>
         </div>
       </div>
 

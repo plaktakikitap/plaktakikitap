@@ -19,7 +19,7 @@ export function AdminSiteSounds() {
         type="button"
         onClick={toggle}
         aria-label={enabled ? "Sesleri kapat" : "Sesleri aç"}
-        className="admin-sound-btn group flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-6 py-5 transition-colors hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--admin-focus-ring)]"
+        className="admin-sound-btn group flex w-full items-center justify-center gap-3 rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 px-6 py-5 transition-colors hover:bg-[#1a1612]/8 focus:outline-none focus:ring-2 focus:ring-[var(--admin-focus-ring)]"
       >
         <div className="flex items-end gap-1" style={{ height: 24 }}>
           {Array.from({ length: BARS }).map((_, i) => (

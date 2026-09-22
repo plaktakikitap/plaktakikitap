@@ -9,8 +9,8 @@ import { StarRatingInput } from "@/components/ui/StarRating";
 import { Tv, Heart, Loader2 } from "lucide-react";
 
 const inputClass =
-  "w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-amber-500/50 focus:outline-none focus:ring-1 focus:ring-amber-500/30";
-const labelClass = "mb-1.5 block text-sm font-medium text-white/90";
+  "w-full rounded-xl border border-[#d4c9bb] bg-[#1a1612]/5 px-4 py-3 text-sm text-[#1a1612] placeholder:text-[#6b6158] focus:border-amber-500/50 focus:outline-none focus:ring-1 focus:ring-amber-500/30";
+const labelClass = "mb-1.5 block text-sm font-medium text-[#1a1612]";
 
 const GENRES = [
   "Dram",
@@ -104,9 +104,9 @@ export function WatchLogSeriesForm() {
         </p>
       )}
 
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-        <h3 className="mb-4 flex items-center gap-2 font-medium text-white">
-          <Tv className="h-5 w-5 text-amber-400" />
+      <div className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-6 backdrop-blur-sm">
+        <h3 className="mb-4 flex items-center gap-2 font-medium text-[#1a1612]">
+          <Tv className="h-5 w-5 text-[#b8934a]" />
           Temel bilgiler
         </h3>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -151,7 +151,7 @@ export function WatchLogSeriesForm() {
                     className={`rounded-full px-3 py-1 text-xs transition ${
                       on
                         ? "bg-amber-500/25 text-amber-100 ring-1 ring-amber-400/40"
-                        : "bg-white/5 text-white/55 hover:bg-white/10"
+                        : "bg-[#1a1612]/5 text-[#6b6158] hover:bg-[#1a1612]/8"
                     }`}
                   >
                     {g}
@@ -163,8 +163,8 @@ export function WatchLogSeriesForm() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-        <h3 className="mb-4 font-medium text-white">Afiş</h3>
+      <div className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-6 backdrop-blur-sm">
+        <h3 className="mb-4 font-medium text-[#1a1612]">Afiş</h3>
         <div className="space-y-4">
           <div>
             <label className={labelClass}>Afiş URL</label>
@@ -192,8 +192,8 @@ export function WatchLogSeriesForm() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-        <h3 className="mb-4 font-medium text-white">İzleme ve değerlendirme</h3>
+      <div className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-6 backdrop-blur-sm">
+        <h3 className="mb-4 font-medium text-[#1a1612]">İzleme ve değerlendirme</h3>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className={labelClass}>İzlenme tarihi *</label>
@@ -218,7 +218,7 @@ export function WatchLogSeriesForm() {
         <div className="mt-4">
           <label className={labelClass}>Kısa yorum</label>
           <input type="hidden" name="review" value={reviewHtml} readOnly aria-hidden />
-          <div className="rounded-xl border border-white/20 bg-white">
+          <div className="rounded-xl border border-[#d4c9bb] bg-white">
             <RichTextEditor
               value={reviewHtml}
               onChange={setReviewHtml}
@@ -228,22 +228,22 @@ export function WatchLogSeriesForm() {
           </div>
         </div>
         <div className="mt-4 flex flex-wrap items-center gap-6">
-          <label className="flex items-center gap-2 text-sm text-white/90">
+          <label className="flex items-center gap-2 text-sm text-[#1a1612]">
             <input
               type="checkbox"
               name="is_favorite"
               id="series_favorite"
-              className="h-4 w-4 rounded border-white/30 text-amber-500"
+              className="h-4 w-4 rounded border-[#d4c9bb] text-amber-500"
             />
-            <Heart className="h-4 w-4 text-amber-400" />
+            <Heart className="h-4 w-4 text-[#b8934a]" />
             Favorilerime ekle
           </label>
-          <label className="flex items-center gap-2 text-sm text-white/90">
+          <label className="flex items-center gap-2 text-sm text-[#1a1612]">
             <input
               type="checkbox"
               checked={published}
               onChange={(e) => setPublished(e.target.checked)}
-              className="h-4 w-4 rounded border-white/30 text-amber-500"
+              className="h-4 w-4 rounded border-[#d4c9bb] text-amber-500"
             />
             Yayında
           </label>
@@ -254,7 +254,7 @@ export function WatchLogSeriesForm() {
         <button
           type="submit"
           disabled={loading}
-          className="flex items-center gap-2 rounded-xl bg-amber-500 px-6 py-3 text-sm font-medium text-white transition hover:bg-amber-600 disabled:opacity-50"
+          className="flex items-center gap-2 rounded-xl bg-amber-500 px-6 py-3 text-sm font-medium text-[#1a1612] transition hover:bg-amber-600 disabled:opacity-50"
         >
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
           {loading ? "Kaydediliyor…" : "Kaydet"}

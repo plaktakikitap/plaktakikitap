@@ -8,8 +8,8 @@ import {
 } from "react";
 
 const fieldClass =
-  "w-full rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 text-sm text-white placeholder:text-white/35 outline-none focus:border-amber-400/40";
-const labelClass = "mb-1.5 block text-sm text-white/70";
+  "w-full rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3.5 py-2.5 text-sm text-[#1a1612] placeholder:text-[#6b6158] outline-none focus:border-[#b8934a]/40";
+const labelClass = "mb-1.5 block text-sm text-[#1a1612]/70";
 
 export function AdminFieldLabel({
   children,
@@ -23,7 +23,7 @@ export function AdminFieldLabel({
   return (
     <label className={labelClass} htmlFor={htmlFor}>
       {children}
-      {required ? <span className="ml-0.5 text-amber-400">*</span> : null}
+      {required ? <span className="ml-0.5 text-[#b8934a]">*</span> : null}
     </label>
   );
 }
@@ -45,15 +45,15 @@ export function AdminTextArea(
 export function AdminOptionalSection({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.02]">
+    <div className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between px-3.5 py-2.5 text-left text-xs uppercase tracking-wider text-white/45 hover:text-white/70"
+        className="flex w-full items-center justify-between px-3.5 py-2.5 text-left text-xs uppercase tracking-wider text-[#1a1612]/40 hover:text-[#1a1612]/70"
       >
         Opsiyonel alanları {open ? "gizle ▴" : "göster ▾"}
       </button>
-      {open ? <div className="space-y-4 border-t border-white/10 px-3.5 py-4">{children}</div> : null}
+      {open ? <div className="space-y-4 border-t border-[#e8e0d4] px-3.5 py-4">{children}</div> : null}
     </div>
   );
 }
@@ -65,8 +65,8 @@ export function AdminRecentList({
 }) {
   if (items.length === 0) return null;
   return (
-    <div className="mb-5 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-3">
-      <p className="mb-2 text-[10px] font-medium uppercase tracking-[0.16em] text-white/40">
+    <div className="mb-5 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3.5 py-3">
+      <p className="mb-2 text-[10px] font-medium uppercase tracking-[0.16em] text-[#1a1612]/40">
         Son kayıtlar
       </p>
       <ul className="space-y-1.5">
@@ -75,9 +75,9 @@ export function AdminRecentList({
             key={item.id}
             className="flex items-baseline justify-between gap-3 text-sm"
           >
-            <span className="truncate text-white/80">{item.title || "—"}</span>
+            <span className="truncate text-[#1a1612]/80">{item.title || "—"}</span>
             {item.meta ? (
-              <span className="shrink-0 text-[11px] text-white/40">{item.meta}</span>
+              <span className="shrink-0 text-[11px] text-[#1a1612]/40">{item.meta}</span>
             ) : null}
           </li>
         ))}

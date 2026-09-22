@@ -58,7 +58,7 @@ export default async function AdminReadingLogPage() {
                 <p className="font-medium">
                   {book.title}
                   {book.is_featured_current && (
-                    <span className="ml-2 rounded bg-amber-500/20 px-1.5 py-0.5 text-xs font-normal text-amber-600 dark:text-amber-400">
+                    <span className="ml-2 rounded bg-amber-500/20 px-1.5 py-0.5 text-xs font-normal text-amber-600 dark:text-[#b8934a]">
                       Öne çıkan
                     </span>
                   )}

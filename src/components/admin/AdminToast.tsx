@@ -83,13 +83,13 @@ export function AdminToast() {
       role="alert"
     >
       <div
-        className={`flex items-center gap-3 rounded-2xl border px-5 py-3 shadow-lg backdrop-blur-xl ${
+        className={`flex items-center gap-3 rounded-2xl border px-5 py-3 shadow-lg ${
           errorMsg
-            ? "border-red-400/40 bg-red-950/80"
-            : "border-emerald-400/30 bg-emerald-950/80"
+            ? "border-red-200 bg-red-50"
+            : "border-emerald-200 bg-emerald-50"
         }`}
       >
-        <p className="text-sm font-medium text-white">
+        <p className={`text-sm font-medium ${errorMsg ? "text-red-900" : "text-emerald-900"}`}>
           {errorMsg ?? successMsg ?? DEFAULT_OK}
         </p>
       </div>

@@ -20,7 +20,7 @@ export default function AdminDashboardError({
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center px-4">
       <div className="max-w-lg rounded-xl border border-amber-500/30 bg-amber-500/5 p-6 text-center">
-        <h2 className="text-lg font-semibold text-amber-700 dark:text-amber-400">
+        <h2 className="text-lg font-semibold text-amber-700 dark:text-[#b8934a]">
           Admin paneli yüklenemedi
         </h2>
         {isServiceRoleMissing ? (

@@ -150,7 +150,7 @@ export function AdminAliskanliklarPanel({
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between gap-3">
-        <p className="text-sm text-white/50">
+        <p className="text-sm text-[#6b6158]">
           {new Date(today + "T12:00:00").toLocaleDateString("tr-TR", {
             weekday: "long",
             day: "numeric",
@@ -160,7 +160,7 @@ export function AdminAliskanliklarPanel({
         <button
           type="button"
           onClick={() => setShowNew((o) => !o)}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 px-3 py-2 text-xs text-white/70 hover:bg-white/5"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-[#e8e0d4] px-3 py-2 text-xs text-[#1a1612]/70 hover:bg-[#1a1612]/5"
         >
           <Plus className="h-3.5 w-3.5" />
           Yeni alışkanlık
@@ -170,20 +170,20 @@ export function AdminAliskanliklarPanel({
       {showNew ? (
         <form
           onSubmit={createHabit}
-          className="space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4"
+          className="space-y-3 rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-4"
         >
           <input
             value={ad}
             onChange={(e) => setAd(e.target.value)}
             placeholder="Örn: Sabah kitap oku"
             required
-            className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white outline-none"
+            className="w-full rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2.5 text-sm text-[#1a1612] outline-none"
           />
           <input
             value={aciklama}
             onChange={(e) => setAciklama(e.target.value)}
             placeholder="Açıklama (opsiyonel)"
-            className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white outline-none"
+            className="w-full rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2.5 text-sm text-[#1a1612] outline-none"
           />
           <button
             type="submit"
@@ -197,7 +197,7 @@ export function AdminAliskanliklarPanel({
 
       <ul className="space-y-2">
         {active.length === 0 ? (
-          <li className="text-sm text-white/40">Henüz alışkanlık yok.</li>
+          <li className="text-sm text-[#1a1612]/40">Henüz alışkanlık yok.</li>
         ) : (
           active.map((h) => {
             const done = doneToday.get(h.id) ?? false;
@@ -205,7 +205,7 @@ export function AdminAliskanliklarPanel({
             return (
               <li
                 key={h.id}
-                className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3"
+                className="flex items-center gap-3 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-4 py-3"
               >
                 <input
                   type="checkbox"
@@ -216,24 +216,24 @@ export function AdminAliskanliklarPanel({
                 <div className="min-w-0 flex-1">
                   <p
                     className={`text-sm ${
-                      done ? "text-white/45 line-through" : "text-white/90"
+                      done ? "text-[#1a1612]/40 line-through" : "text-[#1a1612]"
                     }`}
                   >
                     {h.ad}
                   </p>
                   {h.aciklama ? (
-                    <p className="text-[11px] text-white/35">{h.aciklama}</p>
+                    <p className="text-[11px] text-[#1a1612]/40">{h.aciklama}</p>
                   ) : null}
                 </div>
                 {streak > 0 ? (
-                  <span className="shrink-0 text-xs text-amber-400/90">
+                  <span className="shrink-0 text-xs text-[#b8934a]/90">
                     🔥 {streak} gün
                   </span>
                 ) : null}
                 <button
                   type="button"
                   onClick={() => void deactivate(h.id)}
-                  className="text-[10px] text-white/25 hover:text-white/50"
+                  className="text-[10px] text-[#1a1612]/25 hover:text-[#1a1612]/50"
                 >
                   Gizle
                 </button>
@@ -243,8 +243,8 @@ export function AdminAliskanliklarPanel({
         )}
       </ul>
 
-      <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-        <h3 className="mb-3 text-sm text-white/60">Son 90 gün — tamamlama</h3>
+      <section className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5">
+        <h3 className="mb-3 text-sm text-[#6b6158]">Son 90 gün — tamamlama</h3>
         <div className="flex flex-wrap gap-1">
           {heatmapDays.map((d) => (
             <div
@@ -255,7 +255,7 @@ export function AdminAliskanliklarPanel({
                 background:
                   d.ratio === 0
                     ? "rgba(255,255,255,0.06)"
-                    : `rgba(212,175,55,${0.25 + d.ratio * 0.7})`,
+                    : `rgba(184,147,74,${0.25 + d.ratio * 0.7})`,
               }}
             />
           ))}

@@ -10,11 +10,11 @@ export default async function AdminGunlukPage() {
   return (
     <div className="mx-auto max-w-4xl">
       <header className="mb-8">
-        <h1 className="flex items-center gap-2.5 text-2xl font-semibold text-white">
-          <BookOpen className="h-6 w-6 text-amber-400" />
+        <h1 className="flex items-center gap-2.5 text-2xl font-semibold text-[#1a1612]">
+          <BookOpen className="h-6 w-6 text-[#b8934a]" />
           Günlük
         </h1>
-        <p className="mt-2 text-sm text-white/50">
+        <p className="mt-2 text-sm text-[#6b6158]">
           Günde bir yazı — otomatik kayıt (2 sn).
         </p>
       </header>

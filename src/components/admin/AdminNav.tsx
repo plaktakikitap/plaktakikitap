@@ -148,7 +148,7 @@ export function AdminNav({
       return (
         <span
           title="Yakında"
-          className="flex cursor-not-allowed items-center gap-3 rounded-r-xl px-3 py-2.5 text-white/25"
+          className="flex cursor-not-allowed items-center gap-3 rounded-r-xl px-3 py-2.5 text-[#1a1612]/25"
         >
           <link.icon className="h-5 w-5 shrink-0" />
           <span
@@ -168,16 +168,16 @@ export function AdminNav({
         title={link.label}
         className={`group relative flex items-center gap-3 rounded-r-xl px-3 py-2.5 transition-all duration-200 ${
           active
-            ? "admin-nav-active text-amber-400"
-            : "text-white/60 hover:bg-white/5 hover:text-white/90"
+            ? "admin-nav-active text-[#b8934a]"
+            : "text-[#1a1612]/55 hover:bg-[#1a1612]/5 hover:text-[#1a1612]"
         }`}
       >
         {active && (
           <span
             className="absolute left-0 top-1/2 h-8 w-1 -translate-y-1/2 rounded-r-full"
             style={{
-              background: "linear-gradient(180deg, #d4af37, #f4d03f)",
-              boxShadow: "0 0 16px rgba(212, 175, 55, 0.6)",
+              background: "linear-gradient(180deg, #b8934a, #d4a85a)",
+              boxShadow: "0 0 12px rgba(184, 147, 74, 0.4)",
             }}
           />
         )}
@@ -195,11 +195,11 @@ export function AdminNav({
 
   const SidebarContent = () => (
     <>
-      <div className="flex items-center justify-between border-b border-white/10 px-2 py-3 lg:px-3 lg:py-4">
+      <div className="flex items-center justify-between border-b border-[#e8e0d4] px-2 py-3 lg:px-3 lg:py-4">
         <button
           type="button"
           onClick={() => setSidebarOpen((o) => !o)}
-          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-white/60 hover:bg-white/10 hover:text-white"
+          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-[#6b6158] hover:bg-[#1a1612]/5 hover:text-[#1a1612]"
           aria-label={sidebarOpen ? "Paneli daralt" : "Paneli genişlet"}
           title={sidebarOpen ? "Paneli daralt" : "Paneli genişlet"}
         >
@@ -212,7 +212,7 @@ export function AdminNav({
         <button
           type="button"
           onClick={() => setMenuOpen(false)}
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-white/60 hover:bg-white/10 hover:text-white lg:hidden"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-[#6b6158] hover:bg-[#1a1612]/5 hover:text-[#1a1612] lg:hidden"
           aria-label="Menüyü kapat"
         >
           <X className="h-5 w-5" />
@@ -222,9 +222,9 @@ export function AdminNav({
         {primaryLinks.map((link) => (
           <NavLink key={link.href} link={link} />
         ))}
-        <div className="my-2 border-t border-white/10 pt-2">
+        <div className="my-2 border-t border-[#e8e0d4] pt-2">
           <p
-            className={`mb-1 px-3 text-[9px] font-medium uppercase tracking-[0.14em] text-white/25 ${
+            className={`mb-1 px-3 text-[9px] font-medium uppercase tracking-[0.14em] text-[#1a1612]/30 ${
               sidebarOpen ? "hidden xl:block" : "hidden"
             }`}
           >
@@ -238,7 +238,7 @@ export function AdminNav({
           <button
             type="button"
             onClick={() => setMoreOpen((o) => !o)}
-            className="flex w-full items-center gap-3 rounded-r-xl px-3 py-2.5 text-white/45 hover:bg-white/5 hover:text-white/70"
+            className="flex w-full items-center gap-3 rounded-r-xl px-3 py-2.5 text-[#1a1612]/40 hover:bg-[#1a1612]/5 hover:text-[#1a1612]/60"
             title="Diğer"
           >
             <MoreHorizontal className="h-5 w-5 shrink-0" />
@@ -255,15 +255,15 @@ export function AdminNav({
             : null}
         </div>
       </nav>
-      <div className="border-t border-white/10 px-2 py-3">
+      <div className="border-t border-[#e8e0d4] px-2 py-3">
         {!isSimpleAuth && sidebarOpen && (
-          <p className="mb-2 truncate px-3 text-xs font-light text-white/50">
+          <p className="mb-2 truncate px-3 text-xs font-light text-[#6b6158]">
             {(user as User).email}
           </p>
         )}
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-3 rounded-r-xl px-3 py-2.5 text-sm font-light text-white/60 hover:bg-white/5 hover:text-white"
+          className="flex w-full items-center gap-3 rounded-r-xl px-3 py-2.5 text-sm font-light text-[#6b6158] hover:bg-[#1a1612]/5 hover:text-[#1a1612]"
         >
           <LogOut className="h-5 w-5 shrink-0" />
           <span className={sidebarOpen ? "hidden xl:inline" : "hidden"}>
@@ -277,31 +277,31 @@ export function AdminNav({
   return (
     <>
       <aside
-        className={`fixed left-0 top-0 z-50 hidden h-screen w-[72px] flex-col border-r border-white/10 bg-black/30 shadow-[4px_0_32px_-8px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-[width] duration-200 lg:flex ${
+        className={`fixed left-0 top-0 z-50 hidden h-screen w-[72px] flex-col border-r border-[#e8e0d4] bg-[#faf7f2] shadow-[4px_0_24px_-4px_rgba(26,22,18,0.08)] transition-[width] duration-200 lg:flex ${
           sidebarOpen ? "xl:w-[200px]" : ""
         }`}
       >
         <SidebarContent />
       </aside>
 
-      <div className="fixed left-0 top-0 z-50 flex h-14 w-full items-center justify-between border-b border-white/10 bg-black/40 px-4 backdrop-blur-xl lg:hidden">
+      <div className="fixed left-0 top-0 z-50 flex h-14 w-full items-center justify-between border-b border-[#e8e0d4] bg-[#faf7f2]/95 px-4 backdrop-blur-sm lg:hidden">
         <button
           type="button"
           onClick={() => setMenuOpen(true)}
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-white/80 hover:bg-white/10"
+          className="flex h-9 w-9 items-center justify-center rounded-lg text-[#1a1612]/70 hover:bg-[#1a1612]/8"
           aria-label="Menüyü aç"
         >
           <Menu className="h-5 w-5" />
         </button>
         <Link
           href="/secretgate/planner"
-          className="text-sm font-medium text-white/80 hover:text-white"
+          className="text-sm font-medium text-[#1a1612]/70 hover:text-[#1a1612]"
         >
           Admin
         </Link>
         <button
           onClick={handleLogout}
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-white/80 hover:bg-white/10"
+          className="flex h-9 w-9 items-center justify-center rounded-lg text-[#1a1612]/70 hover:bg-[#1a1612]/8"
           aria-label="Çıkış"
         >
           <LogOut className="h-5 w-5" />
@@ -309,7 +309,7 @@ export function AdminNav({
       </div>
 
       <div
-        className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity lg:hidden"
+        className="fixed inset-0 z-40 bg-[#1a1612]/40 backdrop-blur-sm transition-opacity lg:hidden"
         style={{
           opacity: menuOpen ? 1 : 0,
           pointerEvents: menuOpen ? "auto" : "none",
@@ -318,7 +318,7 @@ export function AdminNav({
         aria-hidden
       />
       <aside
-        className="fixed left-0 top-0 z-50 flex h-full w-[260px] max-w-[85vw] flex-col border-r border-white/10 bg-black/70 shadow-2xl backdrop-blur-xl transition-transform lg:hidden"
+        className="fixed left-0 top-0 z-50 flex h-full w-[260px] max-w-[85vw] flex-col border-r border-[#e8e0d4] bg-[#faf7f2] shadow-2xl transition-transform lg:hidden"
         style={{
           transform: menuOpen ? "translateX(0)" : "translateX(-100%)",
         }}

@@ -27,7 +27,7 @@ const NOT_KATS: { id: DilNotKategori; label: string }[] = [
 ];
 
 const inputClass =
-  "w-full rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 text-sm text-white placeholder:text-white/35 outline-none focus:border-amber-400/40";
+  "w-full rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3.5 py-2.5 text-sm text-[#1a1612] placeholder:text-[#6b6158] outline-none focus:border-[#b8934a]/40";
 
 type Tab = "banka" | "flashcard" | "notlar";
 
@@ -76,7 +76,7 @@ export function DilSayfasi({
         {stats.kelime_sayisi > 0 ? (
           <span className="ml-2 text-amber-200/60">(%{pct})</span>
         ) : null}
-        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-black/20">
+        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#f0ebe2]">
           <div
             className="h-full rounded-full bg-amber-400 transition-all"
             style={{ width: `${pct}%` }}
@@ -99,7 +99,7 @@ export function DilSayfasi({
             className={`rounded-xl px-4 py-2 text-sm transition ${
               tab === id
                 ? "bg-amber-500 text-black"
-                : "bg-white/5 text-white/55 hover:bg-white/10"
+                : "bg-[#1a1612]/5 text-[#6b6158] hover:bg-[#1a1612]/8"
             }`}
           >
             {label}
@@ -295,7 +295,7 @@ function KelimeBankasi({
     <div className="space-y-6">
       <form
         onSubmit={submit}
-        className="space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+        className="space-y-3 rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5"
       >
         {editing ? (
           <div className="flex items-center justify-between text-xs text-amber-300/80">
@@ -365,7 +365,7 @@ function KelimeBankasi({
               className={`rounded-lg px-2.5 py-1 text-xs ${
                 formZorluk === z.id
                   ? "bg-amber-500 text-black"
-                  : "bg-white/5 text-white/50"
+                  : "bg-[#1a1612]/5 text-[#6b6158]"
               }`}
             >
               {z.label}
@@ -380,8 +380,8 @@ function KelimeBankasi({
               onClick={() => toggleEtiket(e)}
               className={`rounded-lg px-2.5 py-1 text-xs ${
                 formEtiket.includes(e)
-                  ? "bg-white/20 text-white"
-                  : "bg-white/5 text-white/40"
+                  ? "bg-[#1a1612]/8 text-[#1a1612]"
+                  : "bg-[#1a1612]/5 text-[#1a1612]/40"
               }`}
             >
               {e}
@@ -456,39 +456,39 @@ function KelimeBankasi({
         {items.map((item) => (
           <li
             key={item.id}
-            className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3"
+            className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-4 py-3"
           >
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div className="min-w-0 flex-1">
                 {arapcaMod && item.arapca_yazi ? (
                   <p
-                    className={`text-2xl text-white ${amiriClassName}`}
+                    className={`text-2xl text-[#1a1612] ${amiriClassName}`}
                     dir="rtl"
                     lang="ar"
                   >
                     {item.arapca_yazi}
                   </p>
                 ) : null}
-                <p className="text-base font-medium text-white/95">
+                <p className="text-base font-medium text-[#1a1612]">
                   {item.kelime}
                 </p>
                 {item.telaffuz ? (
-                  <p className="text-xs text-white/40">{item.telaffuz}</p>
+                  <p className="text-xs text-[#1a1612]/40">{item.telaffuz}</p>
                 ) : null}
-                <p className="mt-0.5 text-sm text-white/70">{item.anlam}</p>
+                <p className="mt-0.5 text-sm text-[#1a1612]/70">{item.anlam}</p>
                 {item.ornek_cumle ? (
-                  <p className="mt-1 text-xs italic text-white/40">
+                  <p className="mt-1 text-xs italic text-[#1a1612]/40">
                     {item.ornek_cumle}
                   </p>
                 ) : null}
                 <div className="mt-2 flex flex-wrap gap-1.5">
-                  <span className="rounded bg-white/10 px-1.5 py-0.5 text-[10px] text-white/50">
+                  <span className="rounded bg-[#1a1612]/8 px-1.5 py-0.5 text-[10px] text-[#6b6158]">
                     {item.zorluk}
                   </span>
                   {item.etiket.map((e) => (
                     <span
                       key={e}
-                      className="rounded bg-white/10 px-1.5 py-0.5 text-[10px] text-white/50"
+                      className="rounded bg-[#1a1612]/8 px-1.5 py-0.5 text-[10px] text-[#6b6158]"
                     >
                       {e}
                     </span>
@@ -502,7 +502,7 @@ function KelimeBankasi({
                   className={`rounded-lg px-2.5 py-1 text-[11px] ${
                     item.ogrenildi
                       ? "bg-emerald-500/20 text-emerald-300"
-                      : "bg-white/5 text-white/50 hover:bg-white/10"
+                      : "bg-[#1a1612]/5 text-[#6b6158] hover:bg-[#1a1612]/8"
                   }`}
                 >
                   {item.ogrenildi ? "Öğrendim ✓" : "Öğrendim"}
@@ -510,18 +510,18 @@ function KelimeBankasi({
                 <button
                   type="button"
                   onClick={() => startEdit(item)}
-                  className="rounded p-1.5 text-white/35 hover:text-white"
+                  className="rounded p-1.5 text-[#1a1612]/40 hover:text-[#1a1612]"
                 >
                   <Pencil className="h-3.5 w-3.5" />
                 </button>
                 <button
                   type="button"
                   onClick={() => void remove(item.id)}
-                  className="rounded p-1.5 text-white/35 hover:text-red-400"
+                  className="rounded p-1.5 text-[#1a1612]/40 hover:text-red-400"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                 </button>
-                <span className="text-[10px] text-white/30">
+                <span className="text-[10px] text-[#6b6158]">
                   tekrar:{item.tekrar_sayisi}
                 </span>
               </div>
@@ -534,7 +534,7 @@ function KelimeBankasi({
         <button
           type="button"
           onClick={() => void fetchList(offset + 40, true)}
-          className="w-full rounded-xl border border-white/10 py-2.5 text-sm text-white/50 hover:bg-white/5"
+          className="w-full rounded-xl border border-[#e8e0d4] py-2.5 text-sm text-[#6b6158] hover:bg-[#1a1612]/5"
         >
           Daha fazla ({items.length}/{total})
         </button>
@@ -642,17 +642,17 @@ function FlashcardModu({
   }
 
   if (loading) {
-    return <p className="text-sm text-white/40">Kartlar yükleniyor…</p>;
+    return <p className="text-sm text-[#1a1612]/40">Kartlar yükleniyor…</p>;
   }
 
   if (deck.length === 0) {
     return (
-      <div className="rounded-2xl border border-white/10 p-8 text-center text-sm text-white/45">
+      <div className="rounded-2xl border border-[#e8e0d4] p-8 text-center text-sm text-[#1a1612]/40">
         Öğrenilecek kelime yok. Bankaya ekle veya filtreyi değiştir.
         <button
           type="button"
           onClick={() => void load(false)}
-          className="mt-4 block w-full text-amber-400 hover:underline"
+          className="mt-4 block w-full text-[#b8934a] hover:underline"
         >
           Tüm kelimelerle başla
         </button>
@@ -664,8 +664,8 @@ function FlashcardModu({
     const total = deck.length;
     const pct = total ? Math.round((known / total) * 100) : 0;
     return (
-      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center">
-        <p className="text-lg text-white/90">
+      <div className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-8 text-center">
+        <p className="text-lg text-[#1a1612]">
           {total} kart gözden geçirildi, {known} tanesini bildin (%{pct}).
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
@@ -680,7 +680,7 @@ function FlashcardModu({
             <button
               type="button"
               onClick={() => void load(false, missedIds)}
-              className="rounded-xl border border-white/15 px-4 py-2.5 text-sm text-white/70"
+              className="rounded-xl border border-[#e8e0d4] px-4 py-2.5 text-sm text-[#1a1612]/70"
             >
               Sadece bilemediklerimi tekrar et
             </button>
@@ -692,7 +692,7 @@ function FlashcardModu({
 
   return (
     <div className="mx-auto max-w-md space-y-4">
-      <p className="text-center text-xs text-white/40">
+      <p className="text-center text-xs text-[#1a1612]/40">
         {idx + 1} / {deck.length} · Boşluk = çevir
       </p>
       <button
@@ -702,7 +702,7 @@ function FlashcardModu({
         style={{ perspective: 1000 }}
       >
         <motion.div
-          className="relative min-h-[220px] w-full rounded-2xl border border-white/15 bg-gradient-to-br from-white/[0.08] to-white/[0.02] p-8 shadow-xl"
+          className="relative min-h-[220px] w-full rounded-2xl border border-[#e8e0d4] bg-gradient-to-br from-white/[0.08] to-white/[0.02] p-8 shadow-xl"
           animate={{ rotateY: flipped ? 180 : 0 }}
           transition={{ duration: 0.35 }}
           style={{ transformStyle: "preserve-3d" }}
@@ -720,19 +720,19 @@ function FlashcardModu({
           >
             {arapcaMod && card.arapca_yazi ? (
               <p
-                className={`text-4xl text-white ${amiriClassName}`}
+                className={`text-4xl text-[#1a1612] ${amiriClassName}`}
                 dir="rtl"
                 lang="ar"
               >
                 {card.arapca_yazi}
               </p>
             ) : (
-              <p className="text-3xl font-medium text-white">{card.kelime}</p>
+              <p className="text-3xl font-medium text-[#1a1612]">{card.kelime}</p>
             )}
             {arapcaMod && card.arapca_yazi ? (
-              <p className="text-sm text-white/50">{card.kelime}</p>
+              <p className="text-sm text-[#6b6158]">{card.kelime}</p>
             ) : null}
-            <span className="rounded bg-white/10 px-2 py-0.5 text-[10px] text-white/45">
+            <span className="rounded bg-[#1a1612]/8 px-2 py-0.5 text-[10px] text-[#1a1612]/40">
               {card.zorluk}
             </span>
           </div>
@@ -750,10 +750,10 @@ function FlashcardModu({
           >
             <p className="text-2xl font-medium text-amber-200">{card.anlam}</p>
             {card.ornek_cumle ? (
-              <p className="text-sm italic text-white/45">{card.ornek_cumle}</p>
+              <p className="text-sm italic text-[#1a1612]/40">{card.ornek_cumle}</p>
             ) : null}
             {arapcaMod && card.telaffuz ? (
-              <p className="text-sm text-white/50">{card.telaffuz}</p>
+              <p className="text-sm text-[#6b6158]">{card.telaffuz}</p>
             ) : null}
           </div>
         </motion.div>
@@ -763,7 +763,7 @@ function FlashcardModu({
         <button
           type="button"
           onClick={() => setFlipped(true)}
-          className="w-full rounded-xl border border-white/15 py-3 text-sm text-white/70"
+          className="w-full rounded-xl border border-[#e8e0d4] py-3 text-sm text-[#1a1612]/70"
         >
           Çevir
         </button>
@@ -876,7 +876,7 @@ function NotlarBolumu({
     <div className="space-y-6">
       <form
         onSubmit={submit}
-        className="space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+        className="space-y-3 rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5"
       >
         <input
           className={inputClass}
@@ -894,7 +894,7 @@ function NotlarBolumu({
               className={`rounded-lg px-2.5 py-1 text-xs ${
                 kategori === k.id
                   ? "bg-amber-500 text-black"
-                  : "bg-white/5 text-white/50"
+                  : "bg-[#1a1612]/5 text-[#6b6158]"
               }`}
             >
               {k.label}
@@ -922,7 +922,7 @@ function NotlarBolumu({
           type="button"
           onClick={() => setFilter("")}
           className={`rounded-lg px-2.5 py-1 text-xs ${
-            !filter ? "bg-white/20 text-white" : "bg-white/5 text-white/40"
+            !filter ? "bg-[#1a1612]/8 text-[#1a1612]" : "bg-[#1a1612]/5 text-[#1a1612]/40"
           }`}
         >
           Hepsi
@@ -934,8 +934,8 @@ function NotlarBolumu({
             onClick={() => setFilter(k.id)}
             className={`rounded-lg px-2.5 py-1 text-xs ${
               filter === k.id
-                ? "bg-white/20 text-white"
-                : "bg-white/5 text-white/40"
+                ? "bg-[#1a1612]/8 text-[#1a1612]"
+                : "bg-[#1a1612]/5 text-[#1a1612]/40"
             }`}
           >
             {k.label}
@@ -949,7 +949,7 @@ function NotlarBolumu({
           return (
             <li
               key={n.id}
-              className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3"
+              className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-4 py-3"
             >
               <button
                 type="button"
@@ -957,21 +957,21 @@ function NotlarBolumu({
                 className="w-full text-left"
               >
                 <div className="flex items-center justify-between gap-2">
-                  <p className="text-sm font-medium text-white/90">{n.baslik}</p>
-                  <span className="text-[10px] text-white/35">
+                  <p className="text-sm font-medium text-[#1a1612]">{n.baslik}</p>
+                  <span className="text-[10px] text-[#1a1612]/40">
                     {n.kategori ?? "genel"}
                   </span>
                 </div>
                 {!open ? (
-                  <p className="mt-1 line-clamp-2 text-xs text-white/45">
+                  <p className="mt-1 line-clamp-2 text-xs text-[#1a1612]/40">
                     {n.icerik.slice(0, 100)}
                     {n.icerik.length > 100 ? "…" : ""}
                   </p>
                 ) : null}
               </button>
               {open ? (
-                <div className="mt-3 space-y-3 border-t border-white/10 pt-3">
-                  <p className="whitespace-pre-wrap text-sm leading-relaxed text-white/75">
+                <div className="mt-3 space-y-3 border-t border-[#e8e0d4] pt-3">
+                  <p className="whitespace-pre-wrap text-sm leading-relaxed text-[#1a1612]/75">
                     {n.icerik}
                   </p>
                   <div className="flex gap-2">
@@ -983,7 +983,7 @@ function NotlarBolumu({
                         setIcerik(n.icerik);
                         setKategori(n.kategori ?? "genel");
                       }}
-                      className="text-xs text-amber-400/80"
+                      className="text-xs text-[#b8934a]/80"
                     >
                       Düzenle
                     </button>

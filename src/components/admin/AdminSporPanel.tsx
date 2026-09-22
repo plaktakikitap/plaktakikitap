@@ -138,7 +138,7 @@ export function AdminSporPanel({
     <div className="space-y-8">
       <form
         onSubmit={handleSubmit}
-        className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+        className="space-y-4 rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5"
       >
         <div className="flex flex-wrap gap-2">
           {AKTIVITELER.map((a) => (
@@ -149,7 +149,7 @@ export function AdminSporPanel({
               className={`rounded-xl px-3 py-1.5 text-xs transition ${
                 aktivite === a
                   ? "bg-amber-500 text-black"
-                  : "bg-white/5 text-white/55 hover:bg-white/10"
+                  : "bg-[#1a1612]/5 text-[#6b6158] hover:bg-[#1a1612]/8"
               }`}
             >
               {a}
@@ -158,28 +158,28 @@ export function AdminSporPanel({
         </div>
         <div className="grid gap-3 sm:grid-cols-3">
           <div>
-            <label className="mb-1 block text-xs text-white/50">Süre (dk)</label>
+            <label className="mb-1 block text-xs text-[#6b6158]">Süre (dk)</label>
             <input
               type="number"
               min={1}
               value={sure}
               onChange={(e) => setSure(e.target.value)}
-              className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white outline-none"
+              className="w-full rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2.5 text-sm text-[#1a1612] outline-none"
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs text-white/50">Mesafe (km)</label>
+            <label className="mb-1 block text-xs text-[#6b6158]">Mesafe (km)</label>
             <input
               type="number"
               min={0}
               step={0.1}
               value={mesafe}
               onChange={(e) => setMesafe(e.target.value)}
-              className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white outline-none"
+              className="w-full rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2.5 text-sm text-[#1a1612] outline-none"
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs text-white/50">Enerji</label>
+            <label className="mb-1 block text-xs text-[#6b6158]">Enerji</label>
             <div className="flex gap-1 pt-1">
               {[1, 2, 3, 4, 5].map((n) => (
                 <button
@@ -191,7 +191,7 @@ export function AdminSporPanel({
                 >
                   <Zap
                     className={`h-5 w-5 ${
-                      n <= enerji ? "fill-amber-400 text-amber-400" : "text-white/20"
+                      n <= enerji ? "fill-amber-400 text-[#b8934a]" : "text-[#1a1612]/20"
                     }`}
                   />
                 </button>
@@ -203,7 +203,7 @@ export function AdminSporPanel({
           value={notlar}
           onChange={(e) => setNotlar(e.target.value)}
           placeholder="Not (opsiyonel)"
-          className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white outline-none"
+          className="w-full rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2.5 text-sm text-[#1a1612] outline-none"
         />
         <button
           type="submit"
@@ -222,18 +222,18 @@ export function AdminSporPanel({
         ].map((s) => (
           <div
             key={s.label}
-            className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4"
+            className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 px-4 py-4"
           >
-            <p className="text-[10px] uppercase tracking-wider text-white/40">
+            <p className="text-[10px] uppercase tracking-wider text-[#1a1612]/40">
               {s.label}
             </p>
-            <p className="mt-1 text-xl font-semibold text-white/90">{s.value}</p>
+            <p className="mt-1 text-xl font-semibold text-[#1a1612]">{s.value}</p>
           </div>
         ))}
       </div>
 
-      <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-        <h3 className="mb-3 text-sm text-white/60">Son 90 gün</h3>
+      <section className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5">
+        <h3 className="mb-3 text-sm text-[#6b6158]">Son 90 gün</h3>
         <div className="flex flex-wrap gap-1">
           {heatmap.map((c) => (
             <div
@@ -245,10 +245,10 @@ export function AdminSporPanel({
                   c.count === 0
                     ? "rgba(255,255,255,0.06)"
                     : c.count === 1
-                      ? "rgba(212,175,55,0.45)"
+                      ? "rgba(184,147,74,0.45)"
                       : c.count === 2
-                        ? "rgba(212,175,55,0.7)"
-                        : "rgba(212,175,55,0.95)",
+                        ? "rgba(184,147,74,0.7)"
+                        : "rgba(184,147,74,0.95)",
               }}
             />
           ))}
@@ -259,20 +259,20 @@ export function AdminSporPanel({
         {items.slice(0, 15).map((i) => (
           <li
             key={i.id}
-            className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3"
+            className="flex items-center justify-between gap-3 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-4 py-3"
           >
             <div>
-              <p className="text-sm text-white/90">
+              <p className="text-sm text-[#1a1612]">
                 {i.aktivite}
                 {i.sure_dakika ? ` · ${i.sure_dakika} dk` : ""}
                 {i.mesafe_km ? ` · ${i.mesafe_km} km` : ""}
               </p>
-              <p className="text-[11px] text-white/40">{i.tarih}</p>
+              <p className="text-[11px] text-[#1a1612]/40">{i.tarih}</p>
             </div>
             <button
               type="button"
               onClick={() => void remove(i.id)}
-              className="text-white/35 hover:text-red-400"
+              className="text-[#1a1612]/40 hover:text-red-400"
             >
               <Trash2 className="h-4 w-4" />
             </button>

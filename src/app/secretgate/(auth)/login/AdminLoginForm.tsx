@@ -54,7 +54,7 @@ export function AdminLoginForm() {
       <div>
         <label
           htmlFor="email"
-          className="block text-sm font-medium text-white/90"
+          className="block text-sm font-medium text-[#1a1612]"
         >
           E-posta
         </label>
@@ -66,13 +66,13 @@ export function AdminLoginForm() {
           required
           autoComplete="email"
           placeholder="eymenyalaz@hotmail.com"
-          className="mt-1 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/30"
+          className="mt-1 w-full rounded-xl border border-[#e8e0d4] bg-[#f0ebe2] px-4 py-3 text-[#1a1612] placeholder:text-[#6b6158] outline-none focus:ring-2 focus:ring-[#b8934a]/30"
         />
       </div>
       <div>
         <label
           htmlFor="password"
-          className="block text-sm font-medium text-white/90"
+          className="block text-sm font-medium text-[#1a1612]"
         >
           Şifre
         </label>
@@ -84,18 +84,18 @@ export function AdminLoginForm() {
           required
           autoComplete="current-password"
           placeholder="••••••••"
-          className="mt-1 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/30"
+          className="mt-1 w-full rounded-xl border border-[#e8e0d4] bg-[#f0ebe2] px-4 py-3 text-[#1a1612] placeholder:text-[#6b6158] outline-none focus:ring-2 focus:ring-[#b8934a]/30"
         />
       </div>
       {error && (
-        <p className="text-sm text-red-400" role="alert">
+        <p className="text-sm text-red-700" role="alert">
           {error}
         </p>
       )}
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-xl bg-white py-3 font-medium text-black hover:opacity-90 disabled:opacity-50"
+        className="w-full rounded-xl bg-[#b8934a] py-3 font-medium text-[#faf7f2] hover:opacity-90 disabled:opacity-50"
       >
         {loading ? "Giriş yapılıyor..." : "Giriş yap"}
       </button>

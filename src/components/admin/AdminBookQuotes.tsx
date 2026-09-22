@@ -81,12 +81,12 @@ export function AdminBookQuotes({ bookId }: AdminBookQuotesProps) {
   }
 
   return (
-    <section className="mt-10 rounded-xl border border-white/10 bg-white/[0.03] p-5">
+    <section className="mt-10 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="flex items-center gap-2 text-sm font-semibold text-white/90">
+        <h2 className="flex items-center gap-2 text-sm font-semibold text-[#1a1612]">
           <QuoteIcon className="h-4 w-4 text-[var(--accent)]" aria-hidden />
           Alıntılar
-          <span className="font-normal text-white/40">({items.length})</span>
+          <span className="font-normal text-[#1a1612]/40">({items.length})</span>
         </h2>
         <button
           type="button"
@@ -101,18 +101,18 @@ export function AdminBookQuotes({ bookId }: AdminBookQuotesProps) {
       {open ? (
         <form onSubmit={handleAdd} className="mt-4 space-y-3">
           <div>
-            <label className="mb-1 block text-xs text-white/60">Alıntı metni</label>
+            <label className="mb-1 block text-xs text-[#6b6158]">Alıntı metni</label>
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
               rows={3}
               required
               placeholder="Kitaptan bir cümle…"
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/35 focus:border-[var(--accent)]/50 focus:outline-none"
+              className="w-full rounded-lg border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2 text-sm text-[#1a1612] placeholder:text-[#6b6158] focus:border-[var(--accent)]/50 focus:outline-none"
             />
           </div>
           <div className="max-w-[140px]">
-            <label className="mb-1 block text-xs text-white/60">
+            <label className="mb-1 block text-xs text-[#6b6158]">
               Sayfa (opsiyonel)
             </label>
             <input
@@ -121,7 +121,7 @@ export function AdminBookQuotes({ bookId }: AdminBookQuotesProps) {
               value={pageNumber}
               onChange={(e) => setPageNumber(e.target.value)}
               placeholder="örn. 42"
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/35 focus:border-[var(--accent)]/50 focus:outline-none"
+              className="w-full rounded-lg border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2 text-sm text-[#1a1612] placeholder:text-[#6b6158] focus:border-[var(--accent)]/50 focus:outline-none"
             />
           </div>
           <div className="flex gap-2">
@@ -138,7 +138,7 @@ export function AdminBookQuotes({ bookId }: AdminBookQuotesProps) {
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-lg border border-white/15 px-3 py-1.5 text-xs text-white/70 hover:bg-white/5"
+              className="rounded-lg border border-[#e8e0d4] px-3 py-1.5 text-xs text-[#1a1612]/70 hover:bg-[#1a1612]/5"
             >
               Vazgeç
             </button>
@@ -149,25 +149,25 @@ export function AdminBookQuotes({ bookId }: AdminBookQuotesProps) {
       {error ? <p className="mt-3 text-xs text-red-400">{error}</p> : null}
 
       {loading ? (
-        <p className="mt-4 flex items-center gap-2 text-xs text-white/45">
+        <p className="mt-4 flex items-center gap-2 text-xs text-[#1a1612]/40">
           <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
           Yükleniyor…
         </p>
       ) : items.length === 0 ? (
-        <p className="mt-4 text-xs text-white/40">Henüz alıntı yok.</p>
+        <p className="mt-4 text-xs text-[#1a1612]/40">Henüz alıntı yok.</p>
       ) : (
         <ul className="mt-4 space-y-3">
           {items.map((q) => (
             <li
               key={q.id}
-              className="flex gap-3 rounded-lg border border-white/10 bg-black/20 px-3 py-2.5"
+              className="flex gap-3 rounded-lg border border-[#e8e0d4] bg-[#f0ebe2] px-3 py-2.5"
             >
-              <p className="min-w-0 flex-1 text-sm leading-relaxed text-white/85">
-                <span className="text-white/35">“</span>
+              <p className="min-w-0 flex-1 text-sm leading-relaxed text-[#1a1612]/85">
+                <span className="text-[#1a1612]/40">“</span>
                 {q.text}
-                <span className="text-white/35">”</span>
+                <span className="text-[#1a1612]/40">”</span>
                 {q.page_number != null ? (
-                  <span className="ml-2 text-xs text-white/40">
+                  <span className="ml-2 text-xs text-[#1a1612]/40">
                     s. {q.page_number}
                   </span>
                 ) : null}
@@ -175,7 +175,7 @@ export function AdminBookQuotes({ bookId }: AdminBookQuotesProps) {
               <button
                 type="button"
                 onClick={() => void handleDelete(q.id)}
-                className="shrink-0 rounded p-1.5 text-white/35 hover:bg-white/5 hover:text-red-300"
+                className="shrink-0 rounded p-1.5 text-[#1a1612]/40 hover:bg-[#1a1612]/5 hover:text-red-300"
                 aria-label="Alıntıyı sil"
               >
                 <Trash2 className="h-3.5 w-3.5" />

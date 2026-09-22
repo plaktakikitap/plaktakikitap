@@ -110,7 +110,7 @@ export function QuickFilmSeriesForm({
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6"
+      className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5 sm:p-6"
     >
       <AdminRecentList items={recent.slice(0, 5)} />
 
@@ -140,7 +140,7 @@ export function QuickFilmSeriesForm({
             ).map(([value, label]) => (
               <label
                 key={value}
-                className="flex cursor-pointer items-center gap-2 text-sm text-white/80"
+                className="flex cursor-pointer items-center gap-2 text-sm text-[#1a1612]/80"
               >
                 <input
                   type="radio"
@@ -181,7 +181,7 @@ export function QuickFilmSeriesForm({
             onChange={(e) => setRating(parseFloat(e.target.value))}
             className="w-full accent-amber-500"
           />
-          <div className="mt-0.5 flex justify-between text-[10px] text-white/35">
+          <div className="mt-0.5 flex justify-between text-[10px] text-[#1a1612]/40">
             <span>0</span>
             <span>5</span>
           </div>

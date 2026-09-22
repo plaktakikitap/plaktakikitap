@@ -12,7 +12,7 @@ const COLUMNS: { id: Oncelik; label: string; accent: string }[] = [
   {
     id: "bekleyebilir",
     label: "Bekleyebilir",
-    accent: "border-white/20 text-white/60",
+    accent: "border-[#d4c9bb] text-[#6b6158]",
   },
 ];
 
@@ -177,19 +177,19 @@ export function AdminYapilacaklarPanel({
     <div className="space-y-6">
       <form
         onSubmit={addTask}
-        className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-3 sm:flex-row sm:items-center"
+        className="flex flex-col gap-2 rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-3 sm:flex-row sm:items-center"
       >
         <input
           value={baslik}
           onChange={(e) => setBaslik(e.target.value)}
           placeholder="Görev başlığı yaz…"
-          className="min-w-0 flex-1 rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 text-sm text-white placeholder:text-white/35 outline-none focus:border-amber-400/40"
+          className="min-w-0 flex-1 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3.5 py-2.5 text-sm text-[#1a1612] placeholder:text-[#6b6158] outline-none focus:border-[#b8934a]/40"
           autoFocus
         />
         <select
           value={oncelik}
           onChange={(e) => setOncelik(e.target.value as Oncelik)}
-          className="rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white outline-none"
+          className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2.5 text-sm text-[#1a1612] outline-none"
         >
           <option value="acil">Acil</option>
           <option value="normal">Normal</option>
@@ -199,7 +199,7 @@ export function AdminYapilacaklarPanel({
           type="date"
           value={bitis}
           onChange={(e) => setBitis(e.target.value)}
-          className="rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white outline-none"
+          className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2.5 text-sm text-[#1a1612] outline-none"
           title="Bitiş tarihi (opsiyonel)"
         />
         <button
@@ -215,31 +215,31 @@ export function AdminYapilacaklarPanel({
         {COLUMNS.map((col) => (
           <section
             key={col.id}
-            className={`rounded-2xl border bg-white/[0.02] ${col.accent.split(" ")[0]}`}
+            className={`rounded-2xl border bg-[#1a1612]/5 ${col.accent.split(" ")[0]}`}
           >
-            <header className={`border-b border-white/10 px-4 py-3 text-sm font-medium ${col.accent}`}>
+            <header className={`border-b border-[#e8e0d4] px-4 py-3 text-sm font-medium ${col.accent}`}>
               {col.label}
-              <span className="ml-2 text-xs font-normal text-white/35">
+              <span className="ml-2 text-xs font-normal text-[#1a1612]/40">
                 {grouped[col.id].filter((x) => !x.tamamlandi).length}
               </span>
             </header>
             <ul className="space-y-2 p-3 min-h-[120px]">
               {grouped[col.id].length === 0 ? (
-                <li className="px-1 py-4 text-center text-xs text-white/30">
+                <li className="px-1 py-4 text-center text-xs text-[#6b6158]">
                   Boş
                 </li>
               ) : (
                 grouped[col.id].map((item) => (
                   <li
                     key={item.id}
-                    className="rounded-xl border border-white/10 bg-black/20 px-3 py-2.5"
+                    className="rounded-xl border border-[#e8e0d4] bg-[#f0ebe2] px-3 py-2.5"
                   >
                     {editingId === item.id ? (
                       <div className="space-y-2">
                         <input
                           value={editBaslik}
                           onChange={(e) => setEditBaslik(e.target.value)}
-                          className="w-full rounded-lg border border-white/15 bg-white/5 px-2.5 py-1.5 text-sm text-white outline-none"
+                          className="w-full rounded-lg border border-[#e8e0d4] bg-[#1a1612]/5 px-2.5 py-1.5 text-sm text-[#1a1612] outline-none"
                           autoFocus
                           onKeyDown={(e) => {
                             if (e.key === "Enter") void saveEdit(item.id);
@@ -250,7 +250,7 @@ export function AdminYapilacaklarPanel({
                           type="date"
                           value={editBitis}
                           onChange={(e) => setEditBitis(e.target.value)}
-                          className="w-full rounded-lg border border-white/15 bg-white/5 px-2.5 py-1.5 text-sm text-white outline-none"
+                          className="w-full rounded-lg border border-[#e8e0d4] bg-[#1a1612]/5 px-2.5 py-1.5 text-sm text-[#1a1612] outline-none"
                         />
                         <div className="flex gap-2">
                           <button
@@ -263,7 +263,7 @@ export function AdminYapilacaklarPanel({
                           <button
                             type="button"
                             onClick={() => setEditingId(null)}
-                            className="rounded-lg px-2 py-1 text-xs text-white/50"
+                            className="rounded-lg px-2 py-1 text-xs text-[#6b6158]"
                           >
                             <X className="h-3.5 w-3.5" />
                           </button>
@@ -283,8 +283,8 @@ export function AdminYapilacaklarPanel({
                             onClick={() => startEdit(item)}
                             className={`block w-full text-left text-sm ${
                               item.tamamlandi
-                                ? "text-white/35 line-through"
-                                : "text-white/90"
+                                ? "text-[#1a1612]/40 line-through"
+                                : "text-[#1a1612]"
                             }`}
                           >
                             {item.baslik}
@@ -301,7 +301,7 @@ export function AdminYapilacaklarPanel({
                                   key={c.id}
                                   type="button"
                                   onClick={() => void changeOncelik(item, c.id)}
-                                  className="rounded px-1.5 py-0.5 text-[10px] text-white/30 hover:bg-white/10 hover:text-white/60"
+                                  className="rounded px-1.5 py-0.5 text-[10px] text-[#6b6158] hover:bg-[#1a1612]/8 hover:text-[#6b6158]"
                                   title={`${c.label}e taşı`}
                                 >
                                   → {c.label}
@@ -314,7 +314,7 @@ export function AdminYapilacaklarPanel({
                           <button
                             type="button"
                             onClick={() => startEdit(item)}
-                            className="rounded p-1 text-white/35 hover:text-white"
+                            className="rounded p-1 text-[#1a1612]/40 hover:text-[#1a1612]"
                             aria-label="Düzenle"
                           >
                             <Pencil className="h-3.5 w-3.5" />
@@ -322,7 +322,7 @@ export function AdminYapilacaklarPanel({
                           <button
                             type="button"
                             onClick={() => void remove(item.id)}
-                            className="rounded p-1 text-white/35 hover:text-red-400"
+                            className="rounded p-1 text-[#1a1612]/40 hover:text-red-400"
                             aria-label="Sil"
                           >
                             <Trash2 className="h-3.5 w-3.5" />

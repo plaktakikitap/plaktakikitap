@@ -239,8 +239,8 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
               onClick={() => setTab(t.id)}
               className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 tab === t.id
-                  ? "bg-[rgba(212,175,55,0.15)] text-[#d4af37] shadow-[0_0_20px_rgba(212,175,55,0.12)]"
-                  : "text-white/50 hover:bg-white/[0.04] hover:text-white/80"
+                  ? "bg-[rgba(184,147,74,0.15)] text-[#b8934a] shadow-[0_0_20px_rgba(184,147,74,0.12)]"
+                  : "text-[#6b6158] hover:bg-[#1a1612]/5 hover:text-[#1a1612]/80"
               }`}
             >
               {t.label}
@@ -251,13 +251,13 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
 
       {tab === "cv" ? (
         <section className="admin-bento-card p-6 sm:p-8">
-          <div className="mb-6 flex items-center gap-3 border-b border-white/[0.06] pb-5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(212,175,55,0.12)] text-[#d4af37]">
+          <div className="mb-6 flex items-center gap-3 border-b border-[#e8e0d4] pb-5">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(184,147,74,0.12)] text-[#b8934a]">
               <FileText className="h-5 w-5" />
             </div>
             <div>
               <h3 className="admin-section-title">CV PDF</h3>
-              <p className="mt-0.5 text-sm text-white/45">
+              <p className="mt-0.5 text-sm text-[#1a1612]/40">
                 Bilgisayarınızdan yükleyin veya bir link girin
               </p>
             </div>
@@ -276,16 +276,16 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
                 type="button"
                 onClick={() => cvPdfInputRef.current?.click()}
                 disabled={loading || cvPdfUploading}
-                className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-white/20 bg-white/[0.04] px-4 py-8 text-sm text-white/65 transition-colors hover:border-[rgba(212,175,55,0.35)] hover:bg-white/[0.06] hover:text-white disabled:opacity-50"
+                className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-[#d4c9bb] bg-[#1a1612]/5 px-4 py-8 text-sm text-[#1a1612]/65 transition-colors hover:border-[rgba(184,147,74,0.35)] hover:bg-[#1a1612]/5 hover:text-[#1a1612] disabled:opacity-50"
               >
                 {cvPdfUploading ? (
                   <>
-                    <Loader2 className="h-6 w-6 animate-spin text-[#d4af37]" />
+                    <Loader2 className="h-6 w-6 animate-spin text-[#b8934a]" />
                     PDF yükleniyor…
                   </>
                 ) : (
                   <>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(212,175,55,0.12)] text-[#d4af37]">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(184,147,74,0.12)] text-[#b8934a]">
                       <Upload className="h-6 w-6" />
                     </div>
                     Bilgisayardan CV PDF seçin
@@ -296,13 +296,13 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
             </div>
 
             {cvUrl ? (
-              <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3">
-                <p className="text-xs font-medium uppercase tracking-wide text-white/40">Aktif CV</p>
+              <div className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-4 py-3">
+                <p className="text-xs font-medium uppercase tracking-wide text-[#1a1612]/40">Aktif CV</p>
                 <a
                   href={cvDisplayHref(cvUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-1 inline-flex items-center gap-1.5 break-all text-sm text-[#d4af37] hover:text-[#f4d03f]"
+                  className="mt-1 inline-flex items-center gap-1.5 break-all text-sm text-[#b8934a] hover:text-[#f4d03f]"
                 >
                   {cvDisplayLabel(cvUrl)}
                   <ExternalLink className="h-3.5 w-3.5 shrink-0 opacity-70" />
@@ -312,10 +312,10 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center" aria-hidden>
-                <div className="w-full border-t border-white/[0.08]" />
+                <div className="w-full border-t border-[#e8e0d4]" />
               </div>
               <div className="relative flex justify-center">
-                <span className="bg-transparent px-3 text-xs uppercase tracking-wide text-white/35">
+                <span className="bg-transparent px-3 text-xs uppercase tracking-wide text-[#1a1612]/40">
                   veya link girin
                 </span>
               </div>
@@ -351,34 +351,34 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
           <section className="admin-bento-card p-5 sm:p-6">
             <div className="mb-4 flex items-center justify-between gap-3">
               <h3 className="admin-section-title">{activeTabLabel}</h3>
-              <span className="rounded-full bg-white/[0.06] px-2.5 py-0.5 text-xs text-white/45">
+              <span className="rounded-full bg-[#1a1612]/5 px-2.5 py-0.5 text-xs text-[#1a1612]/40">
                 {filtered.length} öğe
               </span>
             </div>
 
             {filtered.length === 0 ? (
-              <p className="text-sm text-white/45">Bu sekmede henüz içerik yok.</p>
+              <p className="text-sm text-[#1a1612]/40">Bu sekmede henüz içerik yok.</p>
             ) : (
               <ul className="space-y-2">
                 {filtered.map((item) => (
                   <li
                     key={item.id}
-                    className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-3 py-3 sm:px-4"
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-3 sm:px-4"
                   >
                     <div className="flex min-w-0 flex-1 items-center gap-3">
-                      <GripVertical className="hidden h-4 w-4 shrink-0 text-white/25 sm:block" aria-hidden />
+                      <GripVertical className="hidden h-4 w-4 shrink-0 text-[#1a1612]/25 sm:block" aria-hidden />
                       <div className="min-w-0">
-                        <p className="truncate font-medium text-white/90">{item.title}</p>
+                        <p className="truncate font-medium text-[#1a1612]">{item.title}</p>
                         {item.subtitle ? (
-                          <p className="mt-0.5 truncate text-xs text-white/45">{item.subtitle}</p>
+                          <p className="mt-0.5 truncate text-xs text-[#1a1612]/40">{item.subtitle}</p>
                         ) : null}
                         <div className="mt-1 flex flex-wrap gap-1.5">
                           {item.is_featured ? (
-                            <span className="rounded-md bg-[rgba(212,175,55,0.12)] px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-[#d4af37]">
+                            <span className="rounded-md bg-[rgba(184,147,74,0.12)] px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-[#b8934a]">
                               Öne çıkan
                             </span>
                           ) : null}
-                          <span className="rounded-md bg-white/[0.06] px-1.5 py-0.5 text-[10px] text-white/40">
+                          <span className="rounded-md bg-[#1a1612]/5 px-1.5 py-0.5 text-[10px] text-[#1a1612]/40">
                             {VISIBILITY_OPTIONS.find((v) => v.value === item.visibility)?.label ??
                               item.visibility}
                           </span>
@@ -390,7 +390,7 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
                         <label className="sr-only" htmlFor={`sort-${item.id}`}>
                           Sıra
                         </label>
-                        <span className="text-[10px] uppercase tracking-wide text-white/35">Sıra</span>
+                        <span className="text-[10px] uppercase tracking-wide text-[#1a1612]/40">Sıra</span>
                         <input
                           id={`sort-${item.id}`}
                           type="number"
@@ -405,7 +405,7 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
                       <button
                         type="button"
                         onClick={() => handleDelete(item.id)}
-                        className="rounded-lg p-2 text-white/50 transition-colors hover:bg-red-500/15 hover:text-red-400"
+                        className="rounded-lg p-2 text-[#6b6158] transition-colors hover:bg-red-500/15 hover:text-red-400"
                         disabled={loading}
                         aria-label="Sil"
                       >
@@ -419,13 +419,13 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
           </section>
 
           <form onSubmit={handleCreate} className="admin-bento-card p-6 sm:p-8">
-            <div className="mb-6 flex items-center gap-3 border-b border-white/[0.06] pb-5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(212,175,55,0.12)] text-[#d4af37]">
+            <div className="mb-6 flex items-center gap-3 border-b border-[#e8e0d4] pb-5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(184,147,74,0.12)] text-[#b8934a]">
                 <Plus className="h-5 w-5" />
               </div>
               <div>
                 <h3 className="admin-section-title">Yeni {activeTabLabel.toLowerCase()} ekle</h3>
-                <p className="mt-0.5 text-sm text-white/45">Formu doldurup kaydedin</p>
+                <p className="mt-0.5 text-sm text-[#1a1612]/40">Formu doldurup kaydedin</p>
               </div>
             </div>
 
@@ -515,12 +515,12 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
                       type="button"
                       onClick={() => pdfInputRef.current?.click()}
                       disabled={loading || pdfUploading}
-                      className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-white/20 bg-white/[0.04] px-4 py-4 text-sm text-white/65 transition-colors hover:border-[rgba(212,175,55,0.35)] hover:bg-white/[0.06] hover:text-white disabled:opacity-50"
+                      className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-[#d4c9bb] bg-[#1a1612]/5 px-4 py-4 text-sm text-[#1a1612]/65 transition-colors hover:border-[rgba(184,147,74,0.35)] hover:bg-[#1a1612]/5 hover:text-[#1a1612] disabled:opacity-50"
                     >
                       {pdfUploading ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
                       ) : (
-                        <FileText className="h-4 w-4 text-[#d4af37]" />
+                        <FileText className="h-4 w-4 text-[#b8934a]" />
                       )}
                       {pdfUploading
                         ? "Yükleniyor…"
@@ -648,12 +648,12 @@ export function AdminWorksItemsPanel({ items: initialItems, cvDownloadUrl }: Pro
                 />
               </div>
 
-              <div className="flex flex-wrap items-center gap-5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
-                <label className="flex cursor-pointer items-center gap-2.5 text-sm text-white/70">
+              <div className="flex flex-wrap items-center gap-5 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-4 py-3">
+                <label className="flex cursor-pointer items-center gap-2.5 text-sm text-[#1a1612]/70">
                   <input
                     name="featured"
                     type="checkbox"
-                    className="h-4 w-4 rounded border-white/20 bg-white text-[#d4af37] focus:ring-[rgba(212,175,55,0.5)]"
+                    className="h-4 w-4 rounded border-[#d4c9bb] bg-white text-[#b8934a] focus:ring-[rgba(184,147,74,0.5)]"
                   />
                   Öne çıkan
                 </label>

@@ -38,22 +38,22 @@ export default async function AdminFilmDiziPage() {
       <header className="mb-8">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h1 className="flex items-center gap-2.5 text-2xl font-semibold text-white">
-              <Film className="h-6 w-6 text-amber-400" />
+            <h1 className="flex items-center gap-2.5 text-2xl font-semibold text-[#1a1612]">
+              <Film className="h-6 w-6 text-[#b8934a]" />
               Film & Dizi
             </h1>
-            <p className="mt-2 text-sm text-white/50">
+            <p className="mt-2 text-sm text-[#6b6158]">
               Hızlı ekleme — detaylı formlar{" "}
               <Link
                 href="/secretgate/movie-watch-log"
-                className="text-amber-400/80 underline-offset-2 hover:underline"
+                className="text-[#b8934a]/80 underline-offset-2 hover:underline"
               >
                 Film
               </Link>
               {" / "}
               <Link
                 href="/secretgate/series-watch-log"
-                className="text-amber-400/80 underline-offset-2 hover:underline"
+                className="text-[#b8934a]/80 underline-offset-2 hover:underline"
               >
                 Dizi
               </Link>

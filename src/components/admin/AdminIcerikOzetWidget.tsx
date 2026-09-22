@@ -12,10 +12,10 @@ export async function AdminIcerikOzetWidget() {
   if (!stats) return null;
 
   return (
-    <section className="mb-8 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+    <section className="mb-8 rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5">
       <div className="mb-3 flex items-center justify-between gap-3">
-        <h2 className="flex items-center gap-2 text-sm font-medium text-white/80">
-          <Smartphone className="h-4 w-4 text-amber-400" />
+        <h2 className="flex items-center gap-2 text-sm font-medium text-[#1a1612]/80">
+          <Smartphone className="h-4 w-4 text-[#b8934a]" />
           İçerik özeti
         </h2>
         <Link
@@ -26,32 +26,32 @@ export async function AdminIcerikOzetWidget() {
         </Link>
       </div>
 
-      <p className="text-sm text-white/65">
+      <p className="text-sm text-[#1a1612]/65">
         Bu hafta:{" "}
-        <span className="text-white/90">{stats.weekPlanned}</span> planlandı,{" "}
-        <span className="text-white/90">{stats.weekShared}</span> paylaşıldı
+        <span className="text-[#1a1612]">{stats.weekPlanned}</span> planlandı,{" "}
+        <span className="text-[#1a1612]">{stats.weekShared}</span> paylaşıldı
       </p>
 
       {stats.todayPlanned.length > 0 ? (
         <div className="mt-3">
-          <p className="text-[11px] uppercase tracking-wider text-white/40">
+          <p className="text-[11px] uppercase tracking-wider text-[#1a1612]/40">
             Bugün planlanmış
           </p>
           <ul className="mt-1.5 space-y-1">
             {stats.todayPlanned.slice(0, 5).map((i) => (
-              <li key={i.id} className="truncate text-sm text-white/70">
+              <li key={i.id} className="truncate text-sm text-[#1a1612]/70">
                 <span
                   className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full"
                   style={{ background: i.hesap_renk }}
                 />
                 {i.baslik}
-                <span className="ml-1 text-white/35">· {i.hesap_ad}</span>
+                <span className="ml-1 text-[#1a1612]/40">· {i.hesap_ad}</span>
               </li>
             ))}
           </ul>
         </div>
       ) : (
-        <p className="mt-3 text-xs text-white/35">Bugün planlanmış içerik yok.</p>
+        <p className="mt-3 text-xs text-[#1a1612]/40">Bugün planlanmış içerik yok.</p>
       )}
 
       {stats.overdue.length > 0 ? (

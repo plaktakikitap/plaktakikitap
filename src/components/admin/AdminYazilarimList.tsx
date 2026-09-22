@@ -114,19 +114,19 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
         <div key={category} className="admin-bento-card p-5 sm:p-6">
           <div className="mb-4 flex items-center justify-between gap-3">
             <h3 className="admin-section-title">{label}</h3>
-            <span className="rounded-full bg-white/[0.06] px-2.5 py-0.5 text-xs text-white/45">
+            <span className="rounded-full bg-[#1a1612]/5 px-2.5 py-0.5 text-xs text-[#1a1612]/40">
               {items.length} yazı
             </span>
           </div>
 
           {items.length === 0 ? (
-            <p className="text-sm text-white/45">Bu kategoride yazı yok.</p>
+            <p className="text-sm text-[#1a1612]/40">Bu kategoride yazı yok.</p>
           ) : (
             <ul className="space-y-2">
               {items.map((w) => (
                 <li
                   key={w.id}
-                  className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3 sm:p-4"
+                  className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 p-3 sm:p-4"
                 >
                   {editingId === w.id ? (
                     <EditForm
@@ -141,18 +141,18 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
                         <Link
                           href={`/writings/${w.id}`}
                           target="_blank"
-                          className="inline-flex items-center gap-1.5 font-medium text-[#d4af37] hover:text-[#f4d03f]"
+                          className="inline-flex items-center gap-1.5 font-medium text-[#b8934a] hover:text-[#f4d03f]"
                         >
                           {w.title || "—"}
                           <ExternalLink className="h-3.5 w-3.5 opacity-60" />
                         </Link>
-                        <p className="mt-0.5 text-xs text-white/45">{formatDate(w.published_at)}</p>
+                        <p className="mt-0.5 text-xs text-[#1a1612]/40">{formatDate(w.published_at)}</p>
                       </div>
                       <div className="flex gap-1">
                         <button
                           type="button"
                           onClick={() => setEditingId(w.id)}
-                          className="rounded-lg p-2 text-white/50 transition-colors hover:bg-white/[0.06] hover:text-white"
+                          className="rounded-lg p-2 text-[#6b6158] transition-colors hover:bg-[#1a1612]/5 hover:text-[#1a1612]"
                           aria-label="Düzenle"
                         >
                           <Pencil className="h-4 w-4" />
@@ -160,7 +160,7 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
                         <button
                           type="button"
                           onClick={() => handleDelete(w.id)}
-                          className="rounded-lg p-2 text-white/50 transition-colors hover:bg-red-500/15 hover:text-red-400"
+                          className="rounded-lg p-2 text-[#6b6158] transition-colors hover:bg-red-500/15 hover:text-red-400"
                           aria-label="Sil"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -287,7 +287,7 @@ function EditForm({
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-xl border border-white/10 px-4 py-2.5 text-sm text-white/65 transition-colors hover:border-white/20 hover:text-white"
+          className="rounded-xl border border-[#e8e0d4] px-4 py-2.5 text-sm text-[#1a1612]/65 transition-colors hover:border-[#d4c9bb] hover:text-[#1a1612]"
         >
           İptal
         </button>

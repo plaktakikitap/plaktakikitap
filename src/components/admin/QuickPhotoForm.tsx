@@ -139,7 +139,7 @@ export function QuickPhotoForm({
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6"
+      className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5 sm:p-6"
     >
       <AdminRecentList items={recentItems} />
 
@@ -166,7 +166,7 @@ export function QuickPhotoForm({
             className={`relative cursor-pointer rounded-xl border-2 border-dashed transition ${
               isDragging
                 ? "border-amber-400/60 bg-amber-500/10"
-                : "border-white/20 bg-white/5"
+                : "border-[#d4c9bb] bg-[#1a1612]/5"
             }`}
           >
             <input
@@ -187,26 +187,26 @@ export function QuickPhotoForm({
                   alt=""
                   className="max-h-40 rounded-lg object-contain"
                 />
-                <p className="text-xs text-white/50">Değiştirmek için tıkla</p>
+                <p className="text-xs text-[#6b6158]">Değiştirmek için tıkla</p>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center px-6 py-10 text-center">
-                <ImageIcon className="mb-2 h-9 w-9 text-white/40" />
-                <p className="text-sm text-white/80">
+                <ImageIcon className="mb-2 h-9 w-9 text-[#1a1612]/40" />
+                <p className="text-sm text-[#1a1612]/80">
                   {isDragging ? "Bırak" : "Sürükle veya seç"}
                 </p>
-                <p className="mt-1 text-[11px] text-white/40">JPG, PNG, WEBP · max 10MB</p>
+                <p className="mt-1 text-[11px] text-[#1a1612]/40">JPG, PNG, WEBP · max 10MB</p>
               </div>
             )}
             {uploadProgress !== null ? (
               <div className="absolute inset-x-0 bottom-0 px-4 pb-3">
-                <div className="h-1.5 overflow-hidden rounded-full bg-white/20">
+                <div className="h-1.5 overflow-hidden rounded-full bg-[#1a1612]/8">
                   <div
                     className="h-full rounded-full bg-amber-500 transition-all"
                     style={{ width: `${uploadProgress}%` }}
                   />
                 </div>
-                <p className="mt-1 text-center text-[11px] text-white/55">
+                <p className="mt-1 text-center text-[11px] text-[#6b6158]">
                   {uploadProgress}%
                 </p>
               </div>
@@ -263,7 +263,7 @@ export function QuickPhotoForm({
               className={fieldClass}
             >
               {PHOTO_CATEGORIES.map((opt) => (
-                <option key={opt} value={opt} className="bg-zinc-900 text-white">
+                <option key={opt} value={opt} className="bg-zinc-900 text-[#1a1612]">
                   {opt}
                 </option>
               ))}

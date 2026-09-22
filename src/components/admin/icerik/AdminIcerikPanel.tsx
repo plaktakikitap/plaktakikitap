@@ -167,7 +167,7 @@ export function AdminIcerikPanel({
     <div>
       <IcerikPushSetup />
 
-      <div className="mb-6 flex flex-wrap gap-2 border-b border-white/10 pb-3">
+      <div className="mb-6 flex flex-wrap gap-2 border-b border-[#e8e0d4] pb-3">
         {tabs.map((t) => {
           const Icon = t.icon;
           const active = tab === t.id;
@@ -179,7 +179,7 @@ export function AdminIcerikPanel({
               className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm transition ${
                 active
                   ? "bg-amber-400/15 text-amber-200"
-                  : "text-white/50 hover:bg-white/5 hover:text-white/80"
+                  : "text-[#6b6158] hover:bg-[#1a1612]/5 hover:text-[#1a1612]/80"
               }`}
             >
               <Icon className="h-3.5 w-3.5" />
@@ -273,8 +273,8 @@ function HesapChips({
         onClick={() => setHesapFilter("all")}
         className={`rounded-full px-3 py-1 text-xs font-medium transition ${
           hesapFilter === "all"
-            ? "bg-white/15 text-white"
-            : "bg-white/5 text-white/50 hover:bg-white/10"
+            ? "bg-[#1a1612]/8 text-[#1a1612]"
+            : "bg-[#1a1612]/5 text-[#6b6158] hover:bg-[#1a1612]/8"
         }`}
       >
         Tümü
@@ -285,7 +285,7 @@ function HesapChips({
           type="button"
           onClick={() => setHesapFilter(h.id)}
           className={`rounded-full px-3 py-1 text-xs font-medium transition ${
-            hesapFilter === h.id ? "text-black" : "text-white/80 hover:opacity-90"
+            hesapFilter === h.id ? "text-black" : "text-[#1a1612]/80 hover:opacity-90"
           }`}
           style={{
             background:
@@ -332,12 +332,12 @@ function PanoTab({
         {IC_DURUMLAR.map((durum) => (
           <div
             key={durum}
-            className="rounded-xl border border-white/10 bg-white/[0.02] p-3"
+            className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 p-3"
           >
             <div className="mb-3 flex items-center justify-between">
-              <h3 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/50">
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6b6158]">
                 {IC_DURUM_LABEL[durum]}
-                <span className="ml-1.5 text-white/30">
+                <span className="ml-1.5 text-[#6b6158]">
                   {byDurum[durum].length}
                 </span>
               </h3>
@@ -361,7 +361,7 @@ function PanoTab({
                 />
               ))}
               {byDurum[durum].length === 0 ? (
-                <p className="py-6 text-center text-[11px] text-white/25">Boş</p>
+                <p className="py-6 text-center text-[11px] text-[#1a1612]/25">Boş</p>
               ) : null}
             </div>
           </div>
@@ -388,7 +388,7 @@ function IcerikKart({
   const canAdvance = item.durum !== "paylasildi";
   return (
     <article
-      className="relative overflow-hidden rounded-lg border border-white/10 bg-white/[0.03] p-3 pl-3.5"
+      className="relative overflow-hidden rounded-lg border border-[#e8e0d4] bg-[#1a1612]/5 p-3 pl-3.5"
       style={{ boxShadow: `inset 4px 0 0 ${renk}` }}
     >
       <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
@@ -400,13 +400,13 @@ function IcerikKart({
         <span className="text-[11px]" title={IC_PLATFORM_LABEL[item.platform]}>
           {PLATFORM_ICON[item.platform]}
         </span>
-        <span className="text-[10px] text-white/40">{item.hesap?.ad}</span>
+        <span className="text-[10px] text-[#1a1612]/40">{item.hesap?.ad}</span>
       </div>
-      <h4 className="text-sm font-medium leading-snug text-white/90">
+      <h4 className="text-sm font-medium leading-snug text-[#1a1612]">
         {item.baslik}
       </h4>
       {item.planlanan_tarih ? (
-        <p className="mt-1.5 text-[11px] text-white/45">
+        <p className="mt-1.5 text-[11px] text-[#1a1612]/40">
           📅 {formatDate(item.planlanan_tarih)}
         </p>
       ) : null}
@@ -420,7 +420,7 @@ function IcerikKart({
           type="button"
           onClick={onEdit}
           disabled={busy}
-          className="inline-flex items-center gap-1 rounded px-2 py-1 text-[10px] text-white/50 hover:bg-white/5 hover:text-white/80"
+          className="inline-flex items-center gap-1 rounded px-2 py-1 text-[10px] text-[#6b6158] hover:bg-[#1a1612]/5 hover:text-[#1a1612]/80"
         >
           <Pencil className="h-3 w-3" /> Düzenle
         </button>
@@ -522,7 +522,7 @@ function TakvimTab({
       <div className="mb-4 flex items-center justify-between">
         <button
           type="button"
-          className="rounded-lg px-3 py-1.5 text-sm text-white/60 hover:bg-white/5"
+          className="rounded-lg px-3 py-1.5 text-sm text-[#6b6158] hover:bg-[#1a1612]/5"
           onClick={() => {
             const d = new Date(month.y, month.m - 1, 1);
             setMonth({ y: d.getFullYear(), m: d.getMonth() });
@@ -530,10 +530,10 @@ function TakvimTab({
         >
           ←
         </button>
-        <h3 className="text-sm font-medium capitalize text-white/80">{label}</h3>
+        <h3 className="text-sm font-medium capitalize text-[#1a1612]/80">{label}</h3>
         <button
           type="button"
-          className="rounded-lg px-3 py-1.5 text-sm text-white/60 hover:bg-white/5"
+          className="rounded-lg px-3 py-1.5 text-sm text-[#6b6158] hover:bg-[#1a1612]/5"
           onClick={() => {
             const d = new Date(month.y, month.m + 1, 1);
             setMonth({ y: d.getFullYear(), m: d.getMonth() });
@@ -542,7 +542,7 @@ function TakvimTab({
           →
         </button>
       </div>
-      <div className="grid grid-cols-7 gap-1 text-center text-[10px] uppercase tracking-wider text-white/35">
+      <div className="grid grid-cols-7 gap-1 text-center text-[10px] uppercase tracking-wider text-[#1a1612]/40">
         {["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"].map((d) => (
           <div key={d} className="py-1">
             {d}
@@ -568,11 +568,11 @@ function TakvimTab({
                   ? "border-rose-400/25 bg-rose-500/[0.07]"
                   : isToday
                     ? "border-amber-400/35 bg-amber-400/[0.06]"
-                    : "border-white/8 bg-white/[0.02]"
+                    : "border-[#e8e0d4] bg-[#1a1612]/5"
               }`}
             >
               <div className="mb-1 flex items-center justify-between">
-                <span className="text-[11px] text-white/55">{day}</span>
+                <span className="text-[11px] text-[#6b6158]">{day}</span>
                 {isGap ? (
                   <span className="text-[9px] text-rose-300/80" title="Bu aralıkta paylaşım yok">
                     !
@@ -602,14 +602,14 @@ function TakvimTab({
                   </span>
                 ))}
                 {items.length > 3 ? (
-                  <span className="text-[9px] text-white/35">+{items.length - 3}</span>
+                  <span className="text-[9px] text-[#1a1612]/40">+{items.length - 3}</span>
                 ) : null}
               </div>
             </button>
           );
         })}
       </div>
-      <p className="mt-3 text-[11px] text-white/35">
+      <p className="mt-3 text-[11px] text-[#1a1612]/40">
         Boş güne tıkla → yeni içerik. Renkli etiketlere tıkla → düzenle. Kırmızı
         günler: 2+ gün boşluk uyarısı.
       </p>
@@ -662,12 +662,12 @@ function HesaplarTab({
           return (
             <div
               key={h.id}
-              className="rounded-xl border border-white/10 bg-white/[0.03] p-4"
+              className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 p-4"
               style={{ boxShadow: `inset 4px 0 0 ${h.renk}` }}
             >
               <div className="mb-2 flex items-start justify-between gap-2">
                 <div>
-                  <h3 className="font-medium text-white/90">{h.ad}</h3>
+                  <h3 className="font-medium text-[#1a1612]">{h.ad}</h3>
                   <p className="mt-1 flex gap-1 text-sm">
                     {h.platformlar.map((p) => (
                       <span key={p} title={IC_PLATFORM_LABEL[p]}>
@@ -677,21 +677,21 @@ function HesaplarTab({
                   </p>
                 </div>
                 {!h.aktif ? (
-                  <span className="text-[10px] text-white/35">pasif</span>
+                  <span className="text-[10px] text-[#1a1612]/40">pasif</span>
                 ) : null}
               </div>
-              <dl className="mt-3 space-y-1 text-xs text-white/50">
+              <dl className="mt-3 space-y-1 text-xs text-[#6b6158]">
                 <div className="flex justify-between">
                   <dt>Bu ay planlanan</dt>
-                  <dd className="text-white/80">{planned}</dd>
+                  <dd className="text-[#1a1612]/80">{planned}</dd>
                 </div>
                 <div className="flex justify-between">
                   <dt>Bu ay paylaşılan</dt>
-                  <dd className="text-white/80">{shared}</dd>
+                  <dd className="text-[#1a1612]/80">{shared}</dd>
                 </div>
                 <div className="flex justify-between">
                   <dt>Son paylaşım</dt>
-                  <dd className="text-white/80">{formatDate(lastShared ?? null)}</dd>
+                  <dd className="text-[#1a1612]/80">{formatDate(lastShared ?? null)}</dd>
                 </div>
               </dl>
               <button
@@ -780,16 +780,16 @@ function AyarlarTab({
   return (
     <div className="space-y-8">
       <section>
-        <h3 className="mb-3 text-sm font-medium text-white/70">
+        <h3 className="mb-3 text-sm font-medium text-[#1a1612]/70">
           İki günde bir paylaşım hedefi
         </h3>
         <ul className="space-y-2">
           {hesaplar.map((h) => (
             <li
               key={h.id}
-              className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.02] px-3 py-2.5"
+              className="flex items-center justify-between rounded-lg border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2.5"
             >
-              <span className="flex items-center gap-2 text-sm text-white/80">
+              <span className="flex items-center gap-2 text-sm text-[#1a1612]/80">
                 <span
                   className="h-2.5 w-2.5 rounded-full"
                   style={{ background: h.renk }}
@@ -800,7 +800,7 @@ function AyarlarTab({
                 type="button"
                 onClick={() => toggleHedef(h)}
                 className={`relative h-6 w-11 rounded-full transition ${
-                  h.hedef_iki_gunde_bir ? "bg-amber-400/70" : "bg-white/15"
+                  h.hedef_iki_gunde_bir ? "bg-amber-400/70" : "bg-[#1a1612]/8"
                 }`}
                 aria-pressed={h.hedef_iki_gunde_bir}
               >
@@ -816,21 +816,21 @@ function AyarlarTab({
       </section>
 
       <section>
-        <h3 className="mb-3 text-sm font-medium text-white/70">Bu ay</h3>
+        <h3 className="mb-3 text-sm font-medium text-[#1a1612]/70">Bu ay</h3>
         <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-            <p className="text-[11px] uppercase tracking-wider text-white/40">
+          <div className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 p-4">
+            <p className="text-[11px] uppercase tracking-wider text-[#1a1612]/40">
               Planlanan
             </p>
-            <p className="mt-1 text-2xl font-semibold text-white/90">
+            <p className="mt-1 text-2xl font-semibold text-[#1a1612]">
               {monthPlanned}
             </p>
           </div>
-          <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-            <p className="text-[11px] uppercase tracking-wider text-white/40">
+          <div className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 p-4">
+            <p className="text-[11px] uppercase tracking-wider text-[#1a1612]/40">
               Paylaşılan
             </p>
-            <p className="mt-1 text-2xl font-semibold text-white/90">
+            <p className="mt-1 text-2xl font-semibold text-[#1a1612]">
               {monthShared}
             </p>
           </div>
@@ -838,26 +838,26 @@ function AyarlarTab({
       </section>
 
       <section>
-        <h3 className="mb-3 text-sm font-medium text-white/70">
+        <h3 className="mb-3 text-sm font-medium text-[#1a1612]/70">
           Gelecek 7 gün
         </h3>
         {upcoming.length === 0 ? (
-          <p className="text-sm text-white/40">Planlanmış içerik yok.</p>
+          <p className="text-sm text-[#1a1612]/40">Planlanmış içerik yok.</p>
         ) : (
           <ul className="space-y-2">
             {upcoming.map((i) => (
               <li
                 key={i.id}
-                className="flex items-center justify-between rounded-lg border border-white/10 px-3 py-2 text-sm"
+                className="flex items-center justify-between rounded-lg border border-[#e8e0d4] px-3 py-2 text-sm"
               >
-                <span className="truncate text-white/80">
+                <span className="truncate text-[#1a1612]/80">
                   <span
                     className="mr-2 inline-block h-2 w-2 rounded-full"
                     style={{ background: i.hesap?.renk }}
                   />
                   {i.baslik}
                 </span>
-                <span className="shrink-0 text-xs text-white/40">
+                <span className="shrink-0 text-xs text-[#1a1612]/40">
                   {formatDate(i.planlanan_tarih)}
                 </span>
               </li>
@@ -978,7 +978,7 @@ function IcerikModal({
           <select
             value={hesapId}
             onChange={(e) => setHesapId(e.target.value)}
-            className="w-full rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 text-sm text-white"
+            className="w-full rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3.5 py-2.5 text-sm text-[#1a1612]"
             required
           >
             {hesaplar.map((h) => (
@@ -998,7 +998,7 @@ function IcerikModal({
                 className={`cursor-pointer rounded-lg border px-3 py-1.5 text-xs ${
                   tur === t
                     ? "border-amber-400/40 bg-amber-400/15 text-amber-100"
-                    : "border-white/10 text-white/50"
+                    : "border-[#e8e0d4] text-[#6b6158]"
                 }`}
               >
                 <input
@@ -1034,7 +1034,7 @@ function IcerikModal({
                   className={`rounded-lg border px-3 py-1.5 text-xs ${
                     on
                       ? "border-amber-400/40 bg-amber-400/15 text-amber-100"
-                      : "border-white/10 text-white/50"
+                      : "border-[#e8e0d4] text-[#6b6158]"
                   }`}
                 >
                   {PLATFORM_ICON[p]} {IC_PLATFORM_LABEL[p]}
@@ -1081,7 +1081,7 @@ function IcerikModal({
             <select
               value={durum}
               onChange={(e) => setDurum(e.target.value as IcDurum)}
-              className="w-full rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 text-sm text-white"
+              className="w-full rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3.5 py-2.5 text-sm text-[#1a1612]"
             >
               {IC_DURUMLAR.map((d) => (
                 <option key={d} value={d} style={{ color: "#111" }}>
@@ -1108,7 +1108,7 @@ function IcerikModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg px-4 py-2 text-sm text-white/50 hover:bg-white/5"
+            className="rounded-lg px-4 py-2 text-sm text-[#6b6158] hover:bg-[#1a1612]/5"
           >
             İptal
           </button>
@@ -1183,7 +1183,7 @@ function HesapFormModal({
             type="color"
             value={renk}
             onChange={(e) => setRenk(e.target.value)}
-            className="h-10 w-full cursor-pointer rounded-lg border border-white/15 bg-transparent"
+            className="h-10 w-full cursor-pointer rounded-lg border border-[#e8e0d4] bg-transparent"
           />
         </div>
         <div>
@@ -1203,7 +1203,7 @@ function HesapFormModal({
                   className={`rounded-lg border px-3 py-1.5 text-xs ${
                     on
                       ? "border-amber-400/40 bg-amber-400/15 text-amber-100"
-                      : "border-white/10 text-white/50"
+                      : "border-[#e8e0d4] text-[#6b6158]"
                   }`}
                 >
                   {IC_PLATFORM_LABEL[p]}
@@ -1213,7 +1213,7 @@ function HesapFormModal({
           </div>
         </div>
         {hesap ? (
-          <label className="flex items-center gap-2 text-sm text-white/70">
+          <label className="flex items-center gap-2 text-sm text-[#1a1612]/70">
             <input
               type="checkbox"
               checked={aktif}
@@ -1223,7 +1223,7 @@ function HesapFormModal({
           </label>
         ) : null}
         <div className="flex justify-end gap-2">
-          <button type="button" onClick={onClose} className="px-3 py-2 text-sm text-white/50">
+          <button type="button" onClick={onClose} className="px-3 py-2 text-sm text-[#6b6158]">
             İptal
           </button>
           <button
@@ -1263,15 +1263,15 @@ function ModalShell({
     >
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
       <div
-        className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-white/10 bg-[#141210] p-5 shadow-xl"
+        className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-[#e8e0d4] bg-[#faf7f2] p-5 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-medium text-white/90">{title}</h2>
+          <h2 className="text-lg font-medium text-[#1a1612]">{title}</h2>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-white/40 hover:bg-white/5 hover:text-white/70"
+            className="rounded-lg p-1.5 text-[#1a1612]/40 hover:bg-[#1a1612]/5 hover:text-[#1a1612]/70"
           >
             <X className="h-4 w-4" />
           </button>

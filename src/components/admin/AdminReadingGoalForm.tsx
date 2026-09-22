@@ -35,15 +35,15 @@ export function AdminReadingGoalForm({ initial }: AdminReadingGoalFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <h3 className="admin-heading text-lg font-semibold text-white/95">Yıllık okuma hedefi</h3>
-        <p className="mt-2 text-sm text-white/55">
+        <h3 className="admin-heading text-lg font-semibold text-[#1a1612]">Yıllık okuma hedefi</h3>
+        <p className="mt-2 text-sm text-[#6b6158]">
           Okuma günlüğü sayfasında &quot;X / Y kitap&quot; ve dairesel ilerleme çubuğu bu değerlerle hesaplanır.
         </p>
       </div>
       {error && <p className="text-sm text-red-400">{error}</p>}
       <div className="grid gap-5 sm:grid-cols-3">
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-white/70">Yıl</label>
+          <label className="block text-sm font-medium text-[#1a1612]/70">Yıl</label>
           <input
             name="year"
             type="number"
@@ -54,7 +54,7 @@ export function AdminReadingGoalForm({ initial }: AdminReadingGoalFormProps) {
           />
         </div>
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-white/70">Hedef (kitap sayısı)</label>
+          <label className="block text-sm font-medium text-[#1a1612]/70">Hedef (kitap sayısı)</label>
           <input
             name="goal"
             type="number"
@@ -64,7 +64,7 @@ export function AdminReadingGoalForm({ initial }: AdminReadingGoalFormProps) {
           />
         </div>
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-white/70">Okunan (bu yıl)</label>
+          <label className="block text-sm font-medium text-[#1a1612]/70">Okunan (bu yıl)</label>
           <input
             type="number"
             min={0}

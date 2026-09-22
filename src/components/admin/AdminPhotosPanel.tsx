@@ -97,19 +97,19 @@ export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) 
       {editing ? (
         <form
           onSubmit={handleSaveEdit}
-          className="rounded-2xl border border-amber-400/20 bg-white/[0.03] p-5 sm:p-6"
+          className="rounded-2xl border border-amber-400/20 bg-[#1a1612]/5 p-5 sm:p-6"
         >
           <div className="mb-4 flex items-start justify-between gap-3">
             <div>
-              <h2 className="text-sm font-medium text-white/80">Fotoğrafı düzenle</h2>
-              <p className="mt-0.5 text-[11px] text-white/40">
+              <h2 className="text-sm font-medium text-[#1a1612]/80">Fotoğrafı düzenle</h2>
+              <p className="mt-0.5 text-[11px] text-[#1a1612]/40">
                 Camera, lens, film ve kategori
               </p>
             </div>
             <button
               type="button"
               onClick={() => setEditing(null)}
-              className="rounded p-1 text-white/50 hover:bg-white/10 hover:text-white"
+              className="rounded p-1 text-[#6b6158] hover:bg-[#1a1612]/8 hover:text-[#1a1612]"
               aria-label="Kapat"
             >
               <X className="h-4 w-4" />
@@ -173,7 +173,7 @@ export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) 
                   className={fieldClass}
                 >
                   {PHOTO_CATEGORIES.map((opt) => (
-                    <option key={opt} value={opt} className="bg-zinc-900 text-white">
+                    <option key={opt} value={opt} className="bg-zinc-900 text-[#1a1612]">
                       {opt}
                     </option>
                   ))}
@@ -186,20 +186,20 @@ export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) 
       ) : null}
 
       <section>
-        <h2 className="mb-4 text-sm font-medium text-white/70">
+        <h2 className="mb-4 text-sm font-medium text-[#1a1612]/70">
           Fotoğraflar ({photos.length})
         </h2>
         {photos.length === 0 ? (
-          <p className="text-sm text-white/45">Henüz fotoğraf yok.</p>
+          <p className="text-sm text-[#1a1612]/40">Henüz fotoğraf yok.</p>
         ) : (
           <div className="grid grid-cols-2 gap-2 sm:gap-4">
             {photos.map((p) => (
               <div
                 key={p.id}
-                className={`group relative aspect-square overflow-hidden rounded-lg border bg-white/5 ${
+                className={`group relative aspect-square overflow-hidden rounded-lg border bg-[#1a1612]/5 ${
                   editing?.id === p.id
                     ? "border-amber-400/50"
-                    : "border-white/10"
+                    : "border-[#e8e0d4]"
                 }`}
               >
                 {p.image_url.startsWith("http") ? (
@@ -210,19 +210,19 @@ export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) 
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <span className="flex h-full w-full items-center justify-center text-xs text-white/40">
+                  <span className="flex h-full w-full items-center justify-center text-xs text-[#1a1612]/40">
                     path
                   </span>
                 )}
                 <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 bg-gradient-to-t from-black/80 to-transparent p-2 opacity-0 transition-opacity group-hover:opacity-100">
-                  <div className="min-w-0 flex-1 truncate text-xs text-white/90">
+                  <div className="min-w-0 flex-1 truncate text-xs text-[#1a1612]">
                     {p.caption || resolvePhotoCategory(p)}
                   </div>
                   <div className="flex shrink-0 gap-1">
                     <button
                       type="button"
                       onClick={() => startEdit(p)}
-                      className="rounded p-1.5 text-white/80 hover:bg-white/20 hover:text-white"
+                      className="rounded p-1.5 text-[#1a1612]/80 hover:bg-[#1a1612]/8 hover:text-[#1a1612]"
                       aria-label="Düzenle"
                     >
                       <Pencil className="h-4 w-4" />
@@ -231,7 +231,7 @@ export function AdminPhotosPanel({ initialPhotos }: { initialPhotos: Photo[] }) 
                       type="button"
                       onClick={() => handleDelete(p.id)}
                       disabled={loading}
-                      className="rounded p-1.5 text-white/80 hover:bg-red-500/30 hover:text-white disabled:opacity-50"
+                      className="rounded p-1.5 text-[#1a1612]/80 hover:bg-red-500/30 hover:text-[#1a1612] disabled:opacity-50"
                       aria-label="Sil"
                     >
                       <Trash2 className="h-4 w-4" />

@@ -78,7 +78,7 @@ export function AdminImageUpload({
             inputRef.current?.dispatchEvent(new Event("change", { bubbles: true }));
           }
         }}
-        className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-white/20 bg-white/5 px-4 py-6 transition-colors hover:bg-white/10 ${
+        className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-[#d4c9bb] bg-[#1a1612]/5 px-4 py-6 transition-colors hover:bg-[#1a1612]/8 ${
           uploading ? "pointer-events-none opacity-70" : ""
         }`}
       >
@@ -107,7 +107,7 @@ export function AdminImageUpload({
               <p className="text-sm text-[var(--muted-foreground)]">Yükleniyor…</p>
             ) : (
               <>
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-[var(--accent)]">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#1a1612]/8 text-[var(--accent)]">
                   <Upload className="h-6 w-6" />
                 </div>
                 <p className="text-sm text-[var(--muted-foreground)]">{placeholder}</p>

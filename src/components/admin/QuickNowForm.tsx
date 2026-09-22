@@ -109,11 +109,11 @@ export function QuickNowForm({
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6"
+      className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5 sm:p-6"
     >
       <div className="space-y-6">
         <section className="space-y-4">
-          <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-white/40">
+          <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-[#1a1612]/40">
             Şu an dinliyorum
           </p>
           <div>
@@ -146,10 +146,10 @@ export function QuickNowForm({
           </div>
         </section>
 
-        <div className="border-t border-white/10" />
+        <div className="border-t border-[#e8e0d4]" />
 
         <section className="space-y-4">
-          <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-white/40">
+          <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-[#1a1612]/40">
             Şu an okuyorum
           </p>
           <div>

@@ -208,23 +208,23 @@ export function AdminTakvimPanel({
     <div className="space-y-8">
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
         {/* Calendar */}
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+        <div className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-4 sm:p-5">
           <div className="mb-4 flex items-center justify-between">
             <button
               type="button"
               onClick={() => setCursor(new Date(year, month - 1, 1))}
-              className="rounded-lg p-2 text-white/60 hover:bg-white/10 hover:text-white"
+              className="rounded-lg p-2 text-[#6b6158] hover:bg-[#1a1612]/8 hover:text-[#1a1612]"
               aria-label="Önceki ay"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
-            <h2 className="text-lg font-medium text-white">
+            <h2 className="text-lg font-medium text-[#1a1612]">
               {MONTHS[month]} {year}
             </h2>
             <button
               type="button"
               onClick={() => setCursor(new Date(year, month + 1, 1))}
-              className="rounded-lg p-2 text-white/60 hover:bg-white/10 hover:text-white"
+              className="rounded-lg p-2 text-[#6b6158] hover:bg-[#1a1612]/8 hover:text-[#1a1612]"
               aria-label="Sonraki ay"
             >
               <ChevronRight className="h-5 w-5" />
@@ -235,7 +235,7 @@ export function AdminTakvimPanel({
             {WEEKDAYS.map((w) => (
               <div
                 key={w}
-                className="py-1 text-center text-[10px] font-medium uppercase tracking-wider text-white/35"
+                className="py-1 text-center text-[10px] font-medium uppercase tracking-wider text-[#1a1612]/40"
               >
                 {w}
               </div>
@@ -263,12 +263,12 @@ export function AdminTakvimPanel({
                   className={`relative flex aspect-square flex-col items-start rounded-xl border p-1.5 text-left transition ${
                     isSel
                       ? "border-amber-400/50 bg-amber-500/15"
-                      : "border-transparent bg-white/[0.03] hover:bg-white/[0.07]"
+                      : "border-transparent bg-[#1a1612]/5 hover:bg-[#1a1612]/8"
                   } ${isToday && !isSel ? "ring-1 ring-white/25" : ""}`}
                 >
                   <span
                     className={`text-xs ${
-                      isSel ? "font-semibold text-amber-200" : "text-white/75"
+                      isSel ? "font-semibold text-amber-200" : "text-[#1a1612]/75"
                     }`}
                   >
                     {d}
@@ -295,7 +295,7 @@ export function AdminTakvimPanel({
                     ))}
                   </div>
                   {(nList[0] || tList[0]) && (
-                    <span className="mt-0.5 hidden w-full truncate text-[9px] text-white/45 sm:block">
+                    <span className="mt-0.5 hidden w-full truncate text-[9px] text-[#1a1612]/40 sm:block">
                       {nList[0]?.baslik ?? tList[0]?.baslik}
                     </span>
                   )}
@@ -304,7 +304,7 @@ export function AdminTakvimPanel({
             })}
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-3 text-[11px] text-white/45">
+          <div className="mt-4 flex flex-wrap gap-3 text-[11px] text-[#1a1612]/40">
             <span className="inline-flex items-center gap-1.5">
               <span className="h-2 w-2 rounded-full bg-amber-400" /> Not
             </span>
@@ -315,13 +315,13 @@ export function AdminTakvimPanel({
         </div>
 
         {/* Day panel */}
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+        <div className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-4 sm:p-5">
           <div className="mb-4 flex items-center justify-between gap-2">
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-white/40">
+              <p className="text-[10px] uppercase tracking-wider text-[#1a1612]/40">
                 Seçili gün
               </p>
-              <p className="text-sm font-medium text-white">
+              <p className="text-sm font-medium text-[#1a1612]">
                 {selected ? formatShort(selected) : "—"}
               </p>
             </div>
@@ -336,9 +336,9 @@ export function AdminTakvimPanel({
           </div>
 
           {showNoteForm ? (
-            <form onSubmit={saveNote} className="mb-5 space-y-3 border-b border-white/10 pb-5">
+            <form onSubmit={saveNote} className="mb-5 space-y-3 border-b border-[#e8e0d4] pb-5">
               <div className="flex items-center justify-between">
-                <p className="text-xs text-white/50">
+                <p className="text-xs text-[#6b6158]">
                   {editing ? "Notu düzenle" : "Yeni not"}
                 </p>
                 <button
@@ -347,7 +347,7 @@ export function AdminTakvimPanel({
                     setShowNoteForm(false);
                     setEditing(null);
                   }}
-                  className="rounded p-1 text-white/40 hover:text-white"
+                  className="rounded p-1 text-[#1a1612]/40 hover:text-[#1a1612]"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -395,21 +395,21 @@ export function AdminTakvimPanel({
 
           <div className="space-y-4">
             <section>
-              <p className="mb-2 text-[10px] uppercase tracking-wider text-amber-400/70">
+              <p className="mb-2 text-[10px] uppercase tracking-wider text-[#b8934a]/70">
                 Notlar
               </p>
               {dayNotes.length === 0 ? (
-                <p className="text-xs text-white/35">Bu güne not yok.</p>
+                <p className="text-xs text-[#1a1612]/40">Bu güne not yok.</p>
               ) : (
                 <ul className="space-y-2">
                   {dayNotes.map((n) => (
                     <li
                       key={n.id}
-                      className={`rounded-lg border border-white/10 border-l-4 bg-white/[0.04] px-3 py-2 ${RENK_BORDER[n.renk]}`}
+                      className={`rounded-lg border border-[#e8e0d4] border-l-4 bg-[#1a1612]/5 px-3 py-2 ${RENK_BORDER[n.renk]}`}
                     >
-                      <p className="text-sm text-white/90">{n.baslik}</p>
+                      <p className="text-sm text-[#1a1612]">{n.baslik}</p>
                       {n.icerik ? (
-                        <p className="mt-0.5 text-xs text-white/45 line-clamp-2">
+                        <p className="mt-0.5 text-xs text-[#1a1612]/40 line-clamp-2">
                           {previewLine(n.icerik)}
                         </p>
                       ) : null}
@@ -417,7 +417,7 @@ export function AdminTakvimPanel({
                         <button
                           type="button"
                           onClick={() => openEdit(n)}
-                          className="text-white/40 hover:text-white"
+                          className="text-[#1a1612]/40 hover:text-[#1a1612]"
                           aria-label="Düzenle"
                         >
                           <Pencil className="h-3.5 w-3.5" />
@@ -425,7 +425,7 @@ export function AdminTakvimPanel({
                         <button
                           type="button"
                           onClick={() => removeNote(n.id)}
-                          className="text-white/40 hover:text-red-400"
+                          className="text-[#1a1612]/40 hover:text-red-400"
                           aria-label="Sil"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
@@ -442,7 +442,7 @@ export function AdminTakvimPanel({
                 Yapılacaklar
               </p>
               {dayTodos.length === 0 ? (
-                <p className="text-xs text-white/35">Bu güne görev yok.</p>
+                <p className="text-xs text-[#1a1612]/40">Bu güne görev yok.</p>
               ) : (
                 <ul className="space-y-1.5">
                   {dayTodos.map((t) => (
@@ -450,8 +450,8 @@ export function AdminTakvimPanel({
                       key={t.id}
                       className={`rounded-lg border border-sky-400/20 bg-sky-500/10 px-3 py-2 text-sm ${
                         t.tamamlandi
-                          ? "text-white/40 line-through"
-                          : "text-white/85"
+                          ? "text-[#1a1612]/40 line-through"
+                          : "text-[#1a1612]/85"
                       }`}
                     >
                       {t.baslik}
@@ -467,44 +467,44 @@ export function AdminTakvimPanel({
       {/* All notes list */}
       <section>
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-sm font-medium text-white/70">Tüm notlar</h3>
+          <h3 className="text-sm font-medium text-[#1a1612]/70">Tüm notlar</h3>
           <button
             type="button"
             onClick={() => openNewNote()}
-            className="text-xs text-amber-400/80 hover:text-amber-300"
+            className="text-xs text-[#b8934a]/80 hover:text-amber-300"
           >
             + Not (tarihsiz)
           </button>
         </div>
         {notlar.length === 0 ? (
-          <p className="text-sm text-white/40">Henüz not yok.</p>
+          <p className="text-sm text-[#1a1612]/40">Henüz not yok.</p>
         ) : (
           <ul className="space-y-2">
             {notlar.map((n) => (
               <li
                 key={n.id}
-                className={`flex items-start justify-between gap-3 rounded-xl border border-white/10 border-l-4 bg-white/[0.03] px-4 py-3 ${RENK_BORDER[n.renk]}`}
+                className={`flex items-start justify-between gap-3 rounded-xl border border-[#e8e0d4] border-l-4 bg-[#1a1612]/5 px-4 py-3 ${RENK_BORDER[n.renk]}`}
               >
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-white/90">
+                  <p className="truncate text-sm font-medium text-[#1a1612]">
                     {n.baslik}
                   </p>
                   {n.icerik ? (
-                    <p className="mt-0.5 truncate text-xs text-white/40">
+                    <p className="mt-0.5 truncate text-xs text-[#1a1612]/40">
                       {previewLine(n.icerik)}
                     </p>
                   ) : null}
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
                   {n.tarih ? (
-                    <span className="text-[11px] text-white/40">
+                    <span className="text-[11px] text-[#1a1612]/40">
                       {formatShort(n.tarih)}
                     </span>
                   ) : null}
                   <button
                     type="button"
                     onClick={() => openEdit(n)}
-                    className="rounded p-1.5 text-white/40 hover:bg-white/10 hover:text-white"
+                    className="rounded p-1.5 text-[#1a1612]/40 hover:bg-[#1a1612]/8 hover:text-[#1a1612]"
                     aria-label="Düzenle"
                   >
                     <Pencil className="h-3.5 w-3.5" />
@@ -512,7 +512,7 @@ export function AdminTakvimPanel({
                   <button
                     type="button"
                     onClick={() => removeNote(n.id)}
-                    className="rounded p-1.5 text-white/40 hover:bg-red-500/20 hover:text-red-400"
+                    className="rounded p-1.5 text-[#1a1612]/40 hover:bg-red-500/20 hover:text-red-400"
                     aria-label="Sil"
                   >
                     <Trash2 className="h-3.5 w-3.5" />

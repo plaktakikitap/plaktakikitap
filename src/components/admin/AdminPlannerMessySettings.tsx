@@ -100,19 +100,19 @@ export function AdminPlannerMessySettings({ year, month }: AdminPlannerMessySett
   if (!loaded) return null;
 
   return (
-    <section className="rounded-xl border border-white/20 bg-white/5 p-4">
-      <h2 className="mb-3 flex items-center gap-2 font-medium text-white">
+    <section className="rounded-xl border border-[#d4c9bb] bg-[#1a1612]/5 p-4">
+      <h2 className="mb-3 flex items-center gap-2 font-medium text-[#1a1612]">
         <Sparkles className="h-4 w-4" />
         Bullet Journal — Messy görünüm
       </h2>
-      <p className="mb-4 text-sm text-white/60">
+      <p className="mb-4 text-sm text-[#6b6158]">
         Messy görünümü kontrol et — evet/hayır ile her öğeyi açıp kapat
       </p>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {toggles.map(({ key, label, icon }) => (
           <label
             key={key}
-            className="flex cursor-pointer items-center gap-3 rounded-lg border border-white/20 px-4 py-3 transition hover:bg-white/10"
+            className="flex cursor-pointer items-center gap-3 rounded-lg border border-[#d4c9bb] px-4 py-3 transition hover:bg-[#1a1612]/8"
           >
             <input
               type="checkbox"
@@ -122,24 +122,24 @@ export function AdminPlannerMessySettings({ year, month }: AdminPlannerMessySett
               }
               className="h-4 w-4 rounded"
             />
-            <span className="flex shrink-0 text-white/60">{icon}</span>
-            <span className="text-sm font-medium text-white/90">{label}</span>
+            <span className="flex shrink-0 text-[#6b6158]">{icon}</span>
+            <span className="text-sm font-medium text-[#1a1612]">{label}</span>
           </label>
         ))}
       </div>
 
-      <div className="mt-6 border-t border-white/20 pt-4">
-        <h3 className="mb-2 flex items-center gap-2 text-sm font-medium text-white">
+      <div className="mt-6 border-t border-[#d4c9bb] pt-4">
+        <h3 className="mb-2 flex items-center gap-2 text-sm font-medium text-[#1a1612]">
           <Music2 className="h-4 w-4" />
           Özel alanlar (sağ sayfa)
         </h3>
-        <p className="mb-3 text-xs text-white/60">
+        <p className="mb-3 text-xs text-[#6b6158]">
           Örneğin &quot;Hayatımın Film Müziği&quot; — bu ayın öne çıkan notları
         </p>
         {settings.custom_fields.map((f, i) => (
           <div
             key={i}
-            className="mb-3 flex flex-col gap-2 rounded-lg border border-white/20 p-3"
+            className="mb-3 flex flex-col gap-2 rounded-lg border border-[#d4c9bb] p-3"
           >
             <div className="flex items-center justify-between gap-2">
               <input
@@ -152,7 +152,7 @@ export function AdminPlannerMessySettings({ year, month }: AdminPlannerMessySett
               <button
                 type="button"
                 onClick={() => removeCustomField(i)}
-                className="rounded p-1.5 text-white/60 hover:bg-red-500/10 hover:text-red-400"
+                className="rounded p-1.5 text-[#6b6158] hover:bg-red-500/10 hover:text-red-400"
                 aria-label="Kaldır"
               >
                 <Trash2 className="h-4 w-4" />
@@ -170,7 +170,7 @@ export function AdminPlannerMessySettings({ year, month }: AdminPlannerMessySett
         <button
           type="button"
           onClick={addCustomField}
-          className="flex items-center gap-2 rounded-lg border border-dashed border-white/30 px-3 py-2 text-sm text-white/70 transition hover:border-amber-400/50 hover:text-amber-400"
+          className="flex items-center gap-2 rounded-lg border border-dashed border-[#d4c9bb] px-3 py-2 text-sm text-[#1a1612]/70 transition hover:border-[#b8934a]/50 hover:text-[#b8934a]"
         >
           <Plus className="h-4 w-4" />
           Alan ekle
@@ -181,7 +181,7 @@ export function AdminPlannerMessySettings({ year, month }: AdminPlannerMessySett
         type="button"
         onClick={handleSave}
         disabled={saving}
-        className="mt-4 rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-50"
+        className="mt-4 rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-[#1a1612] transition hover:opacity-90 disabled:opacity-50"
       >
         {saving ? "Kaydediliyor…" : "Kaydet"}
       </button>

@@ -16,7 +16,7 @@ export function AdminLivePreview({ url, isVideo, className = "" }: AdminLivePrev
     <div
       className={`admin-bento-card flex flex-col items-center justify-center overflow-hidden rounded-2xl p-4 ${className}`}
     >
-      <p className="mb-3 text-[10px] font-medium uppercase tracking-wider text-amber-400/80">
+      <p className="mb-3 text-[10px] font-medium uppercase tracking-wider text-[#b8934a]/80">
         Canlı Önizleme
       </p>
       {isVideo ? (

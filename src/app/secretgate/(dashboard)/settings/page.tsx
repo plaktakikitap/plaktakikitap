@@ -34,11 +34,11 @@ export default async function AdminSettingsPage() {
   return (
     <div className="space-y-12">
       <header>
-        <h1 className="admin-heading flex items-center gap-3 text-2xl font-semibold tracking-tight text-white/95">
-          <Settings className="h-7 w-7 text-amber-400" />
+        <h1 className="admin-heading flex items-center gap-3 text-2xl font-semibold tracking-tight text-[#1a1612]">
+          <Settings className="h-7 w-7 text-[#b8934a]" />
           Kontrol Merkezi
         </h1>
-        <p className="mt-1 text-sm text-white/60">
+        <p className="mt-1 text-sm text-[#6b6158]">
           SEO, global ayarlar, bakım modu, ana sayfa metinleri ve kaydetme — tek yerden yönetim.
         </p>
       </header>

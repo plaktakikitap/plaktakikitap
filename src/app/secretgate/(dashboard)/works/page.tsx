@@ -19,11 +19,11 @@ export default async function AdminWorksPage() {
       <header className="mb-8">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="admin-heading flex items-center gap-2.5 text-2xl font-semibold text-white">
-              <Briefcase className="h-6 w-6 text-[#d4af37]" />
+            <h1 className="admin-heading flex items-center gap-2.5 text-2xl font-semibold text-[#1a1612]">
+              <Briefcase className="h-6 w-6 text-[#b8934a]" />
               Yaptıklarım — Yetenek Vitrini
             </h1>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/50">
+            <p className="mt-2 max-w-xl text-sm leading-relaxed text-[#6b6158]">
               Videolar, fotoğraflar, projeler, sertifikalar ve CV içeriğini yönetin. Görünürlük,
               sıralama ve öne çıkarma ayarları buradan yapılır.
             </p>
@@ -31,7 +31,7 @@ export default async function AdminWorksPage() {
           <Link
             href="/works"
             target="_blank"
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-white/55 transition-colors hover:border-[rgba(212,175,55,0.35)] hover:text-[#d4af37]"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2 text-xs text-[#6b6158] transition-colors hover:border-[rgba(184,147,74,0.35)] hover:text-[#b8934a]"
           >
             Siteyi gör
             <ArrowUpRight className="h-3.5 w-3.5" />

@@ -71,16 +71,16 @@ export function AdminSukurPanel({
 
   return (
     <div className="mx-auto max-w-lg space-y-10">
-      <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
-        <h2 className="mb-1 text-lg font-medium text-white">
+      <section className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5 sm:p-6">
+        <h2 className="mb-1 text-lg font-medium text-[#1a1612]">
           Bugün ne için şükrediyorsun?
         </h2>
-        <p className="mb-5 text-xs text-white/40">{formatDate(today)}</p>
+        <p className="mb-5 text-xs text-[#1a1612]/40">{formatDate(today)}</p>
 
         {!editing && todayEntry ? (
           <div>
             <p className="mb-4 text-sm text-emerald-400/90">Bugün zaten yazdın ✓</p>
-            <ol className="list-decimal space-y-2 pl-5 text-sm text-white/85">
+            <ol className="list-decimal space-y-2 pl-5 text-sm text-[#1a1612]/85">
               <li>{todayEntry.madde_1}</li>
               <li>{todayEntry.madde_2}</li>
               <li>{todayEntry.madde_3}</li>
@@ -93,7 +93,7 @@ export function AdminSukurPanel({
                 setM3(todayEntry.madde_3);
                 setEditing(true);
               }}
-              className="mt-5 text-sm text-amber-400/80 hover:text-amber-300"
+              className="mt-5 text-sm text-[#b8934a]/80 hover:text-amber-300"
             >
               Düzenle
             </button>
@@ -101,30 +101,30 @@ export function AdminSukurPanel({
         ) : (
           <form onSubmit={handleSubmit} className="space-y-3">
             <div className="flex items-center gap-2">
-              <span className="w-4 text-sm text-white/40">1.</span>
+              <span className="w-4 text-sm text-[#1a1612]/40">1.</span>
               <input
                 value={m1}
                 onChange={(e) => setM1(e.target.value)}
                 required
-                className="flex-1 rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 text-sm text-white outline-none focus:border-amber-400/40"
+                className="flex-1 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3.5 py-2.5 text-sm text-[#1a1612] outline-none focus:border-[#b8934a]/40"
               />
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-4 text-sm text-white/40">2.</span>
+              <span className="w-4 text-sm text-[#1a1612]/40">2.</span>
               <input
                 value={m2}
                 onChange={(e) => setM2(e.target.value)}
                 required
-                className="flex-1 rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 text-sm text-white outline-none focus:border-amber-400/40"
+                className="flex-1 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3.5 py-2.5 text-sm text-[#1a1612] outline-none focus:border-[#b8934a]/40"
               />
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-4 text-sm text-white/40">3.</span>
+              <span className="w-4 text-sm text-[#1a1612]/40">3.</span>
               <input
                 value={m3}
                 onChange={(e) => setM3(e.target.value)}
                 required
-                className="flex-1 rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 text-sm text-white outline-none focus:border-amber-400/40"
+                className="flex-1 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3.5 py-2.5 text-sm text-[#1a1612] outline-none focus:border-[#b8934a]/40"
               />
             </div>
             <div className="flex justify-end pt-2">
@@ -141,19 +141,19 @@ export function AdminSukurPanel({
       </section>
 
       <section>
-        <h3 className="mb-4 text-sm text-white/50">Geçmiş</h3>
+        <h3 className="mb-4 text-sm text-[#6b6158]">Geçmiş</h3>
         <ul className="space-y-4">
           {items
             .filter((i) => i.tarih !== today || !editing)
             .map((i) => (
               <li
                 key={i.id}
-                className="rounded-2xl border border-white/10 bg-gradient-to-br from-amber-500/5 to-transparent px-5 py-4"
+                className="rounded-2xl border border-[#e8e0d4] bg-gradient-to-br from-amber-500/5 to-transparent px-5 py-4"
               >
-                <p className="mb-3 text-[11px] uppercase tracking-wider text-white/35">
+                <p className="mb-3 text-[11px] uppercase tracking-wider text-[#1a1612]/40">
                   {formatDate(i.tarih)}
                 </p>
-                <ul className="space-y-1.5 text-sm text-white/80">
+                <ul className="space-y-1.5 text-sm text-[#1a1612]/80">
                   <li>· {i.madde_1}</li>
                   <li>· {i.madde_2}</li>
                   <li>· {i.madde_3}</li>

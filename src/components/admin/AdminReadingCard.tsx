@@ -12,7 +12,7 @@ interface Reading {
 export function AdminReadingCard({ reading }: { reading: Reading | null }) {
   return (
     <div className="h-full">
-      <h3 className="admin-heading mb-5 text-sm font-medium text-white/70">
+      <h3 className="admin-heading mb-5 text-sm font-medium text-[#1a1612]/70">
         Şu an okuyorum kartı
       </h3>
       <form action="/api/admin/reading" method="POST" className="space-y-4">

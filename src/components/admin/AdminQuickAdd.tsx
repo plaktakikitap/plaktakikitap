@@ -10,32 +10,32 @@ export function AdminQuickAdd() {
   return (
     <div className="fixed right-6 top-20 z-40 lg:top-6">
       <div
-        className={`absolute right-0 top-0 flex flex-col gap-1 rounded-2xl border border-white/10 bg-black/50 p-2 shadow-2xl backdrop-blur-xl transition-all duration-200 ${
+        className={`absolute right-0 top-0 flex flex-col gap-1 rounded-2xl border border-[#e8e0d4] bg-[#faf7f2] p-2 shadow-2xl transition-all duration-200 ${
           open ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-2 opacity-0"
         }`}
       >
         <Link
           href="/secretgate/films/new"
-          className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-white/90 transition-colors hover:bg-white/10"
+          className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-[#1a1612] transition-colors hover:bg-[#1a1612]/8"
           onClick={() => setOpen(false)}
         >
-          <Film className="h-5 w-5 text-amber-400" />
+          <Film className="h-5 w-5 text-[#b8934a]" />
           Film Ekle
         </Link>
         <Link
           href="/secretgate/series/new"
-          className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-white/90 transition-colors hover:bg-white/10"
+          className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-[#1a1612] transition-colors hover:bg-[#1a1612]/8"
           onClick={() => setOpen(false)}
         >
-          <Tv className="h-5 w-5 text-amber-400" />
+          <Tv className="h-5 w-5 text-[#b8934a]" />
           Dizi Ekle
         </Link>
         <Link
           href="/secretgate/books/new"
-          className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-white/90 transition-colors hover:bg-white/10"
+          className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-[#1a1612] transition-colors hover:bg-[#1a1612]/8"
           onClick={() => setOpen(false)}
         >
-          <BookOpen className="h-5 w-5 text-amber-400" />
+          <BookOpen className="h-5 w-5 text-[#b8934a]" />
           Kitap Ekle
         </Link>
       </div>

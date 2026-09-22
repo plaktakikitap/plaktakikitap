@@ -16,11 +16,11 @@ export default async function AdminDosyalarPage() {
   return (
     <div className="mx-auto max-w-3xl">
       <header className="mb-8">
-        <h1 className="flex items-center gap-2.5 text-2xl font-semibold text-white">
-          <HardDrive className="h-6 w-6 text-amber-400" />
+        <h1 className="flex items-center gap-2.5 text-2xl font-semibold text-[#1a1612]">
+          <HardDrive className="h-6 w-6 text-[#b8934a]" />
           Dosyalar
         </h1>
-        <p className="mt-2 text-sm text-white/50">
+        <p className="mt-2 text-sm text-[#6b6158]">
           Private bucket — signed URL ile indir.
         </p>
       </header>

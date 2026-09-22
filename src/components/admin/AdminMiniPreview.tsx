@@ -21,7 +21,7 @@ export function AdminMiniPreview() {
   const iframeSrc = origin ? `${origin}${path}` : "";
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl">
+    <div className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-4 backdrop-blur-xl">
       <div className="mb-3 flex items-center justify-between gap-2">
         <h3 className="flex items-center gap-2 text-sm font-medium text-[var(--muted-foreground)]">
           <Eye className="h-4 w-4" />
@@ -32,7 +32,7 @@ export function AdminMiniPreview() {
             href={iframeSrc}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-[var(--muted-foreground)] transition-colors hover:bg-white/10 hover:text-[var(--foreground)]"
+            className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-[var(--muted-foreground)] transition-colors hover:bg-[#1a1612]/8 hover:text-[var(--foreground)]"
             title="Yeni sekmede aç"
           >
             <ExternalLink className="h-3 w-3" />
@@ -52,7 +52,7 @@ export function AdminMiniPreview() {
         ))}
       </select>
       {iframeSrc ? (
-        <div className="overflow-hidden rounded-xl border border-white/10 bg-black/20">
+        <div className="overflow-hidden rounded-xl border border-[#e8e0d4] bg-[#f0ebe2]">
           <iframe
             src={iframeSrc}
             title="Site önizleme"
@@ -61,7 +61,7 @@ export function AdminMiniPreview() {
           />
         </div>
       ) : (
-        <div className="flex h-[200px] items-center justify-center rounded-xl border border-white/10 bg-white/5 text-xs text-[var(--muted-foreground)]">
+        <div className="flex h-[200px] items-center justify-center rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 text-xs text-[var(--muted-foreground)]">
           Yükleniyor…
         </div>
       )}

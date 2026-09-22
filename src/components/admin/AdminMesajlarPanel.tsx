@@ -61,10 +61,10 @@ export function AdminMesajlarPanel({ messages }: { messages: SiteMessage[] }) {
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-                  <h2 className="font-medium text-white/95">{msg.isim}</h2>
+                  <h2 className="font-medium text-[#1a1612]">{msg.isim}</h2>
                   <time className="text-xs text-[var(--muted)]">{formatDate(msg.tarih)}</time>
                 </div>
-                <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-white/80">
+                <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-[#1a1612]/80">
                   {msg.mesaj}
                 </p>
               </div>

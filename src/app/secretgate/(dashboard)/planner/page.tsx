@@ -19,8 +19,8 @@ export default async function AdminPlannerPage() {
   return (
     <div className="space-y-10">
       <div>
-        <h1 className="text-2xl font-semibold text-white">Ajanda</h1>
-        <p className="mt-1 text-sm text-white/50">
+        <h1 className="text-2xl font-semibold text-[#1a1612]">Ajanda</h1>
+        <p className="mt-1 text-sm text-[#6b6158]">
           Hızlı kayıt — tarih, başlık, not.
         </p>
       </div>
@@ -29,15 +29,15 @@ export default async function AdminPlannerPage() {
         <QuickAjandaForm initialRecent={recent} />
       </div>
 
-      <details className="group rounded-2xl border border-white/10 bg-white/[0.02]">
-        <summary className="cursor-pointer list-none px-5 py-4 text-sm text-white/55 transition hover:text-white/80 [&::-webkit-details-marker]:hidden">
+      <details className="group rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5">
+        <summary className="cursor-pointer list-none px-5 py-4 text-sm text-[#6b6158] transition hover:text-[#1a1612]/80 [&::-webkit-details-marker]:hidden">
           <span className="flex items-center justify-between">
             Gelişmiş: ay canvas & günlük takvim
-            <span className="text-white/35 group-open:hidden">▾</span>
-            <span className="hidden text-white/35 group-open:inline">▴</span>
+            <span className="text-[#1a1612]/40 group-open:hidden">▾</span>
+            <span className="hidden text-[#1a1612]/40 group-open:inline">▴</span>
           </span>
         </summary>
-        <div className="space-y-8 border-t border-white/10 px-5 py-6">
+        <div className="space-y-8 border-t border-[#e8e0d4] px-5 py-6">
           <AdminSection
             title="Sayfa düzeni (Canvas)"
             description="Aya tıklayarak öğe yerleştir."
@@ -48,7 +48,7 @@ export default async function AdminPlannerPage() {
                   <Link
                     key={i}
                     href={`/secretgate/planner/${year}/${i + 1}`}
-                    className="rounded-lg border border-white/20 bg-white/10 px-4 py-3 text-center font-medium text-white transition hover:border-amber-400/50 hover:bg-white/20"
+                    className="rounded-lg border border-[#d4c9bb] bg-[#1a1612]/8 px-4 py-3 text-center font-medium text-[#1a1612] transition hover:border-[#b8934a]/50 hover:bg-[#1a1612]/8"
                   >
                     {label}
                   </Link>

@@ -192,7 +192,7 @@ export function FilmForm({ item }: { item?: FilmItem | null }) {
                 <button
                   type="button"
                   onClick={() => removeGenre(tag)}
-                  className="rounded p-0.5 hover:bg-black/20"
+                  className="rounded p-0.5 hover:bg-[#f0ebe2]"
                   aria-label={`${tag} kaldır`}
                 >
                   <X className="h-3 w-3" />

@@ -18,8 +18,8 @@ import { AdminImageUpload } from "./AdminImageUpload";
 import type { SiteSettingsValue } from "@/lib/site-settings";
 
 const inputClass =
-  "w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-amber-500/50 focus:outline-none focus:ring-1 focus:ring-amber-500/30";
-const labelClass = "mb-1.5 block text-sm font-medium text-white/90";
+  "w-full rounded-xl border border-[#d4c9bb] bg-[#1a1612]/5 px-4 py-3 text-sm text-[#1a1612] placeholder:text-[#6b6158] focus:border-amber-500/50 focus:outline-none focus:ring-1 focus:ring-amber-500/30";
+const labelClass = "mb-1.5 block text-sm font-medium text-[#1a1612]";
 
 export function AdminSettingsControlCenter() {
   const router = useRouter();
@@ -101,8 +101,8 @@ export function AdminSettingsControlCenter() {
 
   if (loading || !settings) {
     return (
-      <div className="flex items-center justify-center rounded-2xl border border-white/10 bg-white/5 p-12">
-        <Loader2 className="h-8 w-8 animate-spin text-amber-400" />
+      <div className="flex items-center justify-center rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-12">
+        <Loader2 className="h-8 w-8 animate-spin text-[#b8934a]" />
       </div>
     );
   }
@@ -119,9 +119,9 @@ export function AdminSettingsControlCenter() {
       )}
 
       {/* 1. SEO & Global Metadata */}
-      <section className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-        <h2 className="mb-4 flex items-center gap-2 font-medium text-white">
-          <Search className="h-5 w-5 text-amber-400" />
+      <section className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-6 backdrop-blur-sm">
+        <h2 className="mb-4 flex items-center gap-2 font-medium text-[#1a1612]">
+          <Search className="h-5 w-5 text-[#b8934a]" />
           SEO & Global Metadata
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -140,7 +140,7 @@ export function AdminSettingsControlCenter() {
           <div>
             <label className={labelClass}>Favicon URL</label>
             <AdminImageUpload name="favicon_url" value={settings.favicon_url ?? ""} placeholder="Favicon yükle" />
-            <p className="mt-1 text-xs text-white/50">Boş bırakırsanız mevcut /images/favicon.png kullanılır.</p>
+            <p className="mt-1 text-xs text-[#6b6158]">Boş bırakırsanız mevcut /images/favicon.png kullanılır.</p>
           </div>
           <div>
             <label className={labelClass}>OG Image (paylaşım görseli)</label>
@@ -150,9 +150,9 @@ export function AdminSettingsControlCenter() {
       </section>
 
       {/* 2. Site Genel Değişkenleri */}
-      <section className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-        <h2 className="mb-4 flex items-center gap-2 font-medium text-white">
-          <Settings className="h-5 w-5 text-amber-400" />
+      <section className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-6 backdrop-blur-sm">
+        <h2 className="mb-4 flex items-center gap-2 font-medium text-[#1a1612]">
+          <Settings className="h-5 w-5 text-[#b8934a]" />
           Site Genel Değişkenleri
         </h2>
 
@@ -167,7 +167,7 @@ export function AdminSettingsControlCenter() {
               defaultValue={settings.sound_volume ?? 100}
               className="w-full accent-amber-500"
             />
-            <p className="mt-1 text-xs text-white/50">0 = kapalı, 100 = tam ses. Sayfa çevirme ve tık sesleri.</p>
+            <p className="mt-1 text-xs text-[#6b6158]">0 = kapalı, 100 = tam ses. Sayfa çevirme ve tık sesleri.</p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -176,15 +176,15 @@ export function AdminSettingsControlCenter() {
               name="maintenance_mode"
               id="maintenance_mode"
               defaultChecked={!!settings.maintenance_mode}
-              className="h-4 w-4 rounded border-white/30 text-amber-500"
+              className="h-4 w-4 rounded border-[#d4c9bb] text-amber-500"
             />
-            <label htmlFor="maintenance_mode" className="text-sm text-white/90">
+            <label htmlFor="maintenance_mode" className="text-sm text-[#1a1612]">
               Bakım modu (site &quot;Yapım Aşamasında&quot; görünür)
             </label>
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <h3 className="mb-3 flex items-center gap-2 text-sm font-medium text-white">
+          <div className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 p-4">
+            <h3 className="mb-3 flex items-center gap-2 text-sm font-medium text-[#1a1612]">
               <User className="h-4 w-4" />
               Admin profil
             </h3>
@@ -211,8 +211,8 @@ export function AdminSettingsControlCenter() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <h3 className="mb-3 flex items-center gap-2 text-sm font-medium text-white">
+          <div className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 p-4">
+            <h3 className="mb-3 flex items-center gap-2 text-sm font-medium text-[#1a1612]">
               <ImageIcon className="h-4 w-4" />
               Ana sayfa fotoğrafları
             </h3>
@@ -228,8 +228,8 @@ export function AdminSettingsControlCenter() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <h3 className="mb-3 flex items-center gap-2 text-sm font-medium text-white">
+          <div className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 p-4">
+            <h3 className="mb-3 flex items-center gap-2 text-sm font-medium text-[#1a1612]">
               <Type className="h-4 w-4" />
               Ana sayfa metinleri
             </h3>
@@ -248,14 +248,14 @@ export function AdminSettingsControlCenter() {
       </section>
 
       {/* 3. Footer & Navigasyon */}
-      <section className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-        <h2 className="mb-4 flex items-center gap-2 font-medium text-white">
-          <Link2 className="h-5 w-5 text-amber-400" />
+      <section className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-6 backdrop-blur-sm">
+        <h2 className="mb-4 flex items-center gap-2 font-medium text-[#1a1612]">
+          <Link2 className="h-5 w-5 text-[#b8934a]" />
           Footer &amp; Navigasyon
         </h2>
-        <p className="text-sm text-white/70">
+        <p className="text-sm text-[#1a1612]/70">
           Footer sosyal linklerini (Instagram, Twitter, Academia vb.){" "}
-          <a href="/secretgate/socials" className="text-amber-400 underline hover:no-underline">
+          <a href="/secretgate/socials" className="text-[#b8934a] underline hover:no-underline">
             Bana Ulaşın
           </a>{" "}
           sayfasından yönetebilirsiniz.
@@ -266,7 +266,7 @@ export function AdminSettingsControlCenter() {
         <button
           type="submit"
           disabled={saving}
-          className="flex items-center gap-2 rounded-xl bg-amber-500 px-6 py-3 text-sm font-medium text-white transition hover:bg-amber-600 disabled:opacity-50"
+          className="flex items-center gap-2 rounded-xl bg-amber-500 px-6 py-3 text-sm font-medium text-[#1a1612] transition hover:bg-amber-600 disabled:opacity-50"
         >
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           {saving ? "Kaydediliyor…" : "Save Changes"}

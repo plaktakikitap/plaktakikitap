@@ -43,11 +43,11 @@ function MacroBar({
   const pct = Math.min(100, max > 0 ? (value / max) * 100 : 0);
   return (
     <div>
-      <div className="mb-1 flex justify-between text-[11px] text-white/55">
+      <div className="mb-1 flex justify-between text-[11px] text-[#6b6158]">
         <span>{label}</span>
         <span>{Math.round(value)}g</span>
       </div>
-      <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+      <div className="h-1.5 overflow-hidden rounded-full bg-[#1a1612]/8">
         <div
           className="h-full rounded-full transition-all"
           style={{ width: `${pct}%`, background: color }}
@@ -182,7 +182,7 @@ export function AdminBeslenmePanel({
       <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
         <form
           onSubmit={handleSubmit}
-          className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+          className="space-y-4 rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5"
         >
           <div className="flex flex-wrap gap-2">
             {OGUNLER.map((o) => (
@@ -193,7 +193,7 @@ export function AdminBeslenmePanel({
                 className={`rounded-xl px-3 py-2 text-sm transition ${
                   ogun === o.id
                     ? "bg-amber-500 text-black"
-                    : "bg-white/5 text-white/60 hover:bg-white/10"
+                    : "bg-[#1a1612]/5 text-[#6b6158] hover:bg-[#1a1612]/8"
                 }`}
               >
                 {o.label}
@@ -201,7 +201,7 @@ export function AdminBeslenmePanel({
             ))}
           </div>
           <div>
-            <label className="mb-1.5 block text-sm text-white/70">
+            <label className="mb-1.5 block text-sm text-[#1a1612]/70">
               Ne yedin?
             </label>
             <textarea
@@ -209,7 +209,7 @@ export function AdminBeslenmePanel({
               onChange={(e) => setYenen(e.target.value)}
               rows={4}
               placeholder="yulaf ezmesi, 1 muz, fıstık ezmesi…"
-              className="w-full rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 text-sm text-white placeholder:text-white/35 outline-none focus:border-amber-400/40"
+              className="w-full rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3.5 py-2.5 text-sm text-[#1a1612] placeholder:text-[#6b6158] outline-none focus:border-[#b8934a]/40"
               required
             />
           </div>
@@ -222,13 +222,13 @@ export function AdminBeslenmePanel({
           </button>
         </form>
 
-        <aside className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-          <p className="mb-3 text-[10px] uppercase tracking-wider text-white/40">
+        <aside className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5">
+          <p className="mb-3 text-[10px] uppercase tracking-wider text-[#1a1612]/40">
             Bugünün özeti
           </p>
           <p className="text-3xl font-semibold text-amber-300">
             {Math.round(todayTotals.kalori)}
-            <span className="ml-1 text-sm font-normal text-white/40">kcal</span>
+            <span className="ml-1 text-sm font-normal text-[#1a1612]/40">kcal</span>
           </p>
           <div className="mt-4 space-y-3">
             <MacroBar label="Protein" value={todayTotals.protein} max={120} color="#34d399" />
@@ -236,7 +236,7 @@ export function AdminBeslenmePanel({
             <MacroBar label="Yağ" value={todayTotals.yag} max={80} color="#fbbf24" />
           </div>
           {todayTotals.degerler[0] ? (
-            <p className="mt-4 text-xs leading-relaxed text-white/55">
+            <p className="mt-4 text-xs leading-relaxed text-[#6b6158]">
               {todayTotals.degerler[0]}
             </p>
           ) : null}
@@ -248,8 +248,8 @@ export function AdminBeslenmePanel({
         </aside>
       </div>
 
-      <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-        <h3 className="mb-4 text-sm text-white/60">Son 7 gün — kalori</h3>
+      <section className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5">
+        <h3 className="mb-4 text-sm text-[#6b6158]">Son 7 gün — kalori</h3>
         <div className="h-48 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={weekChart}>
@@ -262,36 +262,36 @@ export function AdminBeslenmePanel({
                   borderRadius: 8,
                 }}
               />
-              <Bar dataKey="kalori" fill="#d4af37" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="kalori" fill="#b8934a" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </section>
 
       <section>
-        <h3 className="mb-3 text-sm text-white/60">Bugünkü kayıtlar</h3>
+        <h3 className="mb-3 text-sm text-[#6b6158]">Bugünkü kayıtlar</h3>
         {todayItems.length === 0 ? (
-          <p className="text-sm text-white/35">Henüz kayıt yok.</p>
+          <p className="text-sm text-[#1a1612]/40">Henüz kayıt yok.</p>
         ) : (
           <ul className="space-y-2">
             {todayItems.map((i) => (
               <li
                 key={i.id}
-                className="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3"
+                className="flex items-start justify-between gap-3 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-4 py-3"
               >
                 <div className="min-w-0">
-                  <p className="text-xs text-amber-400/80">
+                  <p className="text-xs text-[#b8934a]/80">
                     {OGUNLER.find((o) => o.id === i.ogun)?.label}
                     {i.ai_analiz?.tahmini_kalori != null
                       ? ` · ~${Math.round(Number(i.ai_analiz.tahmini_kalori))} kcal`
                       : ""}
                   </p>
-                  <p className="mt-0.5 text-sm text-white/85">{i.yenen}</p>
+                  <p className="mt-0.5 text-sm text-[#1a1612]/85">{i.yenen}</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => void remove(i.id)}
-                  className="rounded p-1.5 text-white/35 hover:text-red-400"
+                  className="rounded p-1.5 text-[#1a1612]/40 hover:text-red-400"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>

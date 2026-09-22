@@ -106,7 +106,7 @@ export function AdminMusicPanel({
           type="button"
           onClick={handleStartPlaylist}
           disabled={tracks.filter((t) => t.is_active).length === 0}
-          className="rounded bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-50"
+          className="rounded bg-amber-600 px-4 py-2 text-sm font-medium text-[#1a1612] hover:bg-amber-700 disabled:opacity-50"
         >
           Playlisti şimdi başlat
         </button>

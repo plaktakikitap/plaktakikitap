@@ -10,11 +10,11 @@ export default async function AdminSukurPage() {
   return (
     <div className="mx-auto max-w-lg">
       <header className="mb-8">
-        <h1 className="flex items-center gap-2.5 text-2xl font-semibold text-white">
-          <Sparkles className="h-6 w-6 text-amber-400" />
+        <h1 className="flex items-center gap-2.5 text-2xl font-semibold text-[#1a1612]">
+          <Sparkles className="h-6 w-6 text-[#b8934a]" />
           Şükür
         </h1>
-        <p className="mt-2 text-sm text-white/50">
+        <p className="mt-2 text-sm text-[#6b6158]">
           Her gün üç şey.
         </p>
       </header>

@@ -260,7 +260,7 @@ export function AdminPlaktakiKitapItemsManager() {
           ))}
         </ul>
         {sortedList.length > 0 && orderDirty && (
-          <button type="button" onClick={handleReorder} disabled={loading} className="mt-3 rounded bg-amber-600 px-3 py-1.5 text-sm text-white disabled:opacity-50">
+          <button type="button" onClick={handleReorder} disabled={loading} className="mt-3 rounded bg-amber-600 px-3 py-1.5 text-sm text-[#1a1612] disabled:opacity-50">
             Sırayı kaydet
           </button>
         )}

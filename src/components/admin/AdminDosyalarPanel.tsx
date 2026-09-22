@@ -37,8 +37,8 @@ function formatDate(iso: string) {
 function TypeIcon({ tur }: { tur: string | null }) {
   if (tur === "image") return <ImageIcon className="h-5 w-5 text-emerald-400" />;
   if (tur === "pdf") return <FileText className="h-5 w-5 text-red-400" />;
-  if (tur === "folder") return <Folder className="h-5 w-5 text-white/40" />;
-  return <File className="h-5 w-5 text-white/50" />;
+  if (tur === "folder") return <Folder className="h-5 w-5 text-[#1a1612]/40" />;
+  return <File className="h-5 w-5 text-[#6b6158]" />;
 }
 
 export function AdminDosyalarPanel({
@@ -215,7 +215,7 @@ export function AdminDosyalarPanel({
             className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs transition ${
               activeFolder === f
                 ? "border-amber-400/40 bg-amber-500/15 text-amber-200"
-                : "border-white/10 bg-white/[0.03] text-white/55 hover:text-white/80"
+                : "border-[#e8e0d4] bg-[#1a1612]/5 text-[#6b6158] hover:text-[#1a1612]/80"
             }`}
           >
             <Folder className="h-3.5 w-3.5" />
@@ -225,7 +225,7 @@ export function AdminDosyalarPanel({
         <button
           type="button"
           onClick={() => setShowNewFolder((o) => !o)}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-dashed border-white/20 px-3 py-1.5 text-xs text-white/45 hover:border-white/40 hover:text-white/70"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-dashed border-[#d4c9bb] px-3 py-1.5 text-xs text-[#1a1612]/40 hover:border-[#d4c9bb] hover:text-[#1a1612]/70"
         >
           <FolderPlus className="h-3.5 w-3.5" />
           Yeni klasör
@@ -238,7 +238,7 @@ export function AdminDosyalarPanel({
             value={newFolderName}
             onChange={(e) => setNewFolderName(e.target.value)}
             placeholder="klasör adı"
-            className="flex-1 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white outline-none"
+            className="flex-1 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2 text-sm text-[#1a1612] outline-none"
             autoFocus
           />
           <button
@@ -270,24 +270,24 @@ export function AdminDosyalarPanel({
         className={`relative rounded-2xl border-2 border-dashed p-6 transition ${
           isDragging
             ? "border-amber-400/50 bg-amber-500/10"
-            : "border-white/15 bg-white/[0.02]"
+            : "border-[#e8e0d4] bg-[#1a1612]/5"
         }`}
       >
         <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:justify-between sm:text-left">
           <div className="flex items-center gap-3">
-            <Upload className="h-8 w-8 text-white/40" />
+            <Upload className="h-8 w-8 text-[#1a1612]/40" />
             <div>
-              <p className="text-sm text-white/80">
+              <p className="text-sm text-[#1a1612]/80">
                 {isDragging ? "Bırak" : "Sürükle veya dosya seç"}
               </p>
-              <p className="text-[11px] text-white/40">Max 50MB · private bucket</p>
+              <p className="text-[11px] text-[#1a1612]/40">Max 50MB · private bucket</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <select
               value={uploadFolder}
               onChange={(e) => setUploadFolder(e.target.value)}
-              className="rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white outline-none"
+              className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2 text-xs text-[#1a1612] outline-none"
             >
               {folders.map((f) => (
                 <option key={f} value={f}>
@@ -317,13 +317,13 @@ export function AdminDosyalarPanel({
         </div>
         {progress !== null ? (
           <div className="mt-4">
-            <div className="h-1.5 overflow-hidden rounded-full bg-white/15">
+            <div className="h-1.5 overflow-hidden rounded-full bg-[#1a1612]/8">
               <div
                 className="h-full rounded-full bg-amber-500 transition-all"
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <p className="mt-1 text-center text-[11px] text-white/50">
+            <p className="mt-1 text-center text-[11px] text-[#6b6158]">
               {progress}%
             </p>
           </div>
@@ -332,18 +332,18 @@ export function AdminDosyalarPanel({
 
       {/* File list */}
       <section>
-        <h3 className="mb-3 text-sm text-white/60">
+        <h3 className="mb-3 text-sm text-[#6b6158]">
           {activeFolder}{" "}
-          <span className="text-white/30">({visible.length})</span>
+          <span className="text-[#6b6158]">({visible.length})</span>
         </h3>
         {visible.length === 0 ? (
-          <p className="text-sm text-white/35">Bu klasör boş.</p>
+          <p className="text-sm text-[#1a1612]/40">Bu klasör boş.</p>
         ) : (
-          <ul className="divide-y divide-white/5 rounded-2xl border border-white/10 bg-white/[0.02]">
+          <ul className="divide-y divide-white/5 rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5">
             {visible.map((file) => (
               <li
                 key={file.id}
-                className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.03]"
+                className="flex items-center gap-3 px-4 py-3 hover:bg-[#1a1612]/5"
               >
                 <button
                   type="button"
@@ -352,10 +352,10 @@ export function AdminDosyalarPanel({
                 >
                   <TypeIcon tur={file.dosya_turu} />
                   <div className="min-w-0">
-                    <p className="truncate text-sm text-white/90">
+                    <p className="truncate text-sm text-[#1a1612]">
                       {file.dosya_adi}
                     </p>
-                    <p className="text-[11px] text-white/40">
+                    <p className="text-[11px] text-[#1a1612]/40">
                       {formatBytes(file.boyut)} · {formatDate(file.olusturma_tarihi)}
                       {file.dosya_turu ? ` · ${file.dosya_turu}` : ""}
                     </p>
@@ -364,7 +364,7 @@ export function AdminDosyalarPanel({
                 <button
                   type="button"
                   onClick={() => void download(file.id)}
-                  className="rounded-lg p-2 text-white/40 hover:bg-white/10 hover:text-white"
+                  className="rounded-lg p-2 text-[#1a1612]/40 hover:bg-[#1a1612]/8 hover:text-[#1a1612]"
                   aria-label="İndir"
                 >
                   <Download className="h-4 w-4" />
@@ -372,7 +372,7 @@ export function AdminDosyalarPanel({
                 <button
                   type="button"
                   onClick={() => void remove(file.id)}
-                  className="rounded-lg p-2 text-white/40 hover:bg-red-500/20 hover:text-red-400"
+                  className="rounded-lg p-2 text-[#1a1612]/40 hover:bg-red-500/20 hover:text-red-400"
                   aria-label="Sil"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -393,7 +393,7 @@ export function AdminDosyalarPanel({
           }}
         >
           <div
-            className="relative max-h-[90vh] max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-black"
+            className="relative max-h-[90vh] max-w-4xl overflow-hidden rounded-2xl border border-[#e8e0d4] bg-black"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -402,7 +402,7 @@ export function AdminDosyalarPanel({
                 setPreviewUrl(null);
                 setPreviewKind(null);
               }}
-              className="absolute right-3 top-3 z-10 rounded-lg bg-black/60 px-3 py-1.5 text-xs text-white/80"
+              className="absolute right-3 top-3 z-10 rounded-lg bg-black/60 px-3 py-1.5 text-xs text-white"
             >
               Kapat
             </button>

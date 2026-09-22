@@ -76,11 +76,11 @@ export function AdminDashboard({ recentItems }: AdminDashboardProps) {
       <div className="grid grid-cols-2 gap-6 md:grid-cols-4 md:auto-rows-[minmax(240px,auto)]">
         {/* Recent Items - büyük */}
         <AdminBentoCard colSpan={2} rowSpan={2} className="overflow-hidden">
-          <h3 className="admin-heading mb-5 text-sm font-medium text-white/70">
+          <h3 className="admin-heading mb-5 text-sm font-medium text-[#1a1612]/70">
             Son eklenenler
           </h3>
           {recentItems.length === 0 ? (
-            <p className="py-8 text-center text-sm text-white/50">
+            <p className="py-8 text-center text-sm text-[#6b6158]">
               Henüz içerik yok. Aşağıdan ekleyin.
             </p>
           ) : (
@@ -88,7 +88,7 @@ export function AdminDashboard({ recentItems }: AdminDashboardProps) {
               {recentItems.map((entry) => (
                 <div
                   key={entry.item.id}
-                  className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3"
+                  className="flex items-center justify-between rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-4 py-3"
                 >
                   <div className="flex min-w-0 flex-1 items-center gap-2">
                     {entry.type === "film" && <Film className="h-3.5 w-3.5 shrink-0 text-[var(--muted)]" />}
@@ -96,7 +96,7 @@ export function AdminDashboard({ recentItems }: AdminDashboardProps) {
                     {entry.type === "book" && <BookOpen className="h-3.5 w-3.5 shrink-0 text-[var(--muted)]" />}
                     <div className="min-w-0 truncate">
                       <p className="truncate text-sm font-medium">{entry.item.title}</p>
-                      <p className="truncate text-[10px] text-white/50">
+                      <p className="truncate text-[10px] text-[#6b6158]">
                         {entry.type} · {getDetail(entry)}
                       </p>
                     </div>
@@ -117,8 +117,8 @@ export function AdminDashboard({ recentItems }: AdminDashboardProps) {
 
         {/* Add Film */}
         <AdminBentoCard colSpan={1} rowSpan={1}>
-          <h3 className="admin-heading mb-2 flex items-center gap-1.5 text-sm font-medium text-white/70">
-            <Film className="h-4 w-4 text-amber-400" />
+          <h3 className="admin-heading mb-2 flex items-center gap-1.5 text-sm font-medium text-[#1a1612]/70">
+            <Film className="h-4 w-4 text-[#b8934a]" />
             Film ekle
           </h3>
           <form action={handleFilmSubmit} className="space-y-1">
@@ -163,8 +163,8 @@ export function AdminDashboard({ recentItems }: AdminDashboardProps) {
 
         {/* Add Book - geniş */}
         <AdminBentoCard colSpan={2} rowSpan={1}>
-          <h3 className="admin-heading mb-2 flex items-center gap-1.5 text-sm font-medium text-white/70">
-            <BookOpen className="h-4 w-4 text-amber-400" />
+          <h3 className="admin-heading mb-2 flex items-center gap-1.5 text-sm font-medium text-[#1a1612]/70">
+            <BookOpen className="h-4 w-4 text-[#b8934a]" />
             Kitap ekle
           </h3>
           <form action={handleBookSubmit} className="grid grid-cols-2 gap-x-3 gap-y-1 md:grid-cols-4">

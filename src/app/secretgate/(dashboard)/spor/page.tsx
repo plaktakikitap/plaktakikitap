@@ -15,11 +15,11 @@ export default async function AdminSporPage() {
   return (
     <div className="mx-auto max-w-3xl">
       <header className="mb-8">
-        <h1 className="flex items-center gap-2.5 text-2xl font-semibold text-white">
-          <Dumbbell className="h-6 w-6 text-amber-400" />
+        <h1 className="flex items-center gap-2.5 text-2xl font-semibold text-[#1a1612]">
+          <Dumbbell className="h-6 w-6 text-[#b8934a]" />
           Spor
         </h1>
-        <p className="mt-2 text-sm text-white/50">
+        <p className="mt-2 text-sm text-[#6b6158]">
           Antrenman kaydı + aylık heatmap.
         </p>
       </header>

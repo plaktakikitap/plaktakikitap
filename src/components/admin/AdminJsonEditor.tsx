@@ -73,14 +73,14 @@ export function AdminJsonEditor({
           <button
             type="button"
             onClick={handleFormat}
-            className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white/80 transition-colors hover:bg-white/10"
+            className="rounded-lg border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-1.5 text-xs text-[#1a1612]/80 transition-colors hover:bg-[#1a1612]/8"
           >
             Formatla
           </button>
           <button
             type="button"
             onClick={handleCopy}
-            className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white/80 transition-colors hover:bg-white/10"
+            className="flex items-center gap-1.5 rounded-lg border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-1.5 text-xs text-[#1a1612]/80 transition-colors hover:bg-[#1a1612]/8"
           >
             <Copy className="h-3.5 w-3.5" />
             Kopyala
@@ -88,7 +88,7 @@ export function AdminJsonEditor({
           <button
             type="button"
             onClick={() => setShowPreview(!showPreview)}
-            className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white/80 transition-colors hover:bg-white/10"
+            className="rounded-lg border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-1.5 text-xs text-[#1a1612]/80 transition-colors hover:bg-[#1a1612]/8"
           >
             {showPreview ? "Düzenle" : "Önizle"}
           </button>
@@ -99,7 +99,7 @@ export function AdminJsonEditor({
             Geçerli JSON
           </span>
         ) : (
-          <span className="flex items-center gap-1 text-xs text-amber-400">
+          <span className="flex items-center gap-1 text-xs text-[#b8934a]">
             <AlertCircle className="h-3.5 w-3.5" />
             Geçersiz JSON
           </span>

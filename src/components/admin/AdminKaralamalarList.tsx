@@ -58,7 +58,7 @@ export function AdminKaralamalarList({
   }
 
   if (items.length === 0) {
-    return <p className="text-sm text-white/50">Henüz kayıt yok.</p>;
+    return <p className="text-sm text-[#6b6158]">Henüz kayıt yok.</p>;
   }
 
   return (
@@ -67,7 +67,7 @@ export function AdminKaralamalarList({
       {items.map((item) => (
         <div
           key={item.id}
-          className="rounded-xl border border-white/10 bg-white/[0.03] p-4"
+          className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 p-4"
         >
           {editingId === item.id ? (
             <AdminKaralamalarForm
@@ -78,17 +78,17 @@ export function AdminKaralamalarList({
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="font-medium text-white">{item.baslik}</h3>
+                  <h3 className="font-medium text-[#1a1612]">{item.baslik}</h3>
                   {!item.yayinda ? (
-                    <span className="rounded bg-white/10 px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-white/50">
+                    <span className="rounded bg-[#1a1612]/8 px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-[#6b6158]">
                       taslak
                     </span>
                   ) : null}
                 </div>
-                <p className="mt-1 text-xs text-white/45">
+                <p className="mt-1 text-xs text-[#1a1612]/40">
                   /{item.slug} · {formatDate(item.olusturma_tarihi)}
                 </p>
-                <p className="mt-2 line-clamp-2 text-sm text-white/55">
+                <p className="mt-2 line-clamp-2 text-sm text-[#6b6158]">
                   {stripSpoilers(item.icerik) ||
                     (hasSpoilerMarkup(item.icerik) ? "Spoiler içerir" : "")}
                 </p>
@@ -97,7 +97,7 @@ export function AdminKaralamalarList({
                 <Link
                   href={`${SECTION_PATH}/${item.slug}`}
                   target="_blank"
-                  className="rounded-lg px-2 py-1.5 text-xs text-white/50 hover:bg-white/5 hover:text-white"
+                  className="rounded-lg px-2 py-1.5 text-xs text-[#6b6158] hover:bg-[#1a1612]/5 hover:text-[#1a1612]"
                 >
                   Gör
                 </Link>
@@ -105,7 +105,7 @@ export function AdminKaralamalarList({
                   type="button"
                   onClick={() => setEditingId(item.id)}
                   disabled={loading}
-                  className="rounded-lg p-2 text-white/60 hover:bg-white/5 hover:text-[#d4af37]"
+                  className="rounded-lg p-2 text-[#6b6158] hover:bg-[#1a1612]/5 hover:text-[#b8934a]"
                   aria-label="Düzenle"
                 >
                   <Pencil className="h-4 w-4" />
@@ -114,7 +114,7 @@ export function AdminKaralamalarList({
                   type="button"
                   onClick={() => handleDelete(item.id)}
                   disabled={loading}
-                  className="rounded-lg p-2 text-white/60 hover:bg-red-500/20 hover:text-red-300"
+                  className="rounded-lg p-2 text-[#6b6158] hover:bg-red-500/20 hover:text-red-300"
                   aria-label="Sil"
                 >
                   <Trash2 className="h-4 w-4" />

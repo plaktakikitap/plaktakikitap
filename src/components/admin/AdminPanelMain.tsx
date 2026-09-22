@@ -179,7 +179,7 @@ export function AdminPanelMain({
                 key={t.id}
                 className="flex items-center gap-3 rounded-xl border border-[var(--card-border)] bg-[var(--background)] px-3 py-2"
               >
-                <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-white/10">
+                <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-[#1a1612]/8">
                   {t.cover_url ? (
                     <img
                       src={t.cover_url}

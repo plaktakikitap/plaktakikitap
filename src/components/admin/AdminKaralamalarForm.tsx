@@ -155,7 +155,7 @@ export function AdminKaralamalarForm({
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6"
+      className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5 sm:p-6"
     >
       <AdminRecentList items={recentItems} />
 
@@ -184,7 +184,7 @@ export function AdminKaralamalarForm({
             }}
             className="font-mono text-sm"
           />
-          <p className="mt-1 text-[11px] text-white/35">
+          <p className="mt-1 text-[11px] text-[#1a1612]/40">
             Otomatik üretilir; istersen düzenle.
           </p>
         </div>
@@ -201,16 +201,16 @@ export function AdminKaralamalarForm({
             className="min-h-[220px]"
             required
           />
-          <p className="mt-1.5 text-[11px] text-white/40">
+          <p className="mt-1.5 text-[11px] text-[#1a1612]/40">
             Spoiler için:{" "}
-            <code className="rounded bg-white/10 px-1 py-0.5 font-mono text-white/55">
+            <code className="rounded bg-[#1a1612]/8 px-1 py-0.5 font-mono text-[#6b6158]">
               [spoiler]metin[/spoiler]
             </code>
           </p>
         </div>
 
         <AdminOptionalSection>
-          <label className="flex cursor-pointer items-center justify-between gap-3 text-sm text-white/75">
+          <label className="flex cursor-pointer items-center justify-between gap-3 text-sm text-[#1a1612]/75">
             <span>Yayında</span>
             <button
               type="button"
@@ -218,7 +218,7 @@ export function AdminKaralamalarForm({
               aria-checked={yayinda}
               onClick={() => setYayinda((v) => !v)}
               className={`relative h-7 w-12 rounded-full transition ${
-                yayinda ? "bg-amber-500" : "bg-white/20"
+                yayinda ? "bg-amber-500" : "bg-[#1a1612]/8"
               }`}
             >
               <span
@@ -235,7 +235,7 @@ export function AdminKaralamalarForm({
             <button
               type="button"
               onClick={onDone}
-              className="rounded-xl border border-white/15 px-4 py-2.5 text-sm text-white/70 hover:bg-white/5"
+              className="rounded-xl border border-[#e8e0d4] px-4 py-2.5 text-sm text-[#1a1612]/70 hover:bg-[#1a1612]/5"
             >
               İptal
             </button>

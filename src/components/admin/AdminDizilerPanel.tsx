@@ -144,7 +144,7 @@ export function AdminDizilerPanel({
     <div className="space-y-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="relative min-w-0 flex-1">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#1a1612]/40" />
           <input
             type="search"
             value={query}
@@ -171,12 +171,12 @@ export function AdminDizilerPanel({
         />
       ) : null}
 
-      <p className="text-xs text-white/40">
+      <p className="text-xs text-[#1a1612]/40">
         {filtered.length} / {rows.length} dizi
       </p>
 
       {filtered.length === 0 ? (
-        <p className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-8 text-center text-sm text-white/45">
+        <p className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-4 py-8 text-center text-sm text-[#1a1612]/40">
           Eşleşen dizi yok.
         </p>
       ) : (
@@ -190,7 +190,7 @@ export function AdminDizilerPanel({
             return (
               <li
                 key={row.contentId}
-                className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]"
+                className="overflow-hidden rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5"
               >
                 <div className="flex flex-col gap-3 p-3 sm:flex-row sm:items-center sm:gap-4 sm:p-4">
                   {row.posterUrl ? (
@@ -201,14 +201,14 @@ export function AdminDizilerPanel({
                       className="h-16 w-11 shrink-0 rounded-md object-cover"
                     />
                   ) : (
-                    <div className="flex h-16 w-11 shrink-0 items-center justify-center rounded-md bg-white/5 text-[10px] text-white/30">
+                    <div className="flex h-16 w-11 shrink-0 items-center justify-center rounded-md bg-[#1a1612]/5 text-[10px] text-[#6b6158]">
                       —
                     </div>
                   )}
 
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-medium text-white">{row.title}</p>
-                    <p className="text-xs text-white/40">
+                    <p className="truncate font-medium text-[#1a1612]">{row.title}</p>
+                    <p className="text-xs text-[#1a1612]/40">
                       {[row.year, row.totalSeasons ? `${row.totalSeasons} sezon` : null]
                         .filter(Boolean)
                         .join(" · ") || "—"}
@@ -237,7 +237,7 @@ export function AdminDizilerPanel({
                     <button
                       type="button"
                       onClick={() => void toggleEpisodes(row.contentId)}
-                      className="rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white/80 transition hover:bg-white/10"
+                      className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2 text-xs text-[#1a1612]/80 transition hover:bg-[#1a1612]/8"
                     >
                       {open ? "Bölümleri Gizle" : "Bölümleri Görüntüle"}
                     </button>
@@ -256,9 +256,9 @@ export function AdminDizilerPanel({
                 </div>
 
                 {open ? (
-                  <div className="border-t border-white/10 px-3 py-4 sm:px-4">
+                  <div className="border-t border-[#e8e0d4] px-3 py-4 sm:px-4">
                     {loadingSeasons ? (
-                      <p className="py-6 text-center text-sm text-white/40">
+                      <p className="py-6 text-center text-sm text-[#1a1612]/40">
                         Bölümler yükleniyor…
                       </p>
                     ) : (
