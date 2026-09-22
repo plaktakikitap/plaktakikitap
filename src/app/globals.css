@@ -1147,3 +1147,116 @@ body::before {
     animation: none;
   }
 }
+
+/* Photography — analog film strip + hover overlay */
+.photo-film-strip {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: #1a1208;
+  padding: 14px 0;
+}
+
+.photo-film-strip::before,
+.photo-film-strip::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 14px;
+  pointer-events: none;
+  background-color: #1a1208;
+  background-image: radial-gradient(circle, #f5f0e8 4px, transparent 4.5px);
+  background-size: 22px 14px;
+  background-position: 11px 50%;
+  background-repeat: repeat-x;
+  z-index: 2;
+}
+
+.photo-film-strip::before {
+  top: 0;
+}
+
+.photo-film-strip::after {
+  bottom: 0;
+}
+
+.photo-film-strip-label {
+  position: absolute;
+  top: 16px;
+  right: 6px;
+  z-index: 3;
+  background: #f5c842;
+  color: #1a1208;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+  padding: 2px 6px;
+}
+
+.photo-card-image {
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+.group:hover .photo-card-image,
+.group:focus-within .photo-card-image {
+  transform: scale(1.03);
+}
+
+.photo-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.group:hover .photo-card-overlay,
+.group:focus-within .photo-card-overlay {
+  opacity: 1;
+}
+
+.photo-card-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #fff;
+  text-transform: lowercase;
+}
+
+.photo-card-overlay-date {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.photo-card-gear {
+  margin-top: 2px;
+  padding: 0 2px;
+  font-size: 11px;
+  font-style: italic;
+  color: #8b7b6b;
+  line-height: 1.35;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-card-image,
+  .photo-card-overlay {
+    transition: none;
+  }
+
+  .group:hover .photo-card-image,
+  .group:focus-within .photo-card-image {
+    transform: none;
+  }
+}

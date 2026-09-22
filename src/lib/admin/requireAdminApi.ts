@@ -7,15 +7,22 @@ import {
   ADMIN_COOKIE_NAME,
   isAdminFromCookies,
 } from "@/lib/admin/adminCookieAuth";
+import { verifySignedAdminCookieValue } from "@/lib/admin/signedAdminCookie";
 
 /**
- * Admin API yetki kontrolü.
- * development: açık; production: pk_admin cookie veya whitelist e-posta.
+ * Admin oturumu: imzalı pk_admin cookie veya ADMIN_ALLOWED_EMAIL.
+ * development bypass'ı public yazma uçlarında kapatılabilir.
  */
 export async function isAdminApiAuthorized(
-  req?: NextRequest
+  req?: NextRequest,
+  options?: { allowDevBypass?: boolean }
 ): Promise<boolean> {
-  if (process.env.NODE_ENV === "development") return true;
+  if (
+    options?.allowDevBypass !== false &&
+    process.env.NODE_ENV === "development"
+  ) {
+    return true;
+  }
 
   let email: string | null = null;
   try {
@@ -31,7 +38,9 @@ export async function isAdminApiAuthorized(
   if (req) return isAdminFromCookies(req, email);
 
   const cookieStore = await cookies();
-  if (cookieStore.get(ADMIN_COOKIE_NAME)?.value === "1") return true;
+  if (await verifySignedAdminCookieValue(cookieStore.get(ADMIN_COOKIE_NAME)?.value)) {
+    return true;
+  }
   return isAllowedAdminEmail(email);
 }
 

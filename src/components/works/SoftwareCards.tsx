@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
 import type { WorksItem } from "@/types/works";
+import { BrushStrokeUnderline } from "./BrushStrokeUnderline";
 
 interface SoftwareCardsProps {
   items: WorksItem[];
@@ -15,9 +16,12 @@ export function SoftwareCards({ items }: SoftwareCardsProps) {
 
   return (
     <section className="mb-16">
-      <h2 className="mb-6 font-editorial text-2xl font-medium text-ink sm:text-3xl">
-        Yazılım & Web Projeleri
-      </h2>
+      <div className="mb-6 w-fit max-w-full">
+        <h2 className="font-editorial text-2xl font-bold text-ink sm:text-3xl">
+          Yazılım & Web Projeleri
+        </h2>
+        <BrushStrokeUnderline />
+      </div>
       <div className="grid items-stretch gap-4 sm:grid-cols-2 md:grid-cols-3">
         {items.map((item) => (
           <SoftwareCard key={item.id} item={item} />
@@ -65,7 +69,7 @@ function SoftwareCard({ item }: { item: WorksItem }) {
       ) : null}
 
       <div className="flex shrink-0 flex-col px-4 pb-4 pt-3">
-        <h3 className="font-editorial text-lg font-semibold leading-snug text-ink">
+        <h3 className="font-editorial text-lg font-bold leading-snug text-ink">
           {item.title}
         </h3>
         {(item.description || item.subtitle) && (

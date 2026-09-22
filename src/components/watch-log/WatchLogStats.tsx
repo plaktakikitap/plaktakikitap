@@ -66,7 +66,9 @@ export function WatchLogStats({
         <Clock className="h-6 w-6 shrink-0 text-gold/70" aria-hidden />
         <div>
           <p className="text-xs text-ink/60">
-            Film izleyerek geçirilen toplam tahmini süre
+            {variant === "film"
+              ? "Film izleyerek geçirilen toplam tahmini süre"
+              : "Dizi izleyerek geçirilen toplam tahmini süre"}
           </p>
           <p className="mt-0.5 font-medium text-ink/95">{totalTimeStr}</p>
         </div>

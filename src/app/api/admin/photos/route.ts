@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPhotosAdmin, createPhoto } from "@/lib/photos";
 import { requireAdminApi } from "@/lib/admin/requireAdminApi";
+import { categoryToType, parsePhotoCategory } from "@/types/photos";
 
 export async function GET() {
   const denied = await requireAdminApi();
@@ -30,14 +31,20 @@ export async function POST(req: NextRequest) {
     const type = typeVal && ["analog", "digital", "other"].includes(typeVal) ? typeVal : null;
     const tags = Array.isArray(b.tags) ? b.tags.map(String) : [];
     const camera = b.camera != null ? String(b.camera).trim() || null : null;
+    const lens = b.lens != null ? String(b.lens).trim() || null : null;
+    const film = b.film != null ? String(b.film).trim() || null : null;
+    const category = parsePhotoCategory(b.category) ?? "dijital";
     const year = typeof b.year === "number" ? b.year : b.year != null ? parseInt(String(b.year), 10) : null;
     const result = await createPhoto({
       image_url,
       caption,
       shot_at,
-      type: type as "analog" | "digital" | "other" | null,
+      type: (type as "analog" | "digital" | "other" | null) ?? categoryToType(category),
       tags,
       camera,
+      lens,
+      film,
+      category,
       year: year ?? null,
     });
     if (!result) return NextResponse.json({ error: "Create failed" }, { status: 500 });

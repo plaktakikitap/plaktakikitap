@@ -201,6 +201,12 @@ export function AdminKaralamalarForm({
             className="min-h-[220px]"
             required
           />
+          <p className="mt-1.5 text-[11px] text-white/40">
+            Spoiler için:{" "}
+            <code className="rounded bg-white/10 px-1 py-0.5 font-mono text-white/55">
+              [spoiler]metin[/spoiler]
+            </code>
+          </p>
         </div>
 
         <AdminOptionalSection>

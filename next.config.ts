@@ -41,7 +41,9 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "*.supabase.co", pathname: "/**" },
       { protocol: "https", hostname: "image.tmdb.org", pathname: "/**" },
       { protocol: "https", hostname: "m.media-amazon.com", pathname: "/**" },
+      { protocol: "https", hostname: "covers.openlibrary.org", pathname: "/**" },
       { protocol: "https", hostname: "books.google.com", pathname: "/**" },
+      { protocol: "https", hostname: "*.googleusercontent.com", pathname: "/**" },
       { protocol: "https", hostname: "img.youtube.com", pathname: "/**" },
       { protocol: "https", hostname: "i.ytimg.com", pathname: "/**" },
       { protocol: "https", hostname: "lastfm.freetls.fastly.net", pathname: "/**" },
@@ -50,6 +52,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "1000kitap.com", pathname: "/**" },
       { protocol: "https", hostname: "cdn.1000kitap.com", pathname: "/**" },
       { protocol: "https", hostname: "*.1000kitap.com", pathname: "/**" },
+      { protocol: "https", hostname: "1k-cdn.com", pathname: "/**" },
     ],
   },
 };

@@ -1,8 +1,9 @@
 import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
-import type { Photo, PhotoType } from "@/types/photos";
+import type { Photo, PhotoCategory, PhotoType } from "@/types/photos";
+import { categoryToType, parsePhotoCategory } from "@/types/photos";
 
-export type { Photo, PhotoType } from "@/types/photos";
+export type { Photo, PhotoCategory, PhotoType } from "@/types/photos";
 
 const PHOTOS_BUCKET = "photos-media";
 const MAX_PHOTO_BYTES = 10 * 1024 * 1024;
@@ -25,7 +26,7 @@ export async function getPhotosPublic(): Promise<Photo[]> {
   const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("photos")
-    .select("id, image_url, caption, shot_at, created_at, type")
+    .select("id, image_url, caption, shot_at, created_at, type, camera, lens, film, category")
     .order("created_at", { ascending: false });
 
   if (error) return [];
@@ -33,6 +34,9 @@ export async function getPhotosPublic(): Promise<Photo[]> {
     ...r,
     tags: r.tags ?? [],
     camera: r.camera ?? null,
+    lens: r.lens ?? null,
+    film: r.film ?? null,
+    category: parsePhotoCategory(r.category) ?? r.category ?? null,
     year: r.year ?? null,
   })) as Photo[];
   return resolvePhotoUrls(rows);
@@ -59,6 +63,9 @@ export interface PhotoInsert {
   type?: PhotoType | null;
   tags?: string[];
   camera?: string | null;
+  lens?: string | null;
+  film?: string | null;
+  category?: PhotoCategory | null;
   year?: number | null;
 }
 
@@ -70,9 +77,12 @@ export async function createPhoto(payload: PhotoInsert): Promise<Photo | null> {
       image_url: payload.image_url,
       caption: payload.caption ?? null,
       shot_at: payload.shot_at ?? null,
-      type: payload.type ?? null,
+      type: payload.type ?? (payload.category ? categoryToType(payload.category) : null),
       tags: payload.tags ?? [],
       camera: payload.camera ?? null,
+      lens: payload.lens ?? null,
+      film: payload.film ?? null,
+      category: payload.category ?? "dijital",
       year: payload.year ?? null,
     })
     .select()
@@ -94,6 +104,14 @@ export async function updatePhoto(
   if (payload.type !== undefined) updates.type = payload.type;
   if (payload.tags !== undefined) updates.tags = payload.tags;
   if (payload.camera !== undefined) updates.camera = payload.camera;
+  if (payload.lens !== undefined) updates.lens = payload.lens;
+  if (payload.film !== undefined) updates.film = payload.film;
+  if (payload.category !== undefined) {
+    updates.category = payload.category;
+    if (payload.type === undefined && payload.category) {
+      updates.type = categoryToType(payload.category);
+    }
+  }
   if (payload.year !== undefined) updates.year = payload.year;
 
   const { data, error } = await supabase
@@ -102,7 +120,10 @@ export async function updatePhoto(
     .eq("id", id)
     .select()
     .single();
-  if (error) return null;
+  if (error) {
+    console.error("updatePhoto", error);
+    return null;
+  }
   const resolved = await resolvePhotoUrls([data as Photo]);
   return resolved[0] ?? null;
 }

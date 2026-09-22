@@ -5,7 +5,7 @@ import { createServerClient } from "@/lib/supabase/server";
 
 export type Quote = {
   id: string;
-  book_id: string;
+  book_id: string | null;
   text: string;
   page_number: number | null;
   created_at: string;
@@ -18,23 +18,36 @@ export type QuoteWithBook = Quote & {
 
 type QuoteRow = {
   id: string;
-  book_id: string;
-  text: string;
+  book_id: string | null;
+  text: string | null;
+  quote?: string | null;
   page_number: number | null;
+  page_num?: number | null;
   created_at: string;
+  source_date?: string | null;
+  book?: string | null;
+  author?: string | null;
   books?:
     | { title: string; author: string | null; visibility?: string }
     | { title: string; author: string | null; visibility?: string }[]
     | null;
 };
 
+function quoteText(row: QuoteRow): string {
+  return (row.text || row.quote || "").trim();
+}
+
+function quotePage(row: QuoteRow): number | null {
+  return row.page_number ?? row.page_num ?? null;
+}
+
 function mapQuote(row: QuoteRow): Quote {
   return {
     id: row.id,
     book_id: row.book_id,
-    text: row.text,
-    page_number: row.page_number,
-    created_at: row.created_at,
+    text: quoteText(row),
+    page_number: quotePage(row),
+    created_at: row.source_date ?? row.created_at,
   };
 }
 
@@ -48,12 +61,14 @@ function bookFromJoin(
 }
 
 function mapQuoteWithBook(row: QuoteRow): QuoteWithBook | null {
-  const book = bookFromJoin(row.books);
-  if (!book) return null;
+  const joined = bookFromJoin(row.books);
+  const book_title = joined?.title ?? (row.book?.trim() || "");
+  const text = quoteText(row);
+  if (!text) return null;
   return {
     ...mapQuote(row),
-    book_title: book.title,
-    book_author: book.author,
+    book_title: book_title || "Kitap",
+    book_author: joined?.author ?? row.author ?? null,
   };
 }
 
@@ -80,7 +95,7 @@ export async function getAllQuotesPublic(): Promise<QuoteWithBook[]> {
     const { data, error } = await supabase
       .from("quotes")
       .select(
-        "id, book_id, text, page_number, created_at, books(title, author)"
+        "id, book_id, text, quote, page_number, page_num, created_at, source_date, book, author, books(title, author)"
       )
       .order("created_at", { ascending: false });
     if (error) return [];

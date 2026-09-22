@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { stripSpoilers } from "@/lib/spoiler";
 
 export type AramaTip =
   | "kitap"
@@ -136,7 +137,7 @@ export async function GET(req: NextRequest) {
       tip: "dizi",
       baslik: d.title ?? "",
       altyazi: series?.year != null ? String(series.year) : "",
-      url: `/izleme-gunlugum/diziler`,
+      url: `/diziler`,
       gorsel: series?.poster_url ?? null,
     });
   }
@@ -146,7 +147,7 @@ export async function GET(req: NextRequest) {
       id: k.id,
       tip: "karalama",
       baslik: k.baslik ?? "",
-      altyazi: preview(k.icerik),
+      altyazi: preview(stripSpoilers(k.icerik)),
       url: `/karalamalar/${k.slug}`,
       gorsel: null,
     });

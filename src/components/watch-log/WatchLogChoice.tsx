@@ -12,7 +12,7 @@ const CHOICES = [
     Icon: Film,
   },
   {
-    href: "/izleme-gunlugum/diziler",
+    href: "/diziler",
     title: "Diziler",
     subtitle: "izlediğim diziler ve yorumlarım",
     Icon: Tv,

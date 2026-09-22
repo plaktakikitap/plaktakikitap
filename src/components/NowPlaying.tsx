@@ -18,32 +18,22 @@ export function NowPlaying() {
   if (!data?.name || !data?.artist) return null;
 
   const live = data.date === "şu an çalıyor";
+  const line = live
+    ? `Şu an dinlediğim şarkı: ${data.artist} - ${data.name}`
+    : `Son dinlediğim şarkı: ${data.artist} - ${data.name} (${data.date})`;
 
   return (
     <p
-      className="pointer-events-none mx-auto max-w-[min(90vw,26rem)] truncate text-center"
+      className="pointer-events-none mx-auto max-w-[min(92vw,40rem)] truncate text-center"
       style={{
-        fontSize: "0.72rem",
-        letterSpacing: "0.12em",
+        fontSize: "0.78rem",
+        letterSpacing: "0.04em",
         color: "var(--ink-muted)",
         margin: 0,
       }}
       aria-live="polite"
     >
-      <span aria-hidden>♪ </span>
-      {data.artist} — {data.name}
-      <span style={{ margin: "0 0.35em", opacity: 0.55 }}>·</span>
-      {live ? (
-        <span className="inline-flex items-center gap-1.5 align-middle">
-          <span
-            className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-[rgba(192,160,96,0.9)]"
-            aria-hidden
-          />
-          <span>şu an çalıyor</span>
-        </span>
-      ) : (
-        <span>{data.date}</span>
-      )}
+      {line}
     </p>
   );
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updatePhoto, deletePhoto } from "@/lib/photos";
 import { requireAdminApi } from "@/lib/admin/requireAdminApi";
+import { parsePhotoCategory } from "@/types/photos";
 
 export async function PATCH(
   req: NextRequest,
@@ -23,6 +24,9 @@ export async function PATCH(
       type?: "analog" | "digital" | "other" | null;
       tags?: string[];
       camera?: string | null;
+      lens?: string | null;
+      film?: string | null;
+      category?: "analog" | "dijital" | "diğer" | null;
       year?: number | null;
     } = {};
     if (typeof b.image_url === "string") payload.image_url = b.image_url.trim();
@@ -34,6 +38,9 @@ export async function PATCH(
     }
     if (Array.isArray(b.tags)) payload.tags = b.tags.map(String);
     if (b.camera !== undefined) payload.camera = b.camera != null ? String(b.camera).trim() || null : null;
+    if (b.lens !== undefined) payload.lens = b.lens != null ? String(b.lens).trim() || null : null;
+    if (b.film !== undefined) payload.film = b.film != null ? String(b.film).trim() || null : null;
+    if (b.category !== undefined) payload.category = parsePhotoCategory(b.category);
     if (b.year !== undefined) payload.year = typeof b.year === "number" ? b.year : Number.isNaN(Number(b.year)) ? null : Number(b.year);
     const result = await updatePhoto(id, payload);
     if (!result) return NextResponse.json({ error: "Update failed" }, { status: 500 });

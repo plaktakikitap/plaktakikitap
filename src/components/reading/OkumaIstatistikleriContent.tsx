@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import {
   Bar,
@@ -19,6 +18,8 @@ import type {
   OkumaIstatistikleriResponse,
   OkumaStatsPayload,
 } from "@/app/api/okuma-istatistikleri/route";
+import { BookCoverImage } from "./BookCoverImage";
+import { usableBookCoverUrl } from "@/lib/book-cover";
 
 const GOLD = "#b8934a";
 const MUTED = "#6b6158";
@@ -535,13 +536,11 @@ export function OkumaIstatistikleriContent() {
                 className="group w-[88px] shrink-0 sm:w-[100px]"
               >
                 <div className="relative aspect-[2/3] overflow-hidden rounded-md border border-rule bg-card">
-                  {book.cover_url ? (
-                    <Image
+                  {usableBookCoverUrl(book.cover_url) ? (
+                    <BookCoverImage
                       src={book.cover_url}
                       alt={book.title}
-                      fill
-                      className="object-cover transition-transform group-hover:scale-105"
-                      sizes="100px"
+                      className="h-full w-full object-cover transition-transform group-hover:scale-105"
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center p-2 text-center text-[0.65rem] leading-tight" style={{ color: MUTED }}>

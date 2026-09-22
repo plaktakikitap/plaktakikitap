@@ -1,4 +1,5 @@
-import Image from "next/image";
+import { BookCoverImage } from "@/components/reading/BookCoverImage";
+import { usableBookCoverUrl } from "@/lib/book-cover";
 import { getCurrentReading } from "@/lib/db/queries";
 import { getNowPanelMusicData } from "@/lib/now-playing";
 import ManualNowPlaying from "./ManualNowPlaying";
@@ -80,13 +81,11 @@ export default async function NowPanel() {
         <GlassCard title={readingTitle}>
           <div className="flex items-center gap-4">
             <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-ink/10 bg-ink/5">
-              {reading?.cover_url ? (
-                <Image
+              {usableBookCoverUrl(reading?.cover_url) ? (
+                <BookCoverImage
                   src={reading.cover_url}
                   alt="book cover"
-                  fill
-                  className="object-cover"
-                  unoptimized
+                  className="h-full w-full object-cover"
                 />
               ) : null}
             </div>

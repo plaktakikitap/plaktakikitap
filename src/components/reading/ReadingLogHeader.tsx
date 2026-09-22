@@ -1,6 +1,7 @@
-import Image from "next/image";
 import { getCurrentReading, getReadingGoal } from "@/lib/db/queries";
 import { CircularProgress } from "./CircularProgress";
+import { BookCoverImage } from "./BookCoverImage";
+import { usableBookCoverUrl } from "@/lib/book-cover";
 
 export async function ReadingLogHeader() {
   const [currentReading, goal] = await Promise.all([
@@ -23,14 +24,11 @@ export async function ReadingLogHeader() {
         {currentReading ? (
           <div className="flex flex-wrap items-center gap-4 sm:gap-6">
             <div className="relative h-32 w-24 shrink-0 overflow-hidden rounded-xl border border-ink/10 bg-ink/5 shadow-lg sm:h-40 sm:w-28">
-              {currentReading.cover_url ? (
-                <Image
+              {usableBookCoverUrl(currentReading.cover_url) ? (
+                <BookCoverImage
                   src={currentReading.cover_url}
                   alt={currentReading.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 640px) 96px, 112px"
-                  unoptimized
+                  className="h-full w-full object-cover"
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center text-2xl text-ink/30">

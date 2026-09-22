@@ -48,6 +48,7 @@ const primaryLinks = [
   { href: "/secretgate/icerik", label: "İçerik", icon: Smartphone },
   { href: "/secretgate/karalamalar", label: "Karalamalar", icon: Feather },
   { href: "/secretgate/film-dizi", label: "Film & Dizi", icon: Film },
+  { href: "/secretgate/diziler", label: "Diziler", icon: Tv },
   { href: "/secretgate/photos", label: "Fotoğraflar", icon: Camera },
   { href: "/secretgate/su-an", label: "Şu an", icon: Music },
   {

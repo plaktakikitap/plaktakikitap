@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Pencil, Trash2 } from "lucide-react";
 import { SECTION_PATH } from "@/lib/karalamalar-section";
 import type { Karalama } from "@/lib/karalamalar";
+import { hasSpoilerMarkup, stripSpoilers } from "@/lib/spoiler";
 import { AdminKaralamalarForm } from "./AdminKaralamalarForm";
 
 function formatDate(iso: string): string {
@@ -88,7 +89,8 @@ export function AdminKaralamalarList({
                   /{item.slug} · {formatDate(item.olusturma_tarihi)}
                 </p>
                 <p className="mt-2 line-clamp-2 text-sm text-white/55">
-                  {item.icerik}
+                  {stripSpoilers(item.icerik) ||
+                    (hasSpoilerMarkup(item.icerik) ? "Spoiler içerir" : "")}
                 </p>
               </div>
               <div className="flex shrink-0 items-center gap-1">

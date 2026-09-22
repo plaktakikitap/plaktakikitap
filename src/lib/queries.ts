@@ -1,5 +1,6 @@
 import { createServerClient } from "@/lib/supabase/server";
 import type { ContentItem, Film, Series, Book, Stats } from "@/types/database";
+import { filmWatchMinutes, seriesWatchMinutes } from "@/lib/utils/time";
 
 export async function getFilms(includePrivate = false): Promise<(ContentItem & { film: Film })[]> {
   const supabase = await createServerClient();
@@ -147,14 +148,14 @@ export async function getStats(includePrivate = false): Promise<Stats> {
   const series = seriesRes.data ?? [];
   const books = booksRes.data ?? [];
 
-  let totalWatchTime = 0;
+  let filmWatchTime = 0;
+  let seriesWatchTime = 0;
   let totalReviews = 0;
 
   for (const f of films) {
     const { data: film } = await supabase.from("films").select("duration_min, rewatch_count, review").eq("content_id", f.id).single();
     if (film) {
-      const mult = 1 + (film.rewatch_count ?? 0);
-      totalWatchTime += (film.duration_min ?? 0) * mult;
+      filmWatchTime += filmWatchMinutes(film);
       if (film.review) totalReviews++;
     }
   }
@@ -162,10 +163,7 @@ export async function getStats(includePrivate = false): Promise<Stats> {
   for (const s of series) {
     const { data: ser } = await supabase.from("series").select("total_duration_min, rewatch_count, avg_episode_min, episodes_watched, review").eq("content_id", s.id).single();
     if (ser) {
-      const mins = (ser as { total_duration_min?: number | null }).total_duration_min;
-      const base = mins != null && !Number.isNaN(mins) ? mins : (ser.avg_episode_min ?? 0) * (ser.episodes_watched ?? 0);
-      const mult = 1 + (ser.rewatch_count ?? 0);
-      totalWatchTime += base * mult;
+      seriesWatchTime += seriesWatchMinutes(ser);
       if (ser.review) totalReviews++;
     }
   }
@@ -178,7 +176,7 @@ export async function getStats(includePrivate = false): Promise<Stats> {
     totalFilms: films.length,
     totalSeries: series.length,
     totalBooks: books.length,
-    totalWatchTimeMinutes: totalWatchTime,
+    totalWatchTimeMinutes: filmWatchTime + seriesWatchTime,
     totalReviews,
   };
   } catch {

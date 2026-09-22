@@ -483,7 +483,7 @@ export function VinylScrollStage({
                     opacity: reduceMotion ? 1 : pikapOpacity,
                     pointerEvents: "none",
                     zIndex: 30,
-                    width: "min(90vw, 26rem)",
+                    width: "min(92vw, 40rem)",
                   }}
                 >
                   <NowPlaying />

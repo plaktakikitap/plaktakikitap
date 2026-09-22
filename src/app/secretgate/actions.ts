@@ -1,5 +1,7 @@
 "use server";
 
+import { requireAdmin } from "@/lib/supabase/auth";
+
 import { revalidatePath } from "next/cache";
 import {
   createPlannerDecorAdmin,
@@ -21,6 +23,7 @@ import {
 } from "@/lib/db/queries";
 
 export async function adminCreateFilm(formData: FormData) {
+  await requireAdmin();
   const title = formData.get("title") as string;
   if (!title?.trim()) return { error: "Title is required" };
 
@@ -57,6 +60,7 @@ export async function adminCreateFilm(formData: FormData) {
 }
 
 export async function adminCreateSeries(formData: FormData) {
+  await requireAdmin();
   const title = formData.get("title") as string;
   if (!title?.trim()) return { error: "Title is required" };
 
@@ -90,6 +94,7 @@ export async function adminCreateSeries(formData: FormData) {
 }
 
 export async function adminCreateBook(formData: FormData) {
+  await requireAdmin();
   const title = formData.get("title") as string;
   if (!title?.trim()) return { error: "Title is required" };
 
@@ -124,11 +129,13 @@ export async function adminCreateBook(formData: FormData) {
 }
 
 export async function adminDeleteContent(id: string, type: "film" | "series" | "book") {
+  await requireAdmin();
   return deleteContentItem(id, type);
 }
 
 // Planner
 export async function adminCreatePlannerEntry(formData: FormData) {
+  await requireAdmin();
   const date = formData.get("date") as string;
   if (!date?.trim()) return { error: "Date is required" };
   return createPlannerEntry({
@@ -140,6 +147,7 @@ export async function adminCreatePlannerEntry(formData: FormData) {
 }
 
 export async function adminUpdatePlannerEntry(id: string, formData: FormData) {
+  await requireAdmin();
   return updatePlannerEntry(id, {
     date: (formData.get("date") as string)?.trim(),
     title: (formData.get("title") as string)?.trim() || null,
@@ -149,10 +157,12 @@ export async function adminUpdatePlannerEntry(id: string, formData: FormData) {
 }
 
 export async function adminDeletePlannerEntry(id: string) {
+  await requireAdmin();
   return deletePlannerEntry(id);
 }
 
 export async function adminAddPlannerMedia(formData: FormData) {
+  await requireAdmin();
   const planner_entry_id = formData.get("planner_entry_id") as string;
   const url = formData.get("url") as string;
   if (!planner_entry_id || !url?.trim()) return { error: "Entry and URL required" };
@@ -166,11 +176,13 @@ export async function adminAddPlannerMedia(formData: FormData) {
 }
 
 export async function adminDeletePlannerMedia(id: string) {
+  await requireAdmin();
   return deletePlannerMedia(id);
 }
 
 // Planner decor
 export async function adminCreatePlannerDecor(formData: FormData) {
+  await requireAdmin();
   const year = parseInt(formData.get("year") as string, 10);
   const month = parseInt(formData.get("month") as string, 10);
   const page = formData.get("page") as "left" | "right";
@@ -198,11 +210,13 @@ export async function adminCreatePlannerDecor(formData: FormData) {
 }
 
 export async function adminDeletePlannerDecor(id: string) {
+  await requireAdmin();
   return deletePlannerDecorAdmin(id);
 }
 
 // Manual Now Playing (Spotify fallback)
 export async function adminCreateManualTrack(formData: FormData) {
+  await requireAdmin();
   const title = (formData.get("title") as string)?.trim();
   const artist = (formData.get("artist") as string)?.trim();
   if (!title || !artist) return { error: "Başlık ve sanatçı gerekli" };
@@ -217,6 +231,7 @@ export async function adminCreateManualTrack(formData: FormData) {
 }
 
 export async function adminUpdateManualTrack(id: string, formData: FormData) {
+  await requireAdmin();
   return updateManualTrack(id, {
     title: (formData.get("title") as string)?.trim(),
     artist: (formData.get("artist") as string)?.trim(),
@@ -228,15 +243,18 @@ export async function adminUpdateManualTrack(id: string, formData: FormData) {
 }
 
 export async function adminDeleteManualTrack(id: string) {
+  await requireAdmin();
   return deleteManualTrack(id);
 }
 
 export async function adminSetActiveManualTrack(id: string) {
+  await requireAdmin();
   return updateManualTrack(id, { is_active: true });
 }
 
 // Reading status (Şu an okuyorum)
 export async function adminUpsertReadingStatus(formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const book_title = (formData.get("book_title") as string)?.trim();
@@ -282,6 +300,7 @@ export async function adminUpsertReadingStatus(formData: FormData) {
 }
 
 export async function adminUpsertReadingGoal(formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const year = parseInt((formData.get("year") as string) || "0", 10) || new Date().getFullYear();
@@ -298,6 +317,7 @@ export async function adminUpsertReadingGoal(formData: FormData) {
 
 /** Translations page intro (settings key: translation_intro) */
 export async function adminUpsertTranslationIntro(formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const text = (formData.get("translation_intro") as string)?.trim() ?? "";
@@ -314,6 +334,7 @@ export async function adminUpsertTranslationIntro(formData: FormData) {
 
 /** Plaktaki Kitap kanal tanıtımı (settings key: youtube_intro) */
 export async function adminUpsertYoutubeIntro(formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const text = (formData.get("youtube_intro") as string)?.trim() ?? "";
@@ -332,6 +353,7 @@ export async function adminUpsertYoutubeIntro(formData: FormData) {
 
 /** Academia bölümü (settings key: translation_academia) */
 export async function adminUpsertTranslationAcademia(formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const raw = formData.get("translation_academia_json") as string | null;
@@ -362,6 +384,7 @@ export async function adminUpsertTranslationAcademia(formData: FormData) {
 
 /** Gönüllü projeler (settings key: translation_volunteer) */
 export async function adminUpsertTranslationVolunteer(formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const raw = formData.get("translation_volunteer_json") as string | null;
@@ -386,6 +409,7 @@ export async function adminUpsertTranslationVolunteer(formData: FormData) {
 
 /** Published books (yayınlanmış kitaplar) */
 export async function adminCreatePublishedBook(formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const title = (formData.get("title") as string)?.trim();
@@ -427,6 +451,7 @@ export async function adminCreatePublishedBook(formData: FormData) {
 }
 
 export async function adminUpdatePublishedBook(id: string, formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const title = (formData.get("title") as string)?.trim();
@@ -472,6 +497,7 @@ export async function adminUpdatePublishedBook(id: string, formData: FormData) {
 }
 
 export async function adminDeletePublishedBook(id: string) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const { error } = await supabase.from("published_books").delete().eq("id", id);
@@ -482,6 +508,7 @@ export async function adminDeletePublishedBook(id: string) {
 
 /** Sırayı güncelle: orderedIds sırasına göre order_index atanır (0, 1, 2, ...). */
 export async function adminReorderPublishedBooks(orderedIds: string[]) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   for (let i = 0; i < orderedIds.length; i++) {
@@ -498,6 +525,7 @@ export async function adminReorderPublishedBooks(orderedIds: string[]) {
 // --- Portfolio translations (translations_settings, translation_books, translation_independent, translation_volunteer_projects) ---
 
 export async function adminUpdateTranslationsSettings(formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const intro_title = (formData.get("intro_title") as string)?.trim() || "Çevirilerim";
@@ -544,6 +572,7 @@ async function uploadToBucket(
 }
 
 export async function adminCreateTranslationBook(formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const title = (formData.get("title") as string)?.trim();
@@ -594,6 +623,7 @@ export async function adminCreateTranslationBook(formData: FormData) {
 }
 
 export async function adminUpdateTranslationBook(id: string, formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const title = (formData.get("title") as string)?.trim();
@@ -649,6 +679,7 @@ export async function adminUpdateTranslationBook(id: string, formData: FormData)
 }
 
 export async function adminDeleteTranslationBook(id: string) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const { error } = await supabase.from("translation_books").delete().eq("id", id);
@@ -658,6 +689,7 @@ export async function adminDeleteTranslationBook(id: string) {
 }
 
 export async function adminReorderTranslationBooks(orderedIds: string[]) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   for (let i = 0; i < orderedIds.length; i++) {
@@ -670,6 +702,7 @@ export async function adminReorderTranslationBooks(orderedIds: string[]) {
 
 // translation_independent
 export async function adminCreateTranslationIndependent(formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const title = (formData.get("title") as string)?.trim();
@@ -704,6 +737,7 @@ export async function adminCreateTranslationIndependent(formData: FormData) {
 }
 
 export async function adminUpdateTranslationIndependent(id: string, formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const title = (formData.get("title") as string)?.trim();
@@ -735,6 +769,7 @@ export async function adminUpdateTranslationIndependent(id: string, formData: Fo
 }
 
 export async function adminDeleteTranslationIndependent(id: string) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const { error } = await supabase.from("translation_independent").delete().eq("id", id);
@@ -744,6 +779,7 @@ export async function adminDeleteTranslationIndependent(id: string) {
 }
 
 export async function adminReorderTranslationIndependent(orderedIds: string[]) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   for (let i = 0; i < orderedIds.length; i++) {
@@ -756,6 +792,7 @@ export async function adminReorderTranslationIndependent(orderedIds: string[]) {
 
 // translation_volunteer_projects
 export async function adminCreateTranslationVolunteer(formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const org_name = (formData.get("org_name") as string)?.trim();
@@ -787,6 +824,7 @@ export async function adminCreateTranslationVolunteer(formData: FormData) {
 }
 
 export async function adminUpdateTranslationVolunteer(id: string, formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const org_name = (formData.get("org_name") as string)?.trim();
@@ -811,6 +849,7 @@ export async function adminUpdateTranslationVolunteer(id: string, formData: Form
 }
 
 export async function adminDeleteTranslationVolunteer(id: string) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const { error } = await supabase.from("translation_volunteer_projects").delete().eq("id", id);
@@ -820,6 +859,7 @@ export async function adminDeleteTranslationVolunteer(id: string) {
 }
 
 export async function adminReorderTranslationVolunteer(orderedIds: string[]) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   for (let i = 0; i < orderedIds.length; i++) {
@@ -835,6 +875,7 @@ export async function adminReorderTranslationVolunteer(orderedIds: string[]) {
 
 // Site links (Footer)
 export async function adminCreateSiteLink(formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const type = (formData.get("type") as string)?.trim() || "link";
@@ -857,6 +898,7 @@ export async function adminCreateSiteLink(formData: FormData) {
 }
 
 export async function adminUpdateSiteLink(id: string, formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const type = (formData.get("type") as string)?.trim() || "link";
@@ -876,6 +918,7 @@ export async function adminUpdateSiteLink(id: string, formData: FormData) {
 }
 
 export async function adminDeleteSiteLink(id: string) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const { error } = await supabase.from("site_links").delete().eq("id", id);
@@ -885,6 +928,7 @@ export async function adminDeleteSiteLink(id: string) {
 
 // Social links (Footer — Bana ulaşın)
 export async function adminCreateSocialLink(formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const platform = (formData.get("platform") as string)?.trim() || "link";
@@ -907,6 +951,7 @@ export async function adminCreateSocialLink(formData: FormData) {
 }
 
 export async function adminUpdateSocialLink(id: string, formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const platform = (formData.get("platform") as string)?.trim() || "link";
@@ -926,6 +971,7 @@ export async function adminUpdateSocialLink(id: string, formData: FormData) {
 }
 
 export async function adminDeleteSocialLink(id: string) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const { error } = await supabase.from("social_links").delete().eq("id", id);
@@ -936,6 +982,7 @@ export async function adminDeleteSocialLink(id: string) {
 export async function adminReorderSocialLinks(
   orderedIds: string[]
 ) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   for (let i = 0; i < orderedIds.length; i++) {
@@ -950,6 +997,7 @@ export async function adminReorderSocialLinks(
 // --- Ambient music (senkron çalma listesi) ---
 
 export async function adminCreateMusicTrack(formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const title = (formData.get("title") as string)?.trim();
@@ -980,6 +1028,7 @@ export async function adminCreateMusicTrack(formData: FormData) {
 }
 
 export async function adminUpdateMusicTrack(id: string, formData: FormData) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const title = (formData.get("title") as string)?.trim();
@@ -1006,6 +1055,7 @@ export async function adminUpdateMusicTrack(id: string, formData: FormData) {
 }
 
 export async function adminDeleteMusicTrack(id: string) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const { error } = await supabase.from("music_tracks").delete().eq("id", id);
@@ -1017,6 +1067,7 @@ export async function adminDeleteMusicTrack(id: string) {
 }
 
 export async function adminReorderMusicTracks(orderedIds: string[]) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   for (let i = 0; i < orderedIds.length; i++) {
@@ -1029,6 +1080,7 @@ export async function adminReorderMusicTracks(orderedIds: string[]) {
 }
 
 export async function adminStartMusicPlaylist() {
+  await requireAdmin();
   const { updateSiteSettings } = await import("@/lib/site-settings");
   const result = await updateSiteSettings({
     music_playlist_started_at: new Date().toISOString(),
@@ -1042,6 +1094,7 @@ export async function adminStartMusicPlaylist() {
 // --- Site içi mesajlar (Beni Tanıyın formu) ---
 
 export async function adminDeleteMesaj(id: string) {
+  await requireAdmin();
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();
   const { error } = await supabase.from("mesajlar").delete().eq("id", id);

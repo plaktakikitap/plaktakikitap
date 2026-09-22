@@ -10,7 +10,7 @@ export default async function AdminPhotosPage() {
     <div className="mx-auto max-w-xl">
       <h1 className="text-2xl font-semibold text-white">Fotoğraflar</h1>
       <p className="mt-1 mb-8 text-sm text-white/50">
-        Yükle, isteğe bağlı açıklama ekle.
+        Yükle, kamera / lens / film ve kategori ekle.
       </p>
       <AdminPhotosPanel initialPhotos={photos} />
     </div>

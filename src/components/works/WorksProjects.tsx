@@ -15,7 +15,7 @@ export function WorksProjects({ projects }: { projects: Project[] }) {
 
   return (
     <section className="mb-16">
-      <h2 className="mb-6 font-editorial text-2xl font-medium text-ink sm:text-3xl">
+      <h2 className="mb-6 font-editorial text-2xl font-bold text-ink sm:text-3xl">
         Deneyim & Projeler
       </h2>
       <div className="grid gap-6 sm:grid-cols-2">
@@ -24,7 +24,7 @@ export function WorksProjects({ projects }: { projects: Project[] }) {
             key={p.id}
             className="flex flex-col rounded-2xl border border-ink/10 bg-ink/5 p-6 backdrop-blur-sm transition-all hover:border-gold/40 hover:bg-ink/5 hover:shadow-[0_0_32px_rgba(212,175,55,0.08)]"
           >
-            <h3 className="font-editorial text-xl font-semibold text-ink">{p.title}</h3>
+            <h3 className="font-editorial text-xl font-bold text-ink">{p.title}</h3>
             {p.summary && (
               <p className="mt-3 flex-1 text-sm leading-relaxed text-ink/75">{p.summary}</p>
             )}

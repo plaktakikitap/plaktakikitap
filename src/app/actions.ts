@@ -232,6 +232,7 @@ export async function createSeries(formData: FormData) {
   revalidatePath("/cinema");
   revalidatePath("/izleme-gunlugum");
   revalidatePath("/izleme-gunlugum/diziler");
+  revalidatePath("/diziler");
   revalidatePath("/secretgate");
   revalidatePath("/secretgate/series");
   return { success: true };
@@ -312,6 +313,7 @@ export async function updateSeries(contentId: string, formData: FormData) {
   revalidatePath("/");
   revalidatePath("/izleme-gunlugum");
   revalidatePath("/izleme-gunlugum/diziler");
+  revalidatePath("/diziler");
   revalidatePath("/secretgate");
   revalidatePath("/secretgate/series");
   return { success: true };
@@ -521,6 +523,7 @@ export async function setSeriesFavorite(contentId: string, isFavorite: boolean) 
   }
   revalidatePath("/secretgate/series");
   revalidatePath("/izleme-gunlugum/diziler");
+  revalidatePath("/diziler");
   return { success: true };
 }
 
@@ -562,6 +565,7 @@ export async function updateSeriesRewatchCount(contentId: string, addCount: numb
     .eq("content_id", contentId);
   if (error) return { error: error.message };
   revalidatePath("/izleme-gunlugum/diziler");
+  revalidatePath("/diziler");
   revalidatePath("/cinema");
   return { success: true };
 }

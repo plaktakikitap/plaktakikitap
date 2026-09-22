@@ -8,8 +8,9 @@ import {
   useSyncExternalStore,
   type KeyboardEvent,
 } from "react";
-import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { BookCoverImage } from "@/components/reading/BookCoverImage";
+import { usableBookCoverUrl } from "@/lib/book-cover";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { StarRatingDisplay } from "@/components/ui/StarRating";
 import { BookDetailModal } from "@/components/reading/BookDetailModal";
@@ -68,8 +69,8 @@ function SonYorumKart({
   item: SonYorumItem;
   onOpen: () => void;
 }) {
-  const [imgFailed, setImgFailed] = useState(false);
-  const showCover = Boolean(item.kapak_url) && !imgFailed;
+  const cover = usableBookCoverUrl(item.kapak_url);
+  const showCover = Boolean(cover);
 
   return (
     <button
@@ -79,14 +80,10 @@ function SonYorumKart({
     >
       <div className="relative h-20 w-[60px] shrink-0 overflow-hidden rounded-[4px] bg-[#1a1714]">
         {showCover ? (
-          <Image
-            src={item.kapak_url!}
+          <BookCoverImage
+            src={cover}
             alt=""
-            fill
-            sizes="60px"
-            className="object-cover"
-            unoptimized
-            onError={() => setImgFailed(true)}
+            className="h-full w-full object-cover"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-[10px] text-gold/70">

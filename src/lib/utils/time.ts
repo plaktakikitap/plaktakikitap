@@ -4,12 +4,43 @@ const MIN_PER_MONTH = 30 * MIN_PER_DAY; // 1 day = 24h, 1 month = 30 days
 
 export interface Film {
   duration_min: number;
+  rewatch_count?: number | null;
 }
 
 export interface Series {
   total_duration_min?: number | null;
   avg_episode_min: number | null;
   episodes_watched: number | null;
+  rewatch_count?: number | null;
+}
+
+/** Film: süre × (1 + tekrar izleme). Diziler bu fonksiyona girmez. */
+export function filmWatchMinutes(film: {
+  duration_min?: number | null;
+  rewatch_count?: number | null;
+}): number {
+  const duration = film.duration_min ?? 0;
+  if (duration <= 0) return 0;
+  return duration * (1 + (film.rewatch_count ?? 0));
+}
+
+/**
+ * Dizi: izlenen bölüm × ortalama süre (veya kayıtlı total_duration_min)
+ * × (1 + tekrar). Film süreleri bu fonksiyona girmez.
+ */
+export function seriesWatchMinutes(series: {
+  total_duration_min?: number | null;
+  avg_episode_min?: number | null;
+  episodes_watched?: number | null;
+  rewatch_count?: number | null;
+}): number {
+  const fromEpisodes =
+    (series.episodes_watched ?? 0) * (series.avg_episode_min ?? 0);
+  const stored = series.total_duration_min;
+  const base =
+    stored != null && Number.isFinite(stored) && stored > 0 ? stored : fromEpisodes;
+  if (base <= 0) return 0;
+  return base * (1 + (series.rewatch_count ?? 0));
 }
 
 /**
@@ -90,36 +121,33 @@ export interface TotalLifeSpent {
 }
 
 /**
- * Calculate total watch time from films and series.
- * Films: sum(duration_min). Series: sum((episodes_watched||0) * (avg_episode_min||0)).
- * Returns totalMinutes and humanTR "X Ay, Y Gün, Z Saat" (always all three units).
+ * Film süreleri ve dizi süreleri ayrı toplanır, sonra toplanır (hub).
+ * Film formülü: duration_min × (1 + rewatch).
+ * Dizi formülü: izlenen bölüm × ortalama süre × (1 + rewatch).
  */
 export function calculateTotalLifeSpent(
   films: Film[],
   series: Series[]
 ): TotalLifeSpent {
-  const filmMins = films.reduce((acc, f) => acc + (f.duration_min || 0), 0);
-  const seriesMins = series.reduce((acc, s) => {
-    const stored = s.total_duration_min;
-    const computed = (s.episodes_watched || 0) * (s.avg_episode_min || 0);
-    return acc + (stored != null && !Number.isNaN(stored) ? stored : computed);
-  }, 0);
-  let totalMinutes = filmMins + seriesMins;
+  const filmMins = films.reduce((acc, f) => acc + filmWatchMinutes(f), 0);
+  const seriesMins = series.reduce((acc, s) => acc + seriesWatchMinutes(s), 0);
+  const combined = filmMins + seriesMins;
 
+  let rem = combined;
   const minutesInHour = 60;
   const minutesInDay = 24 * 60;
   const minutesInMonth = 30 * 24 * 60;
 
-  const months = Math.floor(totalMinutes / minutesInMonth);
-  totalMinutes %= minutesInMonth;
+  const months = Math.floor(rem / minutesInMonth);
+  rem %= minutesInMonth;
 
-  const days = Math.floor(totalMinutes / minutesInDay);
-  totalMinutes %= minutesInDay;
+  const days = Math.floor(rem / minutesInDay);
+  rem %= minutesInDay;
 
-  const hours = Math.floor(totalMinutes / minutesInHour);
+  const hours = Math.floor(rem / minutesInHour);
 
   return {
-    totalMinutes: filmMins + seriesMins,
+    totalMinutes: combined,
     humanTR: `${months} Ay, ${days} Gün, ${hours} Saat`,
   };
 }

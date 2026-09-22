@@ -4,6 +4,7 @@ import {
   SECTION_PATH,
 } from "@/lib/karalamalar-section";
 import type { Karalama } from "@/lib/karalamalar";
+import { hasSpoilerMarkup, stripSpoilers } from "@/lib/spoiler";
 
 function formatDate(iso: string): string {
   try {
@@ -18,7 +19,8 @@ function formatDate(iso: string): string {
 }
 
 function preview(text: string, max = 120): string {
-  const clean = text.replace(/\s+/g, " ").trim();
+  const clean = stripSpoilers(text);
+  if (!clean) return hasSpoilerMarkup(text) ? "Spoiler içerir" : "";
   if (clean.length <= max) return clean;
   return `${clean.slice(0, max).trimEnd()}...`;
 }

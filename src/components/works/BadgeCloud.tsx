@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import type { WorksItem } from "@/types/works";
 import { CertificateDetailModal } from "./CertificateDetailModal";
+import { BrushStrokeUnderline } from "./BrushStrokeUnderline";
 
 interface BadgeCloudProps {
   items: WorksItem[];
@@ -16,9 +17,12 @@ export function BadgeCloud({ items }: BadgeCloudProps) {
 
   return (
     <section className="mb-16">
-      <h2 className="mb-6 font-editorial text-2xl font-medium text-ink sm:text-3xl">
-        Sertifikalar
-      </h2>
+      <div className="mb-6 w-fit max-w-full">
+        <h2 className="font-editorial text-2xl font-bold text-ink sm:text-3xl">
+          Sertifikalar
+        </h2>
+        <BrushStrokeUnderline />
+      </div>
       <div className="works-polaroid-grid">
         {items.map((item) => (
           <BadgeItem

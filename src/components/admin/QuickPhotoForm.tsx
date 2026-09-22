@@ -9,9 +9,12 @@ import {
   AdminRecentList,
   AdminSaveBar,
   AdminTextInput,
+  fieldClass,
+  labelClass,
   useAdminCmdEnter,
 } from "./AdminFormPrimitives";
-import type { Photo } from "@/types/photos";
+import type { Photo, PhotoCategory } from "@/types/photos";
+import { PHOTO_CATEGORIES } from "@/types/photos";
 
 export function QuickPhotoForm({
   recent = [],
@@ -26,6 +29,10 @@ export function QuickPhotoForm({
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [caption, setCaption] = useState("");
+  const [camera, setCamera] = useState("");
+  const [lens, setLens] = useState("");
+  const [film, setFilm] = useState("");
+  const [category, setCategory] = useState<PhotoCategory>("dijital");
   const [loading, setLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -88,6 +95,10 @@ export function QuickPhotoForm({
         body: JSON.stringify({
           image_url,
           caption: caption.trim() || null,
+          camera: camera.trim() || null,
+          lens: lens.trim() || null,
+          film: film.trim() || null,
+          category,
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -98,6 +109,10 @@ export function QuickPhotoForm({
       showAdminToast("success", "Fotoğraf yüklendi ✓");
       pickFile(null);
       setCaption("");
+      setCamera("");
+      setLens("");
+      setFilm("");
+      setCategory("dijital");
       if (fileInputRef.current) fileInputRef.current.value = "";
       router.refresh();
     } catch (err) {
@@ -207,6 +222,53 @@ export function QuickPhotoForm({
             onChange={(e) => setCaption(e.target.value)}
             placeholder="Opsiyonel"
           />
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <AdminFieldLabel htmlFor="photo-camera">Camera</AdminFieldLabel>
+            <AdminTextInput
+              id="photo-camera"
+              value={camera}
+              onChange={(e) => setCamera(e.target.value)}
+              placeholder="Canon AE-1"
+            />
+          </div>
+          <div>
+            <AdminFieldLabel htmlFor="photo-lens">Lens</AdminFieldLabel>
+            <AdminTextInput
+              id="photo-lens"
+              value={lens}
+              onChange={(e) => setLens(e.target.value)}
+              placeholder="50mm"
+            />
+          </div>
+          <div>
+            <AdminFieldLabel htmlFor="photo-film">Film</AdminFieldLabel>
+            <AdminTextInput
+              id="photo-film"
+              value={film}
+              onChange={(e) => setFilm(e.target.value)}
+              placeholder="Kodak Gold 200"
+            />
+          </div>
+          <div>
+            <label className={labelClass} htmlFor="photo-category">
+              Category
+            </label>
+            <select
+              id="photo-category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value as PhotoCategory)}
+              className={fieldClass}
+            >
+              {PHOTO_CATEGORIES.map((opt) => (
+                <option key={opt} value={opt} className="bg-zinc-900 text-white">
+                  {opt}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <AdminSaveBar loading={loading} label="Yükle" />

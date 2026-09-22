@@ -2,8 +2,13 @@
 
 import { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import type { Photo } from "@/types/photos";
+import {
+  CATEGORY_BADGE_COLORS,
+  formatPhotoGear,
+  resolvePhotoCategory,
+} from "@/types/photos";
 import type { PhotoLightboxItem } from "./PhotoLightbox";
 import { PhotoImage } from "./PhotoImage";
 
@@ -12,21 +17,24 @@ const PhotoLightbox = dynamic(
   { ssr: false }
 );
 
-export type PhotoCategoryFilter = "analog" | "digital" | "other" | null;
+export type PhotoCategoryFilter = "analog" | "digital" | "other" | "dijital" | "diğer" | null;
 
 function matchesCategory(photo: Photo, category: PhotoCategoryFilter): boolean {
   if (!category) return true;
-  const t = photo.type?.toLowerCase();
-  if (category === "analog") return t === "analog";
-  if (category === "digital") return t === "digital";
-  if (category === "other") return t === "other" || !t; // null/legacy → other
+  const resolved = resolvePhotoCategory(photo);
+  if (category === "analog") return resolved === "analog";
+  if (category === "digital" || category === "dijital") return resolved === "dijital";
+  if (category === "other" || category === "diğer") return resolved === "diğer";
   return true;
 }
 
 /** Format ISO date as dd.mm.yyyy */
 function formatDate(iso: string): string {
+  const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (m) return `${m[3]}.${m[2]}.${m[1]}`;
   try {
     const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "";
     const day = String(d.getDate()).padStart(2, "0");
     const month = String(d.getMonth() + 1).padStart(2, "0");
     const year = d.getFullYear();
@@ -61,6 +69,9 @@ export function PhotosGrid({ photos, categoryFilter = null }: PhotosGridProps) {
         caption: p.caption ?? null,
         shot_at: p.shot_at ?? null,
         created_at: p.created_at,
+        camera: p.camera ?? null,
+        lens: p.lens ?? null,
+        film: p.film ?? null,
       })),
     [filtered]
   );
@@ -72,43 +83,65 @@ export function PhotosGrid({ photos, categoryFilter = null }: PhotosGridProps) {
     return { rightCol: right, leftCol: left };
   }, [filtered]);
 
-  const renderPhoto = (photo: Photo, lightboxIndex: number) => (
-    <motion.figure
-      key={photo.id}
-      layout
-      initial={{ opacity: 0, scale: 0.98 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.98 }}
-      transition={{ duration: 0.22, opacity: { duration: 0.18 } }}
-      className="group mb-3"
-    >
-      <button
-        type="button"
-        onClick={() => setLightboxIndex(lightboxIndex)}
-        className="block w-full text-left"
+  const renderPhoto = (photo: Photo, lightboxIdx: number) => {
+    const category = resolvePhotoCategory(photo);
+    const isAnalog = category === "analog";
+    const gear = formatPhotoGear(photo);
+    const date = displayDate(photo);
+
+    return (
+      <motion.figure
+        key={photo.id}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+        className="group mb-3"
       >
-        <span className="block overflow-hidden rounded-xl transition-all duration-200 group-hover:-translate-y-0.5 group-hover:opacity-95">
-          <PhotoImage
-            src={photo.image_url}
-            alt={photo.caption || "Fotoğraf"}
-            width={600}
-            height={800}
-            className="w-full rounded-xl"
-            sizes="50vw"
-            loading="lazy"
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIhAAAgEDBAMBAAAAAAAAAAAAAQIDAAQRBRIhMQYTQVFh/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAZEQACAwEAAAAAAAAAAAAAAAABAgADESH/2gAMAwEAAhEDEEA/ALvaWVfFb0oNsAjIx/MV0P/Z"
-          />
-        </span>
-      </button>
-      <figcaption className="mt-1.5 flex min-w-0 items-center justify-between gap-2 px-0.5 text-[11px] tracking-wide text-ink-muted/70 transition-opacity duration-200 md:group-hover:text-ink-muted">
-        <span className="min-w-0 truncate">
-          {photo.caption?.trim() || "\u00A0"}
-        </span>
-        <span className="shrink-0">{displayDate(photo)}</span>
-      </figcaption>
-    </motion.figure>
-  );
+        <button
+          type="button"
+          onClick={() => setLightboxIndex(lightboxIdx)}
+          className="block w-full text-left"
+        >
+          <span className={isAnalog ? "photo-film-strip" : "relative block overflow-hidden rounded-xl"}>
+            {isAnalog ? (
+              <span className="photo-film-strip-label" aria-hidden="true">
+                ANALOG
+              </span>
+            ) : null}
+            <span className={isAnalog ? "relative block overflow-hidden" : "relative block"}>
+              <PhotoImage
+                src={photo.image_url}
+                alt={photo.caption || "Fotoğraf"}
+                width={600}
+                height={800}
+                className="photo-card-image w-full"
+                sizes="50vw"
+                loading="lazy"
+                placeholder="blur"
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIhAAAgEDBAMBAAAAAAAAAAAAAQIDAAQRBRIhMQYTQVFh/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAZEQACAwEAAAAAAAAAAAAAAAABAgADESH/2gAMAwEAAhEDEEA/ALvaWVfFb0oNsAjIx/MV0P/Z"
+              />
+              <span className="photo-card-overlay" aria-hidden="true">
+                <span
+                  className="photo-card-badge"
+                  style={{ backgroundColor: CATEGORY_BADGE_COLORS[category] }}
+                >
+                  {category}
+                </span>
+                <span className="photo-card-overlay-date">{date}</span>
+              </span>
+            </span>
+          </span>
+        </button>
+        <figcaption className="mt-1.5 flex min-w-0 items-center justify-between gap-2 px-0.5 text-[11px] tracking-wide text-ink-muted/70 transition-opacity duration-200 md:group-hover:text-ink-muted">
+          <span className="min-w-0 truncate">
+            {photo.caption?.trim() || "\u00A0"}
+          </span>
+          <span className="shrink-0">{date}</span>
+        </figcaption>
+        {gear ? <p className="photo-card-gear">{gear}</p> : null}
+      </motion.figure>
+    );
+  };
 
   return (
     <>
@@ -123,16 +156,14 @@ export function PhotosGrid({ photos, categoryFilter = null }: PhotosGridProps) {
         </motion.p>
       ) : (
         <div className="grid grid-cols-2 gap-x-3">
-          <AnimatePresence mode="popLayout">
-            {/* Sol sütun: 2., 4., 6. ... fotoğraf */}
-            <div className="flex flex-col">
-              {leftCol.map((photo, i) => renderPhoto(photo, i * 2 + 1))}
-            </div>
-            {/* Sağ sütun: 1., 3., 5. ... fotoğraf */}
-            <div className="flex flex-col">
-              {rightCol.map((photo, i) => renderPhoto(photo, i * 2))}
-            </div>
-          </AnimatePresence>
+          {/* Sol sütun: 2., 4., 6. ... fotoğraf */}
+          <div className="flex flex-col">
+            {leftCol.map((photo, i) => renderPhoto(photo, i * 2 + 1))}
+          </div>
+          {/* Sağ sütun: 1., 3., 5. ... fotoğraf */}
+          <div className="flex flex-col">
+            {rightCol.map((photo, i) => renderPhoto(photo, i * 2))}
+          </div>
         </div>
       )}
 

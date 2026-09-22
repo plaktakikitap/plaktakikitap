@@ -14,7 +14,7 @@ export function WorksYouTubeGallery({ videos }: { videos: Video[] }) {
 
   return (
     <section className="mb-16">
-      <h2 className="mb-6 font-editorial text-2xl font-medium text-ink sm:text-3xl">
+      <h2 className="mb-6 font-editorial text-2xl font-bold text-ink sm:text-3xl">
         YouTube
       </h2>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

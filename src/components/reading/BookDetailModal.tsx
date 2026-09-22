@@ -9,6 +9,8 @@ import { StarRatingDisplay } from "@/components/ui/StarRating";
 import { InkBleedText } from "@/components/planner/InkBleedText";
 import { ModalPortal } from "@/components/ui/ModalPortal";
 import { BookQuotesPanel } from "./BookQuotesPanel";
+import { BookCoverImage } from "./BookCoverImage";
+import { usableBookCoverUrl } from "@/lib/book-cover";
 
 interface BookDetailModalProps {
   book: Book | null;
@@ -140,10 +142,10 @@ export function BookDetailModal({
         >
           <div className="relative w-[42%] min-w-[140px] shrink-0 sm:min-w-[180px]">
             <div className="aspect-[2/3] w-full overflow-hidden border-r border-rule bg-ink/5">
-              {coverUrl ? (
-                <img
+              {coverUrl && usableBookCoverUrl(coverUrl) ? (
+                <BookCoverImage
                   src={coverUrl}
-                  alt=""
+                  alt={book.title}
                   className="h-full w-full object-cover object-center"
                 />
               ) : (

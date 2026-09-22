@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import type { WorksItem } from "@/types/works";
+import { BrushStrokeUnderline } from "./BrushStrokeUnderline";
 
 interface ExperienceCardsProps {
   items: WorksItem[];
@@ -20,9 +21,12 @@ export function ExperienceCards({ items }: ExperienceCardsProps) {
 
   return (
     <section className="mb-16">
-      <h2 className="mb-6 font-editorial text-2xl font-medium text-ink sm:text-3xl">
-        Deneyim & Projeler
-      </h2>
+      <div className="mb-6 w-fit max-w-full">
+        <h2 className="font-editorial text-2xl font-bold text-ink sm:text-3xl">
+          Deneyim & Projeler
+        </h2>
+        <BrushStrokeUnderline />
+      </div>
       {pairWithTaksim ? (
         <div className="mb-8 grid items-stretch gap-6 sm:grid-cols-2">
           <div className="flex flex-col gap-2">
@@ -59,7 +63,7 @@ function VolunteerCard({ item, fill }: { item: WorksItem; fill?: boolean }) {
       animate={{ opacity: 1, y: 0 }}
       className={`rounded-xl border border-ink/10 bg-ink/5 px-4 py-3 backdrop-blur-sm transition-all hover:border-amber-400/25 hover:bg-white/8 ${fill ? "flex flex-1 flex-col justify-center" : ""}`}
     >
-      <h3 className="font-editorial text-base font-semibold leading-tight text-ink">
+      <h3 className="font-editorial text-base font-bold leading-tight text-ink">
         {item.title}
       </h3>
       {org ? <p className="mt-0.5 text-xs text-ink/60">{org}</p> : null}
@@ -78,7 +82,7 @@ function ProjectCard({ item, fill }: { item: WorksItem; fill?: boolean }) {
       animate={{ opacity: 1, y: 0 }}
       className={`flex flex-col rounded-2xl border border-ink/10 bg-ink/5 p-6 backdrop-blur-sm transition-all hover:border-amber-400/25 hover:bg-white/8 ${fill ? "h-full" : ""}`}
     >
-      <h3 className="font-editorial text-xl font-semibold text-ink">{item.title}</h3>
+      <h3 className="font-editorial text-xl font-bold text-ink">{item.title}</h3>
       {role && <p className="mt-1 text-sm text-gold/90">{role}</p>}
       {(item.description || item.subtitle) && (
         <p className="mt-3 flex-1 text-sm leading-relaxed text-ink/75">

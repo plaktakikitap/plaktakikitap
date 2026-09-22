@@ -11,6 +11,7 @@ import {
 import type { FilmItem, SeriesItem } from "@/lib/watch-log-poster";
 import { FilmDetailModal } from "./FilmDetailModal";
 import { SeriesDetailModal } from "./SeriesDetailModal";
+import { ImdbPosterModal } from "./ImdbPosterModal";
 
 type KindFilter = "all" | WatchKind;
 type RatingFilter = "all" | "3" | "5";
@@ -153,6 +154,7 @@ export function WatchPosterGrid({
   const [sortKey, setSortKey] = useState<SortKey>("watched-desc");
   const [selectedFilm, setSelectedFilm] = useState<FilmItem | null>(null);
   const [selectedSeries, setSelectedSeries] = useState<SeriesItem | null>(null);
+  const [selectedImdb, setSelectedImdb] = useState<WatchPosterItem | null>(null);
 
   const watchYears = useMemo(() => {
     const years = new Set<number>();
@@ -272,6 +274,8 @@ export function WatchPosterGrid({
                   setSelectedFilm(item.filmItem);
                 } else if (item.kind === "series" && item.seriesItem) {
                   setSelectedSeries(item.seriesItem);
+                } else {
+                  setSelectedImdb(item);
                 }
               }}
             />
@@ -286,6 +290,10 @@ export function WatchPosterGrid({
       <SeriesDetailModal
         item={selectedSeries}
         onClose={() => setSelectedSeries(null)}
+      />
+      <ImdbPosterModal
+        item={selectedImdb}
+        onClose={() => setSelectedImdb(null)}
       />
     </section>
   );

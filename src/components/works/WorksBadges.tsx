@@ -10,7 +10,7 @@ export function WorksBadges({ badges }: { badges: Badge[] }) {
 
   return (
     <section className="mb-16">
-      <h2 className="mb-6 font-editorial text-2xl font-medium text-ink sm:text-3xl">
+      <h2 className="mb-6 font-editorial text-2xl font-bold text-ink sm:text-3xl">
         Sertifikalar
       </h2>
       <div className="flex flex-wrap items-center justify-center gap-6">

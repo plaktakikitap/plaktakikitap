@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { SECTION_NAME, SECTION_PATH } from "@/lib/karalamalar-section";
 import type { Karalama } from "@/lib/karalamalar";
+import SpoilerText from "@/components/SpoilerText";
 
 const PAGE_SIZE = 20;
 
@@ -49,7 +50,7 @@ export function KaralamalarList({ items }: { items: Karalama[] }) {
               </Link>
             </h2>
             <div className="max-w-[680px] whitespace-pre-wrap text-[0.95rem] leading-[1.75] text-ink-muted">
-              {k.icerik}
+              <SpoilerText content={k.icerik} />
             </div>
             <time
               dateTime={k.olusturma_tarihi}

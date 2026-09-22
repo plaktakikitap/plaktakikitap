@@ -77,8 +77,31 @@ export interface Series {
   spine_url?: string | null;
   /** Dizi izleme durumu: bitirilmiş, devamını bekliyorum, yarıda bıraktım */
   status?: "finished" | "waiting" | "dropped" | null;
+  /** TMDB yayın durumu (Ended, Returning Series, …) */
+  tmdb_status?: string | null;
+  tmdb_id?: number | null;
+  backdrop_url?: string | null;
+  overview?: string | null;
+  total_episodes?: number | null;
+  episode_runtime?: number | null;
+  last_air_date?: string | null;
+  watch_status?:
+    | "watchlist"
+    | "watching"
+    | "completed"
+    | "dropped"
+    | "rewatching"
+    | null;
+  dropped_at_season?: number | null;
+  dropped_at_episode?: number | null;
+  total_watched_minutes?: number | null;
+  watch_count?: number | null;
   /** Ek izleme sayısı; toplam = 1 + rewatch_count. Süre: total_duration_min × (1 + rewatch_count) */
   rewatch_count?: number;
+  imdb_id?: string | null;
+  origin_country?: string[] | null;
+  imdb_rating?: number | null;
+  imdb_position?: number | null;
 }
 
 /** Reading log: standalone books table (id, title, author, ...) */

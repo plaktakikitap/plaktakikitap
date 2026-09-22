@@ -3,6 +3,8 @@
 import { useState } from "react";
 import useSWR from "swr";
 import type { ReadingStackPayload, StackBook } from "@/app/api/reading/route";
+import { BookCoverImage } from "@/components/reading/BookCoverImage";
+import { usableBookCoverUrl } from "@/lib/book-cover";
 
 const PALETTE = ["#8B7B6B", "#6B7B8B", "#7B8B6B"] as const;
 const OFFSET = 8;
@@ -149,16 +151,24 @@ export function CurrentlyReading({
                     transition: "transform 0.4s ease, opacity 0.4s ease",
                   }}
                 >
-                  <div className="flex h-full flex-col items-center justify-center gap-1.5 px-4 text-center">
-                    <span className="font-sans text-[0.85rem] font-medium leading-snug text-white">
-                      {book.title}
-                    </span>
-                    {book.author ? (
-                      <span className="font-sans text-[0.75rem] font-normal text-white/70">
-                        {book.author}
+                  {usableBookCoverUrl(book.cover_url) ? (
+                    <BookCoverImage
+                      src={book.cover_url}
+                      alt={book.title}
+                      className="h-full w-full object-cover object-center"
+                    />
+                  ) : (
+                    <div className="flex h-full flex-col items-center justify-center gap-1.5 px-4 text-center">
+                      <span className="font-sans text-[0.85rem] font-medium leading-snug text-white">
+                        {book.title}
                       </span>
-                    ) : null}
-                  </div>
+                      {book.author ? (
+                        <span className="font-sans text-[0.75rem] font-normal text-white/70">
+                          {book.author}
+                        </span>
+                      ) : null}
+                    </div>
+                  )}
                 </div>
               );
             })}

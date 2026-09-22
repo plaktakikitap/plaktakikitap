@@ -3,6 +3,7 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { createServerClient } from "@/lib/supabase/server";
 import type { ContentItem, Film, Series, Book, Translation } from "@/types/database";
+import { filmWatchMinutes, seriesWatchMinutes } from "@/lib/utils/time";
 
 // --- Schemas ---
 
@@ -686,8 +687,7 @@ export async function getCinemaStats(): Promise<CinemaStats> {
   let filmWatchedThisMonth = 0;
   let filmWatchedThisYear = 0;
   for (const film of publicFilmsRows) {
-    const mult = 1 + (film.rewatch_count ?? 0);
-    if (film.duration_min) totalFilmWatchTimeMinutes += film.duration_min * mult;
+    totalFilmWatchTimeMinutes += filmWatchMinutes(film);
     if (film.review) totalReviews++;
     if (film.watched_at) {
       const t = new Date(film.watched_at).getTime();
@@ -706,12 +706,7 @@ export async function getCinemaStats(): Promise<CinemaStats> {
       .eq("content_id", s.id)
       .single();
     if (ser) {
-      const mins = (ser as { total_duration_min?: number | null }).total_duration_min;
-      const base = mins != null && !Number.isNaN(mins)
-        ? mins
-        : (ser.avg_episode_min ?? 0) * (ser.episodes_watched ?? 0);
-      const mult = 1 + (ser.rewatch_count ?? 0);
-      totalSeriesWatchTimeMinutes += base * mult;
+      totalSeriesWatchTimeMinutes += seriesWatchMinutes(ser);
       if (ser.review) totalReviews++;
       if (ser.watched_at) {
         const t = new Date(ser.watched_at).getTime();

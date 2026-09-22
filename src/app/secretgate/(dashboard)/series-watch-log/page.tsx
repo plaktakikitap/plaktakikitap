@@ -33,7 +33,7 @@ export default function AdminSeriesWatchLogPage() {
 
       <p className="mt-4 text-center text-xs text-white/40">
         Kaydettiğiniz diziler{" "}
-        <Link href="/izleme-gunlugum/diziler" className="underline hover:text-white/70">
+        <Link href="/diziler" className="underline hover:text-white/70">
           İzleme günlüğüm → Diziler
         </Link>{" "}
         sayfasında görünür.

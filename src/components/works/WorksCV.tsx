@@ -19,7 +19,7 @@ export function WorksCV({
 }) {
   return (
     <section className="mb-8">
-      <h2 className="mb-6 font-editorial text-2xl font-medium text-ink sm:text-3xl">
+      <h2 className="mb-6 font-editorial text-2xl font-bold text-ink sm:text-3xl">
         Özgeçmiş
       </h2>
 

@@ -10,6 +10,8 @@ import {
   SECTION_PATH,
   SECTION_TITLE,
 } from "@/lib/karalamalar-section";
+import SpoilerText from "@/components/SpoilerText";
+import { stripSpoilers } from "@/lib/spoiler";
 
 export const revalidate = 60;
 
@@ -26,7 +28,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const item = await getKaralamaBySlug(slug);
   if (!item) return { title: "Bulunamadı" };
-  const description = item.icerik.replace(/\s+/g, " ").trim().slice(0, 160);
+  const description = stripSpoilers(item.icerik).slice(0, 160);
   return {
     title: `${item.baslik} | ${SECTION_TITLE}`,
     description,
@@ -72,7 +74,7 @@ export default async function KaralamaDetailPage({
         </h1>
 
         <div className="max-w-[680px] whitespace-pre-wrap text-[0.95rem] leading-[1.75] text-ink/80">
-          {item.icerik}
+          <SpoilerText content={item.icerik} />
         </div>
 
         <time

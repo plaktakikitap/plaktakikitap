@@ -24,7 +24,13 @@ export function PhotosContent({ photos }: PhotosContentProps) {
 
   const typeParam = searchParams.get("type");
   useEffect(() => {
-    if (typeParam === "analog" || typeParam === "digital" || typeParam === "other") {
+    if (
+      typeParam === "analog" ||
+      typeParam === "digital" ||
+      typeParam === "dijital" ||
+      typeParam === "other" ||
+      typeParam === "diğer"
+    ) {
       setCategoryState(typeParam);
     } else {
       setCategoryState(null);

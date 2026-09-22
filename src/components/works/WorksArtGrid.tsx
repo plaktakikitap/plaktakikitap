@@ -21,7 +21,7 @@ export function WorksArtGrid({ items }: { items: Art[] }) {
 
   return (
     <section className="mb-16">
-      <h2 className="mb-6 font-editorial text-2xl font-medium text-ink sm:text-3xl">
+      <h2 className="mb-6 font-editorial text-2xl font-bold text-ink sm:text-3xl">
         Sanat & Fotoğraf
       </h2>
       <div className="relative flex flex-wrap items-center justify-center gap-6 py-4">

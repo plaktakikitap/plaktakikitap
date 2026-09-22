@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
     if (PUBLIC_ADMIN_API.has(pathname)) {
       return response;
     }
-    if (!isAdminFromCookies(request, user?.email)) {
+    if (!(await isAdminFromCookies(request, user?.email))) {
       return NextResponse.json(
         { error: "Yetkisiz erişim" },
         { status: 401 }
@@ -47,7 +47,7 @@ export async function middleware(request: NextRequest) {
       pathname === "/api/planner/recent";
 
     if (alwaysProtect || isWrite) {
-      if (!isAdminFromCookies(request, user?.email)) {
+      if (!(await isAdminFromCookies(request, user?.email))) {
         return NextResponse.json(
           { error: "Yetkisiz erişim" },
           { status: 401 }
@@ -65,7 +65,7 @@ export async function middleware(request: NextRequest) {
     if (process.env.NODE_ENV === "development") {
       return response;
     }
-    if (isAdminFromCookies(request, user?.email)) {
+    if (await isAdminFromCookies(request, user?.email)) {
       return response;
     }
     const url = request.nextUrl.clone();

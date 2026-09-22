@@ -10,6 +10,7 @@ export interface Karalama {
   yayinda: boolean;
   olusturma_tarihi: string;
   guncelleme_tarihi: string;
+  has_spoiler?: boolean;
 }
 
 export interface KaralamaVersiyon {
@@ -23,7 +24,7 @@ export interface KaralamaVersiyon {
 }
 
 const SELECT_COLS =
-  "id, baslik, icerik, slug, yayinda, olusturma_tarihi, guncelleme_tarihi";
+  "id, baslik, icerik, slug, yayinda, olusturma_tarihi, guncelleme_tarihi, has_spoiler";
 
 export async function getKaralamalarPublic(opts?: {
   limit?: number;
