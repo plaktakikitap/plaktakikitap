@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { StarRatingDisplay } from "@/components/ui/StarRating";
 import {
@@ -156,6 +156,14 @@ export function WatchPosterGrid({
   const [selectedSeries, setSelectedSeries] = useState<SeriesItem | null>(null);
   const [selectedImdb, setSelectedImdb] = useState<WatchPosterItem | null>(null);
 
+  const PAGE_SIZE = 120;
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [kind, yearFilter, ratingFilter, sortKey]);
+
   const watchYears = useMemo(() => {
     const years = new Set<number>();
     for (const item of items) {
@@ -183,6 +191,23 @@ export function WatchPosterGrid({
     }
     return [...list].sort((a, b) => compareWatchItems(a, b, sortKey));
   }, [items, kind, yearFilter, ratingFilter, sortKey]);
+
+  const hasMore = visibleCount < filtered.length;
+
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setVisibleCount((c) => c + PAGE_SIZE);
+        }
+      },
+      { rootMargin: "400px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore]);
 
   const pill = (active: boolean) =>
     `rounded-full px-3 py-1.5 text-xs transition ${
@@ -255,7 +280,7 @@ export function WatchPosterGrid({
         </select>
 
         <span className="ml-auto text-[11px] text-ink/40">
-          {filtered.length} kayıt
+          {Math.min(visibleCount, filtered.length)} / {filtered.length} kayıt
         </span>
       </div>
 
@@ -265,7 +290,7 @@ export function WatchPosterGrid({
         </p>
       ) : (
         <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-4 sm:gap-2 lg:grid-cols-5 xl:grid-cols-6">
-          {filtered.map((item) => (
+          {filtered.slice(0, visibleCount).map((item) => (
             <PosterCard
               key={item.key}
               item={item}
@@ -282,6 +307,10 @@ export function WatchPosterGrid({
           ))}
         </div>
       )}
+
+      {visibleCount < filtered.length ? (
+        <div ref={sentinelRef} className="h-16" aria-hidden />
+      ) : null}
 
       <FilmDetailModal
         item={selectedFilm}

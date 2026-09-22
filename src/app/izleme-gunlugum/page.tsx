@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { WatchLogChoice } from "@/components/watch-log/WatchLogChoice";
+import "./animations.css";
 
 export const metadata: Metadata = {
   title: "İzleme Günlüğüm | Plaktaki Kitap",

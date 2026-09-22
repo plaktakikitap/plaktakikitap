@@ -1,0 +1,308 @@
+/* ── Ortak kart hover ── */
+.watch-card:hover .strip-track  { animation-duration: 0.25s; }
+.watch-card:hover .signal-sweep { animation-duration: 1s; }
+
+/* ═══════════════════════════════════════
+   PROJEKSİYON KAMERASI
+═══════════════════════════════════════ */
+.camera-wrap {
+  width: 160px;
+  height: 100px;
+  position: relative;
+}
+
+/* Işın */
+.beam {
+  position: absolute;
+  left: 0; top: 28px;
+  width: 72px; height: 44px;
+  background: linear-gradient(to left, rgba(184,147,74,0.22), transparent);
+  clip-path: polygon(100% 30%, 100% 70%, 0% 100%, 0% 0%);
+  animation: beamFlicker 2.5s ease-in-out infinite;
+}
+@keyframes beamFlicker {
+  0%,100% { opacity: 0.7; }
+  45%      { opacity: 1; }
+  60%      { opacity: 0.5; }
+  75%      { opacity: 0.95; }
+}
+
+/* Film şeridi */
+.filmstrip {
+  position: absolute;
+  left: 0; top: 40px;
+  width: 68px; height: 20px;
+  overflow: hidden;
+}
+.strip-track {
+  display: flex;
+  height: 100%;
+  animation: slideStrip 0.6s linear infinite;
+  width: 200%;
+}
+.strip-hole-row {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2px 0;
+  flex-shrink: 0;
+}
+.strip-hole {
+  width: 5px; height: 5px;
+  background: rgba(26,22,18,0.18);
+  border-radius: 1px;
+  margin: 0 2px;
+}
+.strip-frame {
+  flex-shrink: 0;
+  width: 22px; height: 100%;
+  border: 1px solid rgba(184,147,74,0.5);
+  background: rgba(184,147,74,0.06);
+}
+@keyframes slideStrip {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Kamera gövdesi */
+.cam-body {
+  position: absolute;
+  right: 0; top: 18px;
+  width: 72px; height: 50px;
+  background: #1a1612;
+  border-radius: 6px 6px 6px 4px;
+}
+.cam-lens-ring {
+  position: absolute;
+  right: 8px; top: 27px;
+  width: 32px; height: 32px;
+  background: #0d0b09;
+  border: 3px solid #3a3028;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.cam-lens-inner {
+  width: 18px; height: 18px;
+  background: #060504;
+  border: 2px solid #b8934a;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.cam-lens-core {
+  width: 7px; height: 7px;
+  background: radial-gradient(circle at 35% 35%, rgba(184,147,74,0.7), #0a0806);
+  border-radius: 50%;
+}
+
+/* Makaralar */
+.cam-reel {
+  position: absolute;
+  background: #2a2218;
+  border: 2px solid #3a3028;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.cam-reel::after {
+  content: '';
+  width: 45%; height: 45%;
+  background: rgba(255,255,255,0.9);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 2px #2a2218,
+    -4px -2px 0 2px #2a2218,
+     4px -2px 0 2px #2a2218,
+     0    5px 0 2px #2a2218,
+    -3px  3px 0 2px #2a2218,
+     3px  3px 0 2px #2a2218;
+}
+.cam-reel--big {
+  width: 28px; height: 28px;
+  right: 26px; top: -8px;
+  animation: spinReel 2s linear infinite;
+}
+.cam-reel--sml {
+  width: 20px; height: 20px;
+  right: 8px; top: -4px;
+  animation: spinReel 2s linear infinite reverse;
+}
+@keyframes spinReel {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Tripod */
+.tripod {
+  position: absolute;
+  bottom: 0; right: 14px;
+  width: 48px; height: 32px;
+}
+.tripod::before,
+.tripod::after,
+.tripod-center {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 2px;
+  background: #1a1612;
+  border-radius: 1px;
+}
+.tripod::before  { left: 0;   height: 26px; transform: rotate(12deg);  transform-origin: bottom center; }
+.tripod::after   { right: 0;  height: 26px; transform: rotate(-12deg); transform-origin: bottom center; }
+.tripod-center   { left: 50%; height: 30px; transform: translateX(-50%); }
+
+.cam-handle {
+  position: absolute;
+  right: -8px; top: 42px;
+  width: 12px; height: 5px;
+  background: #3a3028;
+  border-radius: 0 3px 3px 0;
+}
+
+/* ═══════════════════════════════════════
+   ESKİ TELEVİZYON
+═══════════════════════════════════════ */
+.tv-wrap {
+  width: 160px;
+  height: 116px;
+  position: relative;
+  zoom: 0.8;
+}
+
+/* Anten */
+.ant-base {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 20px; height: 10px;
+  background: #5a4a3a;
+  border-radius: 50% 50% 0 0;
+  z-index: 2;
+}
+.ant-l, .ant-r {
+  position: absolute;
+  bottom: 100%;
+  width: 3px; height: 36px;
+  background: #4a3a2a;
+  border-radius: 2px 2px 0 0;
+}
+.ant-l { left: 3px;  transform: rotate(-22deg); transform-origin: bottom center; }
+.ant-r { right: 3px; transform: rotate(22deg);  transform-origin: bottom center; }
+.ant-ball {
+  position: absolute;
+  top: -5px; left: 50%;
+  transform: translateX(-50%);
+  width: 7px; height: 7px;
+  background: #6a5a4a;
+  border-radius: 50%;
+}
+
+/* TV gövdesi */
+.tv-body {
+  position: absolute;
+  top: 10px; left: 0;
+  width: 160px; height: 105px;
+  background: linear-gradient(160deg, #6a5040 0%, #4a3428 60%, #3a2818 100%);
+  border-radius: 12px;
+  border: 2px solid #2a1e14;
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.08), 0 4px 16px rgba(0,0,0,0.3);
+}
+
+/* Ekran */
+.tv-screen-area {
+  position: absolute;
+  left: 8px; top: 8px;
+  width: 110px; height: 89px;
+  background: #1a1208;
+  border-radius: 8px;
+  border: 3px solid #2a1e14;
+  overflow: hidden;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+}
+.tv-screen-inner {
+  position: absolute;
+  inset: 4px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #0a0806;
+}
+.tv-screen-inner canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+}
+.scanlines {
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px, transparent 3px,
+    rgba(0,0,0,0.4) 3px, rgba(0,0,0,0.4) 4px
+  );
+  z-index: 2; pointer-events: none;
+}
+.tv-glare {
+  position: absolute;
+  top: 6px; left: 8px;
+  width: 30px; height: 16px;
+  background: radial-gradient(ellipse, rgba(255,255,255,0.14) 0%, transparent 100%);
+  z-index: 3;
+}
+.signal-sweep {
+  position: absolute; left: 0; right: 0;
+  height: 12px;
+  background: linear-gradient(to bottom, transparent, rgba(200,200,200,0.06), transparent);
+  animation: sweep 2.8s linear infinite;
+  z-index: 1;
+}
+@keyframes sweep {
+  from { top: -12px; }
+  to   { top: 100%; }
+}
+
+/* Kontroller */
+.tv-controls {
+  position: absolute;
+  right: 6px; top: 8px;
+  width: 32px; height: 89px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-top: 6px;
+}
+.tv-knob {
+  width: 22px; height: 22px;
+  background: radial-gradient(circle at 35% 30%, #8a7060, #3a2818);
+  border-radius: 50%;
+  border: 2px solid #2a1a10;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  animation: knobWobble 4s ease-in-out infinite;
+}
+.tv-knob::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 2px; height: 8px;
+  background: #2a1a10;
+  transform: translate(-50%, -50%) rotate(20deg);
+  border-radius: 1px;
+}
+.tv-knob:nth-child(2) { animation-delay: -2s; }
+@keyframes knobWobble {
+  0%,100% { transform: rotate(20deg); }
+  50%     { transform: rotate(10deg); }
+}
+.tv-speaker {
+  width: 22px; height: 28px;
+  border: 1.5px solid #2a1a10;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 3px 2px;
+  margin-top: 2px;
+}
+.speaker-line {
+  height: 2px;
+  background: #2a1a10;
+  border-radius: 1px;
+}

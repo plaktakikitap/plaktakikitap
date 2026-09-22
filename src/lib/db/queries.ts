@@ -131,55 +131,107 @@ export async function getPublicFilms(): Promise<
 > {
   const supabase = await createServerClient();
   const PAGE = 1000;
-  const IN_BATCH = 200; // Küçük batch ile .in() limitleri aşılmaz
 
-  const contentFilmIds = new Set<string>();
-  for (let from = 0; ; from += PAGE) {
-    const { data: chunk } = await supabase
-      .from("content_items")
-      .select("id")
-      .eq("type", "film")
-      .in("visibility", ["public", "unlisted"])
-      .order("id")
-      .range(from, from + PAGE - 1);
-    (chunk ?? []).forEach((c) => contentFilmIds.add(c.id));
-    if (!chunk || chunk.length < PAGE) break;
-  }
-  if (contentFilmIds.size === 0) return [];
+  type JoinedRow = Record<string, unknown> & {
+    id: string;
+    content_items: Record<string, unknown> | Record<string, unknown>[] | null;
+  };
 
-  const allFilmsRows: { id: string; content_id: string; watched_at?: string | null; [k: string]: unknown }[] = [];
+  const rows: JoinedRow[] = [];
   for (let from = 0; ; from += PAGE) {
-    const { data: chunk, error } = await supabase
+    const { data, error } = await supabase
       .from("films")
-      .select("*")
+      .select(
+        `
+      *,
+      content_items!inner(*)
+    `
+      )
+      .in("content_items.visibility", ["public", "unlisted"])
       .order("watched_at", { ascending: true, nullsFirst: false })
       .range(from, from + PAGE - 1);
-    if (error) return [];
-    (chunk ?? []).forEach((row) => {
-      if (contentFilmIds.has(row.content_id)) allFilmsRows.push(row);
-    });
-    if (!chunk || chunk.length < PAGE) break;
-  }
-  const filmsRows = allFilmsRows;
 
-  const contentIdsToFetch = [...new Set(filmsRows.map((f) => f.content_id))];
-  const contentMap = new Map<string, { id: string; [k: string]: unknown }>();
-  for (let i = 0; i < contentIdsToFetch.length; i += IN_BATCH) {
-    const batch = contentIdsToFetch.slice(i, i + IN_BATCH);
-    const { data: items } = await supabase
-      .from("content_items")
-      .select("*")
-      .in("id", batch);
-    (items ?? []).forEach((item) => contentMap.set(item.id, item));
+    if (error) {
+      if (from === 0) return getPublicFilmsFallback(supabase);
+      break;
+    }
+    if (!data?.length) break;
+    rows.push(...(data as JoinedRow[]));
+    if (data.length < PAGE) break;
   }
 
+  return rows.flatMap((row) => {
+    const mapped = mapFilmJoinRow(row);
+    return mapped ? [mapped] : [];
+  });
+}
+
+async function getPublicFilmsFallback(
+  supabase: Awaited<ReturnType<typeof createServerClient>>
+): Promise<(ContentItem & { film: Film | Film[] | null })[]> {
+  const PAGE = 1000;
+  const [filmsChunks, contentChunks] = await Promise.all([
+    (async () => {
+      const all: Record<string, unknown>[] = [];
+      for (let from = 0; ; from += PAGE) {
+        const { data, error } = await supabase
+          .from("films")
+          .select("*")
+          .order("watched_at", { ascending: true, nullsFirst: false })
+          .range(from, from + PAGE - 1);
+        if (error || !data?.length) break;
+        all.push(...data);
+        if (data.length < PAGE) break;
+      }
+      return all;
+    })(),
+    (async () => {
+      const all: Record<string, unknown>[] = [];
+      for (let from = 0; ; from += PAGE) {
+        const { data, error } = await supabase
+          .from("content_items")
+          .select("*")
+          .eq("type", "film")
+          .in("visibility", ["public", "unlisted"])
+          .order("id")
+          .range(from, from + PAGE - 1);
+        if (error || !data?.length) break;
+        all.push(...data);
+        if (data.length < PAGE) break;
+      }
+      return all;
+    })(),
+  ]);
+
+  const contentMap = new Map(
+    contentChunks.map((item) => [item.id as string, item])
+  );
   const list: (ContentItem & { film: Film })[] = [];
-  for (const film of filmsRows) {
-    const content = contentMap.get(film.content_id);
-    if (content)
-      list.push({ ...content, film: { ...film, id: film.id } as Film } as ContentItem & { film: Film });
+  for (const film of filmsChunks) {
+    const content = contentMap.get(film.content_id as string);
+    if (content) {
+      list.push({
+        ...content,
+        film: { ...film, id: film.id } as Film,
+      } as ContentItem & { film: Film });
+    }
   }
   return list;
+}
+
+function mapFilmJoinRow(
+  row: Record<string, unknown> & {
+    id?: unknown;
+    content_items?: Record<string, unknown> | Record<string, unknown>[] | null;
+  }
+): (ContentItem & { film: Film }) | null {
+  const { content_items: content, ...film } = row;
+  const item = Array.isArray(content) ? content[0] : content;
+  if (!item) return null;
+  return {
+    ...item,
+    film: { ...film, id: film.id } as Film,
+  } as ContentItem & { film: Film };
 }
 
 function getSeriesWatchedAt(item: ContentItem & { series: Series | Series[] | null }): string {
@@ -209,31 +261,34 @@ export async function getPublicFavoriteFilms(): Promise<
   (ContentItem & { film: Film | Film[] | null })[]
 > {
   const supabase = await createServerClient();
-  const { data: filmsRows, error: filmsErr } = await supabase
+  const { data, error } = await supabase
     .from("films")
-    .select("*")
+    .select(
+      `
+      *,
+      content_items!inner(*)
+    `
+    )
     .eq("is_favorite", true)
+    .in("content_items.visibility", ["public", "unlisted"])
     .order("favorite_order", { ascending: false, nullsFirst: false })
     .limit(20);
-  if (filmsErr || !filmsRows?.length) return [];
+
+  if (error || !data?.length) return [];
+
   const seen = new Set<string>();
-  const uniqueFilms = filmsRows.filter((f) => {
-    if (seen.has(f.content_id)) return false;
-    seen.add(f.content_id);
-    return true;
-  }).slice(0, 5);
-  const contentIds = uniqueFilms.map((f) => f.content_id);
-  const { data: items, error: itemsErr } = await supabase
-    .from("content_items")
-    .select("*")
-    .in("id", contentIds)
-    .in("visibility", ["public", "unlisted"]);
-  if (itemsErr || !items?.length) return [];
-  const itemMap = new Map(items.map((i) => [i.id, i]));
   const result: (ContentItem & { film: Film | Film[] | null })[] = [];
-  for (const film of uniqueFilms) {
-    const content = itemMap.get(film.content_id);
-    if (content) result.push({ ...content, film });
+  for (const row of data) {
+    const mapped = mapFilmJoinRow(
+      row as Record<string, unknown> & {
+        id?: unknown;
+        content_items?: Record<string, unknown> | Record<string, unknown>[] | null;
+      }
+    );
+    if (!mapped || seen.has(mapped.id)) continue;
+    seen.add(mapped.id);
+    result.push(mapped);
+    if (result.length >= 5) break;
   }
   return result;
 }
@@ -631,81 +686,94 @@ const DEFAULT_CINEMA_STATS: CinemaStats = {
 export async function getCinemaStats(): Promise<CinemaStats> {
   try {
     const supabase = await createServerClient();
-  const vis = ["public", "unlisted"];
-  const PAGE = 1000;
+    const vis = ["public", "unlisted"];
+    const PAGE = 1000;
 
-  const contentFilmIds = new Set<string>();
-  for (let from = 0; ; from += PAGE) {
-    const { data: chunk } = await supabase
-      .from("content_items")
-      .select("id")
-      .eq("type", "film")
-      .in("visibility", vis)
-      .order("id")
-      .range(from, from + PAGE - 1);
-    (chunk ?? []).forEach((c) => contentFilmIds.add(c.id));
-    if (!chunk || chunk.length < PAGE) break;
-  }
+    type FilmStatRow = {
+      duration_min?: number;
+      rewatch_count?: number;
+      review?: string | null;
+      watched_at?: string | null;
+    };
+    type SeriesStatRow = {
+      total_duration_min?: number | null;
+      rewatch_count?: number | null;
+      avg_episode_min?: number | null;
+      episodes_watched?: number | null;
+      review?: string | null;
+      watched_at?: string | null;
+    };
 
-  const series: { id: string }[] = [];
-  for (let from = 0; ; from += PAGE) {
-    const { data: chunk } = await supabase
-      .from("content_items")
-      .select("id")
-      .eq("type", "series")
-      .in("visibility", vis)
-      .order("id")
-      .range(from, from + PAGE - 1);
-    if (chunk) series.push(...chunk);
-    if (!chunk || chunk.length < PAGE) break;
-  }
-
-  const allFilmsRows: { content_id: string; duration_min?: number; rewatch_count?: number; review?: string | null; watched_at?: string | null }[] = [];
-  for (let from = 0; ; from += PAGE) {
-    const { data: chunk } = await supabase
-      .from("films")
-      .select("content_id, duration_min, rewatch_count, review, watched_at")
-      .order("id")
-      .range(from, from + PAGE - 1);
-    if (chunk) allFilmsRows.push(...chunk);
-    if (!chunk || chunk.length < PAGE) break;
-  }
-  const publicFilmsRows = allFilmsRows.filter((f) => contentFilmIds.has(f.content_id));
-
-  const now = new Date();
-  const startOfMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
-  const endOfMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0, 23, 59, 59, 999));
-  const startOfYear = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
-  const endOfYear = new Date(Date.UTC(now.getUTCFullYear(), 11, 31, 23, 59, 59, 999));
-  const startMs = startOfMonth.getTime();
-  const endMs = endOfMonth.getTime();
-  const startYearMs = startOfYear.getTime();
-  const endYearMs = endOfYear.getTime();
-
-  let totalFilmWatchTimeMinutes = 0;
-  let totalReviews = 0;
-  let filmWatchedThisMonth = 0;
-  let filmWatchedThisYear = 0;
-  for (const film of publicFilmsRows) {
-    totalFilmWatchTimeMinutes += filmWatchMinutes(film);
-    if (film.review) totalReviews++;
-    if (film.watched_at) {
-      const t = new Date(film.watched_at).getTime();
-      if (t >= startMs && t <= endMs) filmWatchedThisMonth++;
-      if (t >= startYearMs && t <= endYearMs) filmWatchedThisYear++;
+    async function fetchPages<T>(run: (from: number, to: number) => PromiseLike<{
+      data: T[] | null;
+      error: { message?: string } | null;
+    }>): Promise<T[]> {
+      const all: T[] = [];
+      for (let from = 0; ; from += PAGE) {
+        const { data, error } = await run(from, from + PAGE - 1);
+        if (error || !data?.length) break;
+        all.push(...data);
+        if (data.length < PAGE) break;
+      }
+      return all;
     }
-  }
-  const totalFilms = publicFilmsRows.length;
-  let totalSeriesWatchTimeMinutes = 0;
-  let seriesWatchedThisMonth = 0;
 
-  for (const s of series) {
-    const { data: ser } = await supabase
-      .from("series")
-      .select("total_duration_min, rewatch_count, avg_episode_min, episodes_watched, review, watched_at")
-      .eq("content_id", s.id)
-      .single();
-    if (ser) {
+    const [publicFilmsRows, publicSeriesRows] = await Promise.all([
+      fetchPages<FilmStatRow>((from, to) =>
+        supabase
+          .from("films")
+          .select(
+            "duration_min, rewatch_count, review, watched_at, content_items!inner(id)"
+          )
+          .in("content_items.visibility", vis)
+          .order("id")
+          .range(from, to)
+      ),
+      fetchPages<SeriesStatRow>((from, to) =>
+        supabase
+          .from("series")
+          .select(
+            "total_duration_min, rewatch_count, avg_episode_min, episodes_watched, review, watched_at, content_items!inner(id)"
+          )
+          .in("content_items.visibility", vis)
+          .order("content_id")
+          .range(from, to)
+      ),
+    ]);
+
+    const now = new Date();
+    const startOfMonth = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)
+    );
+    const endOfMonth = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0, 23, 59, 59, 999)
+    );
+    const startOfYear = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
+    const endOfYear = new Date(
+      Date.UTC(now.getUTCFullYear(), 11, 31, 23, 59, 59, 999)
+    );
+    const startMs = startOfMonth.getTime();
+    const endMs = endOfMonth.getTime();
+    const startYearMs = startOfYear.getTime();
+    const endYearMs = endOfYear.getTime();
+
+    let totalFilmWatchTimeMinutes = 0;
+    let totalReviews = 0;
+    let filmWatchedThisMonth = 0;
+    let filmWatchedThisYear = 0;
+    for (const film of publicFilmsRows) {
+      totalFilmWatchTimeMinutes += filmWatchMinutes(film);
+      if (film.review) totalReviews++;
+      if (film.watched_at) {
+        const t = new Date(film.watched_at).getTime();
+        if (t >= startMs && t <= endMs) filmWatchedThisMonth++;
+        if (t >= startYearMs && t <= endYearMs) filmWatchedThisYear++;
+      }
+    }
+
+    let totalSeriesWatchTimeMinutes = 0;
+    let seriesWatchedThisMonth = 0;
+    for (const ser of publicSeriesRows) {
       totalSeriesWatchTimeMinutes += seriesWatchMinutes(ser);
       if (ser.review) totalReviews++;
       if (ser.watched_at) {
@@ -713,19 +781,19 @@ export async function getCinemaStats(): Promise<CinemaStats> {
         if (t >= startMs && t <= endMs) seriesWatchedThisMonth++;
       }
     }
-  }
 
-  return {
-    totalFilms,
-    totalSeries: series.length,
-    totalFilmWatchTimeMinutes,
-    totalSeriesWatchTimeMinutes,
-    totalWatchTimeMinutes: totalFilmWatchTimeMinutes + totalSeriesWatchTimeMinutes,
-    totalReviews,
-    filmWatchedThisMonth,
-    filmWatchedThisYear,
-    seriesWatchedThisMonth,
-  };
+    return {
+      totalFilms: publicFilmsRows.length,
+      totalSeries: publicSeriesRows.length,
+      totalFilmWatchTimeMinutes,
+      totalSeriesWatchTimeMinutes,
+      totalWatchTimeMinutes:
+        totalFilmWatchTimeMinutes + totalSeriesWatchTimeMinutes,
+      totalReviews,
+      filmWatchedThisMonth,
+      filmWatchedThisYear,
+      seriesWatchedThisMonth,
+    };
   } catch {
     return DEFAULT_CINEMA_STATS;
   }

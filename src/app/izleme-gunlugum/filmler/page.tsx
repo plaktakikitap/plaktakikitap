@@ -14,7 +14,7 @@ import { filmToPosterItem } from "@/lib/watch-log-poster";
 import { SonYorumlarim } from "@/components/son-yorumlarim/SonYorumlarim";
 import { watchItemsToSonYorumlar } from "@/lib/son-yorumlarim";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 600;
 
 export const metadata: Metadata = {
   title: "Filmler | İzleme Günlüğüm | Plaktaki Kitap",
