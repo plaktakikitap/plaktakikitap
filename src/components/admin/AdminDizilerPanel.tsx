@@ -80,11 +80,13 @@ export function AdminDizilerPanel({
     const res = await getAdminSeriesSeasons(seriesId);
     setLoadingSeasonsId(null);
     if ("error" in res) {
-      showAdminToast("error", res.error);
+      showAdminToast("error", res.error ?? "Sezonlar yüklenemedi");
       setOpenId(null);
       return;
     }
-    setSeasonsById((prev) => ({ ...prev, [seriesId]: res.seasons }));
+    const seasons = res.seasons;
+    if (!seasons) return;
+    setSeasonsById((prev) => ({ ...prev, [seriesId]: seasons }));
   }
 
   function onStatusChange(seriesId: string, status: WatchStatus) {
@@ -96,7 +98,7 @@ export function AdminDizilerPanel({
     startTransition(async () => {
       const res = await updateWatchStatus(seriesId, status);
       if (res && "error" in res) {
-        showAdminToast("error", res.error);
+        showAdminToast("error", res.error ?? "Durum güncellenemedi");
         router.refresh();
         return;
       }
@@ -109,7 +111,7 @@ export function AdminDizilerPanel({
     const res = await refreshSeriesFromTmdb(row.contentId);
     setRefreshingId(null);
     if ("error" in res) {
-      showAdminToast("error", res.error);
+      showAdminToast("error", res.error ?? "TMDB yenileme başarısız");
       return;
     }
     showAdminToast("success", "TMDB’den yenilendi");
@@ -122,10 +124,11 @@ export function AdminDizilerPanel({
       setLoadingSeasonsId(row.contentId);
       const seasonsRes = await getAdminSeriesSeasons(row.contentId);
       setLoadingSeasonsId(null);
-      if ("seasons" in seasonsRes) {
+      if ("seasons" in seasonsRes && seasonsRes.seasons) {
+        const seasons = seasonsRes.seasons;
         setSeasonsById((prev) => ({
           ...prev,
-          [row.contentId]: seasonsRes.seasons,
+          [row.contentId]: seasons,
         }));
       }
     }
