@@ -266,6 +266,17 @@ h3.type-scale {
 .admin-command-center {
   background: #faf7f2;
   min-height: 100vh;
+  color: #1a1612;
+}
+
+/* Leftover navy-theme white text is invisible on cream */
+.admin-command-center [class*="text-white"] {
+  color: #1a1612 !important;
+}
+.admin-command-center [class*="bg-[var(--accent)]"][class*="text-white"],
+.admin-command-center [class*="bg-[#1a1612]"][class*="text-white"],
+.admin-command-center .admin-btn {
+  color: #ffffff !important;
 }
 
 /* Admin: tüm metin input/textarea/select koyu yazı + açık kutu (okunaklı) */

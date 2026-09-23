@@ -49,7 +49,9 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
   const [loading, setLoading] = useState(true);
   const [addOpen, setAddOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const polaroidInputRef = useRef<HTMLInputElement>(null);
 
   const ensurePage = useCallback(async () => {
     const res = await fetch("/api/planner/admin/pages", {
@@ -117,8 +119,8 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
     [pageId, addSide, items]
   );
 
-  const handleUpload = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUploadAs = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>, itemType: "photo" | "polaroid" = "photo") => {
       const file = e.target.files?.[0];
       e.target.value = "";
       if (!file) return;
@@ -128,13 +130,11 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
         form.set("file", file);
         const res = await fetch("/api/planner/admin/upload", { method: "POST", body: form });
         const data = await res.json();
-        if (data.publicUrl) addItem("photo", { asset_url: data.publicUrl });
-        else if (data.path) {
-          const base = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "") || "";
-          addItem("photo", {
-            asset_url: base ? `${base}/storage/v1/object/public/planner-assets/${data.path}` : data.path,
-          });
-        }
+        const url = data.publicUrl
+          ?? (data.path
+            ? `${(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").replace(/\/$/, "")}/storage/v1/object/public/planner-assets/${data.path}`
+            : null);
+        if (url) addItem(itemType, { asset_url: url });
       } finally {
         setUploading(false);
       }
@@ -223,15 +223,21 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
                 .map((it) => (
                   <Rnd
                     key={it.id}
-                    size={{ width: 80, height: 60 }}
+                    size={{
+                      width: Math.max(24, (it.style_json as Record<string, unknown>)?.width as number ?? 80),
+                      height: Math.max(24, (it.style_json as Record<string, unknown>)?.height as number ?? 60),
+                    }}
                     position={{
-                      x: (it.x / 100) * PAGE_WIDTH - 40,
-                      y: (it.y / 100) * PAGE_HEIGHT - 30,
+                      x: (it.x / 100) * PAGE_WIDTH - Math.max(24, (it.style_json as Record<string, unknown>)?.width as number ?? 80) / 2,
+                      y: (it.y / 100) * PAGE_HEIGHT - Math.max(24, (it.style_json as Record<string, unknown>)?.height as number ?? 60) / 2,
                     }}
                     scale={it.scale}
                     onDragStop={(_e, d) => {
-                      const x = ((d.x + 40) / PAGE_WIDTH) * 100;
-                      const y = ((d.y + 30) / PAGE_HEIGHT) * 100;
+                      const style = (it.style_json ?? {}) as Record<string, unknown>;
+                      const w = Math.max(24, (style.width as number) ?? 80);
+                      const h = Math.max(24, (style.height as number) ?? 60);
+                      const x = (d.x + w / 2) / PAGE_WIDTH * 100;
+                      const y = (d.y + h / 2) / PAGE_HEIGHT * 100;
                       updateItem(it.id, { x, y });
                     }}
                     onResizeStop={(_e, _dir, ref, _delta, pos) => {
@@ -352,7 +358,14 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
           type="file"
           accept="image/*"
           className="hidden"
-          onChange={handleUpload}
+          onChange={(e) => handleUploadAs(e, "photo")}
+        />
+        <input
+          ref={polaroidInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => handleUploadAs(e, "polaroid")}
         />
         <div className="flex flex-wrap gap-2">
           <button
@@ -362,7 +375,16 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
             className="inline-flex items-center gap-1 rounded-lg border border-[#d4c9bb] px-3 py-1.5 text-sm text-[#1a1612] hover:bg-[#1a1612]/8"
           >
             <Upload className="h-4 w-4" />
-            Fotoğraf yükle
+            {uploading ? "Yükleniyor…" : "Fotoğraf"}
+          </button>
+          <button
+            type="button"
+            disabled={uploading}
+            onClick={() => polaroidInputRef.current?.click()}
+            className="inline-flex items-center gap-1 rounded-lg border border-[#d4c9bb] px-3 py-1.5 text-sm text-[#1a1612] hover:bg-[#1a1612]/8"
+          >
+            <ImageIcon className="h-4 w-4" />
+            {uploading ? "Yükleniyor…" : "Polaroid"}
           </button>
           {ITEM_TYPES.filter((t) => t.type !== "photo").map(({ type, label }) => (
             <button
@@ -381,6 +403,45 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
             <hr className="my-4 border-[#d4c9bb]" />
             <h2 className="mb-2 font-medium text-[#1a1612]">Seçili öğe</h2>
             <div className="space-y-2 text-sm text-[#1a1612]">
+              {selected.type === "postit" && (
+                <div className="flex items-center gap-2">
+                  <span className="w-16 text-sm">Renk</span>
+                  <div className="flex gap-1.5">
+                    {["#fef08a", "#bbf7d0", "#fecaca", "#bfdbfe", "#f5d0fe", "#fed7aa"].map((c) => (
+                      <button
+                        key={c}
+                        type="button"
+                        onClick={() =>
+                          updateItem(selected.id, {
+                            style_json: { ...(selected.style_json ?? {}), color: c },
+                          })
+                        }
+                        className="h-6 w-6 rounded-full border-2 transition-transform hover:scale-110"
+                        style={{
+                          backgroundColor: c,
+                          borderColor:
+                            ((selected.style_json ?? {}) as Record<string, unknown>).color === c
+                              ? "#1a1612"
+                              : "transparent",
+                        }}
+                        title={c}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+              {(selected.type === "text" || selected.type === "postit") && (
+                <div>
+                  <label className="mb-1 block text-xs text-[#6b6158]">İçerik</label>
+                  <textarea
+                    className="w-full rounded border border-[#d4c9bb] bg-white px-2 py-1.5 text-sm text-[#1a1612] placeholder:text-[#1a1612]/40 focus:outline-none focus:ring-1 focus:ring-amber-400"
+                    rows={3}
+                    value={selected.text_content ?? ""}
+                    onChange={(e) => updateItem(selected.id, { text_content: e.target.value })}
+                    placeholder="Metin girin..."
+                  />
+                </div>
+              )}
               <label className="flex items-center gap-2">
                 <span className="w-16">Döndür</span>
                 <input
@@ -423,21 +484,51 @@ export function AdminPlannerCanvasEditor({ year, month, monthName }: AdminPlanne
                 >
                   Öne
                 </button>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  if (confirm("Bu öğeyi silmek istediğinize emin misiniz?")) {
-                    fetch(`/api/planner/admin/items/${selected.id}`, { method: "DELETE" }).then(() =>
-                      removeItem(selected.id)
-                    );
+                <button
+                  type="button"
+                  onClick={() =>
+                    updateItem(selected.id, {
+                      page_side: selected.page_side === "left" ? "right" : "left",
+                    })
                   }
-                }}
-                className="flex items-center gap-1 rounded border border-red-400/50 bg-red-500/20 px-2 py-1 text-red-300 hover:bg-red-500/30"
-              >
-                <Trash2 className="h-4 w-4" />
-                Sil
-              </button>
+                  className="rounded border border-[#d4c9bb] px-2 py-1 text-xs text-[#1a1612] hover:bg-[#1a1612]/8"
+                >
+                  {selected.page_side === "left" ? "→ Sağa taşı" : "← Sola taşı"}
+                </button>
+              </div>
+              {confirmDeleteId === selected.id ? (
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      fetch(`/api/planner/admin/items/${selected.id}`, { method: "DELETE" }).then(() => {
+                        removeItem(selected.id);
+                        setConfirmDeleteId(null);
+                      });
+                    }}
+                    className="flex items-center gap-1 rounded border border-red-400/50 bg-red-500/10 px-2 py-1 text-sm text-red-600 hover:bg-red-500/20"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Evet, sil
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmDeleteId(null)}
+                    className="rounded border border-[#d4c9bb] px-2 py-1 text-sm text-[#1a1612] hover:bg-[#1a1612]/8"
+                  >
+                    İptal
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setConfirmDeleteId(selected.id)}
+                  className="flex items-center gap-1 rounded border border-red-400/30 px-2 py-1 text-sm text-red-500 hover:bg-red-500/8"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Sil
+                </button>
+              )}
             </div>
           </>
         )}
@@ -465,16 +556,29 @@ function ItemThumb({ item }: { item: PlannerItem }) {
 
   switch (item.type) {
     case "photo":
-    case "polaroid":
       return item.asset_url ? (
         <img
           src={item.asset_url}
           alt=""
           className="h-full w-full object-cover"
-          style={{ width: "100%", height: "100%" }}
         />
       ) : (
-        <div className="flex h-full w-full items-center justify-center bg-gray-200 text-xs">Foto</div>
+        <div className="flex h-full w-full items-center justify-center bg-[#e8e0d4] text-xs text-[#6b6158]">
+          Foto
+        </div>
+      );
+
+    case "polaroid":
+      return (
+        <div className="flex h-full w-full flex-col bg-white p-1.5 shadow-sm" style={{ paddingBottom: "20%" }}>
+          {item.asset_url ? (
+            <img src={item.asset_url} alt="" className="h-full w-full object-cover" />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-[#e8e0d4] text-xs text-[#6b6158]">
+              Foto
+            </div>
+          )}
+        </div>
       );
     case "postit":
       return (

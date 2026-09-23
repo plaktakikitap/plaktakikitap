@@ -233,7 +233,7 @@ function PlannerDateModal({
   if (loading) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
-        <div className="rounded-xl bg-[#1a1612]/8 px-8 py-4 text-[#1a1612]" onClick={(e) => e.stopPropagation()}>
+        <div className="rounded-xl border border-[#d4c9bb] bg-[#faf7f2] px-8 py-4 text-[#1a1612]" onClick={(e) => e.stopPropagation()}>
           Yükleniyor…
         </div>
       </div>
@@ -292,10 +292,10 @@ function PlannerDateModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
       <div
-        className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-xl border border-[#d4c9bb] bg-[#1a1f2e] shadow-xl"
+        className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-xl border border-[#d4c9bb] bg-[#faf7f2] shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 flex items-center justify-between border-b border-[#d4c9bb] bg-[#1a1f2e] px-4 py-3">
+        <div className="sticky top-0 flex items-center justify-between border-b border-[#d4c9bb] bg-[#faf7f2] px-4 py-3">
           <h3 className="font-medium text-[#1a1612]">{display} — Kayıtlar</h3>
           <div className="flex items-center gap-2">
             <button
@@ -305,7 +305,7 @@ function PlannerDateModal({
               className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm ${
                 hasSmudge
                   ? "border border-[#d4c9bb] text-[#1a1612]/70 hover:bg-[#1a1612]/8"
-                  : "bg-[#36454F] text-[#1a1612] hover:bg-[#2a3640]"
+                  : "border border-[#d4c9bb] bg-[#1a1612]/8 text-[#1a1612] hover:bg-[#1a1612]/12"
               }`}
               title={hasSmudge ? "Lekeyi kaldır" : "Yazıyı dağıt (mürekkep lekesi ekle)"}
             >
@@ -460,10 +460,10 @@ function DayEntryFormModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
       <div
-        className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-xl border border-[#d4c9bb] bg-[#1a1f2e] shadow-xl"
+        className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-xl border border-[#d4c9bb] bg-[#faf7f2] shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 flex items-center justify-between border-b border-[#d4c9bb] bg-[#1a1f2e] px-4 py-3">
+        <div className="sticky top-0 flex items-center justify-between border-b border-[#d4c9bb] bg-[#faf7f2] px-4 py-3">
           <h3 className="font-medium text-[#1a1612]">Gün notu — {display}</h3>
           <button type="button" onClick={onClose} className="rounded p-1.5 text-[#1a1612]/70 hover:bg-[#1a1612]/8 hover:text-[#1a1612]">
             <X className="h-5 w-5" />
@@ -639,10 +639,10 @@ function EntryFormModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
       <div
-        className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-xl border border-[#d4c9bb] bg-[#1a1f2e] shadow-xl"
+        className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-xl border border-[#d4c9bb] bg-[#faf7f2] shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 flex items-center justify-between border-b border-[#d4c9bb] bg-[#1a1f2e] px-4 py-3">
+        <div className="sticky top-0 flex items-center justify-between border-b border-[#d4c9bb] bg-[#faf7f2] px-4 py-3">
           <h3 className="font-medium text-[#1a1612]">{isEdit ? "Entry düzenle" : "Entry ekle"} — {display}</h3>
           <button type="button" onClick={onClose} className="rounded p-1.5 text-[#1a1612]/70 hover:bg-[#1a1612]/8 hover:text-[#1a1612]">
             <X className="h-5 w-5" />
