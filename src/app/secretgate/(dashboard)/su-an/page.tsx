@@ -1,6 +1,6 @@
 import { Music } from "lucide-react";
-import { getManualNowPlayingList } from "@/lib/db/queries";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { getManualNowPlayingList, getCurrentReading } from "@/lib/db/queries";
+import { getSiteSettings } from "@/lib/site-settings";
 import { QuickNowForm } from "@/components/admin/QuickNowForm";
 
 export const dynamic = "force-dynamic";
@@ -12,12 +12,14 @@ export default async function AdminSuAnPage() {
     artist: string;
     album_art_url: string;
   } | null = null;
+
   let reading: {
     book_title: string;
     author: string;
     cover_url: string;
-    note: string;
   } | null = null;
+
+  let musicSource: "lastfm" | "manuel" = "lastfm";
 
   try {
     const tracks = await getManualNowPlayingList();
@@ -35,21 +37,21 @@ export default async function AdminSuAnPage() {
   }
 
   try {
-    const supabase = createAdminClient();
-    const { data } = await supabase
-      .from("reading_status")
-      .select("book_title, author, cover_url, note")
-      .order("updated_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-    if (data) {
+    const book = await getCurrentReading();
+    if (book) {
       reading = {
-        book_title: data.book_title ?? "",
-        author: data.author ?? "",
-        cover_url: data.cover_url ?? "",
-        note: data.note ?? "",
+        book_title: book.title ?? "",
+        author: book.author ?? "",
+        cover_url: book.cover_url ?? "",
       };
     }
+  } catch {
+    /* empty */
+  }
+
+  try {
+    const settings = await getSiteSettings();
+    musicSource = settings?.music_source === "manuel" ? "manuel" : "lastfm";
   } catch {
     /* empty */
   }
@@ -62,11 +64,10 @@ export default async function AdminSuAnPage() {
           Şu an
         </h1>
         <p className="mt-2 text-sm text-[#6b6158]">
-          Ana sayfadaki dinliyorum / okuyorum kartlarını güncelle.
+          Ana sayfadaki dinliyorum kartını güncelle. Okuduğun kitap Kütüphanem&apos;den işaretlenir.
         </p>
       </header>
-
-      <QuickNowForm music={music} reading={reading} />
+      <QuickNowForm music={music} reading={reading} musicSource={musicSource} />
     </div>
   );
 }

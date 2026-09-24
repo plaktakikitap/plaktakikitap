@@ -15,7 +15,7 @@ export function YouTubeGallery({ items }: YouTubeGalleryProps) {
 
   return (
     <section className="mb-16">
-      <h2 className="mb-6 font-editorial text-2xl font-medium text-white sm:text-3xl">
+      <h2 className="mb-6 font-editorial text-2xl font-medium text-ink sm:text-3xl">
         Video
       </h2>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

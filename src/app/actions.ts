@@ -2,7 +2,22 @@
 
 import { revalidatePath } from "next/cache";
 import { createServerClient } from "@/lib/supabase/server";
-import type { Visibility } from "@/types/database";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/supabase/auth";
+import { mapSeriesStatusInput, parseAdminVisibility } from "@/lib/series-status-map";
+import type { BookStatus, Visibility } from "@/types/database";
+import { isBookStatus } from "@/types/database";
+
+function parseBookStatus(raw: FormDataEntryValue | null): BookStatus {
+  return isBookStatus(raw) ? raw : "reading";
+}
+
+function parseBookVisibility(raw: FormDataEntryValue | null, status: BookStatus): Visibility {
+  if (status === "to_read") return "private";
+  const v = String(raw ?? "public");
+  if (v === "unlisted" || v === "private") return v;
+  return "public";
+}
 
 function slugify(text: string): string {
   return text
@@ -159,8 +174,19 @@ export async function createSeries(formData: FormData) {
   const title = formData.get("title") as string;
   const slug = formData.get("slug") as string || slugify(title);
   const description = formData.get("description") as string || null;
-  const rating = formData.get("rating") ? parseFloat(formData.get("rating") as string) : null;
-  const visibility = (formData.get("visibility") as Visibility) || "public";
+  const rating_5Raw = formData.get("rating_5") as string | null;
+  const rating_5 = rating_5Raw ? parseFloat(rating_5Raw) : null;
+  const ratingFromForm = formData.get("rating")
+    ? parseFloat(formData.get("rating") as string)
+    : null;
+  const rating =
+    ratingFromForm != null && !Number.isNaN(ratingFromForm)
+      ? ratingFromForm
+      : rating_5 != null && !Number.isNaN(rating_5)
+        ? rating_5 * 2
+        : null;
+  const visibility =
+    parseAdminVisibility(formData.get("visibility")) ?? "public";
   const episodeCountRaw = formData.get("episode_count") ?? formData.get("episodes_watched");
   const episode_count = parseInt(String(episodeCountRaw ?? 0), 10) || 0;
   const avg_episode_min = formData.get("avg_episode_min") ? parseInt(formData.get("avg_episode_min") as string, 10) : null;
@@ -179,17 +205,15 @@ export async function createSeries(formData: FormData) {
   const spine_url = (formData.get("spine_url") as string)?.trim() || null;
   const is_favorite = formData.get("is_favorite") === "on" || formData.get("is_favorite") === "true";
   const favorite_order = is_favorite ? Date.now() : null;
-  const statusRaw = (formData.get("status") as string)?.trim() || null;
-  const status =
-    statusRaw === "finished" || statusRaw === "waiting" || statusRaw === "dropped" ? statusRaw : null;
+  const statusMapped = mapSeriesStatusInput(
+    (formData.get("status") as string)?.trim() || null
+  );
   const yearRaw = (formData.get("year") as string)?.trim();
   const year = yearRaw ? parseInt(yearRaw, 10) : null;
   const genreTagsRaw = formData.get("genre_tags") as string | null;
   const genre_tags = genreTagsRaw
     ? genreTagsRaw.split(/[\s,]+/).map((s) => s.trim()).filter(Boolean)
     : [];
-  const rating_5Raw = formData.get("rating_5") as string | null;
-  const rating_5 = rating_5Raw ? parseFloat(rating_5Raw) : null;
 
   const { data: content, error: contentError } = await supabase
     .from("content_items")
@@ -221,7 +245,8 @@ export async function createSeries(formData: FormData) {
     spine_url: spine_url || null,
     is_favorite: is_favorite ?? false,
     favorite_order,
-    status,
+    status: statusMapped.status,
+    watch_status: statusMapped.watch_status,
     year: year != null && !Number.isNaN(year) ? year : null,
     genre_tags: genre_tags.length ? genre_tags : null,
     rating_5: rating_5 != null && !Number.isNaN(rating_5) ? rating_5 : null,
@@ -234,6 +259,7 @@ export async function createSeries(formData: FormData) {
   revalidatePath("/izleme-gunlugum/diziler");
   revalidatePath("/diziler");
   revalidatePath("/secretgate");
+  revalidatePath("/secretgate/diziler");
   revalidatePath("/secretgate/series");
   return { success: true };
 }
@@ -320,7 +346,8 @@ export async function updateSeries(contentId: string, formData: FormData) {
 }
 
 export async function createBook(formData: FormData) {
-  const supabase = await createServerClient();
+  await requireAdmin();
+  const supabase = createAdminClient();
   const title = (formData.get("title") as string)?.trim();
   if (!title) return { error: "Başlık zorunludur." };
   const author = (formData.get("author") as string)?.trim() ?? "";
@@ -329,28 +356,34 @@ export async function createBook(formData: FormData) {
   if (page_count == null || Number.isNaN(page_count) || page_count < 1) {
     return { error: "Sayfa sayısı zorunludur (1 ve üzeri tam sayı)." };
   }
-  const visibility = (formData.get("visibility") as Visibility) || "public";
+  const status = parseBookStatus(formData.get("status"));
+  const visibility = parseBookVisibility(formData.get("visibility"), status);
   const spine_url = (formData.get("spine_url") as string)?.trim() || null;
-  const review = (formData.get("review") as string)?.trim() || null;
+  const review = status === "to_read" ? null : (formData.get("review") as string)?.trim() || null;
   const cover_url = (formData.get("cover_url") as string)?.trim() || null;
   const tagsRaw = (formData.get("tags") as string)?.trim() || "";
   const tags = normalizeBookTags(tagsRaw);
-  const status = (formData.get("status") as "reading" | "finished" | "paused" | "dropped") || "reading";
   const bookRatingRaw = (formData.get("book_rating") as string)?.trim();
   const rating =
-    bookRatingRaw != null && bookRatingRaw !== ""
-      ? Math.max(0, Math.min(5, parseFloat(bookRatingRaw) || 0))
-      : null;
+    status === "to_read"
+      ? null
+      : bookRatingRaw != null && bookRatingRaw !== ""
+        ? Math.max(0, Math.min(5, parseFloat(bookRatingRaw) || 0))
+        : null;
   const startDateRaw = (formData.get("start_date") as string)?.trim();
-  const start_date = startDateRaw || null;
+  const start_date = status === "to_read" ? null : startDateRaw || null;
   const endDateRaw = (formData.get("end_date") as string)?.trim();
-  const end_date = endDateRaw || null;
+  const end_date = status === "to_read" ? null : endDateRaw || null;
   const progressPercentRaw = (formData.get("progress_percent") as string)?.trim();
   const progress_percent =
-    progressPercentRaw != null && progressPercentRaw !== ""
-      ? Math.max(0, Math.min(100, parseInt(progressPercentRaw, 10) || 0))
-      : null;
-  const is_featured_current = formData.get("is_featured_current") === "on" || formData.get("is_featured_current") === "true";
+    status === "to_read"
+      ? null
+      : progressPercentRaw != null && progressPercentRaw !== ""
+        ? Math.max(0, Math.min(100, parseInt(progressPercentRaw, 10) || 0))
+        : null;
+  const is_featured_current =
+    status === "reading" &&
+    (formData.get("is_featured_current") === "on" || formData.get("is_featured_current") === "true");
 
   if (is_featured_current) {
     await supabase.from("books").update({ is_featured_current: false });
@@ -380,11 +413,13 @@ export async function createBook(formData: FormData) {
   revalidatePath("/secretgate");
   revalidatePath("/secretgate/books");
   revalidatePath("/secretgate/reading-log");
+  revalidatePath("/secretgate/okunacaklar");
   return { success: true };
 }
 
 export async function updateBook(id: string, formData: FormData) {
-  const supabase = await createServerClient();
+  await requireAdmin();
+  const supabase = createAdminClient();
   const title = (formData.get("title") as string)?.trim();
   if (!title) return { error: "Başlık zorunludur." };
   const author = (formData.get("author") as string)?.trim() ?? "";
@@ -393,28 +428,34 @@ export async function updateBook(id: string, formData: FormData) {
   if (page_count == null || Number.isNaN(page_count) || page_count < 1) {
     return { error: "Sayfa sayısı zorunludur (1 ve üzeri tam sayı)." };
   }
-  const visibility = (formData.get("visibility") as "public" | "unlisted" | "private") || "public";
+  const status = parseBookStatus(formData.get("status"));
+  const visibility = parseBookVisibility(formData.get("visibility"), status);
   const spine_url = (formData.get("spine_url") as string)?.trim() || null;
-  const review = (formData.get("review") as string)?.trim() || null;
+  const review = status === "to_read" ? null : (formData.get("review") as string)?.trim() || null;
   const cover_url = (formData.get("cover_url") as string)?.trim() || null;
   const tagsRaw = (formData.get("tags") as string)?.trim() || "";
   const tags = normalizeBookTags(tagsRaw);
-  const status = (formData.get("status") as "reading" | "finished" | "paused" | "dropped") || "reading";
   const bookRatingRaw = (formData.get("book_rating") as string)?.trim();
   const rating =
-    bookRatingRaw != null && bookRatingRaw !== ""
-      ? Math.max(0, Math.min(5, parseFloat(bookRatingRaw) || 0))
-      : null;
+    status === "to_read"
+      ? null
+      : bookRatingRaw != null && bookRatingRaw !== ""
+        ? Math.max(0, Math.min(5, parseFloat(bookRatingRaw) || 0))
+        : null;
   const startDateRaw = (formData.get("start_date") as string)?.trim();
-  const start_date = startDateRaw || null;
+  const start_date = status === "to_read" ? null : startDateRaw || null;
   const endDateRaw = (formData.get("end_date") as string)?.trim();
-  const end_date = endDateRaw || null;
+  const end_date = status === "to_read" ? null : endDateRaw || null;
   const progressPercentRaw = (formData.get("progress_percent") as string)?.trim();
   const progress_percent =
-    progressPercentRaw != null && progressPercentRaw !== ""
-      ? Math.max(0, Math.min(100, parseInt(progressPercentRaw, 10) || 0))
-      : null;
-  const is_featured_current = formData.get("is_featured_current") === "on" || formData.get("is_featured_current") === "true";
+    status === "to_read"
+      ? null
+      : progressPercentRaw != null && progressPercentRaw !== ""
+        ? Math.max(0, Math.min(100, parseInt(progressPercentRaw, 10) || 0))
+        : null;
+  const is_featured_current =
+    status === "reading" &&
+    (formData.get("is_featured_current") === "on" || formData.get("is_featured_current") === "true");
 
   if (is_featured_current) {
     await supabase.from("books").update({ is_featured_current: false });
@@ -448,15 +489,19 @@ export async function updateBook(id: string, formData: FormData) {
   revalidatePath("/secretgate");
   revalidatePath("/secretgate/books");
   revalidatePath("/secretgate/reading-log");
+  revalidatePath("/secretgate/okunacaklar");
   return { success: true };
 }
 
 export async function deleteContent(id: string, type: "film" | "series" | "book") {
-  const supabase = await createServerClient();
+  if (type === "book") await requireAdmin();
+  const supabase =
+    type === "book" ? createAdminClient() : await createServerClient();
   if (type === "book") {
     const { error } = await supabase.from("books").delete().eq("id", id);
     if (error) return { error: error.message };
     revalidatePath("/secretgate/reading-log");
+    revalidatePath("/secretgate/okunacaklar");
   } else {
     const { error } = await supabase.from("content_items").delete().eq("id", id);
     if (error) return { error: error.message };

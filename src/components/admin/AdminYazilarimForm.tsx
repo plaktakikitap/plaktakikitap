@@ -3,7 +3,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { PenLine } from "lucide-react";
+import { PenLine, Plus } from "lucide-react";
 
 const RichTextEditor = dynamic(
   () => import("@/components/admin/RichTextEditor").then((m) => ({ default: m.RichTextEditor })),
@@ -21,6 +21,7 @@ export function AdminYazilarimForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [bodyHtml, setBodyHtml] = useState("");
+  const [showForm, setShowForm] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -60,6 +61,7 @@ export function AdminYazilarimForm() {
       }
       (e.target as HTMLFormElement).reset();
       setBodyHtml("");
+      setShowForm(false);
       router.refresh();
     } finally {
       setLoading(false);
@@ -69,7 +71,18 @@ export function AdminYazilarimForm() {
   const today = new Date().toISOString().slice(0, 16);
 
   return (
-    <form onSubmit={handleSubmit} className="admin-bento-card p-6 sm:p-8">
+    <div className="space-y-3">
+      <button
+        type="button"
+        onClick={() => setShowForm(!showForm)}
+        className="flex w-full items-center gap-2 rounded-xl border border-[#e8e0d4] bg-[#faf7f2] px-4 py-3 text-sm font-medium text-[#1a1612] transition-colors hover:border-[#b8934a]/30 hover:bg-[#b8934a]/5"
+      >
+        <Plus className={`h-4 w-4 text-[#b8934a] transition-transform ${showForm ? "rotate-45" : ""}`} />
+        {showForm ? "Formu kapat" : "Yeni yazı ekle"}
+      </button>
+
+      {showForm && (
+    <form onSubmit={handleSubmit} className="rounded-2xl border border-[#e8e0d4] bg-white/70 p-5 sm:p-6">
       <div className="mb-6 flex items-center gap-3 border-b border-[#e8e0d4] pb-5">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(184,147,74,0.12)] text-[#b8934a]">
           <PenLine className="h-5 w-5" />
@@ -174,5 +187,7 @@ export function AdminYazilarimForm() {
         </button>
       </div>
     </form>
+      )}
+    </div>
   );
 }

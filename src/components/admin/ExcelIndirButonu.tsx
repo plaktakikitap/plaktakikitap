@@ -1,20 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  DIZI_SUTUNLARI,
-  exportAllToExcel,
-  exportToExcel,
-  FILM_SUTUNLARI,
-  KITAP_SUTUNLARI,
-  type ExportColumn,
-} from "@/lib/export-excel";
-
-const SUTUN_MAP = {
-  kitaplar: KITAP_SUTUNLARI,
-  filmler: FILM_SUTUNLARI,
-  diziler: DIZI_SUTUNLARI,
-} as const;
+import type { ExportColumn } from "@/lib/export-excel";
 
 export function ExcelIndirButonu({
   tur,
@@ -24,11 +11,23 @@ export function ExcelIndirButonu({
   sutunlar?: ExportColumn[];
 }) {
   const [yukleniyor, setYukleniyor] = useState(false);
-  const cols = sutunlar ?? SUTUN_MAP[tur];
 
   const indir = async () => {
     setYukleniyor(true);
     try {
+      const {
+        DIZI_SUTUNLARI,
+        exportToExcel,
+        FILM_SUTUNLARI,
+        KITAP_SUTUNLARI,
+      } = await import("@/lib/export-excel");
+      const defaultCols =
+        tur === "kitaplar"
+          ? KITAP_SUTUNLARI
+          : tur === "filmler"
+            ? FILM_SUTUNLARI
+            : DIZI_SUTUNLARI;
+      const cols = sutunlar ?? defaultCols;
       const res = await fetch(`/api/admin/export/${tur}`);
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "İndirme başarısız");
@@ -56,7 +55,7 @@ export function ExcelIndirButonu({
       disabled={yukleniyor}
       className="inline-flex items-center gap-1.5 rounded-md border border-[rgba(201,166,90,0.3)] bg-[rgba(201,166,90,0.1)] px-4 py-2 text-[0.85rem] text-[#c9a65a] transition hover:bg-[rgba(201,166,90,0.2)] disabled:cursor-wait disabled:opacity-60"
     >
-      {yukleniyor ? "Hazırlanıyor..." : "⬇ Excel İndir"}
+      {yukleniyor ? "Hazırlanıyor..." : "Excel İndir"}
     </button>
   );
 }
@@ -67,6 +66,12 @@ export function ExcelTumunuIndirButonu() {
   const indir = async () => {
     setYukleniyor(true);
     try {
+      const {
+        DIZI_SUTUNLARI,
+        exportAllToExcel,
+        FILM_SUTUNLARI,
+        KITAP_SUTUNLARI,
+      } = await import("@/lib/export-excel");
       const res = await fetch("/api/admin/export/all");
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "İndirme başarısız");
@@ -102,7 +107,7 @@ export function ExcelTumunuIndirButonu() {
       disabled={yukleniyor}
       className="inline-flex items-center gap-1.5 rounded-md border border-[rgba(201,166,90,0.3)] bg-[rgba(201,166,90,0.1)] px-4 py-2 text-[0.85rem] text-[#c9a65a] transition hover:bg-[rgba(201,166,90,0.2)] disabled:cursor-wait disabled:opacity-60"
     >
-      {yukleniyor ? "Hazırlanıyor..." : "⬇ Tümünü İndir"}
+      {yukleniyor ? "Hazırlanıyor..." : "Tümünü İndir"}
     </button>
   );
 }

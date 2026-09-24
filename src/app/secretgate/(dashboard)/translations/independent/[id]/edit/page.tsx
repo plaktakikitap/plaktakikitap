@@ -4,18 +4,34 @@ import type { TranslationIndependentRow } from "@/types/database";
 import { AdminTranslationIndependentForm } from "@/components/admin/AdminTranslationIndependentForm";
 import Link from "next/link";
 
-export default async function EditTranslationIndependentPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function EditTranslationIndependentPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
   const supabase = createAdminClient();
-  const { data, error } = await supabase.from("translation_independent").select("*").eq("id", id).maybeSingle();
+  const { data, error } = await supabase
+    .from("translation_independent")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
   if (error || !data) notFound();
+  const item = data as TranslationIndependentRow;
+
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8">
-      <Link href="/secretgate/translations" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">
+    <div className="mx-auto max-w-xl">
+      <Link
+        href="/secretgate/translations"
+        className="text-sm text-[#6b6158] transition-colors hover:text-[#b8934a]"
+      >
         ← Çeviriler
       </Link>
-      <h1 className="mt-4 text-xl font-semibold">Bağımsız çeviri düzenle</h1>
-      <AdminTranslationIndependentForm item={data as TranslationIndependentRow} />
+      <h1 className="admin-heading mt-4 text-2xl font-semibold text-[#1a1612]">
+        Bağımsız çeviri düzenle
+      </h1>
+      <p className="mt-1 text-sm text-[#6b6158]">{item.title}</p>
+      <AdminTranslationIndependentForm item={item} />
     </div>
   );
 }

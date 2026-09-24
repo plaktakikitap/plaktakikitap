@@ -1,6 +1,6 @@
 "use client";
 
-import { Mail } from "lucide-react";
+import { Download, Mail } from "lucide-react";
 import type { WorksItem } from "@/types/works";
 
 const CV_MAIL = "plaktakikitap@gmail.com";
@@ -10,7 +10,7 @@ interface CVTimelineProps {
   cvDownloadUrl: string;
 }
 
-export function CVTimeline({ items }: CVTimelineProps) {
+export function CVTimeline({ items, cvDownloadUrl }: CVTimelineProps) {
   const roles = items.filter((i) => i.type === "cv_role");
 
   return (
@@ -65,13 +65,26 @@ export function CVTimeline({ items }: CVTimelineProps) {
         </div>
       )}
 
-      <a
-        href={`mailto:${CV_MAIL}`}
-        className="inline-flex items-center gap-2 rounded-xl border border-ink/20 bg-ink/5 px-5 py-3 font-medium text-ink transition hover:border-ink/35 hover:bg-ink/10"
-      >
-        <Mail className="h-5 w-5" />
-        CV&apos;mi istemek için bana ulaşınız.
-      </a>
+      <div className="flex flex-wrap items-center gap-3">
+        {cvDownloadUrl ? (
+          <a
+            href={cvDownloadUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-xl border border-amber-400/40 bg-amber-400/10 px-5 py-3 font-medium text-gold transition hover:bg-gold-soft"
+          >
+            <Download className="h-5 w-5" />
+            CV&apos;yi indir
+          </a>
+        ) : null}
+        <a
+          href={`mailto:${CV_MAIL}`}
+          className="inline-flex items-center gap-2 rounded-xl border border-ink/20 bg-ink/5 px-5 py-3 font-medium text-ink transition hover:border-ink/35 hover:bg-ink/10"
+        >
+          <Mail className="h-5 w-5" />
+          CV&apos;mi istemek için bana ulaşınız.
+        </a>
+      </div>
     </section>
   );
 }

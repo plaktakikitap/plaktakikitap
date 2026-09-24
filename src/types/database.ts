@@ -9,7 +9,7 @@ export type ContentType =
   | "art"
   | "planner_entry";
 
-export type Visibility = "public" | "unlisted" | "private";
+export type Visibility = "public" | "unlisted" | "private" | "archived";
 
 export interface ContentItem {
   id: string;
@@ -91,6 +91,7 @@ export interface Series {
     | "completed"
     | "dropped"
     | "rewatching"
+    | "paused"
     | null;
   dropped_at_season?: number | null;
   dropped_at_episode?: number | null;
@@ -105,7 +106,19 @@ export interface Series {
 }
 
 /** Reading log: standalone books table (id, title, author, ...) */
-export type BookStatus = "reading" | "finished" | "paused" | "dropped";
+export type BookStatus = "reading" | "finished" | "paused" | "dropped" | "to_read";
+
+export const BOOK_STATUSES = [
+  "reading",
+  "finished",
+  "paused",
+  "dropped",
+  "to_read",
+] as const;
+
+export function isBookStatus(value: unknown): value is BookStatus {
+  return typeof value === "string" && (BOOK_STATUSES as readonly string[]).includes(value);
+}
 
 export interface Book {
   id: string;

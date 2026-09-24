@@ -14,7 +14,8 @@ export type WatchStatus =
   | "watching"
   | "completed"
   | "dropped"
-  | "rewatching";
+  | "rewatching"
+  | "paused";
 
 function revalidateDiziler() {
   revalidatePath("/diziler", "layout");

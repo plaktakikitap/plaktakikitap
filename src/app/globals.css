@@ -597,6 +597,9 @@ h3.type-scale {
 .works-page[data-category="all"] {
   --works-bg: var(--color-all);
 }
+.works-page[data-category="youtube"] {
+  --works-bg: var(--color-gonulluluk);
+}
 .works-page[data-category="project"] {
   --works-bg: var(--color-projeler);
 }

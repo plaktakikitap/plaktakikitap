@@ -105,7 +105,9 @@ export function WorksContent({ items, cvDownloadUrl }: WorksContentProps) {
         </p>
       )}
 
-      {filter === "all" ? <YouTubeGallery items={youtube} /> : null}
+      {filter === "all" || filter === "youtube" ? (
+        <YouTubeGallery items={youtube} />
+      ) : null}
       {filter === "all" || filter === "art" ? (
         <ArtPhotoGrid items={artPhoto} />
       ) : null}

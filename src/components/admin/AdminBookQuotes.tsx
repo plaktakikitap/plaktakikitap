@@ -16,6 +16,7 @@ export function AdminBookQuotes({ bookId }: AdminBookQuotesProps) {
   const [text, setText] = useState("");
   const [pageNumber, setPageNumber] = useState("");
   const [open, setOpen] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -71,27 +72,29 @@ export function AdminBookQuotes({ bookId }: AdminBookQuotesProps) {
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Bu alıntıyı silmek istiyor musun?")) return;
+    setError(null);
     const res = await fetch(`/api/admin/quotes/${id}`, { method: "DELETE" });
     if (!res.ok) {
       setError("Silinemedi");
+      setConfirmDeleteId(null);
       return;
     }
     setItems((prev) => prev.filter((q) => q.id !== id));
+    setConfirmDeleteId(null);
   }
 
   return (
     <section className="mt-10 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5">
       <div className="flex items-center justify-between gap-3">
         <h2 className="flex items-center gap-2 text-sm font-semibold text-[#1a1612]">
-          <QuoteIcon className="h-4 w-4 text-[var(--accent)]" aria-hidden />
+          <QuoteIcon className="h-4 w-4 text-[#b8934a]" aria-hidden />
           Alıntılar
           <span className="font-normal text-[#1a1612]/40">({items.length})</span>
         </h2>
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#b8934a] px-3 py-1.5 text-xs font-medium text-[#faf7f2] hover:opacity-90"
         >
           <Plus className="h-3.5 w-3.5" aria-hidden />
           Alıntı ekle
@@ -108,7 +111,7 @@ export function AdminBookQuotes({ bookId }: AdminBookQuotesProps) {
               rows={3}
               required
               placeholder="Kitaptan bir cümle…"
-              className="w-full rounded-lg border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2 text-sm text-[#1a1612] placeholder:text-[#6b6158] focus:border-[var(--accent)]/50 focus:outline-none"
+              className="admin-input min-h-[5rem]"
             />
           </div>
           <div className="max-w-[140px]">
@@ -121,14 +124,14 @@ export function AdminBookQuotes({ bookId }: AdminBookQuotesProps) {
               value={pageNumber}
               onChange={(e) => setPageNumber(e.target.value)}
               placeholder="örn. 42"
-              className="w-full rounded-lg border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2 text-sm text-[#1a1612] placeholder:text-[#6b6158] focus:border-[var(--accent)]/50 focus:outline-none"
+              className="admin-input"
             />
           </div>
           <div className="flex gap-2">
             <button
               type="submit"
               disabled={saving || !text.trim()}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-3 py-1.5 text-xs font-medium text-white hover:opacity-90 disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#b8934a] px-3 py-1.5 text-xs font-medium text-[#faf7f2] hover:opacity-90 disabled:opacity-50"
             >
               {saving ? (
                 <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
@@ -172,14 +175,34 @@ export function AdminBookQuotes({ bookId }: AdminBookQuotesProps) {
                   </span>
                 ) : null}
               </p>
-              <button
-                type="button"
-                onClick={() => void handleDelete(q.id)}
-                className="shrink-0 rounded p-1.5 text-[#1a1612]/40 hover:bg-[#1a1612]/5 hover:text-red-300"
-                aria-label="Alıntıyı sil"
-              >
-                <Trash2 className="h-3.5 w-3.5" />
-              </button>
+              {confirmDeleteId === q.id ? (
+                <div className="flex shrink-0 items-center gap-1.5">
+                  <span className="text-xs text-red-500">Emin misin?</span>
+                  <button
+                    type="button"
+                    onClick={() => void handleDelete(q.id)}
+                    className="rounded-lg bg-red-500 px-2.5 py-1 text-xs font-medium text-[#faf7f2] hover:bg-red-600"
+                  >
+                    Sil
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmDeleteId(null)}
+                    className="rounded-lg border border-[#e8e0d4] px-2.5 py-1 text-xs text-[#6b6158] hover:text-[#1a1612]"
+                  >
+                    İptal
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setConfirmDeleteId(q.id)}
+                  className="shrink-0 rounded p-1.5 text-[#1a1612]/40 hover:bg-[#1a1612]/5 hover:text-red-500"
+                  aria-label="Alıntıyı sil"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              )}
             </li>
           ))}
         </ul>

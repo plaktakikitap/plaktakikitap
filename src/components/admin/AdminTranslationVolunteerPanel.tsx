@@ -11,10 +11,6 @@ import {
   adminReorderTranslationVolunteer,
 } from "@/app/secretgate/actions";
 
-const inputClass =
-  "w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm";
-const labelClass = "mb-1 block text-sm font-medium text-[var(--muted)]";
-
 export function AdminTranslationVolunteerPanel({
   projects,
 }: {
@@ -23,6 +19,8 @@ export function AdminTranslationVolunteerPanel({
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [draggedId, setDraggedId] = useState<string | null>(null);
 
   const sorted = [...projects].sort((a, b) => a.order_index - b.order_index);
@@ -41,16 +39,24 @@ export function AdminTranslationVolunteerPanel({
       return;
     }
     form.reset();
+    setShowForm(false);
     router.refresh();
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Bu projeyi silmek istediğinize emin misiniz?")) return;
+    setError(null);
     setLoading(true);
-    const result = await adminDeleteTranslationVolunteer(id);
-    setLoading(false);
-    if (result?.error) setError(result.error);
-    else router.refresh();
+    try {
+      const result = await adminDeleteTranslationVolunteer(id);
+      if (result?.error) {
+        setError(result.error);
+        return;
+      }
+      router.refresh();
+    } finally {
+      setLoading(false);
+      setConfirmDeleteId(null);
+    }
   }
 
   const handleDragStart = (e: React.DragEvent, id: string) => {
@@ -70,7 +76,7 @@ export function AdminTranslationVolunteerPanel({
     const next = [...sorted];
     const [removed] = next.splice(fromIdx, 1);
     next.splice(toIdx, 0, removed);
-    handleReorder(next);
+    void handleReorder(next);
   };
 
   async function handleReorder(newOrder: TranslationVolunteerProjectRow[]) {
@@ -83,91 +89,129 @@ export function AdminTranslationVolunteerPanel({
   }
 
   return (
-    <div className="space-y-8">
-      <section className="rounded-xl border border-[var(--card-border)] bg-[var(--card)]/50 p-6">
-        <h2 className="mb-4 flex items-center gap-2 font-medium">
-          <Plus className="h-4 w-4" />
-          Gönüllü proje ekle
-        </h2>
-        {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
-        <form onSubmit={handleCreate} className="grid gap-4 sm:grid-cols-2">
+    <div className="space-y-4">
+      {error ? <p className="admin-error">{error}</p> : null}
+
+      <button
+        type="button"
+        onClick={() => setShowForm(!showForm)}
+        className="flex w-full items-center gap-2 rounded-xl border border-[#e8e0d4] bg-[#faf7f2] px-4 py-3 text-sm font-medium text-[#1a1612] transition-colors hover:border-[#b8934a]/30 hover:bg-[#b8934a]/5"
+      >
+        <Plus className={`h-4 w-4 text-[#b8934a] transition-transform ${showForm ? "rotate-45" : ""}`} />
+        Gönüllü proje ekle
+      </button>
+
+      {showForm ? (
+        <form onSubmit={handleCreate} className="admin-bento-card grid gap-4 p-5 sm:grid-cols-2 sm:p-6">
           <div className="sm:col-span-2">
-            <label className={labelClass}>Kurum adı (org_name) *</label>
-            <input name="org_name" required className={inputClass} placeholder="Felsefelog" />
+            <label className="admin-label">Kurum adı *</label>
+            <input name="org_name" required className="admin-input" placeholder="Felsefelog" />
           </div>
           <div>
-            <label className={labelClass}>Rol (role_title)</label>
-            <input name="role_title" className={inputClass} placeholder="Gönüllü çevirmen" />
+            <label className="admin-label">Rol</label>
+            <input name="role_title" className="admin-input" placeholder="Gönüllü çevirmen" />
           </div>
           <div>
-            <label className={labelClass}>Yıllar (years)</label>
-            <input name="years" className={inputClass} placeholder="2022–2023" />
+            <label className="admin-label">Yıllar</label>
+            <input name="years" className="admin-input" placeholder="2022–2023" />
           </div>
           <div className="sm:col-span-2">
-            <label className={labelClass}>Açıklama (description)</label>
-            <textarea name="description" rows={3} className={inputClass} />
+            <label className="admin-label">Açıklama</label>
+            <textarea name="description" rows={3} className="admin-input min-h-[5rem]" />
           </div>
           <div className="sm:col-span-2">
-            <label className={labelClass}>Highlight’lar (her satıra bir)</label>
-            <textarea name="highlights" rows={4} className={inputClass} placeholder="Satır satır madde" />
+            <label className="admin-label">Öne çıkanlar</label>
+            <textarea name="highlights" rows={4} className="admin-input min-h-[6rem]" placeholder="Her satıra bir madde" />
+            <p className="admin-hint">Her satır ayrı madde olur.</p>
           </div>
           <div>
-            <label className={labelClass}>website_url</label>
-            <input name="website_url" type="text" className={inputClass} placeholder="https://..." />
+            <label className="admin-label">Website</label>
+            <input name="website_url" type="text" className="admin-input" placeholder="https://..." />
           </div>
           <div>
-            <label className={labelClass}>instagram_url</label>
-            <input name="instagram_url" type="text" className={inputClass} placeholder="https://..." />
+            <label className="admin-label">Instagram</label>
+            <input name="instagram_url" type="text" className="admin-input" placeholder="https://..." />
           </div>
           <div className="sm:col-span-2">
-            <label className={labelClass}>x_url</label>
-            <input name="x_url" type="text" className={inputClass} placeholder="https://..." />
+            <label className="admin-label">X</label>
+            <input name="x_url" type="text" className="admin-input" placeholder="https://..." />
           </div>
           <div className="sm:col-span-2">
-            <button
-              type="submit"
-              disabled={loading}
-              className="rounded bg-[var(--primary)] px-4 py-2 text-sm text-[var(--primary-foreground)] disabled:opacity-50"
-            >
+            <button type="submit" disabled={loading} className="admin-btn-gold disabled:opacity-50">
               Ekle
             </button>
           </div>
         </form>
-      </section>
+      ) : null}
 
-      <section>
-        <h2 className="mb-4 font-medium">Gönüllü projeler ({projects.length})</h2>
-        {sorted.length === 0 ? (
-          <p className="text-sm text-[var(--muted)]">Henüz proje yok.</p>
-        ) : (
-          <div className="space-y-3">
-            {sorted.map((p) => (
+      {sorted.length === 0 ? (
+        <p className="py-4 text-sm text-[#1a1612]/40">Henüz proje yok.</p>
+      ) : (
+        <ul className="space-y-2">
+          {sorted.map((p) => (
+            <li
+              key={p.id}
+              draggable
+              onDragStart={(e) => handleDragStart(e, p.id)}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => handleDrop(e, p.id)}
+              className={`group flex items-center gap-3 rounded-xl border border-[#e8e0d4] bg-white/60 px-4 py-3 transition-all hover:border-[#d4c9bb] ${
+                draggedId === p.id ? "opacity-60" : ""
+              }`}
+            >
+              <GripVertical className="h-4 w-4 shrink-0 cursor-grab text-[#a09588]" />
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium text-[#1a1612]">{p.org_name}</p>
+                <p className="mt-0.5 truncate text-xs text-[#a09588]">{p.role_title || p.years || "—"}</p>
+              </div>
               <div
-                key={p.id}
-                draggable
-                onDragStart={(e) => handleDragStart(e, p.id)}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => handleDrop(e, p.id)}
-                className={`flex items-center gap-4 rounded-lg border border-[var(--card-border)] bg-[var(--card)]/30 px-4 py-3 ${draggedId === p.id ? "opacity-60" : ""}`}
+                className={`flex shrink-0 items-center gap-1 transition-opacity ${
+                  confirmDeleteId === p.id
+                    ? "opacity-100"
+                    : "opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+                }`}
               >
-                <GripVertical className="h-5 w-5 shrink-0 cursor-grab text-[var(--muted)]" />
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium">{p.org_name}</p>
-                  <p className="text-sm text-[var(--muted)]">{p.role_title || p.years || "—"}</p>
-                </div>
-                <div className="flex gap-2">
-                  <Link href={`/secretgate/translations/volunteer/${p.id}/edit`} className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--background)]" aria-label="Düzenle">
-                    <Pencil className="h-4 w-4" />
-                  </Link>
-                  <button type="button" onClick={() => handleDelete(p.id)} disabled={loading} className="rounded p-1.5 text-red-600 hover:bg-red-500/10" aria-label="Sil">
+                <Link
+                  href={`/secretgate/translations/volunteer/${p.id}/edit`}
+                  className="rounded-lg p-1.5 text-[#6b6158] transition-colors hover:bg-[#1a1612]/8 hover:text-[#1a1612]"
+                  aria-label="Düzenle"
+                >
+                  <Pencil className="h-4 w-4" />
+                </Link>
+                {confirmDeleteId === p.id ? (
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs text-red-500">Emin misin?</span>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(p.id)}
+                      disabled={loading}
+                      className="rounded-lg bg-red-500 px-2.5 py-1 text-xs font-medium text-[#faf7f2] hover:bg-red-600 disabled:opacity-50"
+                    >
+                      Sil
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmDeleteId(null)}
+                      className="rounded-lg border border-[#e8e0d4] px-2.5 py-1 text-xs text-[#6b6158] hover:text-[#1a1612]"
+                    >
+                      İptal
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setConfirmDeleteId(p.id)}
+                    className="rounded-lg p-1.5 text-[#6b6158] transition-colors hover:text-red-500"
+                    aria-label="Sil"
+                  >
                     <Trash2 className="h-4 w-4" />
                   </button>
-                </div>
+                )}
               </div>
-            ))}
-          </div>
-        )}
-      </section>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

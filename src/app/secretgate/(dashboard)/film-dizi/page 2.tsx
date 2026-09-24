@@ -52,7 +52,7 @@ export default async function AdminFilmDiziPage() {
               </Link>
               {" / "}
               <Link
-                href="/secretgate/series-watch-log"
+                href="/secretgate/diziler"
                 className="text-amber-400/80 underline-offset-2 hover:underline"
               >
                 Dizi

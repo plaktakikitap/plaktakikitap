@@ -17,8 +17,8 @@ export type TimelineEntry = {
 };
 
 const inputClass =
-  "w-full rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-500";
-const labelClass = "mb-1 block text-sm font-medium text-[var(--muted)]";
+  "w-full rounded-lg border border-[#e8e0d4] bg-white px-3 py-2 text-sm text-[#1a1612] placeholder:text-[#6b6158]";
+const labelClass = "mb-1 block text-sm font-medium text-[#6b6158]";
 
 /** Cihazdan fotoğraf yükleme — dosya seçici ile. */
 function AboutTimelineImageUpload({
@@ -85,7 +85,7 @@ function AboutTimelineImageUpload({
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={disabled || uploading}
-          className="inline-flex items-center gap-2 rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-50 disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-lg border border-[#e8e0d4] bg-white px-3 py-2 text-sm text-[#1a1612] hover:bg-[#faf7f2] disabled:opacity-50"
         >
           {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
           {uploading ? "Yükleniyor…" : "Bilgisayardan veya telefondan görsel ekle"}
@@ -132,6 +132,8 @@ export function AdminAboutTimelineForm({ entries }: { entries: TimelineEntry[] }
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const [ordered, setOrdered] = useState(entries);
   const [newEntryImages, setNewEntryImages] = useState<TimelineImage[]>([]);
+  const [showForm, setShowForm] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const sorted = [...ordered].sort((a, b) => a.order_index - b.order_index);
 
   async function handleCreate(e: React.FormEvent<HTMLFormElement>) {
@@ -161,6 +163,7 @@ export function AdminAboutTimelineForm({ entries }: { entries: TimelineEntry[] }
     }
     form.reset();
     setNewEntryImages([]);
+    setShowForm(false);
     router.refresh();
   }
 
@@ -182,11 +185,18 @@ export function AdminAboutTimelineForm({ entries }: { entries: TimelineEntry[] }
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Bu girişi silmek istediğinize emin misiniz?")) return;
     setLoading(true);
-    await fetch(`/api/admin/about/${id}`, { method: "DELETE" });
-    setLoading(false);
-    router.refresh();
+    try {
+      const res = await fetch(`/api/admin/about/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setOrdered((e) => e.filter((x) => x.id !== id));
+        if (editingId === id) setEditingId(null);
+        router.refresh();
+      }
+    } finally {
+      setLoading(false);
+      setConfirmDeleteId(null);
+    }
   }
 
   async function handleReorder(newOrder: TimelineEntry[]) {
@@ -222,31 +232,60 @@ export function AdminAboutTimelineForm({ entries }: { entries: TimelineEntry[] }
 
   return (
     <div className="mt-6 space-y-6">
-      <form onSubmit={handleCreate} className="rounded-xl border border-[var(--card-border)] bg-[var(--card)]/50 p-6">
-        <h2 className="mb-4 flex items-center gap-2 font-medium">
-          <Plus className="h-4 w-4" />
-          Yeni timeline girişi
-        </h2>
-        {error && <p className="mb-3 text-sm text-red-500">{error}</p>}
-        <div className="grid gap-3">
-          <label className={labelClass}>Dönem</label>
-          <input name="year_or_period" className={inputClass} placeholder="2015-2018 Üniversite Yılları" required />
-          <label className={labelClass}>Paragraf metni</label>
-          <textarea name="paragraph_text" className={inputClass} rows={4} placeholder="O döneme ait hikaye..." />
-          <label className={labelClass}>Görseller</label>
-          <AboutTimelineImageUpload
-            value={newEntryImages}
-            onChange={setNewEntryImages}
-            disabled={loading}
+      <div>
+        <button
+          type="button"
+          onClick={() => setShowForm((v) => !v)}
+          className="flex w-full items-center gap-2 rounded-xl border border-[#e8e0d4] bg-[#faf7f2] px-4 py-3 text-sm font-medium text-[#1a1612] transition-colors hover:border-[#b8934a]/30 hover:bg-[#b8934a]/5"
+        >
+          <Plus
+            className={`h-4 w-4 text-[#b8934a] transition-transform ${showForm ? "rotate-45" : ""}`}
           />
-        </div>
-        <button type="submit" disabled={loading} className="mt-4 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm text-white hover:opacity-90 disabled:opacity-50">
-          Ekle
+          {showForm ? "Formu kapat" : "Yeni timeline girişi"}
         </button>
-      </form>
+        {showForm && (
+          <form
+            onSubmit={handleCreate}
+            className="mt-3 rounded-2xl border border-[#e8e0d4] bg-white/70 p-4 sm:p-5"
+          >
+            {error && <p className="mb-3 text-sm text-red-500">{error}</p>}
+            <div className="grid gap-3">
+              <label className={labelClass}>Dönem</label>
+              <input
+                name="year_or_period"
+                className={inputClass}
+                placeholder="2015-2018 Üniversite Yılları"
+                required
+              />
+              <label className={labelClass}>Paragraf metni</label>
+              <textarea
+                name="paragraph_text"
+                className={inputClass}
+                rows={4}
+                placeholder="O döneme ait hikaye..."
+              />
+              <label className={labelClass}>Görseller</label>
+              <AboutTimelineImageUpload
+                value={newEntryImages}
+                onChange={setNewEntryImages}
+                disabled={loading}
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="mt-4 rounded-lg bg-[#1a1612] px-4 py-2 text-sm text-[#faf7f2] hover:opacity-90 disabled:opacity-50"
+            >
+              Ekle
+            </button>
+          </form>
+        )}
+      </div>
 
       <div className="space-y-3">
-        <h2 className="font-medium">Mevcut girişler (sürükle-bırak ile sırala)</h2>
+        <h2 className="font-medium text-[#1a1612]">
+          Mevcut girişler (sürükle-bırak ile sırala)
+        </h2>
         {sorted.map((entry) => (
           <div
             key={entry.id}
@@ -254,57 +293,118 @@ export function AdminAboutTimelineForm({ entries }: { entries: TimelineEntry[] }
             onDragStart={(e) => handleDragStart(e, entry.id)}
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => handleDrop(e, entry.id)}
-            className={`flex items-start gap-3 rounded-xl border p-4 ${
-              entry.is_highlight ? "border-amber-500/50 bg-amber-500/5" : "border-[var(--card-border)] bg-[var(--card)]/30"
+            className={`group rounded-2xl border p-4 transition-all ${
+              entry.is_highlight
+                ? "border-[#b8934a]/40 bg-[#b8934a]/5 shadow-sm"
+                : "border-[#e8e0d4] bg-white/60 hover:border-[#d4c9bb]"
             }`}
           >
-            <GripVertical className="mt-1 h-5 w-5 shrink-0 cursor-grab text-[var(--muted)]" />
-            <div className="min-w-0 flex-1">
-              {editingId === entry.id ? (
-                <EditForm
-                  entry={entry}
-                  onSave={(data) => handleUpdate(entry.id, data)}
-                  onCancel={() => setEditingId(null)}
-                  loading={loading}
-                />
-              ) : (
-                <>
+            {editingId === entry.id ? (
+              <EditForm
+                entry={entry}
+                onSave={(data) => handleUpdate(entry.id, data)}
+                onCancel={() => setEditingId(null)}
+                loading={loading}
+              />
+            ) : (
+              <div className="flex items-start gap-3">
+                <span className="mt-1 cursor-grab touch-none text-[#c8bfb4] active:cursor-grabbing">
+                  <GripVertical className="h-4 w-4" />
+                </span>
+                <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold">{entry.year_or_period}</span>
-                    {entry.is_highlight && <Star className="h-4 w-4 fill-amber-500 text-amber-500" />}
+                    <span
+                      className={`text-base font-semibold ${
+                        entry.is_highlight ? "text-[#b8934a]" : "text-[#1a1612]"
+                      }`}
+                    >
+                      {entry.year_or_period}
+                    </span>
+                    {entry.is_highlight && (
+                      <span className="rounded-full bg-[#b8934a]/15 px-2 py-0.5 text-[10px] font-medium text-[#b8934a]">
+                        Öne çıkan
+                      </span>
+                    )}
                   </div>
-                  <p className="mt-1 line-clamp-2 text-sm text-[var(--muted)]">{entry.paragraph_text}</p>
+                  <p className="mt-1 line-clamp-2 overflow-hidden text-sm leading-relaxed text-[#6b6158]">
+                    {entry.paragraph_text}
+                  </p>
                   {entry.associated_images?.length > 0 && (
-                    <p className="mt-1 text-xs text-[var(--muted)]">
+                    <p className="mt-1.5 text-xs text-[#a09588]">
                       {entry.associated_images.length} görsel
                     </p>
                   )}
-                  <div className="mt-2 flex gap-2">
+                  <div
+                    className={`mt-3 flex items-center gap-1 transition-opacity ${
+                      confirmDeleteId === entry.id
+                        ? "opacity-100"
+                        : "opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+                    }`}
+                  >
                     <button
                       type="button"
-                      onClick={() => setEditingId(entry.id)}
-                      className="flex items-center gap-1 rounded px-2 py-1 text-xs text-[var(--muted)] hover:bg-[var(--background)]"
+                      onClick={() => {
+                        setEditingId(entry.id);
+                        setConfirmDeleteId(null);
+                      }}
+                      className="flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs text-[#6b6158] transition-colors hover:bg-[#1a1612]/8 hover:text-[#1a1612]"
                     >
-                      <Pencil className="h-3 w-3" /> Düzenle
+                      <Pencil className="h-3.5 w-3.5" />
+                      Düzenle
                     </button>
                     <button
                       type="button"
-                      onClick={() => handleUpdate(entry.id, { is_highlight: !entry.is_highlight })}
-                      className="flex items-center gap-1 rounded px-2 py-1 text-xs text-[var(--muted)] hover:bg-[var(--background)]"
+                      onClick={() =>
+                        handleUpdate(entry.id, {
+                          is_highlight: !entry.is_highlight,
+                        })
+                      }
+                      className={`flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs transition-colors ${
+                        entry.is_highlight
+                          ? "text-[#b8934a] hover:bg-[#b8934a]/10"
+                          : "text-[#6b6158] hover:bg-[#1a1612]/8 hover:text-[#1a1612]"
+                      }`}
                     >
-                      <Star className={`h-3 w-3 ${entry.is_highlight ? "fill-amber-500 text-amber-500" : ""}`} /> Highlight
+                      <Star
+                        className={`h-3.5 w-3.5 ${
+                          entry.is_highlight ? "fill-[#b8934a]" : ""
+                        }`}
+                      />
+                      {entry.is_highlight ? "Öne çıkan" : "Highlight"}
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(entry.id)}
-                      className="flex items-center gap-1 rounded px-2 py-1 text-xs text-red-500 hover:bg-red-500/10"
-                    >
-                      <Trash2 className="h-3 w-3" /> Sil
-                    </button>
+                    {confirmDeleteId === entry.id ? (
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs text-red-500">Emin misin?</span>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(entry.id)}
+                          disabled={loading}
+                          className="rounded-lg bg-red-500 px-2.5 py-1 text-xs font-medium text-[#faf7f2] hover:bg-red-600 disabled:opacity-50"
+                        >
+                          Sil
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setConfirmDeleteId(null)}
+                          className="rounded-lg border border-[#e8e0d4] px-2.5 py-1 text-xs text-[#6b6158] hover:text-[#1a1612]"
+                        >
+                          İptal
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setConfirmDeleteId(entry.id)}
+                        className="flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs text-red-400 transition-colors hover:bg-red-50 hover:text-red-600"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                        Sil
+                      </button>
+                    )}
                   </div>
-                </>
-              )}
-            </div>
+                </div>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -355,10 +455,10 @@ function EditForm({
         disabled={loading}
       />
       <div className="flex gap-2">
-        <button type="submit" disabled={loading} className="rounded bg-[var(--accent)] px-3 py-1.5 text-sm text-white">
+        <button type="submit" disabled={loading} className="rounded bg-[#1a1612] px-3 py-1.5 text-sm text-[#faf7f2]">
           Kaydet
         </button>
-        <button type="button" onClick={onCancel} className="rounded border px-3 py-1.5 text-sm">
+        <button type="button" onClick={onCancel} className="rounded border border-[#e8e0d4] px-3 py-1.5 text-sm text-[#1a1612]">
           İptal
         </button>
       </div>

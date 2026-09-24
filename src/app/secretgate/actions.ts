@@ -1102,3 +1102,17 @@ export async function adminDeleteMesaj(id: string) {
   revalidatePath("/secretgate/mesajlar");
   return { success: true };
 }
+
+export async function adminSetMusicSource(source: "lastfm" | "manuel") {
+  await requireAdmin();
+  if (source !== "lastfm" && source !== "manuel") {
+    return { error: "Geçersiz kaynak" };
+  }
+  const { updateSiteSettings } = await import("@/lib/site-settings");
+  const result = await updateSiteSettings({ music_source: source });
+  revalidatePath("/secretgate/su-an");
+  revalidatePath("/secretgate/now-playing");
+  revalidatePath("/");
+  revalidatePath("/home");
+  return result;
+}

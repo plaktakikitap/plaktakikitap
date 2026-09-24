@@ -86,6 +86,7 @@ export function AdminTakvimPanel({
   const [icerik, setIcerik] = useState("");
   const [renk, setRenk] = useState<NotRenk>("sari");
   const [loading, setLoading] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const year = cursor.getFullYear();
   const month = cursor.getMonth();
@@ -191,13 +192,13 @@ export function AdminTakvimPanel({
   }
 
   async function removeNote(id: string) {
-    if (!confirm("Bu notu silmek istiyor musun?")) return;
     const res = await fetch(`/api/admin/notlar/${id}`, { method: "DELETE" });
     if (!res.ok) {
       showAdminToast("error", "Silinemedi.");
       return;
     }
     setNotlar((prev) => prev.filter((n) => n.id !== id));
+    setConfirmDeleteId(null);
     showAdminToast("success", "Silindi ✓");
     router.refresh();
   }
@@ -264,11 +265,11 @@ export function AdminTakvimPanel({
                     isSel
                       ? "border-amber-400/50 bg-amber-500/15"
                       : "border-transparent bg-[#1a1612]/5 hover:bg-[#1a1612]/8"
-                  } ${isToday && !isSel ? "ring-1 ring-white/25" : ""}`}
+                  } ${isToday && !isSel ? "ring-1 ring-[#b8934a]/40" : ""}`}
                 >
                   <span
                     className={`text-xs ${
-                      isSel ? "font-semibold text-amber-200" : "text-[#1a1612]/75"
+                      isSel ? "font-semibold text-amber-800" : "text-[#1a1612]/75"
                     }`}
                   >
                     {d}
@@ -328,7 +329,7 @@ export function AdminTakvimPanel({
             <button
               type="button"
               onClick={() => openNewNote(selected ?? undefined)}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-amber-500 px-3 py-2 text-xs font-medium text-black hover:bg-amber-400"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-amber-500 px-3 py-2 text-xs font-medium text-[#1a1612] hover:bg-amber-400"
             >
               <Plus className="h-3.5 w-3.5" />
               Not ekle
@@ -422,14 +423,33 @@ export function AdminTakvimPanel({
                         >
                           <Pencil className="h-3.5 w-3.5" />
                         </button>
-                        <button
-                          type="button"
-                          onClick={() => removeNote(n.id)}
-                          className="text-[#1a1612]/40 hover:text-red-400"
-                          aria-label="Sil"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
+                        {confirmDeleteId === n.id ? (
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => removeNote(n.id)}
+                              className="text-[10px] font-medium text-red-500 hover:text-red-600"
+                            >
+                              Sil
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setConfirmDeleteId(null)}
+                              className="text-[10px] text-[#6b6158] hover:text-[#1a1612]"
+                            >
+                              İptal
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => setConfirmDeleteId(n.id)}
+                            className="text-[#1a1612]/40 hover:text-red-400"
+                            aria-label="Sil"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        )}
                       </div>
                     </li>
                   ))}
@@ -509,14 +529,34 @@ export function AdminTakvimPanel({
                   >
                     <Pencil className="h-3.5 w-3.5" />
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => removeNote(n.id)}
-                    className="rounded p-1.5 text-[#1a1612]/40 hover:bg-red-500/20 hover:text-red-400"
-                    aria-label="Sil"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </button>
+                  {confirmDeleteId === n.id ? (
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs text-red-500">Emin misin?</span>
+                      <button
+                        type="button"
+                        onClick={() => removeNote(n.id)}
+                        className="rounded-lg bg-red-500 px-2.5 py-1 text-xs font-medium text-[#faf7f2] hover:bg-red-600"
+                      >
+                        Sil
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setConfirmDeleteId(null)}
+                        className="rounded-lg border border-[#e8e0d4] px-2.5 py-1 text-xs text-[#6b6158] hover:text-[#1a1612]"
+                      >
+                        İptal
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setConfirmDeleteId(n.id)}
+                      className="rounded p-1.5 text-[#1a1612]/40 hover:bg-red-500/20 hover:text-red-400"
+                      aria-label="Sil"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  )}
                 </div>
               </li>
             ))}

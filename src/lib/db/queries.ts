@@ -328,6 +328,7 @@ export async function getPublicBooks(): Promise<Book[]> {
     .from("books")
     .select("*")
     .in("visibility", ["public", "unlisted"])
+    .neq("status", "to_read")
     .order("created_at", { ascending: false });
 
   if (error) return [];
@@ -1385,47 +1386,10 @@ export interface ReadingStatus {
   updated_at: string;
 }
 
-/** "Şu an okuyorum": önce admin panelinden girilen reading_status, yoksa books tablosunda featured/latest. */
+/** "Şu an okuyorum": kütüphanede featured current, yoksa en son güncellenen reading kitabı. */
 export async function getCurrentReading(): Promise<Book | null> {
   const supabase = await createServerClient();
 
-  // 1) Admin "Şu an okuyorum" sayfasından girilen kitap (reading_status)
-  const { data: statusRow } = await supabase
-    .from("reading_status")
-    .select("id, book_title, author, cover_url, progress_percent, updated_at, status")
-    .order("updated_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  if (statusRow && (statusRow.book_title ?? "").trim() !== "") {
-    const row = statusRow as {
-      id: string;
-      book_title: string;
-      author: string | null;
-      cover_url: string | null;
-      progress_percent: number | null;
-      updated_at: string;
-      status: string;
-    };
-    return {
-      id: row.id,
-      title: row.book_title.trim(),
-      author: row.author?.trim() ?? "",
-      page_count: 0,
-      status: (row.status === "last" ? "reading" : row.status) as Book["status"],
-      rating: null,
-      tags: [],
-      review: null,
-      cover_url: row.cover_url?.trim() || null,
-      spine_url: "",
-      start_date: null,
-      end_date: null,
-      last_progress_update_at: row.updated_at,
-      progress_percent: row.progress_percent ?? null,
-      created_at: row.updated_at,
-    } as Book;
-  }
-
-  // 2) Kitaplık: featured current veya en son güncellenen "reading"
   const visibilityFilter = { visibility: ["public", "unlisted"] as const };
   const { data: featured } = await supabase
     .from("books")

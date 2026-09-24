@@ -23,7 +23,6 @@ import {
   Briefcase,
   FileText,
   Video,
-  BookOpen,
   BookMarked,
   Languages,
   Share2,
@@ -52,8 +51,8 @@ const dashboardLink = {
 const contentLinks = [
   { href: "/secretgate/planner", label: "Ajanda", icon: Calendar },
   { href: "/secretgate/karalamalar", label: "Karalamalar", icon: Feather },
-  { href: "/secretgate/film-dizi", label: "Film & Dizi", icon: Film },
   { href: "/secretgate/diziler", label: "Diziler", icon: Tv },
+  { href: "/secretgate/movie-watch-log", label: "Film günlüğü", icon: Film },
   { href: "/secretgate/photos", label: "Fotoğraflar", icon: Camera },
   { href: "/secretgate/su-an", label: "Şu an", icon: Music },
   { href: "/secretgate/about", label: "Beni Tanıyın", icon: UserCircle },
@@ -62,9 +61,6 @@ const contentLinks = [
   { href: "/secretgate/plaktaki-kitap", label: "Plaktaki Kitap", icon: Video },
   { href: "/secretgate/reading-log", label: "Okuma günlüğü", icon: BookMarked },
   { href: "/secretgate/translations", label: "Çeviriler", icon: Languages },
-  { href: "/secretgate/movie-watch-log", label: "Film günlüğü", icon: Film },
-  { href: "/secretgate/series-watch-log", label: "Dizi günlüğü", icon: Tv },
-  { href: "/secretgate/reading", label: "Okuma", icon: BookOpen },
   { href: "/secretgate/socials", label: "Bana Ulaşın", icon: Share2 },
 ];
 
@@ -72,6 +68,7 @@ const contentLinks = [
 const personalLinks = [
   { href: "/secretgate/takvim", label: "Takvim", icon: CalendarDays },
   { href: "/secretgate/yapilacaklar", label: "Yapılacaklar", icon: CheckSquare },
+  { href: "/secretgate/okunacaklar", label: "Kütüphanem", icon: BookMarked },
   { href: "/secretgate/dosyalar", label: "Dosyalar", icon: HardDrive },
   { href: "/secretgate/beslenme", label: "Beslenme", icon: Apple },
   { href: "/secretgate/spor", label: "Spor", icon: Dumbbell },
@@ -99,6 +96,184 @@ const settingsLink = {
 function isActive(pathname: string, href: string) {
   if (href === "/secretgate") return pathname === "/secretgate";
   return pathname === href || pathname.startsWith(href + "/");
+}
+
+type AdminNavItem = {
+  href: string;
+  label: string;
+  icon: typeof Calendar;
+  soon?: boolean;
+};
+
+function AdminNavLink({
+  link,
+  pathname,
+  showLabel,
+  compact,
+  onNavigate,
+}: {
+  link: AdminNavItem;
+  pathname: string;
+  showLabel: boolean;
+  compact?: boolean;
+  onNavigate: () => void;
+}) {
+  const active = isActive(pathname, link.href);
+  const labelClass = `relative z-10 min-w-0 truncate text-sm font-medium ${
+    !showLabel ? "hidden" : compact ? "hidden xl:inline" : "inline"
+  }`;
+  if (link.soon) {
+    return (
+      <span
+        title="Yakında"
+        className="flex cursor-not-allowed items-center gap-3 rounded-r-xl px-3 py-2.5 text-[#1a1612]/40"
+      >
+        <link.icon className="h-5 w-5 shrink-0" />
+        <span className={labelClass}>{link.label}</span>
+      </span>
+    );
+  }
+  return (
+    <Link
+      href={link.href}
+      onClick={onNavigate}
+      title={link.label}
+      className={`group relative flex items-center gap-3 rounded-r-xl px-3 py-2.5 transition-all duration-200 ${
+        active
+          ? "admin-nav-active text-[#8a6d2e]"
+          : "text-[#1a1612] hover:bg-[#1a1612]/5 hover:text-[#1a1612]"
+      }`}
+    >
+      {active && (
+        <span
+          className="absolute left-0 top-1/2 h-8 w-1 -translate-y-1/2 rounded-r-full"
+          style={{
+            background: "linear-gradient(180deg, #b8934a, #d4a85a)",
+            boxShadow: "0 0 12px rgba(184, 147, 74, 0.4)",
+          }}
+        />
+      )}
+      <link.icon className="relative z-10 h-5 w-5 shrink-0" />
+      <span className={labelClass}>{link.label}</span>
+    </Link>
+  );
+}
+
+function AdminSidebarBody({
+  pathname,
+  sidebarOpen,
+  showLabels,
+  compact,
+  userEmail,
+  onToggleSidebar,
+  onCloseMobile,
+  onLogout,
+}: {
+  pathname: string;
+  sidebarOpen: boolean;
+  showLabels: boolean;
+  compact?: boolean;
+  userEmail?: string | null;
+  onToggleSidebar: () => void;
+  onCloseMobile: () => void;
+  onLogout: () => void;
+}) {
+  const sectionClass = `mb-1 px-3 text-[9px] font-semibold uppercase tracking-[0.14em] text-[#6b6158] ${
+    !showLabels ? "hidden" : compact ? "hidden xl:block" : "block"
+  }`;
+  const exitClass = !showLabels ? "hidden" : compact ? "hidden xl:inline" : "inline";
+  return (
+    <>
+      <div className="flex items-center justify-between border-b border-[#e8e0d4] px-2 py-3 lg:px-3 lg:py-4">
+        <button
+          type="button"
+          onClick={onToggleSidebar}
+          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-[#6b6158] hover:bg-[#1a1612]/5 hover:text-[#1a1612]"
+          aria-label={sidebarOpen ? "Paneli daralt" : "Paneli genişlet"}
+          title={sidebarOpen ? "Paneli daralt" : "Paneli genişlet"}
+        >
+          {sidebarOpen ? (
+            <PanelLeftClose className="h-5 w-5" />
+          ) : (
+            <PanelLeftOpen className="h-5 w-5" />
+          )}
+        </button>
+        <button
+          type="button"
+          onClick={onCloseMobile}
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-[#6b6158] hover:bg-[#1a1612]/5 hover:text-[#1a1612] lg:hidden"
+          aria-label="Menüyü kapat"
+        >
+          <X className="h-5 w-5" />
+        </button>
+      </div>
+
+      <nav className="flex-1 space-y-0.5 overflow-y-auto px-2 py-3">
+        <AdminNavLink
+          link={dashboardLink}
+          pathname={pathname}
+          showLabel={showLabels}
+          compact={compact}
+          onNavigate={onCloseMobile}
+        />
+
+        <div className="my-2 border-t border-[#e8e0d4] pt-2">
+          <p className={sectionClass}>İçerik</p>
+          {contentLinks.map((link) => (
+            <AdminNavLink
+              key={link.href}
+              link={link}
+              pathname={pathname}
+              showLabel={showLabels}
+              compact={compact}
+              onNavigate={onCloseMobile}
+            />
+          ))}
+        </div>
+
+        <div className="my-2 border-t border-[#e8e0d4] pt-2">
+          <p className={sectionClass}>Kişisel</p>
+          {personalLinks.map((link) => (
+            <AdminNavLink
+              key={link.href}
+              link={link}
+              pathname={pathname}
+              showLabel={showLabels}
+              compact={compact}
+              onNavigate={onCloseMobile}
+            />
+          ))}
+        </div>
+      </nav>
+
+      <div className="border-t border-[#e8e0d4] px-2 py-3">
+        {userEmail && showLabels && (
+          <p
+            className={`mb-2 truncate px-3 text-xs font-medium text-[#6b6158] ${
+              compact ? "hidden xl:block" : "block"
+            }`}
+          >
+            {userEmail}
+          </p>
+        )}
+        <AdminNavLink
+          link={settingsLink}
+          pathname={pathname}
+          showLabel={showLabels}
+          compact={compact}
+          onNavigate={onCloseMobile}
+        />
+        <button
+          type="button"
+          onClick={onLogout}
+          className="flex w-full items-center gap-3 rounded-r-xl px-3 py-2.5 text-sm font-medium text-[#1a1612] hover:bg-[#1a1612]/5"
+        >
+          <LogOut className="h-5 w-5 shrink-0 text-[#6b6158]" />
+          <span className={exitClass}>Çıkış</span>
+        </button>
+      </div>
+    </>
+  );
 }
 
 export function AdminNav({
@@ -140,144 +315,14 @@ export function AdminNav({
     router.refresh();
   }
 
-  const NavLink = ({
-    link,
-  }: {
-    link: {
-      href: string;
-      label: string;
-      icon: typeof Calendar;
-      soon?: boolean;
-    };
-  }) => {
-    const active = isActive(pathname, link.href);
-    if (link.soon) {
-      return (
-        <span
-          title="Yakında"
-          className="flex cursor-not-allowed items-center gap-3 rounded-r-xl px-3 py-2.5 text-[#1a1612]/25"
-        >
-          <link.icon className="h-5 w-5 shrink-0" />
-          <span
-            className={`min-w-0 truncate text-sm font-light ${
-              sidebarOpen ? "hidden lg:group-hover:inline xl:inline" : "hidden"
-            }`}
-          >
-            {link.label}
-          </span>
-        </span>
-      );
-    }
-    return (
-      <Link
-        href={link.href}
-        onClick={() => setMenuOpen(false)}
-        title={link.label}
-        className={`group relative flex items-center gap-3 rounded-r-xl px-3 py-2.5 transition-all duration-200 ${
-          active
-            ? "admin-nav-active text-[#b8934a]"
-            : "text-[#1a1612]/55 hover:bg-[#1a1612]/5 hover:text-[#1a1612]"
-        }`}
-      >
-        {active && (
-          <span
-            className="absolute left-0 top-1/2 h-8 w-1 -translate-y-1/2 rounded-r-full"
-            style={{
-              background: "linear-gradient(180deg, #b8934a, #d4a85a)",
-              boxShadow: "0 0 12px rgba(184, 147, 74, 0.4)",
-            }}
-          />
-        )}
-        <link.icon className="relative z-10 h-5 w-5 shrink-0" />
-        <span
-          className={`relative z-10 min-w-0 truncate text-sm font-light ${
-            sidebarOpen ? "hidden lg:group-hover:inline xl:inline" : "hidden"
-          }`}
-        >
-          {link.label}
-        </span>
-      </Link>
-    );
+  const sidebarProps = {
+    pathname,
+    sidebarOpen,
+    userEmail: !isSimpleAuth ? (user as User).email : null,
+    onToggleSidebar: () => setSidebarOpen((o) => !o),
+    onCloseMobile: () => setMenuOpen(false),
+    onLogout: handleLogout,
   };
-
-  const SidebarContent = () => (
-    <>
-      {/* Header — toggle + mobile kapat */}
-      <div className="flex items-center justify-between border-b border-[#e8e0d4] px-2 py-3 lg:px-3 lg:py-4">
-        <button
-          type="button"
-          onClick={() => setSidebarOpen((o) => !o)}
-          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-[#6b6158] hover:bg-[#1a1612]/5 hover:text-[#1a1612]"
-          aria-label={sidebarOpen ? "Paneli daralt" : "Paneli genişlet"}
-          title={sidebarOpen ? "Paneli daralt" : "Paneli genişlet"}
-        >
-          {sidebarOpen ? (
-            <PanelLeftClose className="h-5 w-5" />
-          ) : (
-            <PanelLeftOpen className="h-5 w-5" />
-          )}
-        </button>
-        <button
-          type="button"
-          onClick={() => setMenuOpen(false)}
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-[#6b6158] hover:bg-[#1a1612]/5 hover:text-[#1a1612] lg:hidden"
-          aria-label="Menüyü kapat"
-        >
-          <X className="h-5 w-5" />
-        </button>
-      </div>
-
-      <nav className="flex-1 space-y-0.5 overflow-y-auto px-2 py-3">
-        {/* Dashboard — tek başına */}
-        <NavLink link={dashboardLink} />
-
-        <div className="my-2 border-t border-[#e8e0d4] pt-2">
-          <p
-            className={`mb-1 px-3 text-[9px] font-medium uppercase tracking-[0.14em] text-[#1a1612]/30 ${
-              sidebarOpen ? "hidden xl:block" : "hidden"
-            }`}
-          >
-            İçerik
-          </p>
-          {contentLinks.map((link) => (
-            <NavLink key={link.href} link={link} />
-          ))}
-        </div>
-
-        <div className="my-2 border-t border-[#e8e0d4] pt-2">
-          <p
-            className={`mb-1 px-3 text-[9px] font-medium uppercase tracking-[0.14em] text-[#1a1612]/30 ${
-              sidebarOpen ? "hidden xl:block" : "hidden"
-            }`}
-          >
-            Kişisel
-          </p>
-          {personalLinks.map((link) => (
-            <NavLink key={link.href} link={link} />
-          ))}
-        </div>
-      </nav>
-
-      {/* Footer — Ayarlar + çıkış */}
-      <div className="border-t border-[#e8e0d4] px-2 py-3">
-        {!isSimpleAuth && sidebarOpen && (
-          <p className="mb-2 truncate px-3 text-xs font-light text-[#6b6158]">
-            {(user as User).email}
-          </p>
-        )}
-        <NavLink link={settingsLink} />
-        <button
-          onClick={handleLogout}
-          className="flex w-full items-center gap-3 rounded-r-xl px-3 py-2.5 text-sm font-light text-[#6b6158] hover:bg-[#1a1612]/5 hover:text-[#1a1612]"
-        >
-          <LogOut className="h-5 w-5 shrink-0" />
-          <span className={sidebarOpen ? "hidden xl:inline" : "hidden"}>
-            Çıkış
-          </span>
-        </button>
-      </div>
-    </>
-  );
 
   return (
     <>
@@ -286,7 +331,11 @@ export function AdminNav({
           sidebarOpen ? "xl:w-[200px]" : ""
         }`}
       >
-        <SidebarContent />
+        <AdminSidebarBody
+          {...sidebarProps}
+          showLabels={sidebarOpen}
+          compact
+        />
       </aside>
 
       <div className="fixed left-0 top-0 z-50 flex h-14 w-full items-center justify-between border-b border-[#e8e0d4] bg-[#faf7f2]/95 px-4 backdrop-blur-sm lg:hidden">
@@ -328,7 +377,7 @@ export function AdminNav({
           transform: menuOpen ? "translateX(0)" : "translateX(-100%)",
         }}
       >
-        <SidebarContent />
+        <AdminSidebarBody {...sidebarProps} showLabels />
       </aside>
     </>
   );

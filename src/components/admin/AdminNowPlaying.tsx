@@ -30,6 +30,7 @@ export function AdminNowPlaying({ tracks }: AdminNowPlayingProps) {
   const [loading, setLoading] = useState(false);
   const [audioUrl, setAudioUrl] = useState("");
   const [uploadingAudio, setUploadingAudio] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -56,10 +57,10 @@ export function AdminNowPlaying({ tracks }: AdminNowPlayingProps) {
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Bu şarkıyı silmek istediğinize emin misiniz?")) return;
     setLoading(true);
     await adminDeleteManualTrack(id);
     setLoading(false);
+    setConfirmDeleteId(null);
     router.refresh();
   }
 
@@ -191,15 +192,36 @@ export function AdminNowPlaying({ tracks }: AdminNowPlayingProps) {
                       Şu an gösteriliyor
                     </span>
                   )}
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(t.id)}
-                    disabled={loading}
-                    className="rounded p-1.5 text-[var(--muted)] hover:bg-red-500/10 hover:text-red-600"
-                    title="Sil"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
+                  {confirmDeleteId === t.id ? (
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs text-red-500">Emin misin?</span>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(t.id)}
+                        disabled={loading}
+                        className="rounded-lg bg-red-500 px-2 py-1 text-xs text-[#faf7f2] hover:bg-red-600 disabled:opacity-50"
+                      >
+                        Sil
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setConfirmDeleteId(null)}
+                        className="rounded-lg border border-[#e8e0d4] px-2 py-1 text-xs text-[#6b6158]"
+                      >
+                        İptal
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setConfirmDeleteId(t.id)}
+                      disabled={loading}
+                      className="rounded p-1.5 text-[#6b6158] hover:bg-red-500/10 hover:text-red-500"
+                      aria-label="Sil"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  )}
                 </div>
               </li>
             ))}

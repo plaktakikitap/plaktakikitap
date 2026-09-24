@@ -85,6 +85,9 @@ export async function updatePlaktakiKitapSettings(
     ...(payload.intro_text !== undefined && { intro_text: payload.intro_text }),
     ...(payload.youtube_channel_url !== undefined && { youtube_channel_url: payload.youtube_channel_url }),
     ...(payload.youtube_channel_id !== undefined && { youtube_channel_id: payload.youtube_channel_id }),
+    ...(payload.youtube_subscriber_count !== undefined && {
+      youtube_subscriber_count: payload.youtube_subscriber_count,
+    }),
     ...(payload.spotify_profile_url !== undefined && { spotify_profile_url: payload.spotify_profile_url }),
     updated_at: new Date().toISOString(),
   };

@@ -1,5 +1,6 @@
 import "server-only";
 import { revalidateTag, unstable_cache } from "next/cache";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createServerClient } from "@/lib/supabase/server";
 
 const SITE_SETTINGS_CACHE_TAG = "site-settings";
@@ -25,6 +26,8 @@ export interface SiteSettingsValue {
   intro_subtitle?: string | null;
   /** Senkron ambient müzik: playlist’in “başladığı” an (ISO string). Herkes bu andan itibaren aynı pozisyonda dinler. */
   music_playlist_started_at?: string | null;
+  /** Ana sayfa şeridi: Last.fm mi manuel şarkı mı. */
+  music_source?: "lastfm" | "manuel";
 }
 
 const DEFAULTS: SiteSettingsValue = {
@@ -43,10 +46,11 @@ const DEFAULTS: SiteSettingsValue = {
   intro_title: "Hoş geldiniz, ben Eymen!",
   intro_subtitle: "yanii... nam-ı diğer Plaktaki Kitap",
   music_playlist_started_at: null,
+  music_source: "lastfm",
 };
 
 async function getSiteSettingsUncached(): Promise<SiteSettingsValue> {
-  const supabase = await createServerClient();
+  const supabase = createAdminClient();
   const { data } = await supabase
     .from("site_settings")
     .select("value")
@@ -55,7 +59,11 @@ async function getSiteSettingsUncached(): Promise<SiteSettingsValue> {
     .maybeSingle();
 
   const raw = (data?.value as Record<string, unknown> | null) ?? {};
-  return { ...DEFAULTS, ...raw } as SiteSettingsValue;
+  const merged = { ...DEFAULTS, ...raw } as SiteSettingsValue;
+  if (merged.music_source !== "lastfm" && merged.music_source !== "manuel") {
+    merged.music_source = "lastfm";
+  }
+  return merged;
 }
 
 /** Cached for SITE_SETTINGS_REVALIDATE seconds; invalidate with revalidateTag("site-settings") after updates. */

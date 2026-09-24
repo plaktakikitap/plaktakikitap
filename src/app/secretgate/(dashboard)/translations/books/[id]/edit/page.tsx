@@ -21,14 +21,15 @@ export default async function EditTranslationBookPage({
   const book = data as TranslationBookRow;
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8">
+    <div className="mx-auto max-w-xl">
       <Link
         href="/secretgate/translations"
-        className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]"
+        className="text-sm text-[#6b6158] transition-colors hover:text-[#b8934a]"
       >
         ← Çeviriler
       </Link>
-      <h1 className="mt-4 text-xl font-semibold">Kitap düzenle</h1>
+      <h1 className="admin-heading mt-4 text-2xl font-semibold text-[#1a1612]">Kitap düzenle</h1>
+      <p className="mt-1 text-sm text-[#6b6158]">{book.title}</p>
       <AdminTranslationBookForm book={book} />
     </div>
   );

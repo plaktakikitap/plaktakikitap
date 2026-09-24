@@ -9,6 +9,7 @@ import {
 import { getMusicCurrentState } from "@/lib/music";
 import { getCurrentReading } from "@/lib/db/queries";
 import { getNowPlaying } from "@/lib/lastfm";
+import { getSiteSettings } from "@/lib/site-settings";
 import type { NowPlayingBook, NowPlayingData, LastFmNowPlaying } from "@/types/now-playing";
 
 export type { NowPlayingBook, NowPlayingData, LastFmNowPlaying };
@@ -60,30 +61,55 @@ export async function getNowPlayingData(): Promise<NowPlayingData> {
 }
 
 /**
- * NowPanel müzik verisi: önce Last.fm, yoksa admin manuel şarkılar, sonra Spotify.
+ * NowPanel müzik verisi: site_settings.music_source önceliği,
+ * sonra diğer kaynağa düş, en sonda Spotify.
  */
 export async function getStripMusicNowPlaying(): Promise<LastFmNowPlaying | null> {
+  let source: "lastfm" | "manuel" = "lastfm";
   try {
-    const lastfm = await getNowPlaying();
-    if (lastfm) return lastfm;
+    const settings = await getSiteSettings();
+    source = settings?.music_source === "manuel" ? "manuel" : "lastfm";
   } catch {
-    /* Last.fm yapılandırılmamış veya geçici hata */
+    /* default: lastfm */
   }
 
-  try {
-    const manual = await getManualNowTracks();
-    if (manual.length > 0) {
-      const track = manual[0];
-      return {
-        title: track.title,
-        artist: track.artist,
-        albumArt: track.cover_url,
-        isNowPlaying: false,
-        playedAt: null,
-      };
+  async function fromLastFm(): Promise<LastFmNowPlaying | null> {
+    try {
+      return (await getNowPlaying()) ?? null;
+    } catch {
+      return null;
     }
-  } catch {
-    /* Supabase yok veya tablo boş */
+  }
+
+  async function fromManual(): Promise<LastFmNowPlaying | null> {
+    try {
+      const manual = await getManualNowTracks();
+      if (manual.length > 0) {
+        const track = manual[0];
+        return {
+          title: track.title,
+          artist: track.artist,
+          albumArt: track.cover_url,
+          isNowPlaying: false,
+          playedAt: null,
+        };
+      }
+    } catch {
+      /* Supabase yok veya tablo boş */
+    }
+    return null;
+  }
+
+  if (source === "lastfm") {
+    const lastfm = await fromLastFm();
+    if (lastfm) return lastfm;
+    const manual = await fromManual();
+    if (manual) return manual;
+  } else {
+    const manual = await fromManual();
+    if (manual) return manual;
+    const lastfm = await fromLastFm();
+    if (lastfm) return lastfm;
   }
 
   try {

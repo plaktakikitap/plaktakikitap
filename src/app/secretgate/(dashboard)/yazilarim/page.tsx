@@ -10,7 +10,7 @@ export default async function AdminYazilarimPage() {
   const writings = await getWritingsPublic();
 
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="mx-auto max-w-xl">
       <header className="mb-8">
         <div className="flex items-start justify-between gap-4">
           <div>

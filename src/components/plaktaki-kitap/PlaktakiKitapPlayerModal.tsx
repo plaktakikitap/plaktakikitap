@@ -51,8 +51,8 @@ export function PlaktakiKitapPlayerModal({ item, onClose }: Props) {
         aria-modal="true"
         aria-labelledby="pk-modal-title"
       >
-        <button ref={closeRef} type="button" onClick={onClose} className="absolute right-4 top-4 z-10 rounded-full bg-ink/5 p-2.5 text-ink hover:bg-white/20 focus:ring-2 focus:ring-amber-400/50" aria-label="Kapat">
-          <X className="h-5 w-5" />
+        <button ref={closeRef} type="button" onClick={onClose} className="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2.5 text-white hover:bg-white/20 hover:text-white/70 focus:ring-2 focus:ring-amber-400/50" aria-label="Kapat">
+          <X className="h-6 w-6" />
         </button>
         <motion.div
           initial={{ scale: 0.96, opacity: 0 }}
@@ -75,12 +75,12 @@ export function PlaktakiKitapPlayerModal({ item, onClose }: Props) {
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-black/60">
-                  <span className="text-sm text-ink/60">Yükleniyor…</span>
+                  <span className="text-sm text-white/60">Yükleniyor…</span>
                 </div>
               )}
             </div>
             <div className="flex flex-col gap-3 border-t border-ink/10 bg-black/60 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
-              <p id="pk-modal-title" className="min-w-0 flex-1 text-sm font-medium text-ink/95 line-clamp-2">{item.title || "Video"}</p>
+              <p id="pk-modal-title" className="min-w-0 flex-1 text-sm font-medium text-white/90 line-clamp-2">{item.title || "Video"}</p>
               <a href={watchUrl(item.youtube_video_id)} target="_blank" rel="noopener noreferrer" className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-500/15 px-4 py-2.5 text-sm font-medium text-gold hover:bg-amber-500/25 hover:text-amber-100 focus:ring-2 focus:ring-amber-400/50">
                 <ExternalLink className="h-4 w-4" /> YouTube&apos;da İzle ve Yorum Yap
               </a>

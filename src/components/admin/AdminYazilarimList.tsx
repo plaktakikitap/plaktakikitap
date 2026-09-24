@@ -3,7 +3,6 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { Pencil, Trash2, ExternalLink } from "lucide-react";
 
 const RichTextEditor = dynamic(
@@ -35,6 +34,7 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
   const router = useRouter();
   const [writings, setWritings] = useState(initialWritings);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -78,7 +78,6 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Bu yazıyı silmek istediğinize emin misiniz?")) return;
     setError(null);
     setLoading(true);
     try {
@@ -92,6 +91,7 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
       router.refresh();
     } finally {
       setLoading(false);
+      setConfirmDeleteId(null);
     }
   }
 
@@ -124,47 +124,82 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
           ) : (
             <ul className="space-y-2">
               {items.map((w) => (
-                <li
-                  key={w.id}
-                  className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 p-3 sm:p-4"
-                >
+                <li key={w.id}>
                   {editingId === w.id ? (
-                    <EditForm
-                      writing={w}
-                      onSave={(p) => handleUpdate(w.id, p)}
-                      onCancel={() => setEditingId(null)}
-                      disabled={loading}
-                    />
+                    <div className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 p-3 sm:p-4">
+                      <EditForm
+                        writing={w}
+                        onSave={(p) => handleUpdate(w.id, p)}
+                        onCancel={() => setEditingId(null)}
+                        disabled={loading}
+                      />
+                    </div>
                   ) : (
-                    <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="group flex items-center gap-3 rounded-xl border border-[#e8e0d4] bg-white/60 px-4 py-3 transition-all hover:border-[#d4c9bb]">
                       <div className="min-w-0 flex-1">
-                        <Link
+                        <a
                           href={`/writings/${w.id}`}
                           target="_blank"
-                          className="inline-flex items-center gap-1.5 font-medium text-[#b8934a] hover:text-[#f4d03f]"
+                          rel="noreferrer"
+                          className="flex items-center gap-1.5 truncate text-sm font-medium text-[#1a1612] hover:text-[#b8934a]"
                         >
                           {w.title || "—"}
-                          <ExternalLink className="h-3.5 w-3.5 opacity-60" />
-                        </Link>
-                        <p className="mt-0.5 text-xs text-[#1a1612]/40">{formatDate(w.published_at)}</p>
+                          <ExternalLink className="h-3 w-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-60" />
+                        </a>
+                        <p className="mt-0.5 text-xs text-[#a09588]">
+                          {formatDate(w.published_at)}
+                          {w.tefrika_issue ? (
+                            <span className="ml-2 rounded-full bg-[#b8934a]/10 px-1.5 py-0.5 text-[10px] font-medium text-[#b8934a]">
+                              Tefrika #{w.tefrika_issue}
+                            </span>
+                          ) : null}
+                        </p>
                       </div>
-                      <div className="flex gap-1">
+
+                      <div
+                        className={`flex shrink-0 items-center gap-1 transition-opacity ${
+                          confirmDeleteId === w.id
+                            ? "opacity-100"
+                            : "opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+                        }`}
+                      >
                         <button
                           type="button"
                           onClick={() => setEditingId(w.id)}
-                          className="rounded-lg p-2 text-[#6b6158] transition-colors hover:bg-[#1a1612]/5 hover:text-[#1a1612]"
+                          className="rounded-lg p-1.5 text-[#6b6158] transition-colors hover:bg-[#1a1612]/8 hover:text-[#1a1612]"
                           aria-label="Düzenle"
                         >
                           <Pencil className="h-4 w-4" />
                         </button>
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(w.id)}
-                          className="rounded-lg p-2 text-[#6b6158] transition-colors hover:bg-red-500/15 hover:text-red-400"
-                          aria-label="Sil"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
+                        {confirmDeleteId === w.id ? (
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs text-red-500">Emin misin?</span>
+                            <button
+                              type="button"
+                              onClick={() => handleDelete(w.id)}
+                              disabled={loading}
+                              className="rounded-lg bg-red-500 px-2.5 py-1 text-xs font-medium text-[#faf7f2] hover:bg-red-600 disabled:opacity-50"
+                            >
+                              Sil
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setConfirmDeleteId(null)}
+                              className="rounded-lg border border-[#e8e0d4] px-2.5 py-1 text-xs text-[#6b6158] hover:text-[#1a1612]"
+                            >
+                              İptal
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => setConfirmDeleteId(w.id)}
+                            className="rounded-lg p-1.5 text-[#6b6158] transition-colors hover:text-red-500"
+                            aria-label="Sil"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        )}
                       </div>
                     </div>
                   )}

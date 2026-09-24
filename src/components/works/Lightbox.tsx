@@ -49,7 +49,7 @@ export function Lightbox({ open, index, items, onClose, onPrev, onNext }: Lightb
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-full bg-ink/5 p-2 text-ink hover:bg-white/20"
+          className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
           aria-label="Kapat"
         >
           <X className="h-6 w-6" />
@@ -59,7 +59,7 @@ export function Lightbox({ open, index, items, onClose, onPrev, onNext }: Lightb
           <button
             type="button"
             onClick={(e) => { e.stopPropagation(); onPrev(); }}
-            className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-ink/5 p-2 text-ink hover:bg-white/20 sm:left-4"
+            className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 sm:left-4"
             aria-label="Önceki"
           >
             <ChevronLeft className="h-8 w-8" />
@@ -69,7 +69,7 @@ export function Lightbox({ open, index, items, onClose, onPrev, onNext }: Lightb
           <button
             type="button"
             onClick={(e) => { e.stopPropagation(); onNext(); }}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-ink/5 p-2 text-ink hover:bg-white/20 sm:right-4"
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 sm:right-4"
             aria-label="Sonraki"
           >
             <ChevronRight className="h-8 w-8" />
@@ -91,10 +91,10 @@ export function Lightbox({ open, index, items, onClose, onPrev, onNext }: Lightb
             draggable={false}
           />
           {caption && (
-            <p className="mt-3 text-center text-sm text-ink/80">{caption}</p>
+            <p className="mt-3 text-center text-sm text-white/80">{caption}</p>
           )}
           {items.length > 1 && (
-            <p className="mt-1 text-center text-xs text-ink/50">
+            <p className="mt-1 text-center text-xs text-white/50">
               {index + 1} / {items.length}
             </p>
           )}

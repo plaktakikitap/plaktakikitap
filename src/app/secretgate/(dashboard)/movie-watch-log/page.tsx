@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, Film } from "lucide-react";
 import { WatchLogMovieForm } from "@/components/admin/WatchLogMovieForm";
+import { ExcelIndirButonu } from "@/components/admin/ExcelIndirButonu";
 
 export default function AdminMovieWatchLogPage() {
   return (
@@ -14,18 +15,21 @@ export default function AdminMovieWatchLogPage() {
       </Link>
 
       <div className="rounded-2xl border border-[#e8e0d4] bg-[#f0ebe2] p-6 backdrop-blur-sm sm:p-8">
-        <div className="mb-8 flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/20 text-[#b8934a]">
-            <Film className="h-6 w-6" />
+        <div className="mb-8 flex flex-wrap items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/20 text-[#b8934a]">
+              <Film className="h-6 w-6" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-[#1a1612]">
+                Film izleme günlüğü
+              </h1>
+              <p className="mt-0.5 text-sm text-[#6b6158]">
+                DVD rafı görünümünü besleyen film kaydı
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-[#1a1612]">
-              Film izleme günlüğü
-            </h1>
-            <p className="mt-0.5 text-sm text-[#6b6158]">
-              DVD rafı görünümünü besleyen film kaydı
-            </p>
-          </div>
+          <ExcelIndirButonu tur="filmler" />
         </div>
 
         <WatchLogMovieForm />

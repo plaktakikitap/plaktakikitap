@@ -28,6 +28,7 @@ export function AdminMusicPanel({
   const [coverUrl, setCoverUrl] = useState("");
   const [durationSec, setDurationSec] = useState<number>(180);
   const [uploading, setUploading] = useState<"audio" | "cover" | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   async function uploadFile(type: "audio" | "cover", file: File) {
     setUploading(type);
@@ -84,7 +85,6 @@ export function AdminMusicPanel({
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Bu parçayı silmek istediğinize emin misiniz?")) return;
     setError(null);
     const result = await adminDeleteMusicTrack(id);
     if (result.error) setError(result.error);
@@ -92,6 +92,7 @@ export function AdminMusicPanel({
       setTracks((prev) => prev.filter((t) => t.id !== id));
       setSuccess("Silindi.");
     }
+    setConfirmDeleteId(null);
   }
 
   return (
@@ -209,13 +210,34 @@ export function AdminMusicPanel({
                 <p className="truncate text-sm text-[var(--muted)]">{t.artist}</p>
               </div>
               <span className="text-xs text-[var(--muted)]">{t.duration_sec}s</span>
-              <button
-                type="button"
-                onClick={() => handleDelete(t.id)}
-                className="rounded border border-red-500/50 px-2 py-1 text-xs text-red-600 hover:bg-red-500/10"
-              >
-                Sil
-              </button>
+              {confirmDeleteId === t.id ? (
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs text-red-500">Emin misin?</span>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(t.id)}
+                    className="rounded-lg bg-red-500 px-2 py-1 text-xs text-[#faf7f2] hover:bg-red-600"
+                  >
+                    Sil
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmDeleteId(null)}
+                    className="rounded-lg border border-[#e8e0d4] px-2 py-1 text-xs text-[#6b6158]"
+                  >
+                    İptal
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setConfirmDeleteId(t.id)}
+                  className="rounded border border-red-500/50 px-2 py-1 text-xs text-red-600 hover:bg-red-500/10"
+                  aria-label="Sil"
+                >
+                  Sil
+                </button>
+              )}
             </li>
           ))}
         </ul>

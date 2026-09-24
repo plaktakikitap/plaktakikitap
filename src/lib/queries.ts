@@ -1,5 +1,8 @@
 import { createServerClient } from "@/lib/supabase/server";
-import type { ContentItem, Film, Series, Book, Stats } from "@/types/database";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { revalidatePath } from "next/cache";
+import type { ContentItem, Film, Series, Book, BookStatus, Stats } from "@/types/database";
+import { isBookStatus } from "@/types/database";
 import { filmWatchMinutes, seriesWatchMinutes } from "@/lib/utils/time";
 
 export async function getFilms(includePrivate = false): Promise<(ContentItem & { film: Film })[]> {
@@ -77,19 +80,113 @@ export async function getSeriesItem(
 }
 
 export async function getBooks(includePrivate = false): Promise<Book[]> {
-  const supabase = await createServerClient();
+  const supabase = includePrivate
+    ? createAdminClient()
+    : await createServerClient();
   let query = supabase
     .from("books")
     .select("*")
     .order("created_at", { ascending: false });
 
   if (!includePrivate) {
-    query = query.in("visibility", ["public", "unlisted"]);
+    query = query.in("visibility", ["public", "unlisted"]).neq("status", "to_read");
   }
 
   const { data, error } = await query;
   if (error) throw error;
   return (data ?? []) as Book[];
+}
+
+export async function patchAdminBook(
+  id: string,
+  payload: Record<string, unknown>
+): Promise<Book | null> {
+  const supabase = createAdminClient();
+  const row: Record<string, unknown> = {};
+
+  if (payload.status !== undefined) {
+    if (!isBookStatus(payload.status)) return null;
+    row.status = payload.status;
+  }
+  if (payload.visibility !== undefined) {
+    const v = String(payload.visibility);
+    if (!["public", "unlisted", "private"].includes(v)) return null;
+    row.visibility = v;
+  }
+  if (payload.is_featured_current !== undefined) {
+    row.is_featured_current = Boolean(payload.is_featured_current);
+  }
+  if (payload.progress_percent !== undefined) {
+    if (payload.progress_percent === null) {
+      row.progress_percent = null;
+    } else {
+      const n = Number(payload.progress_percent);
+      if (Number.isNaN(n)) return null;
+      row.progress_percent = Math.max(0, Math.min(100, Math.round(n)));
+    }
+    row.last_progress_update_at = new Date().toISOString();
+  }
+  if (payload.review !== undefined) {
+    if (payload.review === null) {
+      row.review = null;
+    } else {
+      const text = String(payload.review).trim();
+      row.review = text === "" ? null : text;
+    }
+  }
+
+  if (Object.keys(row).length === 0) return null;
+
+  const status = row.status as BookStatus | undefined;
+  if (status === "to_read") {
+    row.is_featured_current = false;
+    if (payload.visibility === undefined) row.visibility = "private";
+  }
+  if (status === "reading") {
+    row.last_progress_update_at = new Date().toISOString();
+    if (payload.visibility === undefined) row.visibility = "public";
+    if (payload.is_featured_current === undefined) {
+      await supabase.from("books").update({ is_featured_current: false });
+      row.is_featured_current = true;
+    }
+    const { data: current } = await supabase
+      .from("books")
+      .select("start_date")
+      .eq("id", id)
+      .maybeSingle();
+    if (!current?.start_date) {
+      row.start_date = new Date().toISOString().slice(0, 10);
+    }
+  }
+  if (status === "finished") {
+    row.is_featured_current = false;
+    if (payload.visibility === undefined) row.visibility = "public";
+    const { data: current } = await supabase
+      .from("books")
+      .select("end_date")
+      .eq("id", id)
+      .maybeSingle();
+    if (!current?.end_date) {
+      row.end_date = new Date().toISOString().slice(0, 10);
+    }
+  }
+
+  const { data, error } = await supabase
+    .from("books")
+    .update(row)
+    .eq("id", id)
+    .select("*")
+    .single();
+
+  if (error || !data) return null;
+
+  revalidatePath("/");
+  revalidatePath("/readings");
+  revalidatePath("/books");
+  revalidatePath("/secretgate/reading-log");
+  revalidatePath("/secretgate/okunacaklar");
+  revalidatePath("/secretgate/su-an");
+  return data as Book;
 }
 
 const DEFAULT_STATS: Stats = {

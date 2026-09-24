@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { ArrowUpRight, Languages } from "lucide-react";
 import {
   getTranslationsSettings,
   getTranslationBooksPublic,
@@ -8,8 +10,8 @@ import { AdminTranslationsSettingsForm } from "@/components/admin/AdminTranslati
 import { AdminTranslationBooksPanel } from "@/components/admin/AdminTranslationBooksPanel";
 import { AdminTranslationIndependentPanel } from "@/components/admin/AdminTranslationIndependentPanel";
 import { AdminTranslationVolunteerPanel } from "@/components/admin/AdminTranslationVolunteerPanel";
-import Link from "next/link";
-import { BookOpen } from "lucide-react";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminTranslationsPage() {
   const [settings, books, independent, volunteer] = await Promise.all([
@@ -20,34 +22,48 @@ export default async function AdminTranslationsPage() {
   ]);
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8">
-      <h1 className="flex items-center gap-2 text-xl font-semibold">
-        <BookOpen className="h-5 w-5" />
-        Çeviriler
-      </h1>
-      <p className="mt-1 text-sm text-[var(--muted)]">
-        /translations sayfası: ayarlar, yayınlanmış kitaplar, bağımsız çeviriler, gönüllü projeler. Kapak ve PDF yüklemek için Supabase Storage bucket’ları &quot;covers&quot; ve &quot;translation_files&quot; oluşturun (public read).
-      </p>
-      <div className="mt-8 space-y-10">
-        <AdminTranslationsSettingsForm settings={settings} />
+    <div className="mx-auto max-w-xl">
+      <header className="mb-8">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="admin-heading flex items-center gap-2.5 text-2xl font-semibold text-[#1a1612]">
+              <Languages className="h-6 w-6 text-[#b8934a]" />
+              Çeviriler
+            </h1>
+            <p className="mt-2 text-sm text-[#6b6158]">
+              Giriş metni, yayınlanmış kitaplar, bağımsız çeviriler ve gönüllü projeler.
+              Tamamı /translations sayfasında yayınlanır.
+            </p>
+          </div>
+          <Link
+            href="/translations"
+            target="_blank"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2 text-xs text-[#6b6158] transition-colors hover:border-[rgba(184,147,74,0.35)] hover:text-[#b8934a]"
+          >
+            Siteyi gör
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+      </header>
+
+      <div className="space-y-10">
         <div>
-          <h2 className="mb-4 text-lg font-medium">Yayınlanmış kitaplar</h2>
+          <h2 className="admin-section-title mb-4">Ayarlar</h2>
+          <AdminTranslationsSettingsForm settings={settings} />
+        </div>
+        <div>
+          <h2 className="admin-section-title mb-4">Yayınlanmış kitaplar</h2>
           <AdminTranslationBooksPanel books={books} />
         </div>
         <div>
-          <h2 className="mb-4 text-lg font-medium">Bağımsız çeviriler</h2>
+          <h2 className="admin-section-title mb-4">Bağımsız çeviriler</h2>
           <AdminTranslationIndependentPanel items={independent} />
         </div>
         <div>
-          <h2 className="mb-4 text-lg font-medium">Gönüllü projeler</h2>
+          <h2 className="admin-section-title mb-4">Gönüllü projeler</h2>
           <AdminTranslationVolunteerPanel projects={volunteer} />
         </div>
       </div>
-      <p className="mt-6 text-sm text-[var(--muted)]">
-        <Link href="/translations" className="text-[var(--accent)] underline hover:no-underline">
-          Çeviriler sayfasını görüntüle
-        </Link>
-      </p>
     </div>
   );
 }

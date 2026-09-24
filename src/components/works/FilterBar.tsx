@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 
 export type WorksFilter =
   | "all"
+  | "youtube"
   | "art"
   | "project"
   | "certificate"
@@ -12,6 +13,7 @@ export type WorksFilter =
 
 const FILTERS: { value: WorksFilter; label: string }[] = [
   { value: "all", label: "Tümü" },
+  { value: "youtube", label: "Video" },
   { value: "art", label: "Resim" },
   { value: "project", label: "Projeler" },
   { value: "certificate", label: "Sertifika" },

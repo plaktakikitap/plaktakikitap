@@ -57,6 +57,7 @@ export async function GET(req: NextRequest) {
         .from("books")
         .select("id, title, author, cover_url")
         .in("visibility", ["public", "unlisted"])
+        .neq("status", "to_read")
         .or(`title.ilike."${pattern}",author.ilike."${pattern}"`)
         .limit(5),
 
