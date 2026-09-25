@@ -193,8 +193,8 @@ export function AdminGunlukPanel({
                     onClick={() => setSelected(iso)}
                     className={`relative rounded-lg py-1.5 text-[11px] ${
                       isSel
-                        ? "bg-amber-500/25 text-amber-200"
-                        : "text-[#1a1612]/65 hover:bg-[#1a1612]/8"
+                        ? "bg-amber-500/25 font-semibold text-amber-800"
+                        : "text-[#1a1612]/75 hover:bg-[#1a1612]/8"
                     }`}
                   >
                     {d}
@@ -251,7 +251,7 @@ export function AdminGunlukPanel({
             type="button"
             onClick={() => void save(false)}
             disabled={saving}
-            className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-medium text-black disabled:opacity-50"
+            className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-medium text-[#1a1612] hover:bg-amber-400 disabled:opacity-50"
           >
             Kaydet
           </button>

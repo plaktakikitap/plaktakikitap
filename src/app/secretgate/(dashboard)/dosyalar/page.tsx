@@ -14,7 +14,7 @@ export default async function AdminDosyalarPage() {
   ]);
 
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="mx-auto max-w-xl">
       <header className="mb-8">
         <h1 className="flex items-center gap-2.5 text-2xl font-semibold text-[#1a1612]">
           <HardDrive className="h-6 w-6 text-[#b8934a]" />

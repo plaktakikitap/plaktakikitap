@@ -53,6 +53,12 @@ export function AdminFinansPanel({
   const [newCatAd, setNewCatAd] = useState("");
   const [newCatTur, setNewCatTur] = useState<FinansTur>("gider");
   const [newCatRenk, setNewCatRenk] = useState("#c9a65a");
+  const [confirmDeleteKayitId, setConfirmDeleteKayitId] = useState<
+    string | null
+  >(null);
+  const [confirmDeleteKategoriId, setConfirmDeleteKategoriId] = useState<
+    string | null
+  >(null);
 
   const now = new Date();
   const [month, setMonth] = useState(
@@ -134,14 +140,15 @@ export function AdminFinansPanel({
     }
   }
 
-  async function remove(id: string) {
-    if (!confirm("Silinsin mi?")) return;
+  async function handleDeleteKayit(id: string) {
     const res = await fetch(`/api/admin/finans/${id}`, { method: "DELETE" });
     if (!res.ok) {
       showAdminToast("error", "Silinemedi.");
       return;
     }
-    setKayitlar((prev) => prev.filter((x) => x.id !== id));
+    setKayitlar((prev) => prev.filter((k) => k.id !== id));
+    setConfirmDeleteKayitId(null);
+    showAdminToast("success", "Silindi ✓");
   }
 
   async function addCat(e: React.FormEvent) {
@@ -166,8 +173,7 @@ export function AdminFinansPanel({
     showAdminToast("success", "Kategori eklendi ✓");
   }
 
-  async function delCat(id: string) {
-    if (!confirm("Kategori silinsin mi?")) return;
+  async function handleDeleteKategori(id: string) {
     const res = await fetch("/api/admin/finans", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -178,6 +184,8 @@ export function AdminFinansPanel({
       return;
     }
     setKategoriler((prev) => prev.filter((c) => c.id !== id));
+    setConfirmDeleteKategoriId(null);
+    showAdminToast("success", "Silindi ✓");
   }
 
   return (
@@ -230,7 +238,7 @@ export function AdminFinansPanel({
             />
             <button
               type="submit"
-              className="rounded-xl bg-amber-500 px-3 py-2 text-sm text-black"
+              className="rounded-xl bg-amber-500 px-3 py-2 text-sm text-[#1a1612]"
             >
               Ekle
             </button>
@@ -247,13 +255,37 @@ export function AdminFinansPanel({
                 />
                 {c.ad}
                 <span className="text-[#6b6158]">{c.tur}</span>
-                <button
-                  type="button"
-                  onClick={() => void delCat(c.id)}
-                  className="text-[#6b6158] hover:text-red-400"
-                >
-                  ×
-                </button>
+                {confirmDeleteKategoriId === c.id ? (
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs text-red-500">Emin misin?</span>
+                    <button
+                      type="button"
+                      onClick={() => void handleDeleteKategori(c.id)}
+                      className="rounded-lg bg-red-500 px-2.5 py-1 text-xs font-medium text-[#faf7f2] hover:bg-red-600"
+                    >
+                      Sil
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmDeleteKategoriId(null)}
+                      className="rounded-lg border border-[#e8e0d4] px-2.5 py-1 text-xs text-[#6b6158] hover:text-[#1a1612]"
+                    >
+                      İptal
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setConfirmDeleteKayitId(null);
+                      setConfirmDeleteKategoriId(c.id);
+                    }}
+                    className="rounded-lg p-1.5 text-[#6b6158] hover:text-red-500"
+                    aria-label="Sil"
+                  >
+                    ×
+                  </button>
+                )}
               </li>
             ))}
           </ul>
@@ -273,12 +305,12 @@ export function AdminFinansPanel({
                 setTur(t);
                 setKategori("");
               }}
-              className={`rounded-xl py-3 text-sm font-medium transition ${
+              className={`rounded-xl border py-3 text-sm font-medium transition ${
                 tur === t
                   ? t === "gelir"
-                    ? "bg-emerald-500/25 text-emerald-300 ring-1 ring-emerald-400/40"
-                    : "bg-red-500/25 text-red-300 ring-1 ring-red-400/40"
-                  : "bg-[#1a1612]/5 text-[#1a1612]/40"
+                    ? "border-emerald-500/30 bg-emerald-500/20 text-emerald-600"
+                    : "border-red-500/30 bg-red-500/20 text-red-500"
+                  : "border-transparent bg-[#1a1612]/5 text-[#6b6158]"
               }`}
             >
               {t === "gelir" ? "Gelir" : "Gider"}
@@ -324,7 +356,7 @@ export function AdminFinansPanel({
         <button
           type="submit"
           disabled={loading}
-          className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-medium text-black disabled:opacity-50"
+          className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-medium text-[#1a1612] disabled:opacity-50"
         >
           Kaydet
         </button>
@@ -333,13 +365,13 @@ export function AdminFinansPanel({
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-4">
           <p className="text-[10px] uppercase text-emerald-400/70">Gelir</p>
-          <p className="mt-1 text-xl font-semibold text-emerald-300">
+          <p className="mt-1 text-xl font-semibold text-emerald-600">
             {formatTL(summary.gelir)}
           </p>
         </div>
         <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-4">
           <p className="text-[10px] uppercase text-red-400/70">Gider</p>
-          <p className="mt-1 text-xl font-semibold text-red-300">
+          <p className="mt-1 text-xl font-semibold text-red-500">
             {formatTL(summary.gider)}
           </p>
         </div>
@@ -347,7 +379,7 @@ export function AdminFinansPanel({
           <p className="text-[10px] uppercase text-[#1a1612]/40">Net</p>
           <p
             className={`mt-1 text-xl font-semibold ${
-              summary.net >= 0 ? "text-emerald-300" : "text-red-300"
+              summary.net >= 0 ? "text-emerald-600" : "text-red-500"
             }`}
           >
             {formatTL(summary.net)}
@@ -376,9 +408,10 @@ export function AdminFinansPanel({
                 <Tooltip
                   formatter={(v) => formatTL(Number(v))}
                   contentStyle={{
-                    background: "#111",
+                    background: "#1a1612",
                     border: "1px solid #333",
                     borderRadius: 8,
+                    color: "#faf7f2",
                   }}
                 />
               </PieChart>
@@ -412,13 +445,37 @@ export function AdminFinansPanel({
                   {k.notlar ? ` · ${k.notlar}` : ""}
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={() => void remove(k.id)}
-                className="text-[#1a1612]/40 hover:text-red-400"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
+              {confirmDeleteKayitId === k.id ? (
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs text-red-500">Emin misin?</span>
+                  <button
+                    type="button"
+                    onClick={() => void handleDeleteKayit(k.id)}
+                    className="rounded-lg bg-red-500 px-2.5 py-1 text-xs font-medium text-[#faf7f2] hover:bg-red-600"
+                  >
+                    Sil
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmDeleteKayitId(null)}
+                    className="rounded-lg border border-[#e8e0d4] px-2.5 py-1 text-xs text-[#6b6158] hover:text-[#1a1612]"
+                  >
+                    İptal
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setConfirmDeleteKategoriId(null);
+                    setConfirmDeleteKayitId(k.id);
+                  }}
+                  className="rounded-lg p-1.5 text-[#6b6158] hover:text-red-500"
+                  aria-label="Sil"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              )}
             </li>
           ))}
         </ul>

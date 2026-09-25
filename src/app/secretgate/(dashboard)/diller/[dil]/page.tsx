@@ -61,7 +61,7 @@ export default async function AdminDilPage({
               href={`/secretgate/diller/${d}`}
               className={`rounded-xl px-3 py-2 text-sm transition ${
                 active
-                  ? "bg-amber-500 text-black"
+                  ? "bg-amber-500 text-[#1a1612]"
                   : "bg-[#1a1612]/5 text-[#6b6158] hover:bg-[#1a1612]/8"
               }`}
             >

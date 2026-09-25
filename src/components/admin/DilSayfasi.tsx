@@ -67,7 +67,7 @@ export function DilSayfasi({
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-100/90">
+      <div className="rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm font-medium text-[#b8934a]">
         {bayrak}{" "}
         <span className="font-medium">
           {stats.kelime_sayisi} kelime · {stats.ogrenilen} öğrenildi ·{" "}
@@ -98,7 +98,7 @@ export function DilSayfasi({
             onClick={() => setTab(id)}
             className={`rounded-xl px-4 py-2 text-sm transition ${
               tab === id
-                ? "bg-amber-500 text-black"
+                ? "bg-amber-500 text-[#1a1612]"
                 : "bg-[#1a1612]/5 text-[#6b6158] hover:bg-[#1a1612]/8"
             }`}
           >
@@ -171,6 +171,9 @@ function KelimeBankasi({
   const [formZorluk, setFormZorluk] = useState<DilZorluk>("orta");
   const [formEtiket, setFormEtiket] = useState<string[]>([]);
   const [editing, setEditing] = useState<DilKelime | null>(null);
+  const [confirmDeleteKelimeId, setConfirmDeleteKelimeId] = useState<
+    string | null
+  >(null);
 
   const fetchList = useCallback(
     async (nextOffset = 0, append = false) => {
@@ -266,8 +269,7 @@ function KelimeBankasi({
     onChanged();
   }
 
-  async function remove(id: string) {
-    if (!confirm("Kelime silinsin mi?")) return;
+  async function handleDeleteKelime(id: string) {
     const res = await fetch(`/api/admin/diller/kelimeler/${id}`, {
       method: "DELETE",
     });
@@ -277,6 +279,8 @@ function KelimeBankasi({
     }
     setItems((prev) => prev.filter((x) => x.id !== id));
     setTotal((t) => Math.max(0, t - 1));
+    setConfirmDeleteKelimeId(null);
+    showAdminToast("success", "Silindi ✓");
     onChanged();
   }
 
@@ -364,7 +368,7 @@ function KelimeBankasi({
               onClick={() => setFormZorluk(z.id)}
               className={`rounded-lg px-2.5 py-1 text-xs ${
                 formZorluk === z.id
-                  ? "bg-amber-500 text-black"
+                  ? "bg-amber-500 text-[#1a1612]"
                   : "bg-[#1a1612]/5 text-[#6b6158]"
               }`}
             >
@@ -391,7 +395,7 @@ function KelimeBankasi({
         <button
           type="submit"
           disabled={loading}
-          className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-medium text-black disabled:opacity-50"
+          className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-medium text-[#1a1612] disabled:opacity-50"
         >
           {editing ? "Güncelle" : "Ekle"}
         </button>
@@ -514,13 +518,36 @@ function KelimeBankasi({
                 >
                   <Pencil className="h-3.5 w-3.5" />
                 </button>
-                <button
-                  type="button"
-                  onClick={() => void remove(item.id)}
-                  className="rounded p-1.5 text-[#1a1612]/40 hover:text-red-400"
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </button>
+                {confirmDeleteKelimeId === item.id ? (
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs text-red-500">Emin misin?</span>
+                    <button
+                      type="button"
+                      onClick={() => void handleDeleteKelime(item.id)}
+                      className="rounded-lg bg-red-500 px-2.5 py-1 text-xs font-medium text-[#faf7f2] hover:bg-red-600"
+                    >
+                      Sil
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmDeleteKelimeId(null)}
+                      className="rounded-lg border border-[#e8e0d4] px-2.5 py-1 text-xs text-[#6b6158] hover:text-[#1a1612]"
+                    >
+                      İptal
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setConfirmDeleteKelimeId(item.id);
+                    }}
+                    className="rounded-lg p-1.5 text-[#6b6158] hover:text-red-500"
+                    aria-label="Sil"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                )}
                 <span className="text-[10px] text-[#6b6158]">
                   tekrar:{item.tekrar_sayisi}
                 </span>
@@ -672,7 +699,7 @@ function FlashcardModu({
           <button
             type="button"
             onClick={() => void load(true)}
-            className="rounded-xl bg-amber-500 px-4 py-2.5 text-sm text-black"
+            className="rounded-xl bg-amber-500 px-4 py-2.5 text-sm text-[#1a1612]"
           >
             Tekrar Başla
           </button>
@@ -808,6 +835,9 @@ function NotlarBolumu({
   const [openId, setOpenId] = useState<string | null>(null);
   const [editing, setEditing] = useState<DilNot | null>(null);
   const [loading, setLoading] = useState(false);
+  const [confirmDeleteNotId, setConfirmDeleteNotId] = useState<string | null>(
+    null
+  );
 
   async function reload() {
     const params = new URLSearchParams({ dil });
@@ -859,8 +889,7 @@ function NotlarBolumu({
     }
   }
 
-  async function remove(id: string) {
-    if (!confirm("Not silinsin mi?")) return;
+  async function handleDeleteNot(id: string) {
     const res = await fetch(`/api/admin/diller/notlar/${id}`, {
       method: "DELETE",
     });
@@ -869,6 +898,8 @@ function NotlarBolumu({
       return;
     }
     setItems((prev) => prev.filter((x) => x.id !== id));
+    setConfirmDeleteNotId(null);
+    showAdminToast("success", "Silindi ✓");
     onChanged();
   }
 
@@ -893,7 +924,7 @@ function NotlarBolumu({
               onClick={() => setKategori(k.id)}
               className={`rounded-lg px-2.5 py-1 text-xs ${
                 kategori === k.id
-                  ? "bg-amber-500 text-black"
+                  ? "bg-amber-500 text-[#1a1612]"
                   : "bg-[#1a1612]/5 text-[#6b6158]"
               }`}
             >
@@ -911,7 +942,7 @@ function NotlarBolumu({
         <button
           type="submit"
           disabled={loading}
-          className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-medium text-black disabled:opacity-50"
+          className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-medium text-[#1a1612] disabled:opacity-50"
         >
           {editing ? "Güncelle" : "Kaydet"}
         </button>
@@ -987,13 +1018,34 @@ function NotlarBolumu({
                     >
                       Düzenle
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => void remove(n.id)}
-                      className="text-xs text-red-400/80"
-                    >
-                      Sil
-                    </button>
+                    {confirmDeleteNotId === n.id ? (
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs text-red-500">Emin misin?</span>
+                        <button
+                          type="button"
+                          onClick={() => void handleDeleteNot(n.id)}
+                          className="rounded-lg bg-red-500 px-2.5 py-1 text-xs font-medium text-[#faf7f2] hover:bg-red-600"
+                        >
+                          Sil
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setConfirmDeleteNotId(null)}
+                          className="rounded-lg border border-[#e8e0d4] px-2.5 py-1 text-xs text-[#6b6158] hover:text-[#1a1612]"
+                        >
+                          İptal
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setConfirmDeleteNotId(n.id)}
+                        className="rounded-lg p-1.5 text-[#6b6158] hover:text-red-500"
+                        aria-label="Sil"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    )}
                   </div>
                 </div>
               ) : null}

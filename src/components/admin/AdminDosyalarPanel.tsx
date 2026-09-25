@@ -64,6 +64,7 @@ export function AdminDosyalarPanel({
   const [previewKind, setPreviewKind] = useState<"image" | "pdf" | null>(null);
   const [newFolderName, setNewFolderName] = useState("");
   const [showNewFolder, setShowNewFolder] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const visible = useMemo(
@@ -155,18 +156,23 @@ export function AdminDosyalarPanel({
     }
   }
 
-  async function remove(id: string) {
-    if (!confirm("Dosyayı kalıcı olarak silmek istiyor musun?")) return;
-    const res = await fetch(`/api/admin/kisisel-dosyalar/${id}`, {
-      method: "DELETE",
-    });
-    if (!res.ok) {
-      showAdminToast("error", "Silinemedi.");
-      return;
+  async function handleDelete(id: string) {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/admin/kisisel-dosyalar/${id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        showAdminToast("error", "Silinemedi.");
+        return;
+      }
+      setFiles((prev) => prev.filter((d) => d.id !== id));
+      setConfirmDeleteId(null);
+      showAdminToast("success", "Silindi ✓");
+      router.refresh();
+    } finally {
+      setLoading(false);
     }
-    setFiles((prev) => prev.filter((f) => f.id !== id));
-    showAdminToast("success", "Silindi ✓");
-    router.refresh();
   }
 
   async function createFolder(e: React.FormEvent) {
@@ -214,7 +220,7 @@ export function AdminDosyalarPanel({
             onClick={() => setActiveFolder(f)}
             className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs transition ${
               activeFolder === f
-                ? "border-amber-400/40 bg-amber-500/15 text-amber-200"
+                ? "border-amber-400/40 bg-amber-500/15 text-amber-800"
                 : "border-[#e8e0d4] bg-[#1a1612]/5 text-[#6b6158] hover:text-[#1a1612]/80"
             }`}
           >
@@ -244,7 +250,7 @@ export function AdminDosyalarPanel({
           <button
             type="submit"
             disabled={loading}
-            className="rounded-xl bg-amber-500 px-3 py-2 text-sm text-black disabled:opacity-50"
+            className="rounded-xl bg-amber-500 px-3 py-2 text-sm text-[#1a1612] hover:bg-amber-400 disabled:opacity-50"
           >
             Oluştur
           </button>
@@ -299,7 +305,7 @@ export function AdminDosyalarPanel({
               type="button"
               onClick={() => inputRef.current?.click()}
               disabled={loading}
-              className="rounded-xl bg-amber-500 px-4 py-2 text-sm font-medium text-black hover:bg-amber-400 disabled:opacity-50"
+              className="rounded-xl bg-amber-500 px-4 py-2 text-sm font-medium text-[#1a1612] hover:bg-amber-400 disabled:opacity-50"
             >
               Seç
             </button>
@@ -369,14 +375,35 @@ export function AdminDosyalarPanel({
                 >
                   <Download className="h-4 w-4" />
                 </button>
-                <button
-                  type="button"
-                  onClick={() => void remove(file.id)}
-                  className="rounded-lg p-2 text-[#1a1612]/40 hover:bg-red-500/20 hover:text-red-400"
-                  aria-label="Sil"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
+                {confirmDeleteId === file.id ? (
+                  <div className="flex shrink-0 items-center gap-1.5">
+                    <span className="text-xs text-red-500">Emin misin?</span>
+                    <button
+                      type="button"
+                      onClick={() => void handleDelete(file.id)}
+                      disabled={loading}
+                      className="rounded-lg bg-red-500 px-2.5 py-1 text-xs font-medium text-[#faf7f2] hover:bg-red-600 disabled:opacity-50"
+                    >
+                      Sil
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmDeleteId(null)}
+                      className="rounded-lg border border-[#e8e0d4] px-2.5 py-1 text-xs text-[#6b6158] hover:text-[#1a1612]"
+                    >
+                      İptal
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setConfirmDeleteId(file.id)}
+                    className="rounded-lg p-1.5 text-[#6b6158] transition-colors hover:text-red-500"
+                    aria-label="Sil"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                )}
               </li>
             ))}
           </ul>

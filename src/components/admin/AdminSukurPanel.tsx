@@ -79,7 +79,7 @@ export function AdminSukurPanel({
 
         {!editing && todayEntry ? (
           <div>
-            <p className="mb-4 text-sm text-emerald-400/90">Bugün zaten yazdın ✓</p>
+            <p className="mb-4 text-sm text-emerald-600">Bugün zaten yazdın ✓</p>
             <ol className="list-decimal space-y-2 pl-5 text-sm text-[#1a1612]/85">
               <li>{todayEntry.madde_1}</li>
               <li>{todayEntry.madde_2}</li>
@@ -93,7 +93,7 @@ export function AdminSukurPanel({
                 setM3(todayEntry.madde_3);
                 setEditing(true);
               }}
-              className="mt-5 text-sm text-[#b8934a]/80 hover:text-amber-300"
+              className="mt-5 text-sm text-[#6b6158] hover:text-[#b8934a]"
             >
               Düzenle
             </button>
@@ -131,7 +131,7 @@ export function AdminSukurPanel({
               <button
                 type="submit"
                 disabled={loading}
-                className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-medium text-black disabled:opacity-50"
+                className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-medium text-[#1a1612] hover:bg-amber-400 disabled:opacity-50"
               >
                 Kaydet
               </button>

@@ -78,12 +78,7 @@ const personalLinks = [
   { href: "/secretgate/aliskanliklar", label: "Alışkanlıklar", icon: Flame },
   { href: "/secretgate/diller", label: "Diller", icon: LanguagesIcon },
   { href: "/secretgate/icerik", label: "İçerik Planı", icon: Smartphone },
-  {
-    href: "/secretgate/istatistikler",
-    label: "İstatistikler",
-    icon: BarChart3,
-    soon: true,
-  },
+  { href: "/secretgate/istatistikler", label: "İstatistikler", icon: BarChart3 },
 ];
 
 // ── Ayarlar — tek başına en altta ──

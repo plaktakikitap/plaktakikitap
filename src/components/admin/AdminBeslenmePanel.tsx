@@ -67,6 +67,7 @@ export function AdminBeslenmePanel({
   const [ogun, setOgun] = useState<BeslenmeOgun>("ogle");
   const [yenen, setYenen] = useState("");
   const [loading, setLoading] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const today = todayISO();
   const todayItems = useMemo(
@@ -162,20 +163,20 @@ export function AdminBeslenmePanel({
     }
   }
 
-  async function remove(id: string) {
-    if (!confirm("Silinsin mi?")) return;
+  async function handleDelete(id: string) {
     const res = await fetch(`/api/admin/beslenme/${id}`, { method: "DELETE" });
     if (!res.ok) {
       showAdminToast("error", "Silinemedi.");
       return;
     }
-    setItems((prev) => prev.filter((x) => x.id !== id));
+    setItems((prev) => prev.filter((k) => k.id !== id));
+    setConfirmDeleteId(null);
     showAdminToast("success", "Silindi ✓");
   }
 
   return (
     <div className="space-y-8">
-      <p className="rounded-xl border border-amber-500/20 bg-amber-500/10 px-4 py-2.5 text-xs text-amber-100/80">
+      <p className="rounded-xl border border-amber-500/20 bg-amber-500/10 px-4 py-2.5 text-xs text-amber-700">
         Bu analizler yapay zeka tahminidir, kesin tıbbi bilgi değildir.
       </p>
 
@@ -192,7 +193,7 @@ export function AdminBeslenmePanel({
                 onClick={() => setOgun(o.id)}
                 className={`rounded-xl px-3 py-2 text-sm transition ${
                   ogun === o.id
-                    ? "bg-amber-500 text-black"
+                    ? "bg-amber-500 text-[#1a1612]"
                     : "bg-[#1a1612]/5 text-[#6b6158] hover:bg-[#1a1612]/8"
                 }`}
               >
@@ -216,7 +217,7 @@ export function AdminBeslenmePanel({
           <button
             type="submit"
             disabled={loading}
-            className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-medium text-black hover:bg-amber-400 disabled:opacity-50"
+            className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-medium text-[#1a1612] hover:bg-amber-400 disabled:opacity-50"
           >
             {loading ? "Analiz ediliyor…" : "Analiz Et & Kaydet"}
           </button>
@@ -226,7 +227,7 @@ export function AdminBeslenmePanel({
           <p className="mb-3 text-[10px] uppercase tracking-wider text-[#1a1612]/40">
             Bugünün özeti
           </p>
-          <p className="text-3xl font-semibold text-amber-300">
+          <p className="text-3xl font-semibold text-[#b8934a]">
             {Math.round(todayTotals.kalori)}
             <span className="ml-1 text-sm font-normal text-[#1a1612]/40">kcal</span>
           </p>
@@ -241,7 +242,7 @@ export function AdminBeslenmePanel({
             </p>
           ) : null}
           {todayTotals.eksikler.length > 0 ? (
-            <p className="mt-2 text-xs text-red-300/80">
+            <p className="mt-2 text-xs text-red-500">
               Eksik: {todayTotals.eksikler.join(", ")}
             </p>
           ) : null}
@@ -257,9 +258,10 @@ export function AdminBeslenmePanel({
               <YAxis stroke="#666" fontSize={11} width={36} />
               <Tooltip
                 contentStyle={{
-                  background: "#111",
+                  background: "#1a1612",
                   border: "1px solid #333",
                   borderRadius: 8,
+                  color: "#faf7f2",
                 }}
               />
               <Bar dataKey="kalori" fill="#b8934a" radius={[4, 4, 0, 0]} />
@@ -288,13 +290,34 @@ export function AdminBeslenmePanel({
                   </p>
                   <p className="mt-0.5 text-sm text-[#1a1612]/85">{i.yenen}</p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => void remove(i.id)}
-                  className="rounded p-1.5 text-[#1a1612]/40 hover:text-red-400"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
+                {confirmDeleteId === i.id ? (
+                  <div className="flex shrink-0 items-center gap-1.5">
+                    <span className="text-xs text-red-500">Emin misin?</span>
+                    <button
+                      type="button"
+                      onClick={() => void handleDelete(i.id)}
+                      className="rounded-lg bg-red-500 px-2.5 py-1 text-xs font-medium text-[#faf7f2] hover:bg-red-600"
+                    >
+                      Sil
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmDeleteId(null)}
+                      className="rounded-lg border border-[#e8e0d4] px-2.5 py-1 text-xs text-[#6b6158] hover:text-[#1a1612]"
+                    >
+                      İptal
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setConfirmDeleteId(i.id)}
+                    className="rounded-lg p-1.5 text-[#6b6158] hover:text-red-500"
+                    aria-label="Sil"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                )}
               </li>
             ))}
           </ul>

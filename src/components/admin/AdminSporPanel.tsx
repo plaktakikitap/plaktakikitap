@@ -35,6 +35,7 @@ export function AdminSporPanel({
   const [enerji, setEnerji] = useState(3);
   const [notlar, setNotlar] = useState("");
   const [loading, setLoading] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const monthStats = useMemo(() => {
     const now = new Date();
@@ -124,14 +125,15 @@ export function AdminSporPanel({
     }
   }
 
-  async function remove(id: string) {
-    if (!confirm("Silinsin mi?")) return;
+  async function handleDelete(id: string) {
     const res = await fetch(`/api/admin/spor/${id}`, { method: "DELETE" });
     if (!res.ok) {
       showAdminToast("error", "Silinemedi.");
       return;
     }
     setItems((prev) => prev.filter((x) => x.id !== id));
+    setConfirmDeleteId(null);
+    showAdminToast("success", "Silindi ✓");
   }
 
   return (
@@ -148,7 +150,7 @@ export function AdminSporPanel({
               onClick={() => setAktivite(a)}
               className={`rounded-xl px-3 py-1.5 text-xs transition ${
                 aktivite === a
-                  ? "bg-amber-500 text-black"
+                  ? "bg-amber-500 text-[#1a1612]"
                   : "bg-[#1a1612]/5 text-[#6b6158] hover:bg-[#1a1612]/8"
               }`}
             >
@@ -208,7 +210,7 @@ export function AdminSporPanel({
         <button
           type="submit"
           disabled={loading}
-          className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-medium text-black disabled:opacity-50"
+          className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-medium text-[#1a1612] disabled:opacity-50"
         >
           Kaydet
         </button>
@@ -235,23 +237,23 @@ export function AdminSporPanel({
       <section className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5">
         <h3 className="mb-3 text-sm text-[#6b6158]">Son 90 gün</h3>
         <div className="flex flex-wrap gap-1">
-          {heatmap.map((c) => (
-            <div
-              key={c.iso}
-              title={c.tip}
-              className="h-3 w-3 rounded-sm"
-              style={{
-                background:
-                  c.count === 0
-                    ? "rgba(255,255,255,0.06)"
-                    : c.count === 1
-                      ? "rgba(184,147,74,0.45)"
-                      : c.count === 2
-                        ? "rgba(184,147,74,0.7)"
-                        : "rgba(184,147,74,0.95)",
-              }}
-            />
-          ))}
+          {heatmap.map((c) => {
+            const cellBg =
+              c.count === 0
+                ? "bg-[#1a1612]/6"
+                : c.count <= 2
+                  ? "bg-[#b8934a]/30"
+                  : c.count <= 4
+                    ? "bg-[#b8934a]/60"
+                    : "bg-[#b8934a]";
+            return (
+              <div
+                key={c.iso}
+                title={c.tip}
+                className={`h-3 w-3 rounded-sm ${cellBg}`}
+              />
+            );
+          })}
         </div>
       </section>
 
@@ -269,13 +271,34 @@ export function AdminSporPanel({
               </p>
               <p className="text-[11px] text-[#1a1612]/40">{i.tarih}</p>
             </div>
-            <button
-              type="button"
-              onClick={() => void remove(i.id)}
-              className="text-[#1a1612]/40 hover:text-red-400"
-            >
-              <Trash2 className="h-4 w-4" />
-            </button>
+            {confirmDeleteId === i.id ? (
+              <div className="flex shrink-0 items-center gap-1.5">
+                <span className="text-xs text-red-500">Emin misin?</span>
+                <button
+                  type="button"
+                  onClick={() => void handleDelete(i.id)}
+                  className="rounded-lg bg-red-500 px-2.5 py-1 text-xs font-medium text-[#faf7f2] hover:bg-red-600"
+                >
+                  Sil
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmDeleteId(null)}
+                  className="rounded-lg border border-[#e8e0d4] px-2.5 py-1 text-xs text-[#6b6158] hover:text-[#1a1612]"
+                >
+                  İptal
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setConfirmDeleteId(i.id)}
+                className="rounded-lg p-1.5 text-[#6b6158] hover:text-red-500"
+                aria-label="Sil"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            )}
           </li>
         ))}
       </ul>

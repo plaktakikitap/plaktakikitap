@@ -6,15 +6,16 @@ import { Pencil, Trash2, X } from "lucide-react";
 import type { Oncelik, Yapilacak } from "@/types/kisisel";
 import { showAdminToast } from "./admin-toast-events";
 
-const COLUMNS: { id: Oncelik; label: string; accent: string }[] = [
-  { id: "acil", label: "Acil", accent: "border-red-400/40 text-red-300" },
-  { id: "normal", label: "Normal", accent: "border-amber-400/40 text-amber-300" },
-  {
-    id: "bekleyebilir",
-    label: "Bekleyebilir",
-    accent: "border-[#d4c9bb] text-[#6b6158]",
-  },
+const COLUMNS: { id: Oncelik; label: string; accent: string; headerText: string }[] = [
+  { id: "acil", label: "Acil", accent: "border-red-400/40", headerText: "text-red-500" },
+  { id: "normal", label: "Normal", accent: "border-amber-400/40", headerText: "text-[#b8934a]" },
+  { id: "bekleyebilir", label: "Bekleyebilir", accent: "border-[#d4c9bb]", headerText: "text-[#6b6158]" },
 ];
+
+function isOverdue(iso: string | null): boolean {
+  if (!iso) return false;
+  return new Date(iso + "T23:59:59") < new Date();
+}
 
 function formatShort(iso: string) {
   try {
@@ -41,6 +42,7 @@ export function AdminYapilacaklarPanel({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editBaslik, setEditBaslik] = useState("");
   const [editBitis, setEditBitis] = useState("");
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const grouped = useMemo(() => {
     const map: Record<Oncelik, Yapilacak[]> = {
@@ -160,16 +162,28 @@ export function AdminYapilacaklarPanel({
   }
 
   async function remove(id: string) {
-    if (!confirm("Bu görevi silmek istiyor musun?")) return;
-    const res = await fetch(`/api/admin/yapilacaklar/${id}`, {
-      method: "DELETE",
-    });
+    const res = await fetch(`/api/admin/yapilacaklar/${id}`, { method: "DELETE" });
     if (!res.ok) {
       showAdminToast("error", "Silinemedi.");
       return;
     }
     setItems((prev) => prev.filter((x) => x.id !== id));
+    setConfirmDeleteId(null);
     showAdminToast("success", "Silindi ✓");
+    router.refresh();
+  }
+
+  async function clearDone(oncelik: Oncelik) {
+    const doneIds = grouped[oncelik]
+      .filter((x) => x.tamamlandi)
+      .map((x) => x.id);
+    await Promise.all(
+      doneIds.map((id) =>
+        fetch(`/api/admin/yapilacaklar/${id}`, { method: "DELETE" })
+      )
+    );
+    setItems((prev) => prev.filter((x) => !(x.oncelik === oncelik && x.tamamlandi)));
+    showAdminToast("success", `${doneIds.length} görev silindi ✓`);
     router.refresh();
   }
 
@@ -177,7 +191,7 @@ export function AdminYapilacaklarPanel({
     <div className="space-y-6">
       <form
         onSubmit={addTask}
-        className="flex flex-col gap-2 rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-3 sm:flex-row sm:items-center"
+        className="sticky top-14 z-10 flex flex-col gap-2 rounded-2xl border border-[#e8e0d4] bg-[#faf7f2]/95 p-3 backdrop-blur-sm sm:flex-row sm:items-center lg:top-0"
       >
         <input
           value={baslik}
@@ -195,17 +209,24 @@ export function AdminYapilacaklarPanel({
           <option value="normal">Normal</option>
           <option value="bekleyebilir">Bekleyebilir</option>
         </select>
-        <input
-          type="date"
-          value={bitis}
-          onChange={(e) => setBitis(e.target.value)}
-          className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2.5 text-sm text-[#1a1612] outline-none"
-          title="Bitiş tarihi (opsiyonel)"
-        />
+        <div className="relative mb-3 sm:mb-0">
+          <input
+            type="date"
+            value={bitis}
+            onChange={(e) => setBitis(e.target.value)}
+            className="rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2.5 text-sm text-[#1a1612] outline-none"
+            title="Bitiş tarihi"
+          />
+          {bitis && (
+            <p className="absolute -bottom-4 left-0 text-[10px] text-[#a09588]">
+              Takvimde görünür
+            </p>
+          )}
+        </div>
         <button
           type="submit"
           disabled={loading}
-          className="rounded-xl bg-amber-500 px-4 py-2.5 text-sm font-medium text-black hover:bg-amber-400 disabled:opacity-50"
+          className="rounded-xl bg-amber-500 px-4 py-2.5 text-sm font-medium text-[#1a1612] hover:bg-amber-400 disabled:opacity-50"
         >
           Ekle
         </button>
@@ -215,13 +236,24 @@ export function AdminYapilacaklarPanel({
         {COLUMNS.map((col) => (
           <section
             key={col.id}
-            className={`rounded-2xl border bg-[#1a1612]/5 ${col.accent.split(" ")[0]}`}
+            className={`rounded-2xl border bg-[#1a1612]/5 ${col.accent}`}
           >
-            <header className={`border-b border-[#e8e0d4] px-4 py-3 text-sm font-medium ${col.accent}`}>
-              {col.label}
-              <span className="ml-2 text-xs font-normal text-[#1a1612]/40">
-                {grouped[col.id].filter((x) => !x.tamamlandi).length}
+            <header className={`flex items-center justify-between border-b border-[#e8e0d4] px-4 py-3 text-sm font-medium ${col.headerText}`}>
+              <span>
+                {col.label}
+                <span className="ml-2 text-xs font-normal text-[#1a1612]/40">
+                  {grouped[col.id].filter((x) => !x.tamamlandi).length}
+                </span>
               </span>
+              {grouped[col.id].some((x) => x.tamamlandi) && (
+                <button
+                  type="button"
+                  onClick={() => void clearDone(col.id)}
+                  className="text-[10px] text-[#a09588] hover:text-red-400 transition-colors"
+                >
+                  Tamamlananları sil
+                </button>
+              )}
             </header>
             <ul className="space-y-2 p-3 min-h-[120px]">
               {grouped[col.id].length === 0 ? (
@@ -232,7 +264,11 @@ export function AdminYapilacaklarPanel({
                 grouped[col.id].map((item) => (
                   <li
                     key={item.id}
-                    className="rounded-xl border border-[#e8e0d4] bg-[#f0ebe2] px-3 py-2.5"
+                    className={`rounded-xl border border-[#e8e0d4] px-3 py-2.5 transition-all ${
+                      item.tamamlandi
+                        ? "bg-[#f0ebe2]/50 opacity-60"
+                        : "bg-[#f0ebe2]"
+                    }`}
                   >
                     {editingId === item.id ? (
                       <div className="space-y-2">
@@ -256,7 +292,7 @@ export function AdminYapilacaklarPanel({
                           <button
                             type="button"
                             onClick={() => void saveEdit(item.id)}
-                            className="rounded-lg bg-amber-500 px-2.5 py-1 text-xs text-black"
+                            className="rounded-lg bg-amber-500 px-2.5 py-1 text-xs text-[#1a1612]"
                           >
                             Kaydet
                           </button>
@@ -290,7 +326,14 @@ export function AdminYapilacaklarPanel({
                             {item.baslik}
                           </button>
                           {item.bitis_tarihi ? (
-                            <span className="mt-1 inline-block rounded bg-sky-500/15 px-1.5 py-0.5 text-[10px] text-sky-300">
+                            <span
+                              className={`mt-1 inline-block rounded px-1.5 py-0.5 text-[10px] ${
+                                isOverdue(item.bitis_tarihi) && !item.tamamlandi
+                                  ? "bg-red-500/15 text-red-500"
+                                  : "bg-sky-500/15 text-sky-600"
+                              }`}
+                            >
+                              {isOverdue(item.bitis_tarihi) && !item.tamamlandi ? "⚠ " : ""}
                               {formatShort(item.bitis_tarihi)}
                             </span>
                           ) : null}
@@ -319,14 +362,33 @@ export function AdminYapilacaklarPanel({
                           >
                             <Pencil className="h-3.5 w-3.5" />
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => void remove(item.id)}
-                            className="rounded p-1 text-[#1a1612]/40 hover:text-red-400"
-                            aria-label="Sil"
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </button>
+                          {confirmDeleteId === item.id ? (
+                            <div className="flex items-center gap-1">
+                              <button
+                                type="button"
+                                onClick={() => void remove(item.id)}
+                                className="rounded px-1.5 py-0.5 text-[10px] font-medium text-red-500 hover:text-red-600"
+                              >
+                                Sil
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setConfirmDeleteId(null)}
+                                className="rounded px-1.5 py-0.5 text-[10px] text-[#6b6158]"
+                              >
+                                İptal
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setConfirmDeleteId(item.id)}
+                              className="rounded p-1 text-[#1a1612]/40 hover:text-red-400"
+                              aria-label="Sil"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          )}
                         </div>
                       </div>
                     )}

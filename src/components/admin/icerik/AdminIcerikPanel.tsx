@@ -29,14 +29,15 @@ import {
   AdminTextArea,
   AdminTextInput,
 } from "@/components/admin/AdminFormPrimitives";
+import { showAdminToast } from "@/components/admin/admin-toast-events";
 
 type Tab = "pano" | "takvim" | "hesaplar" | "ayarlar";
 
 const TUR_COLORS: Record<IcTur, string> = {
-  post: "bg-amber-500/20 text-amber-200 border-amber-400/30",
-  story: "bg-sky-500/20 text-sky-200 border-sky-400/30",
-  video: "bg-violet-500/20 text-violet-200 border-violet-400/30",
-  reel: "bg-rose-500/20 text-rose-200 border-rose-400/30",
+  post: "bg-amber-500/15 text-amber-700 border-amber-500/25",
+  story: "bg-sky-500/15 text-sky-600 border-sky-500/25",
+  video: "bg-violet-500/15 text-violet-600 border-violet-500/25",
+  reel: "bg-rose-500/15 text-rose-600 border-rose-500/25",
 };
 
 const PLATFORM_ICON: Record<IcPlatform, string> = {
@@ -84,6 +85,7 @@ export function AdminIcerikPanel({
   const [modal, setModal] = useState<ModalState>({ mode: "closed" });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [calMonth, setCalMonth] = useState(() => {
     const n = new Date();
     return { y: n.getFullYear(), m: n.getMonth() };
@@ -135,25 +137,19 @@ export function AdminIcerikPanel({
     }
   }
 
-  async function remove(id: string) {
-    if (!confirm("Bu içeriği silmek istiyor musun?")) return;
-    setBusy(true);
-    try {
-      const res = await fetch("/api/admin/icerik/icerikler", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
-      });
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Silinemedi");
-      }
-      await refresh();
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Hata");
-    } finally {
-      setBusy(false);
+  async function handleDelete(id: string) {
+    const res = await fetch("/api/admin/icerik/icerikler", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    if (!res.ok) {
+      showAdminToast("error", "Silinemedi.");
+      return;
     }
+    setIcerikler((prev) => prev.filter((i) => i.id !== id));
+    setConfirmDeleteId(null);
+    showAdminToast("success", "Silindi ✓");
   }
 
   const tabs: { id: Tab; label: string; icon: typeof LayoutGrid }[] = [
@@ -207,7 +203,9 @@ export function AdminIcerikPanel({
           }
           onEdit={(item) => setModal({ mode: "edit", item })}
           onAdvance={advance}
-          onDelete={remove}
+          onDelete={handleDelete}
+          confirmDeleteId={confirmDeleteId}
+          setConfirmDeleteId={setConfirmDeleteId}
         />
       ) : null}
 
@@ -310,6 +308,8 @@ function PanoTab({
   onEdit,
   onAdvance,
   onDelete,
+  confirmDeleteId,
+  setConfirmDeleteId,
 }: {
   hesaplar: IcHesap[];
   hesapFilter: string | "all";
@@ -320,6 +320,8 @@ function PanoTab({
   onEdit: (item: IcIcerikWithHesap) => void;
   onAdvance: (id: string) => void;
   onDelete: (id: string) => void;
+  confirmDeleteId: string | null;
+  setConfirmDeleteId: (id: string | null) => void;
 }) {
   return (
     <div>
@@ -355,8 +357,11 @@ function PanoTab({
                   key={item.id}
                   item={item}
                   busy={busy}
+                  confirmDeleteId={confirmDeleteId}
                   onEdit={() => onEdit(item)}
                   onAdvance={() => onAdvance(item.id)}
+                  onAskDelete={() => setConfirmDeleteId(item.id)}
+                  onCancelDelete={() => setConfirmDeleteId(null)}
                   onDelete={() => onDelete(item.id)}
                 />
               ))}
@@ -374,14 +379,20 @@ function PanoTab({
 function IcerikKart({
   item,
   busy,
+  confirmDeleteId,
   onEdit,
   onAdvance,
+  onAskDelete,
+  onCancelDelete,
   onDelete,
 }: {
   item: IcIcerikWithHesap;
   busy: boolean;
+  confirmDeleteId: string | null;
   onEdit: () => void;
   onAdvance: () => void;
+  onAskDelete: () => void;
+  onCancelDelete: () => void;
   onDelete: () => void;
 }) {
   const renk = item.hesap?.renk ?? "#c9a65a";
@@ -393,7 +404,7 @@ function IcerikKart({
     >
       <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
         <span
-          className={`rounded border px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide ${TUR_COLORS[item.tur]}`}
+          className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${TUR_COLORS[item.tur] ?? "bg-[#1a1612]/8 text-[#6b6158]"}`}
         >
           {IC_TUR_LABEL[item.tur]}
         </span>
@@ -424,14 +435,36 @@ function IcerikKart({
         >
           <Pencil className="h-3 w-3" /> Düzenle
         </button>
-        <button
-          type="button"
-          onClick={onDelete}
-          disabled={busy}
-          className="inline-flex items-center gap-1 rounded px-2 py-1 text-[10px] text-rose-300/50 hover:bg-rose-500/10 hover:text-rose-200"
-        >
-          <Trash2 className="h-3 w-3" /> Sil
-        </button>
+        {confirmDeleteId === item.id ? (
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs text-red-500">Emin misin?</span>
+            <button
+              type="button"
+              onClick={onDelete}
+              disabled={busy}
+              className="rounded-lg bg-red-500 px-2.5 py-1 text-xs font-medium text-[#faf7f2] hover:bg-red-600"
+            >
+              Sil
+            </button>
+            <button
+              type="button"
+              onClick={onCancelDelete}
+              className="rounded-lg border border-[#e8e0d4] px-2.5 py-1 text-xs text-[#6b6158] hover:text-[#1a1612]"
+            >
+              İptal
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={onAskDelete}
+            disabled={busy}
+            className="rounded-lg p-1.5 text-[#6b6158] hover:text-red-500"
+            aria-label="Sil"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        )}
         {canAdvance ? (
           <button
             type="button"

@@ -1,266 +1,445 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Plus } from "lucide-react";
-import type { Aliskanlik, AliskanlikKayit } from "@/types/takip";
+import { Archive, Eye, EyeOff, Pencil, Plus } from "lucide-react";
+import { formatIstanbulLong, startOfIsoWeekISO } from "@/lib/date/istanbul";
+import type {
+  Aliskanlik,
+  AliskanlikGunModu,
+  AliskanlikGunu,
+  AliskanlikHaftalikDegerlendirme,
+  AliskanlikKayit,
+} from "@/types/takip";
 import { showAdminToast } from "./admin-toast-events";
+import { DayModeSelector } from "./aliskanliklar/DayModeSelector";
+import { HabitsTodayView } from "./aliskanliklar/HabitsTodayView";
+import { HabitForm } from "./aliskanliklar/HabitForm";
+import { HabitStats } from "./aliskanliklar/HabitStats";
+import { WeeklyReview } from "./aliskanliklar/WeeklyReview";
+import { HabitPlanSetup } from "./aliskanliklar/HabitPlanSetup";
+import { postAliskanlik, replaceLog } from "./aliskanliklar/api";
+import type { KayitPayload } from "./aliskanliklar/HabitCard";
 
-function todayISO() {
-  return new Date().toISOString().slice(0, 10);
-}
+type Section = "bugun" | "olcum" | "hafta" | "plan" | "liste";
 
-function calcStreak(
-  logs: AliskanlikKayit[],
-  habitId: string,
-  today: string
-): number {
-  const done = new Set(
-    logs
-      .filter((l) => l.aliskanlik_id === habitId && l.tamamlandi)
-      .map((l) => l.tarih)
-  );
-  let streak = 0;
-  const d = new Date(today + "T12:00:00");
-  if (!done.has(today)) d.setDate(d.getDate() - 1);
-  for (;;) {
-    const iso = d.toISOString().slice(0, 10);
-    if (!done.has(iso)) break;
-    streak += 1;
-    d.setDate(d.getDate() - 1);
-  }
-  return streak;
-}
+const SECTIONS: { id: Section; ad: string }[] = [
+  { id: "bugun", ad: "Bugün" },
+  { id: "olcum", ad: "Ölçümler" },
+  { id: "hafta", ad: "Haftalık" },
+  { id: "plan", ad: "Plan" },
+  { id: "liste", ad: "Yönet" },
+];
 
 export function AdminAliskanliklarPanel({
   initialHabits,
   initialLogs,
+  initialGun,
+  initialReviews,
+  today,
 }: {
   initialHabits: Aliskanlik[];
   initialLogs: AliskanlikKayit[];
+  initialGun: AliskanlikGunu | null;
+  initialReviews: AliskanlikHaftalikDegerlendirme[];
+  today: string;
 }) {
-  const router = useRouter();
-  const today = todayISO();
   const [habits, setHabits] = useState(initialHabits);
   const [logs, setLogs] = useState(initialLogs);
+  const [gun, setGun] = useState<AliskanlikGunu | null>(initialGun);
+  const [reviews, setReviews] = useState(initialReviews);
+  const [section, setSection] = useState<Section>("bugun");
+  const [pendingId, setPendingId] = useState<string | null>(null);
   const [showNew, setShowNew] = useState(false);
-  const [ad, setAd] = useState("");
-  const [aciklama, setAciklama] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
+  const [confirmId, setConfirmId] = useState<string | null>(null);
 
-  const active = habits.filter((h) => h.aktif);
+  const gunModu: AliskanlikGunModu = gun?.gun_modu ?? "normal";
+  const hafta = startOfIsoWeekISO(today);
+  const thisReview = useMemo(
+    () => reviews.find((r) => r.hafta_baslangici === hafta) ?? null,
+    [reviews, hafta]
+  );
 
-  const doneToday = useMemo(() => {
-    const m = new Map<string, boolean>();
-    for (const l of logs) {
-      if (l.tarih === today) m.set(l.aliskanlik_id, l.tamamlandi);
-    }
-    return m;
-  }, [logs, today]);
-
-  const heatmapDays = useMemo(() => {
-    const days: { iso: string; ratio: number }[] = [];
-    const activeIds = new Set(active.map((h) => h.id));
-    const total = activeIds.size || 1;
-    for (let i = 89; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      const iso = d.toISOString().slice(0, 10);
-      const done = logs.filter(
-        (l) =>
-          l.tarih === iso &&
-          l.tamamlandi &&
-          activeIds.has(l.aliskanlik_id)
-      ).length;
-      days.push({ iso, ratio: done / total });
-    }
-    return days;
-  }, [logs, active]);
-
-  async function createHabit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
+  async function run<T>(
+    key: string,
+    body: Record<string, unknown>,
+    apply: (data: T) => void
+  ) {
+    if (pendingId === key) return;
+    setPendingId(key);
     try {
-      const res = await fetch("/api/admin/aliskanliklar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "create",
-          ad,
-          aciklama: aciklama.trim() || null,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        showAdminToast("error", data.error || "Eklenemedi.");
-        return;
-      }
-      setHabits((prev) => [...prev, data]);
-      setAd("");
-      setAciklama("");
-      setShowNew(false);
-      showAdminToast("success", "Alışkanlık eklendi ✓");
-      router.refresh();
-    } catch {
-      showAdminToast("error", "Bağlantı hatası.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function toggle(habitId: string, next: boolean) {
-    const res = await fetch("/api/admin/aliskanliklar", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "toggle",
-        aliskanlik_id: habitId,
-        tarih: today,
-        tamamlandi: next,
-      }),
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      showAdminToast("error", data.error || "Güncellenemedi.");
-      return;
-    }
-    setLogs((prev) => {
-      const rest = prev.filter(
-        (l) => !(l.aliskanlik_id === habitId && l.tarih === today)
+      const data = await postAliskanlik<T>(body);
+      apply(data);
+    } catch (e) {
+      showAdminToast(
+        "error",
+        e instanceof Error ? e.message : "İşlem başarısız."
       );
-      return [...rest, data];
-    });
+    } finally {
+      setPendingId(null);
+    }
   }
 
-  async function deactivate(id: string) {
-    if (!confirm("Alışkanlığı gizle? Veriler silinmez.")) return;
-    const res = await fetch("/api/admin/aliskanliklar", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "set-aktif", id, aktif: false }),
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      showAdminToast("error", data.error || "Güncellenemedi.");
-      return;
+  function onKayit(payload: KayitPayload) {
+    const prev = logs;
+    const optimistic: AliskanlikKayit = {
+      id: `tmp-${payload.aliskanlik_id}`,
+      aliskanlik_id: payload.aliskanlik_id,
+      tarih: payload.tarih,
+      tamamlandi: payload.durum
+        ? ["minimum", "hedef", "bonus"].includes(payload.durum)
+        : false,
+      durum: payload.durum ?? null,
+      deger: payload.deger ?? null,
+      notlar: null,
+      gun_modu: gunModu,
+      kayit_zamani: new Date().toISOString(),
+      alt_adimlar: {},
+      ekstra: payload.ekstra ?? {},
+    };
+    const existing = logs.find(
+      (l) =>
+        l.aliskanlik_id === payload.aliskanlik_id && l.tarih === payload.tarih
+    );
+    if (existing && payload.alt_adim_kod) {
+      optimistic.id = existing.id;
+      optimistic.alt_adimlar = {
+        ...existing.alt_adimlar,
+        [payload.alt_adim_kod]: Boolean(payload.alt_adim_deger),
+      };
+      optimistic.durum = existing.durum;
+      optimistic.tamamlandi = existing.tamamlandi;
+      optimistic.deger = existing.deger;
+      optimistic.ekstra = { ...existing.ekstra, ...payload.ekstra };
     }
-    setHabits((prev) => prev.map((h) => (h.id === id ? data : h)));
+    if (payload.geri_al) {
+      setLogs((p) =>
+        p.filter(
+          (l) =>
+            !(
+              l.aliskanlik_id === payload.aliskanlik_id &&
+              l.tarih === payload.tarih
+            )
+        )
+      );
+    } else {
+      setLogs((p) => replaceLog(p, optimistic));
+    }
+    void (async () => {
+      setPendingId(payload.aliskanlik_id);
+      try {
+        const data = await postAliskanlik<AliskanlikKayit>({
+          action: payload.geri_al
+            ? "geri-al"
+            : payload.alt_adim_kod
+              ? "alt-adim"
+              : "kayit",
+          ...payload,
+          gun_modu: gunModu,
+        });
+        setLogs((p) => replaceLog(p, data));
+      } catch (e) {
+        setLogs(prev);
+        showAdminToast(
+          "error",
+          e instanceof Error ? e.message : "Kayıt güncellenemedi."
+        );
+      } finally {
+        setPendingId(null);
+      }
+    })();
   }
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-sm text-[#6b6158]">
-          {new Date(today + "T12:00:00").toLocaleDateString("tr-TR", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-          })}
-        </p>
-        <button
-          type="button"
-          onClick={() => setShowNew((o) => !o)}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-[#e8e0d4] px-3 py-2 text-xs text-[#1a1612]/70 hover:bg-[#1a1612]/5"
-        >
-          <Plus className="h-3.5 w-3.5" />
-          Yeni alışkanlık
-        </button>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <p className="text-sm text-[#6b6158]">{formatIstanbulLong(today)}</p>
+        <nav className="flex flex-wrap gap-1.5" aria-label="Bölümler">
+          {SECTIONS.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => setSection(s.id)}
+              className={`rounded-lg px-3 py-1.5 text-xs ${
+                section === s.id
+                  ? "bg-[#b8934a]/20 text-[#1a1612]"
+                  : "text-[#6b6158] hover:bg-[#1a1612]/5"
+              }`}
+            >
+              {s.ad}
+            </button>
+          ))}
+        </nav>
       </div>
 
-      {showNew ? (
-        <form
-          onSubmit={createHabit}
-          className="space-y-3 rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-4"
-        >
-          <input
-            value={ad}
-            onChange={(e) => setAd(e.target.value)}
-            placeholder="Örn: Sabah kitap oku"
-            required
-            className="w-full rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2.5 text-sm text-[#1a1612] outline-none"
+      {section === "bugun" ? (
+        <div className="space-y-6">
+          <DayModeSelector
+            gun={gun}
+            disabled={pendingId === "gun"}
+            onChange={(modu) =>
+              void run<AliskanlikGunu>(
+                "gun",
+                { action: "gun-modu", tarih: today, gun_modu: modu },
+                (data) => {
+                  setGun(data);
+                  showAdminToast("success", "Gün modu kaydedildi.");
+                }
+              )
+            }
           />
-          <input
-            value={aciklama}
-            onChange={(e) => setAciklama(e.target.value)}
-            placeholder="Açıklama (opsiyonel)"
-            className="w-full rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3 py-2.5 text-sm text-[#1a1612] outline-none"
+          <HabitsTodayView
+            habits={habits}
+            logs={logs}
+            today={today}
+            gunModu={gunModu}
+            pendingId={pendingId}
+            onKayit={onKayit}
           />
-          <button
-            type="submit"
-            disabled={loading}
-            className="rounded-xl bg-amber-500 px-4 py-2 text-sm text-black disabled:opacity-50"
-          >
-            Kaydet
-          </button>
-        </form>
+        </div>
       ) : null}
 
-      <ul className="space-y-2">
-        {active.length === 0 ? (
-          <li className="text-sm text-[#1a1612]/40">Henüz alışkanlık yok.</li>
-        ) : (
-          active.map((h) => {
-            const done = doneToday.get(h.id) ?? false;
-            const streak = calcStreak(logs, h.id, today);
-            return (
-              <li
-                key={h.id}
-                className="flex items-center gap-3 rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-4 py-3"
-              >
-                <input
-                  type="checkbox"
-                  checked={done}
-                  onChange={(e) => void toggle(h.id, e.target.checked)}
-                  className="h-5 w-5 accent-amber-500"
-                />
-                <div className="min-w-0 flex-1">
-                  <p
-                    className={`text-sm ${
-                      done ? "text-[#1a1612]/40 line-through" : "text-[#1a1612]"
-                    }`}
-                  >
-                    {h.ad}
-                  </p>
-                  {h.aciklama ? (
-                    <p className="text-[11px] text-[#1a1612]/40">{h.aciklama}</p>
-                  ) : null}
-                </div>
-                {streak > 0 ? (
-                  <span className="shrink-0 text-xs text-[#b8934a]/90">
-                    🔥 {streak} gün
-                  </span>
-                ) : null}
-                <button
-                  type="button"
-                  onClick={() => void deactivate(h.id)}
-                  className="text-[10px] text-[#1a1612]/25 hover:text-[#1a1612]/50"
-                >
-                  Gizle
-                </button>
-              </li>
-            );
-          })
-        )}
-      </ul>
+      {section === "olcum" ? (
+        <HabitStats habits={habits} logs={logs} today={today} />
+      ) : null}
 
-      <section className="rounded-2xl border border-[#e8e0d4] bg-[#1a1612]/5 p-5">
-        <h3 className="mb-3 text-sm text-[#6b6158]">Son 90 gün — tamamlama</h3>
-        <div className="flex flex-wrap gap-1">
-          {heatmapDays.map((d) => (
-            <div
-              key={d.iso}
-              title={`${d.iso}: %${Math.round(d.ratio * 100)}`}
-              className="h-3 w-3 rounded-sm"
-              style={{
-                background:
-                  d.ratio === 0
-                    ? "rgba(255,255,255,0.06)"
-                    : `rgba(184,147,74,${0.25 + d.ratio * 0.7})`,
+      {section === "hafta" ? (
+        <WeeklyReview
+          habits={habits}
+          logs={logs}
+          today={today}
+          existing={thisReview}
+          pending={pendingId === "hafta"}
+          onSave={(body) =>
+            void run<AliskanlikHaftalikDegerlendirme>(
+              "hafta",
+              body,
+              (data) => {
+                setReviews((prev) => {
+                  const rest = prev.filter(
+                    (r) => r.hafta_baslangici !== data.hafta_baslangici
+                  );
+                  return [data, ...rest];
+                });
+                showAdminToast("success", "Değerlendirme kaydedildi.");
+              }
+            )
+          }
+        />
+      ) : null}
+
+      {section === "plan" ? (
+        <HabitPlanSetup
+          habits={habits}
+          pending={pendingId === "plan"}
+          onPreviewApply={(maxAsama) =>
+            void run<{ eklendi: Aliskanlik[]; atlanan: string[] }>(
+              "plan",
+              { action: "plan-kur", maxAsama },
+              (data) => {
+                if (data.eklendi.length) {
+                  setHabits((prev) => [...prev, ...data.eklendi]);
+                }
+                showAdminToast(
+                  "success",
+                  data.eklendi.length
+                    ? `${data.eklendi.length} alışkanlık eklendi.`
+                    : "Eklenecek yeni alışkanlık yok."
+                );
+              }
+            )
+          }
+          onActivateStage={(asama) =>
+            void run<{ updated: Aliskanlik[] }>(
+              "plan",
+              { action: "asama-etkinlestir", asama },
+              (data) => {
+                const map = new Map(data.updated.map((h) => [h.id, h]));
+                setHabits((prev) =>
+                  prev.map((h) => map.get(h.id) ?? h)
+                );
+                showAdminToast("success", `${asama}. hafta etkin.`);
+              }
+            )
+          }
+        />
+      ) : null}
+
+      {section === "liste" ? (
+        <div className="space-y-4">
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={() => {
+                setShowNew((o) => !o);
+                setEditId(null);
               }}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-[#e8e0d4] px-3 py-2 text-xs text-[#1a1612]/70 hover:bg-[#1a1612]/5"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Yeni alışkanlık
+            </button>
+          </div>
+          {showNew ? (
+            <HabitForm
+              loading={pendingId === "create"}
+              onCancel={() => setShowNew(false)}
+              onSubmit={(values) =>
+                void run<Aliskanlik>(
+                  "create",
+                  { action: "create", ...values },
+                  (data) => {
+                    setHabits((prev) => [...prev, data]);
+                    setShowNew(false);
+                    showAdminToast("success", "Alışkanlık eklendi.");
+                  }
+                )
+              }
             />
-          ))}
+          ) : null}
+          <ul className="space-y-2">
+            {habits.length === 0 ? (
+              <li className="text-sm text-[#1a1612]/40">Henüz alışkanlık yok.</li>
+            ) : (
+              habits.map((h) => (
+                <li
+                  key={h.id}
+                  className="rounded-xl border border-[#e8e0d4] bg-white/60 px-4 py-3"
+                >
+                  {editId === h.id ? (
+                    <HabitForm
+                      initial={h}
+                      loading={pendingId === h.id}
+                      onCancel={() => setEditId(null)}
+                      onSubmit={(values) =>
+                        void run<Aliskanlik>(
+                          h.id,
+                          { action: "update", id: h.id, ...values },
+                          (data) => {
+                            setHabits((prev) =>
+                              prev.map((x) => (x.id === data.id ? data : x))
+                            );
+                            setEditId(null);
+                            showAdminToast("success", "Güncellendi.");
+                          }
+                        )
+                      }
+                    />
+                  ) : (
+                    <div className="flex items-start gap-3">
+                      <div className="min-w-0 flex-1">
+                        <p
+                          className={`text-sm ${
+                            h.aktif && !h.arsivlendi
+                              ? "text-[#1a1612]"
+                              : "text-[#1a1612]/40"
+                          }`}
+                        >
+                          {h.ad}
+                        </p>
+                        <p className="text-[11px] text-[#6b6158]">
+                          {[h.kategori, h.arsivlendi ? "arşiv" : h.aktif ? "aktif" : "pasif"]
+                            .filter(Boolean)
+                            .join(" · ")}
+                        </p>
+                      </div>
+                      <div className="flex shrink-0 items-center gap-1">
+                        <button
+                          type="button"
+                          aria-label="Düzenle"
+                          onClick={() => setEditId(h.id)}
+                          className="rounded-lg p-1.5 text-[#6b6158] hover:text-[#1a1612]"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                        <button
+                          type="button"
+                          aria-label={h.aktif ? "Pasife al" : "Aktifleştir"}
+                          onClick={() =>
+                            void run<Aliskanlik>(
+                              h.id,
+                              {
+                                action: "set-aktif",
+                                id: h.id,
+                                aktif: !h.aktif,
+                              },
+                              (data) => {
+                                setHabits((prev) =>
+                                  prev.map((x) => (x.id === data.id ? data : x))
+                                );
+                              }
+                            )
+                          }
+                          className="rounded-lg p-1.5 text-[#6b6158] hover:text-[#1a1612]"
+                        >
+                          {h.aktif ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </button>
+                        {confirmId === h.id ? (
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs text-[#6b6158]">
+                              Arşivlensin mi?
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                void run<Aliskanlik>(
+                                  h.id,
+                                  {
+                                    action: "arsivle",
+                                    id: h.id,
+                                    arsivlendi: !h.arsivlendi,
+                                  },
+                                  (data) => {
+                                    setHabits((prev) =>
+                                      prev.map((x) =>
+                                        x.id === data.id ? data : x
+                                      )
+                                    );
+                                    setConfirmId(null);
+                                    showAdminToast(
+                                      "success",
+                                      data.arsivlendi
+                                        ? "Arşivlendi."
+                                        : "Arşivden alındı."
+                                    );
+                                  }
+                                )
+                              }
+                              className="rounded-lg bg-[#1a1612]/10 px-2.5 py-1 text-xs font-medium text-[#1a1612]"
+                            >
+                              {h.arsivlendi ? "Geri al" : "Arşivle"}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setConfirmId(null)}
+                              className="rounded-lg border border-[#e8e0d4] px-2.5 py-1 text-xs text-[#6b6158]"
+                            >
+                              İptal
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            aria-label="Arşivle"
+                            onClick={() => setConfirmId(h.id)}
+                            className="rounded-lg p-1.5 text-[#6b6158] hover:text-[#1a1612]"
+                          >
+                            <Archive className="h-4 w-4" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </li>
+              ))
+            )}
+          </ul>
         </div>
-      </section>
+      ) : null}
     </div>
   );
 }

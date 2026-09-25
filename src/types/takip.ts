@@ -68,12 +68,97 @@ export interface FinansKayit {
   olusturma_tarihi: string;
 }
 
+export type AliskanlikProgramTuru =
+  | "gunluk"
+  | "belirli_gunler"
+  | "iki_gunde_bir"
+  | "haftada_x"
+  | "ayda_x"
+  | "esnek"
+  | "haftalik"
+  | "challenge";
+
+export type AliskanlikZamanDilimi =
+  | "sabah"
+  | "gunduz"
+  | "aksam"
+  | "gun_boyu"
+  | "yolculuk"
+  | "ogle"
+  | "gece";
+
+export type AliskanlikKayitDurum =
+  | "minimum"
+  | "hedef"
+  | "bonus"
+  | "yapilmadi"
+  | "planli_degil";
+
+export type AliskanlikGunModu = "normal" | "yogun" | "toparlanma";
+
+export type AliskanlikOzelTuru =
+  | "namaz"
+  | "ogun"
+  | "dil"
+  | "yolculuk"
+  | "icerik_hatti"
+  | "sosyal"
+  | "uyku";
+
+export type AliskanlikSorunTuru =
+  | "zaman"
+  | "ortam"
+  | "tetikleyici"
+  | "zorluk"
+  | "enerji";
+
+export interface AliskanlikAltAdim {
+  kod: string;
+  ad: string;
+  grup?: string;
+}
+
+export type AliskanlikKayitEkstra = {
+  sosyal_niyet?: "is" | "paylasim" | "mesaj" | "eglence" | "can_sikintisi";
+  sosyal_alternatif?: string;
+  yatis_saati?: string;
+  uyanis_saati?: string;
+  hedef_yatis?: string;
+  hazirlik?: boolean;
+  telefon_uzak?: boolean;
+  ayaga_kalkma?: boolean;
+  kendime_secim?: "kitap" | "sessizlik" | "yuruyus" | "sanat" | "dinlenme";
+  spor_karsiladi?: boolean;
+};
+
 export interface Aliskanlik {
   id: string;
   ad: string;
   aciklama: string | null;
   aktif: boolean;
+  kategori: string | null;
+  kimlik_ifadesi: string | null;
+  program_turu: AliskanlikProgramTuru | null;
+  hedef_gunler: number[];
+  hedef_siklik: number | null;
+  birim: string | null;
+  minimum_deger: number | null;
+  hedef_deger: number | null;
+  tetikleyici: string | null;
+  zaman_dilimi: AliskanlikZamanDilimi | null;
+  siradaki_adim: string | null;
+  zorluk_seviyesi: number | null;
+  sira: number;
+  renk: string;
+  ikon: string | null;
+  ozel_tur: AliskanlikOzelTuru | null;
+  arsivlendi: boolean;
+  plan_kodu: string | null;
+  asama: number | null;
+  alt_adimlar: AliskanlikAltAdim[];
+  karsilayan_aliskanlik_id: string | null;
   olusturma_tarihi: string;
+  guncelleme_tarihi: string | null;
 }
 
 export interface AliskanlikKayit {
@@ -81,4 +166,34 @@ export interface AliskanlikKayit {
   aliskanlik_id: string;
   tarih: string;
   tamamlandi: boolean;
+  durum: AliskanlikKayitDurum | null;
+  deger: number | null;
+  notlar: string | null;
+  gun_modu: AliskanlikGunModu | null;
+  kayit_zamani: string | null;
+  alt_adimlar: Record<string, boolean>;
+  ekstra: AliskanlikKayitEkstra;
+}
+
+export interface AliskanlikGunu {
+  id: string;
+  tarih: string;
+  gun_modu: AliskanlikGunModu;
+  notlar: string | null;
+  olusturma_tarihi: string;
+  guncelleme_tarihi: string | null;
+}
+
+export interface AliskanlikHaftalikDegerlendirme {
+  id: string;
+  hafta_baslangici: string;
+  dogal_akan: string | null;
+  zorlanan: string | null;
+  sorun_turu: AliskanlikSorunTuru | null;
+  buyuk_hedef: string | null;
+  kucultme: string | null;
+  ust_seviye: string | null;
+  notlar: string | null;
+  olusturma_tarihi: string;
+  guncelleme_tarihi: string | null;
 }

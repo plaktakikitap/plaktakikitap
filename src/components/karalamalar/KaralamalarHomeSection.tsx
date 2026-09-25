@@ -25,17 +25,21 @@ function preview(text: string, max = 120): string {
   return `${clean.slice(0, max).trimEnd()}...`;
 }
 
-/** Ana sayfa: kutucuksuz, son 3 karalama — ekşi/tweet tarzı. */
+/** Ana sayfa: son 5 karalama, hafif çerçeveli. */
 export function KaralamalarHomeSection({ items }: { items: Karalama[] }) {
-  if (items.length === 0) return null;
+  const shown = items.slice(0, 5);
+  if (shown.length === 0) return null;
 
   return (
     <section className="mx-auto w-full max-w-[720px] px-4 sm:px-6">
       <p className="section-eyebrow mb-8">{SECTION_NAME}</p>
 
-      {items.map((item, idx) => (
-        <div key={item.id}>
-          <article className="mb-10">
+      <div className="space-y-3">
+        {shown.map((item) => (
+          <article
+            key={item.id}
+            className="rounded-xl border border-[#1a1612]/[0.08] bg-white/[0.28] px-5 py-4 sm:px-6 sm:py-5"
+          >
             <h3 className="type-3 m-0 mb-2 font-editorial font-medium tracking-[-0.01em] text-ink">
               <Link
                 href={`${SECTION_PATH}/${item.slug}`}
@@ -54,13 +58,10 @@ export function KaralamalarHomeSection({ items }: { items: Karalama[] }) {
               {formatDate(item.olusturma_tarihi)}
             </time>
           </article>
-          {idx < items.length - 1 ? (
-            <hr className="section-divider mb-10" />
-          ) : null}
-        </div>
-      ))}
+        ))}
+      </div>
 
-      <p className="mt-2">
+      <p className="mt-6">
         <Link
           href={SECTION_PATH}
           className="type-4 tracking-[0.06em] text-ink-muted no-underline transition hover:text-gold"

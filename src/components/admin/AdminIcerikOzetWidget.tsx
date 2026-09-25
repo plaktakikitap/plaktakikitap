@@ -20,7 +20,7 @@ export async function AdminIcerikOzetWidget() {
         </h2>
         <Link
           href="/secretgate/icerik"
-          className="text-xs text-amber-300/80 hover:text-amber-200"
+          className="text-xs text-[#b8934a] hover:text-[#1a1612]"
         >
           Panele git →
         </Link>
@@ -28,7 +28,7 @@ export async function AdminIcerikOzetWidget() {
 
       <p className="text-sm text-[#1a1612]/65">
         Bu hafta:{" "}
-        <span className="text-[#1a1612]">{stats.weekPlanned}</span> planlandı,{" "}
+        <span className="font-semibold text-[#b8934a]">{stats.weekPlanned}</span> planlandı,{" "}
         <span className="text-[#1a1612]">{stats.weekShared}</span> paylaşıldı
       </p>
 
@@ -55,7 +55,7 @@ export async function AdminIcerikOzetWidget() {
       )}
 
       {stats.overdue.length > 0 ? (
-        <p className="mt-3 text-sm text-rose-300/80">
+        <p className="mt-3 text-sm font-semibold text-red-500">
           Geciken: {stats.overdue.length} içerik
         </p>
       ) : null}

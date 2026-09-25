@@ -585,11 +585,11 @@ export function VinylScrollStage({
           marginTop: reduceMotion ? 0 : "-85vh",
         }}
       >
-        <KaralamalarHomeSection items={karalamalarPreview} />
+        <LazyAjanda />
         <div className="py-8">
           <hr className="section-divider" aria-hidden />
         </div>
-        <LazyAjanda />
+        <KaralamalarHomeSection items={karalamalarPreview} />
         <div className="mx-auto mt-8 max-w-[1100px]">{children}</div>
       </section>
     </div>

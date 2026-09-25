@@ -93,16 +93,16 @@ export function HomePageContent({
             <hr className="section-divider" aria-hidden />
           </div>
 
-          <KaralamalarHomeSection items={karalamalarPreview} />
+          <section className="section-block px-4">
+            <p className="section-eyebrow mb-8 text-center">ajanda</p>
+            <LazyAjanda />
+          </section>
 
           <div className="py-8">
             <hr className="section-divider" aria-hidden />
           </div>
 
-          <section className="section-block px-4">
-            <p className="section-eyebrow mb-8 text-center">ajanda</p>
-            <LazyAjanda />
-          </section>
+          <KaralamalarHomeSection items={karalamalarPreview} />
           <div className="mx-auto max-w-6xl px-4 pb-8">{children}</div>
         </div>
       )}
