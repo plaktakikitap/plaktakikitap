@@ -3,11 +3,13 @@
 import { useState } from "react";
 import type {
   Aliskanlik,
+  AliskanlikBaglam,
   AliskanlikOzelTuru,
   AliskanlikProgramTuru,
   AliskanlikZamanDilimi,
 } from "@/types/takip";
 import { KIMLIK_KATALOG } from "@/lib/takip/aliskanlik-plan";
+import { BAGLAM_SECENEK } from "@/lib/takip/aliskanlik-now";
 import { AdminOptionalSection } from "@/components/admin/AdminFormPrimitives";
 import { fieldClass, goldBtn } from "./api";
 
@@ -66,6 +68,10 @@ export type HabitFormValues = {
   ikon: string;
   sira: string;
   ozel_tur: AliskanlikOzelTuru | "";
+  baglamlar: AliskanlikBaglam[];
+  muhtemel_engel: string;
+  eger_kosulu: string;
+  o_zaman_davranis: string;
 };
 
 function fromHabit(h?: Aliskanlik): HabitFormValues {
@@ -86,6 +92,10 @@ function fromHabit(h?: Aliskanlik): HabitFormValues {
     ikon: h?.ikon ?? "",
     sira: String(h?.sira ?? 0),
     ozel_tur: h?.ozel_tur ?? "",
+    baglamlar: h?.baglamlar ?? [],
+    muhtemel_engel: h?.muhtemel_engel ?? "",
+    eger_kosulu: h?.eger_kosulu ?? "",
+    o_zaman_davranis: h?.o_zaman_davranis ?? "",
   };
 }
 
@@ -134,6 +144,10 @@ export function HabitForm({
           ikon: v.ikon || null,
           sira: v.sira ? Number(v.sira) : 0,
           ozel_tur: v.ozel_tur || null,
+          baglamlar: v.baglamlar,
+          muhtemel_engel: v.muhtemel_engel || null,
+          eger_kosulu: v.eger_kosulu || null,
+          o_zaman_davranis: v.o_zaman_davranis || null,
         });
       }}
     >
@@ -322,6 +336,51 @@ export function HabitForm({
             </option>
           ))}
         </select>
+        <p className="text-xs text-[#6b6158]">Uygun bağlamlar</p>
+        <div className="flex flex-wrap gap-1.5">
+          {BAGLAM_SECENEK.map((b) => {
+            const on = v.baglamlar.includes(b.id);
+            return (
+              <button
+                key={b.id}
+                type="button"
+                onClick={() =>
+                  patch(
+                    "baglamlar",
+                    on
+                      ? v.baglamlar.filter((x) => x !== b.id)
+                      : [...v.baglamlar, b.id]
+                  )
+                }
+                className={`rounded-lg border px-2 py-1 text-xs ${
+                  on
+                    ? "border-[#b8934a]/50 bg-[#b8934a]/15 text-[#1a1612]"
+                    : "border-[#e8e0d4] text-[#6b6158]"
+                }`}
+              >
+                {b.ad}
+              </button>
+            );
+          })}
+        </div>
+        <input
+          value={v.muhtemel_engel}
+          onChange={(e) => patch("muhtemel_engel", e.target.value)}
+          placeholder="Muhtemel engel"
+          className={fieldClass}
+        />
+        <input
+          value={v.eger_kosulu}
+          onChange={(e) => patch("eger_kosulu", e.target.value)}
+          placeholder="Eğer… (işten geç çıkarsam)"
+          className={fieldClass}
+        />
+        <input
+          value={v.o_zaman_davranis}
+          onChange={(e) => patch("o_zaman_davranis", e.target.value)}
+          placeholder="O zaman… (5 dakika esnerim)"
+          className={fieldClass}
+        />
       </AdminOptionalSection>
       <div className="flex gap-2">
         <button type="submit" disabled={loading} className={goldBtn}>

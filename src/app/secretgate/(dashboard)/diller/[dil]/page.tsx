@@ -12,6 +12,7 @@ import {
   DIL_META,
   type DilKodu,
 } from "@/types/dil";
+import { isDil } from "@/types/dil-ogrenme";
 
 const amiri = Amiri({
   subsets: ["arabic", "latin"],
@@ -49,6 +50,14 @@ export default async function AdminDilPage({
         <p className="mt-1 text-sm text-[#6b6158]">
           Kelime bankası · flashcard · notlar
         </p>
+        {isDil(dil) ? (
+          <Link
+            href={`/secretgate/diller/${dil}/ogrenme`}
+            className="mt-2 inline-block text-sm text-[#b8934a] hover:text-[#1a1612]"
+          >
+            Öğrenme sayfası →
+          </Link>
+        ) : null}
       </header>
 
       <nav className="mb-8 flex flex-wrap gap-2">

@@ -6,6 +6,7 @@ import { HAZIR_PLAN, previewHazirPlan } from "@/lib/takip/aliskanlik-plan";
 import type {
   Aliskanlik,
   AliskanlikAltAdim,
+  AliskanlikBaglam,
   AliskanlikGunModu,
   AliskanlikGunu,
   AliskanlikHaftalikDegerlendirme,
@@ -21,7 +22,7 @@ import type {
 export { calcStreak } from "@/lib/takip/aliskanlik-streak";
 
 const HABIT_SELECT =
-  "id, ad, aciklama, aktif, kategori, kimlik_ifadesi, program_turu, hedef_gunler, hedef_siklik, birim, minimum_deger, hedef_deger, tetikleyici, zaman_dilimi, siradaki_adim, zorluk_seviyesi, sira, renk, ikon, ozel_tur, arsivlendi, plan_kodu, asama, alt_adimlar, karsilayan_aliskanlik_id, olusturma_tarihi, guncelleme_tarihi";
+  "id, ad, aciklama, aktif, kategori, kimlik_ifadesi, program_turu, hedef_gunler, hedef_siklik, birim, minimum_deger, hedef_deger, tetikleyici, zaman_dilimi, siradaki_adim, zorluk_seviyesi, sira, renk, ikon, ozel_tur, arsivlendi, plan_kodu, asama, alt_adimlar, karsilayan_aliskanlik_id, baglamlar, muhtemel_engel, eger_kosulu, o_zaman_davranis, olusturma_tarihi, guncelleme_tarihi";
 const HABIT_SELECT_LEGACY = "id, ad, aciklama, aktif, olusturma_tarihi";
 const LOG_SELECT =
   "id, aliskanlik_id, tarih, tamamlandi, durum, deger, notlar, gun_modu, kayit_zamani, alt_adimlar, ekstra";
@@ -65,6 +66,7 @@ const KAYIT_DURUMLARI: AliskanlikKayitDurum[] = [
   "planli_degil",
 ];
 const GUN_MODLARI: AliskanlikGunModu[] = ["normal", "yogun", "toparlanma"];
+const BAGLAMLAR: AliskanlikBaglam[] = ["ev", "is", "yol", "dusuk_enerji"];
 const OZEL_TURLER: AliskanlikOzelTuru[] = [
   "namaz",
   "ogun",
@@ -109,6 +111,17 @@ function asBoolMap(v: unknown): Record<string, boolean> {
     out[k] = Boolean(val);
   }
   return out;
+}
+
+function asStringArr(v: unknown): string[] {
+  if (!Array.isArray(v)) return [];
+  return v.filter((x): x is string => typeof x === "string");
+}
+
+function asBaglamlar(v: unknown): AliskanlikBaglam[] {
+  return asStringArr(v).filter((x): x is AliskanlikBaglam =>
+    BAGLAMLAR.includes(x as AliskanlikBaglam)
+  );
 }
 
 function asEkstra(v: unknown): AliskanlikKayitEkstra {
@@ -157,6 +170,10 @@ export function mapHabit(r: Record<string, unknown>): Aliskanlik {
     alt_adimlar: asAltAdimlar(r.alt_adimlar),
     karsilayan_aliskanlik_id:
       (r.karsilayan_aliskanlik_id as string | null) ?? null,
+    baglamlar: asBaglamlar(r.baglamlar),
+    muhtemel_engel: (r.muhtemel_engel as string | null) ?? null,
+    eger_kosulu: (r.eger_kosulu as string | null) ?? null,
+    o_zaman_davranis: (r.o_zaman_davranis as string | null) ?? null,
     olusturma_tarihi: r.olusturma_tarihi as string,
     guncelleme_tarihi: (r.guncelleme_tarihi as string | null) ?? null,
   };
@@ -192,6 +209,11 @@ function mapGunu(r: Record<string, unknown>): AliskanlikGunu {
       ? (r.gun_modu as AliskanlikGunModu)
       : "normal",
     notlar: (r.notlar as string | null) ?? null,
+    baglam: BAGLAMLAR.includes(r.baglam as AliskanlikBaglam)
+      ? (r.baglam as AliskanlikBaglam)
+      : null,
+    atlanan_oneriler: asStringArr(r.atlanan_oneriler),
+    uygun_degil: asStringArr(r.uygun_degil),
     olusturma_tarihi: r.olusturma_tarihi as string,
     guncelleme_tarihi: (r.guncelleme_tarihi as string | null) ?? null,
   };
@@ -239,6 +261,10 @@ export type HabitWrite = {
   asama?: number | null;
   plan_kodu?: string | null;
   aktif?: boolean;
+  baglamlar?: AliskanlikBaglam[];
+  muhtemel_engel?: string | null;
+  eger_kosulu?: string | null;
+  o_zaman_davranis?: string | null;
 };
 
 function habitRow(input: HabitWrite): Record<string, unknown> {
@@ -264,6 +290,10 @@ function habitRow(input: HabitWrite): Record<string, unknown> {
     alt_adimlar: input.alt_adimlar ?? [],
     karsilayan_aliskanlik_id: input.karsilayan_aliskanlik_id ?? null,
     asama: input.asama ?? null,
+    baglamlar: input.baglamlar ?? [],
+    muhtemel_engel: input.muhtemel_engel?.trim() || null,
+    eger_kosulu: input.eger_kosulu?.trim() || null,
+    o_zaman_davranis: input.o_zaman_davranis?.trim() || null,
     guncelleme_tarihi: new Date().toISOString(),
   };
   if (input.plan_kodu) row.plan_kodu = input.plan_kodu;
@@ -359,6 +389,13 @@ export async function updateAliskanlik(
   if (input.karsilayan_aliskanlik_id !== undefined)
     row.karsilayan_aliskanlik_id = input.karsilayan_aliskanlik_id;
   if (input.asama !== undefined) row.asama = input.asama;
+  if (input.baglamlar !== undefined) row.baglamlar = input.baglamlar;
+  if (input.muhtemel_engel !== undefined)
+    row.muhtemel_engel = input.muhtemel_engel?.trim() || null;
+  if (input.eger_kosulu !== undefined)
+    row.eger_kosulu = input.eger_kosulu?.trim() || null;
+  if (input.o_zaman_davranis !== undefined)
+    row.o_zaman_davranis = input.o_zaman_davranis?.trim() || null;
 
   const { data, error } = await supabase
     .from("aliskanliklar")
@@ -620,18 +657,28 @@ export async function toggleAliskanlikKayit(input: {
   return upsertAliskanlikKayit(input);
 }
 
+const GUN_SELECT =
+  "id, tarih, gun_modu, notlar, baglam, atlanan_oneriler, uygun_degil, olusturma_tarihi, guncelleme_tarihi";
+const GUN_SELECT_LEGACY =
+  "id, tarih, gun_modu, notlar, olusturma_tarihi, guncelleme_tarihi";
+
 export async function getAliskanlikGunu(
   tarih: string
 ): Promise<AliskanlikGunu | null> {
   try {
     const supabase = createAdminClient();
-    const { data, error } = await supabase
+    let { data, error } = await supabase
       .from("aliskanlik_gunleri")
-      .select(
-        "id, tarih, gun_modu, notlar, olusturma_tarihi, guncelleme_tarihi"
-      )
+      .select(GUN_SELECT)
       .eq("tarih", tarih)
       .maybeSingle();
+    if (error && isMissingColumn(error)) {
+      ({ data, error } = await supabase
+        .from("aliskanlik_gunleri")
+        .select(GUN_SELECT_LEGACY)
+        .eq("tarih", tarih)
+        .maybeSingle());
+    }
     if (error || !data) return null;
     return mapGunu(data as Record<string, unknown>);
   } catch {
@@ -641,25 +688,46 @@ export async function getAliskanlikGunu(
 
 export async function upsertAliskanlikGunu(input: {
   tarih: string;
-  gun_modu: AliskanlikGunModu;
+  gun_modu?: AliskanlikGunModu;
   notlar?: string | null;
+  baglam?: AliskanlikBaglam | null;
+  atlanan_oneriler?: string[];
+  uygun_degil?: string[];
 }): Promise<AliskanlikGunu | { error: string }> {
+  const mevcut = await getAliskanlikGunu(input.tarih);
   const supabase = createAdminClient();
-  const { data, error } = await supabase
+  const row: Record<string, unknown> = {
+    tarih: input.tarih,
+    gun_modu: input.gun_modu ?? mevcut?.gun_modu ?? "normal",
+    notlar:
+      input.notlar !== undefined
+        ? input.notlar?.trim() || null
+        : mevcut?.notlar ?? null,
+    baglam: input.baglam !== undefined ? input.baglam : mevcut?.baglam ?? null,
+    atlanan_oneriler: input.atlanan_oneriler ?? mevcut?.atlanan_oneriler ?? [],
+    uygun_degil: input.uygun_degil ?? mevcut?.uygun_degil ?? [],
+    guncelleme_tarihi: new Date().toISOString(),
+  };
+  let { data, error } = await supabase
     .from("aliskanlik_gunleri")
-    .upsert(
-      {
-        tarih: input.tarih,
-        gun_modu: input.gun_modu,
-        notlar: input.notlar?.trim() || null,
-        guncelleme_tarihi: new Date().toISOString(),
-      },
-      { onConflict: "tarih" }
-    )
-    .select(
-      "id, tarih, gun_modu, notlar, olusturma_tarihi, guncelleme_tarihi"
-    )
+    .upsert(row, { onConflict: "tarih" })
+    .select(GUN_SELECT)
     .single();
+  if (error && isMissingColumn(error)) {
+    ({ data, error } = await supabase
+      .from("aliskanlik_gunleri")
+      .upsert(
+        {
+          tarih: input.tarih,
+          gun_modu: row.gun_modu,
+          notlar: row.notlar,
+          guncelleme_tarihi: row.guncelleme_tarihi,
+        },
+        { onConflict: "tarih" }
+      )
+      .select(GUN_SELECT_LEGACY)
+      .single());
+  }
   if (error) return { error: publicDbError(error.message) };
   return mapGunu(data as Record<string, unknown>);
 }

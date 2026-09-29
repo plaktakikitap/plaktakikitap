@@ -10,6 +10,8 @@ const RichTextEditor = dynamic(
   { ssr: false }
 );
 
+type WritingDurum = "taslak" | "yayinda" | "arsivlendi";
+
 type Writing = {
   id: string;
   category: string;
@@ -20,7 +22,10 @@ type Writing = {
   updated_at: string;
   tefrika_issue: string | null;
   external_url: string | null;
+  durum: WritingDurum;
 };
+
+type Filtre = "hepsi" | "taslak" | "yayinda";
 
 const CATEGORY_LABELS: Record<string, string> = {
   denemeler: "Denemeler",
@@ -30,6 +35,18 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 const CATEGORY_ORDER = ["denemeler", "siirler", "diger"];
 
+const DURUM_STIL: Record<WritingDurum, string> = {
+  taslak: "bg-amber-50 text-amber-700 border border-amber-200",
+  yayinda: "bg-emerald-50 text-emerald-700 border border-emerald-200",
+  arsivlendi: "bg-[#e8e0d4] text-[#6b6158] border border-[#e8e0d4]",
+};
+
+const DURUM_ETIKET: Record<WritingDurum, string> = {
+  taslak: "taslak",
+  yayinda: "yayında",
+  arsivlendi: "arşiv",
+};
+
 export function AdminYazilarimList({ initialWritings }: { initialWritings: Writing[] }) {
   const router = useRouter();
   const [writings, setWritings] = useState(initialWritings);
@@ -37,11 +54,16 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [filtre, setFiltre] = useState<Filtre>("hepsi");
+
+  const filtrelenmis = writings.filter((y) =>
+    filtre === "hepsi" ? true : y.durum === filtre
+  );
 
   const byCategory = CATEGORY_ORDER.map((cat) => ({
     category: cat,
     label: CATEGORY_LABELS[cat] ?? cat,
-    items: writings.filter((w) => w.category === cat),
+    items: filtrelenmis.filter((w) => w.category === cat),
   }));
 
   async function handleUpdate(
@@ -53,6 +75,7 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
       published_at?: string;
       tefrika_issue?: string | null;
       external_url?: string | null;
+      durum?: WritingDurum;
     }
   ) {
     setError(null);
@@ -75,6 +98,10 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
     } finally {
       setLoading(false);
     }
+  }
+
+  async function durumDegistir(id: string, durum: WritingDurum) {
+    await handleUpdate(id, { durum });
   }
 
   async function handleDelete(id: string) {
@@ -110,6 +137,29 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
     <div className="space-y-5">
       {error ? <p className="admin-error">{error}</p> : null}
 
+      <div className="flex flex-wrap gap-2">
+        {(
+          [
+            { value: "hepsi", label: "Hepsi" },
+            { value: "taslak", label: "Taslak" },
+            { value: "yayinda", label: "Yayında" },
+          ] as const
+        ).map((opt) => (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => setFiltre(opt.value)}
+            className={`rounded-full px-3 py-1 text-xs transition-colors ${
+              filtre === opt.value
+                ? "bg-[#1a1612] text-[#faf7f2]"
+                : "bg-[#1a1612]/5 text-[#6b6158] hover:bg-[#1a1612]/10"
+            }`}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+
       {byCategory.map(({ category, label, items }) => (
         <div key={category} className="admin-bento-card p-5 sm:p-6">
           <div className="mb-4 flex items-center justify-between gap-3">
@@ -137,19 +187,30 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
                   ) : (
                     <div className="group flex items-center gap-3 rounded-xl border border-[#e8e0d4] bg-white/60 px-4 py-3 transition-all hover:border-[#d4c9bb]">
                       <div className="min-w-0 flex-1">
-                        <a
-                          href={`/writings/${w.id}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="flex items-center gap-1.5 truncate text-sm font-medium text-[#1a1612] hover:text-[#b8934a]"
-                        >
-                          {w.title || "—"}
-                          <ExternalLink className="h-3 w-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-60" />
-                        </a>
-                        <p className="mt-0.5 text-xs text-[#a09588]">
+                        {w.durum === "yayinda" ? (
+                          <a
+                            href={`/writings/${w.id}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex items-center gap-1.5 truncate text-sm font-medium text-[#1a1612] hover:text-[#b8934a]"
+                          >
+                            {w.title || "—"}
+                            <ExternalLink className="h-3 w-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-60" />
+                          </a>
+                        ) : (
+                          <p className="truncate text-sm font-medium text-[#1a1612]">
+                            {w.title || "—"}
+                          </p>
+                        )}
+                        <p className="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-[#a09588]">
                           {formatDate(w.published_at)}
+                          <span
+                            className={`rounded-full px-2 py-0.5 text-xs ${DURUM_STIL[w.durum]}`}
+                          >
+                            {DURUM_ETIKET[w.durum]}
+                          </span>
                           {w.tefrika_issue ? (
-                            <span className="ml-2 rounded-full bg-[#b8934a]/10 px-1.5 py-0.5 text-[10px] font-medium text-[#b8934a]">
+                            <span className="rounded-full bg-[#b8934a]/10 px-1.5 py-0.5 text-[10px] font-medium text-[#b8934a]">
                               Tefrika #{w.tefrika_issue}
                             </span>
                           ) : null}
@@ -163,6 +224,21 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
                             : "opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                         }`}
                       >
+                        {w.durum === "taslak" || w.durum === "yayinda" ? (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              durumDegistir(
+                                w.id,
+                                w.durum === "taslak" ? "yayinda" : "taslak"
+                              )
+                            }
+                            disabled={loading}
+                            className="rounded border border-[#e8e0d4] px-2 py-1 text-xs text-[#6b6158] transition-all hover:border-[#b8934a]/40 hover:text-[#1a1612] disabled:opacity-50"
+                          >
+                            {w.durum === "taslak" ? "Yayınla" : "Taslağa al"}
+                          </button>
+                        ) : null}
                         <button
                           type="button"
                           onClick={() => setEditingId(w.id)}
@@ -227,6 +303,7 @@ function EditForm({
     published_at?: string;
     tefrika_issue?: string | null;
     external_url?: string | null;
+    durum?: WritingDurum;
   }) => void;
   onCancel: () => void;
   disabled: boolean;
@@ -239,6 +316,7 @@ function EditForm({
   );
   const [tefrika_issue, setTefrikaIssue] = useState(writing.tefrika_issue ?? "");
   const [external_url, setExternalUrl] = useState(writing.external_url ?? "");
+  const [durum, setDurum] = useState<WritingDurum>(writing.durum ?? "yayinda");
 
   return (
     <form
@@ -251,11 +329,12 @@ function EditForm({
           published_at: new Date(published_at).toISOString(),
           tefrika_issue: tefrika_issue.trim() || null,
           external_url: external_url.trim() || null,
+          durum,
         });
       }}
       className="w-full space-y-4"
     >
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-3">
         <div>
           <label className="admin-label">Kategori</label>
           <select
@@ -268,6 +347,18 @@ function EditForm({
                 {CATEGORY_LABELS[c]}
               </option>
             ))}
+          </select>
+        </div>
+        <div>
+          <label className="admin-label">Durum</label>
+          <select
+            value={durum}
+            onChange={(e) => setDurum(e.target.value as WritingDurum)}
+            className="admin-input admin-select"
+          >
+            <option value="taslak">Taslak</option>
+            <option value="yayinda">Yayında</option>
+            <option value="arsivlendi">Arşiv</option>
           </select>
         </div>
         <div>

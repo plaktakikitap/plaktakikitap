@@ -33,6 +33,7 @@ export function AdminYazilarimForm() {
     const published_at = (fd.get("published_at") as string) || new Date().toISOString().slice(0, 16);
     const tefrika_issue = (fd.get("tefrika_issue") as string)?.trim() || null;
     const external_url = (fd.get("external_url") as string)?.trim() || null;
+    const durum = (fd.get("durum") as string) || "taslak";
     const body = bodyHtml;
 
     if (!title) {
@@ -52,6 +53,7 @@ export function AdminYazilarimForm() {
           published_at: new Date(published_at).toISOString(),
           tefrika_issue,
           external_url,
+          durum,
         }),
       });
       const data = await res.json();
@@ -95,7 +97,7 @@ export function AdminYazilarimForm() {
 
       {error ? <p className="admin-error">{error}</p> : null}
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-5 sm:grid-cols-3">
         <div>
           <label className="admin-label" htmlFor="writing-category">
             Kategori
@@ -111,6 +113,21 @@ export function AdminYazilarimForm() {
                 {c.label}
               </option>
             ))}
+          </select>
+        </div>
+        <div>
+          <label className="admin-label" htmlFor="writing-durum">
+            Durum
+          </label>
+          <select
+            id="writing-durum"
+            name="durum"
+            className="admin-input admin-select"
+            defaultValue="taslak"
+          >
+            <option value="taslak">Taslak</option>
+            <option value="yayinda">Yayında</option>
+            <option value="arsivlendi">Arşiv</option>
           </select>
         </div>
         <div>

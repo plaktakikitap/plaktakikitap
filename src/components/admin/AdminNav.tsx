@@ -36,9 +36,9 @@ import {
   Sparkles,
   Wallet,
   Flame,
-  Languages as LanguagesIcon,
   Smartphone,
 } from "lucide-react";
+import GlobalArama from "@/components/admin/GlobalArama";
 
 // ── Dashboard — tek başına üstte ──
 const dashboardLink = {
@@ -76,7 +76,7 @@ const personalLinks = [
   { href: "/secretgate/sukur", label: "Şükür", icon: Sparkles },
   { href: "/secretgate/finans", label: "Finans", icon: Wallet },
   { href: "/secretgate/aliskanliklar", label: "Alışkanlıklar", icon: Flame },
-  { href: "/secretgate/diller", label: "Diller", icon: LanguagesIcon },
+  { href: "/secretgate/diller", label: "Diller", icon: Languages },
   { href: "/secretgate/icerik", label: "İçerik Planı", icon: Smartphone },
   { href: "/secretgate/istatistikler", label: "İstatistikler", icon: BarChart3 },
 ];
@@ -204,6 +204,13 @@ function AdminSidebarBody({
       </div>
 
       <nav className="flex-1 space-y-0.5 overflow-y-auto px-2 py-3">
+        <div className="mb-1 px-1">
+          <GlobalArama
+            shortcut={false}
+            compact={compact}
+            onOpen={onCloseMobile}
+          />
+        </div>
         <AdminNavLink
           link={dashboardLink}
           pathname={pathname}
@@ -348,13 +355,16 @@ export function AdminNav({
         >
           Dashboard
         </Link>
-        <button
-          onClick={handleLogout}
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-[#1a1612]/70 hover:bg-[#1a1612]/8"
-          aria-label="Çıkış"
-        >
-          <LogOut className="h-5 w-5" />
-        </button>
+        <div className="flex items-center gap-1">
+          <GlobalArama variant="icon" />
+          <button
+            onClick={handleLogout}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-[#1a1612]/70 hover:bg-[#1a1612]/8"
+            aria-label="Çıkış"
+          >
+            <LogOut className="h-5 w-5" />
+          </button>
+        </div>
       </div>
 
       <div

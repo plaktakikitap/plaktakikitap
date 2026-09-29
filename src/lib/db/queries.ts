@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createServerClient } from "@/lib/supabase/server";
 import type { ContentItem, Film, Series, Book, Translation } from "@/types/database";
 import { filmWatchMinutes, seriesWatchMinutes } from "@/lib/utils/time";
+import { syncBookFeaturedCurrent } from "@/lib/books/featured";
 
 // --- Schemas ---
 
@@ -1014,6 +1015,7 @@ export async function createBook(
     return { error: parsed.error.flatten().formErrors.join(", ") };
   }
   const data = parsed.data;
+  const is_featured_current = await syncBookFeaturedCurrent("reading");
 
   const supabase = await createServerClient();
   const { data: book, error: bookError } = await supabase
@@ -1032,6 +1034,7 @@ export async function createBook(
       end_date: null,
       progress_percent: null,
       visibility: data.visibility,
+      is_featured_current,
     })
     .select("id")
     .single();

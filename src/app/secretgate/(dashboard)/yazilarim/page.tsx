@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { FileText, ArrowUpRight } from "lucide-react";
-import { getWritingsPublic } from "@/lib/writings";
+import { getWritingsAdmin } from "@/lib/writings";
 import { AdminYazilarimForm } from "@/components/admin/AdminYazilarimForm";
 import { AdminYazilarimList } from "@/components/admin/AdminYazilarimList";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminYazilarimPage() {
-  const writings = await getWritingsPublic();
+  const writings = await getWritingsAdmin();
 
   return (
     <div className="mx-auto max-w-xl">

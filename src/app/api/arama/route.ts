@@ -87,6 +87,7 @@ export async function GET(req: NextRequest) {
       supabase
         .from("writings")
         .select("id, title")
+        .eq("durum", "yayinda")
         .ilike("title", pattern)
         .limit(3),
 

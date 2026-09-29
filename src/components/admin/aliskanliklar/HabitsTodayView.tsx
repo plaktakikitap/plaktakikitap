@@ -2,6 +2,7 @@
 
 import type {
   Aliskanlik,
+  AliskanlikBaglam,
   AliskanlikGunModu,
   AliskanlikKayit,
 } from "@/types/takip";
@@ -18,6 +19,7 @@ import {
   zamanSlot,
   type ZamanSlot,
 } from "@/lib/takip/aliskanlik-progress";
+import { baglamSirasi, isGecikmis } from "@/lib/takip/aliskanlik-now";
 import { HabitCard, type KayitPayload } from "./HabitCard";
 
 const SLOT_ORDER: ZamanSlot[] = [
@@ -32,14 +34,18 @@ export function HabitsTodayView({
   habits,
   logs,
   today,
+  hour,
   gunModu,
+  baglam,
   pendingId,
   onKayit,
 }: {
   habits: Aliskanlik[];
   logs: AliskanlikKayit[];
   today: string;
+  hour: number;
   gunModu: AliskanlikGunModu;
+  baglam: AliskanlikBaglam | null;
   pendingId: string | null;
   onKayit: (payload: KayitPayload) => void;
 }) {
@@ -63,7 +69,12 @@ export function HabitsTodayView({
 
   const groups = SLOT_ORDER.map((slot) => ({
     slot,
-    items: planned.filter((h) => zamanSlot(h.zaman_dilimi) === slot),
+    items: planned
+      .filter((h) => zamanSlot(h.zaman_dilimi) === slot)
+      .sort(
+        (a, b) =>
+          baglamSirasi(a, baglam) - baglamSirasi(b, baglam) || a.sira - b.sira
+      ),
   })).filter((g) => g.items.length > 0);
 
   if (planned.length === 0 && optional.length === 0) {
@@ -75,7 +86,7 @@ export function HabitsTodayView({
     );
   }
 
-  function card(h: Aliskanlik, missed: boolean) {
+  function card(h: Aliskanlik, missed: boolean, delayed = false) {
     const kayit = logs.find(
       (l) => l.aliskanlik_id === h.id && l.tarih === today
     );
@@ -91,6 +102,7 @@ export function HabitsTodayView({
         today={today}
         gunModu={gunModu}
         missed={missed}
+        delayed={delayed}
         pending={pendingId === h.id}
         primaryLang={primaryLang}
         microLang={microLang}
@@ -111,9 +123,13 @@ export function HabitsTodayView({
           </h2>
           <div className="space-y-3">
             {g.items.map((h) => {
+              const kayit = logs.find(
+                (l) => l.aliskanlik_id === h.id && l.tarih === today
+              );
               const missed =
                 gunModu === "normal" && missedLastPlanned(h, today, logs);
-              return card(h, missed);
+              const delayed = isGecikmis(h, hour, kayit);
+              return card(h, missed, delayed);
             })}
           </div>
         </section>

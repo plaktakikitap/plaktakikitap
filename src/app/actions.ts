@@ -6,6 +6,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAdmin } from "@/lib/supabase/auth";
 import { mapSeriesStatusInput, parseAdminVisibility } from "@/lib/series-status-map";
 import type { BookStatus, Visibility } from "@/types/database";
+import { syncBookFeaturedCurrent } from "@/lib/books/featured";
 import { isBookStatus } from "@/types/database";
 
 function parseBookStatus(raw: FormDataEntryValue | null): BookStatus {
@@ -381,13 +382,7 @@ export async function createBook(formData: FormData) {
       : progressPercentRaw != null && progressPercentRaw !== ""
         ? Math.max(0, Math.min(100, parseInt(progressPercentRaw, 10) || 0))
         : null;
-  const is_featured_current =
-    status === "reading" &&
-    (formData.get("is_featured_current") === "on" || formData.get("is_featured_current") === "true");
-
-  if (is_featured_current) {
-    await supabase.from("books").update({ is_featured_current: false });
-  }
+  const is_featured_current = await syncBookFeaturedCurrent(status);
 
   const { data: inserted, error: insertError } = await supabase.from("books").insert({
     title,
@@ -453,13 +448,7 @@ export async function updateBook(id: string, formData: FormData) {
       : progressPercentRaw != null && progressPercentRaw !== ""
         ? Math.max(0, Math.min(100, parseInt(progressPercentRaw, 10) || 0))
         : null;
-  const is_featured_current =
-    status === "reading" &&
-    (formData.get("is_featured_current") === "on" || formData.get("is_featured_current") === "true");
-
-  if (is_featured_current) {
-    await supabase.from("books").update({ is_featured_current: false });
-  }
+  const is_featured_current = await syncBookFeaturedCurrent(status, id);
 
   const { error } = await supabase
     .from("books")

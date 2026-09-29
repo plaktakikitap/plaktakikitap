@@ -41,7 +41,12 @@ export function OkunacaklarPanel({
         return;
       }
       setToRead((prev) => prev.filter((b) => b.id !== book.id));
-      setNowReading((prev) => [updated, ...prev.filter((b) => b.id !== book.id)]);
+      setNowReading((prev) => [
+        updated,
+        ...prev
+          .filter((b) => b.id !== book.id)
+          .map((b) => ({ ...b, is_featured_current: false })),
+      ]);
       router.refresh();
     } finally {
       setLoadingId(null);

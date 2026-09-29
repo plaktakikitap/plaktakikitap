@@ -35,6 +35,7 @@ function Shell({
   logs,
   today,
   missed,
+  delayed,
   children,
 }: {
   habit: Aliskanlik;
@@ -42,6 +43,7 @@ function Shell({
   logs: AliskanlikKayit[];
   today: string;
   missed: boolean;
+  delayed?: boolean;
   children: React.ReactNode;
 }) {
   const done = kayit ? isAliskanlikKayitDone(kayit) : false;
@@ -75,6 +77,14 @@ function Shell({
           dönebilirsin.
         </p>
       ) : null}
+      {(missed || delayed) &&
+      (habit.eger_kosulu || habit.o_zaman_davranis) ? (
+        <p className="mt-2 text-xs leading-relaxed text-[#6b6158]">
+          {habit.eger_kosulu && habit.o_zaman_davranis
+            ? `Eğer ${habit.eger_kosulu}, o zaman ${habit.o_zaman_davranis}.`
+            : habit.o_zaman_davranis || habit.muhtemel_engel}
+        </p>
+      ) : null}
       <div className="mt-3 space-y-3">{children}</div>
     </article>
   );
@@ -87,6 +97,7 @@ export function HabitCard(props: {
   today: string;
   gunModu: AliskanlikGunModu;
   missed: boolean;
+  delayed?: boolean;
   pending?: boolean;
   primaryLang?: boolean;
   microLang?: boolean;
@@ -111,6 +122,7 @@ function GenericHabitCard({
   today,
   gunModu,
   missed,
+  delayed,
   pending,
   karsilayanDone,
   onKayit,
@@ -121,6 +133,7 @@ function GenericHabitCard({
   today: string;
   gunModu: AliskanlikGunModu;
   missed: boolean;
+  delayed?: boolean;
   pending?: boolean;
   karsilayanDone?: boolean;
   onKayit: (payload: KayitPayload) => void;
@@ -138,7 +151,7 @@ function GenericHabitCard({
   }
 
   return (
-    <Shell habit={habit} kayit={kayit} logs={logs} today={today} missed={missed}>
+    <Shell habit={habit} kayit={kayit} logs={logs} today={today} missed={missed} delayed={delayed}>
       {min != null || hedef != null ? (
         <p className="text-sm text-[#1a1612]">
           {deger}
@@ -218,6 +231,7 @@ function PrayerHabitCard({
   logs,
   today,
   missed,
+  delayed,
   pending,
   onKayit,
 }: {
@@ -227,12 +241,13 @@ function PrayerHabitCard({
   today: string;
   gunModu: AliskanlikGunModu;
   missed: boolean;
+  delayed?: boolean;
   pending?: boolean;
   onKayit: (payload: KayitPayload) => void;
 }) {
   const { done, total } = altDoneCount(habit, kayit);
   return (
-    <Shell habit={habit} kayit={kayit} logs={logs} today={today} missed={missed}>
+    <Shell habit={habit} kayit={kayit} logs={logs} today={today} missed={missed} delayed={delayed}>
       <p className="text-sm text-[#1a1612]">
         {done}/{total} vakit
       </p>
@@ -269,6 +284,7 @@ function MealHabitCard({
   logs,
   today,
   missed,
+  delayed,
   pending,
   onKayit,
 }: {
@@ -278,13 +294,14 @@ function MealHabitCard({
   today: string;
   gunModu: AliskanlikGunModu;
   missed: boolean;
+  delayed?: boolean;
   pending?: boolean;
   onKayit: (payload: KayitPayload) => void;
 }) {
   const ana = altDoneCount(habit, kayit, "ana_ogun");
   const ara = altDoneCount(habit, kayit, "ara_ogun");
   return (
-    <Shell habit={habit} kayit={kayit} logs={logs} today={today} missed={missed}>
+    <Shell habit={habit} kayit={kayit} logs={logs} today={today} missed={missed} delayed={delayed}>
       <p className="text-sm text-[#1a1612]">
         {ana.done}/{ana.total} ana öğün
         <span className="ml-2 text-xs text-[#6b6158]">
@@ -315,6 +332,7 @@ function LanguageRotationCard(props: {
   today: string;
   gunModu: AliskanlikGunModu;
   missed: boolean;
+  delayed?: boolean;
   pending?: boolean;
   primaryLang?: boolean;
   microLang?: boolean;
@@ -353,6 +371,7 @@ function ContentPipelineCard({
   logs,
   today,
   missed,
+  delayed,
   pending,
   onKayit,
 }: {
@@ -362,11 +381,12 @@ function ContentPipelineCard({
   today: string;
   gunModu: AliskanlikGunModu;
   missed: boolean;
+  delayed?: boolean;
   pending?: boolean;
   onKayit: (payload: KayitPayload) => void;
 }) {
   return (
-    <Shell habit={habit} kayit={kayit} logs={logs} today={today} missed={missed}>
+    <Shell habit={habit} kayit={kayit} logs={logs} today={today} missed={missed} delayed={delayed}>
       <SubstepSummary habit={habit} kayit={kayit} />
       <SubstepToggles
         habit={habit}
@@ -392,6 +412,7 @@ function SocialHabitCard({
   logs,
   today,
   missed,
+  delayed,
   pending,
   onKayit,
 }: {
@@ -401,12 +422,13 @@ function SocialHabitCard({
   today: string;
   gunModu: AliskanlikGunModu;
   missed: boolean;
+  delayed?: boolean;
   pending?: boolean;
   onKayit: (payload: KayitPayload) => void;
 }) {
   const niyet = kayit?.ekstra.sosyal_niyet;
   return (
-    <Shell habit={habit} kayit={kayit} logs={logs} today={today} missed={missed}>
+    <Shell habit={habit} kayit={kayit} logs={logs} today={today} missed={missed} delayed={delayed}>
       <p className="text-xs text-[#6b6158]">İsteğe bağlı. Engel değil.</p>
       <SubstepToggles
         habit={habit}
@@ -442,6 +464,7 @@ function SleepHabitCard({
   logs,
   today,
   missed,
+  delayed,
   pending,
   onKayit,
 }: {
@@ -451,6 +474,7 @@ function SleepHabitCard({
   today: string;
   gunModu: AliskanlikGunModu;
   missed: boolean;
+  delayed?: boolean;
   pending?: boolean;
   onKayit: (payload: KayitPayload) => void;
 }) {
@@ -460,7 +484,7 @@ function SleepHabitCard({
     kayit?.ekstra.hedef_yatis ?? "23:30"
   );
   return (
-    <Shell habit={habit} kayit={kayit} logs={logs} today={today} missed={missed}>
+    <Shell habit={habit} kayit={kayit} logs={logs} today={today} missed={missed} delayed={delayed}>
       <SubstepToggles
         habit={habit}
         kayit={kayit}
@@ -537,6 +561,7 @@ function JourneyHabitCard({
   logs,
   today,
   missed,
+  delayed,
   pending,
   onKayit,
 }: {
@@ -546,11 +571,12 @@ function JourneyHabitCard({
   today: string;
   gunModu: AliskanlikGunModu;
   missed: boolean;
+  delayed?: boolean;
   pending?: boolean;
   onKayit: (payload: KayitPayload) => void;
 }) {
   return (
-    <Shell habit={habit} kayit={kayit} logs={logs} today={today} missed={missed}>
+    <Shell habit={habit} kayit={kayit} logs={logs} today={today} missed={missed} delayed={delayed}>
       <p className="text-xs text-[#6b6158]">
         Her yolculuğu üretkenliğe çevirmek zorunda değilsin.
       </p>

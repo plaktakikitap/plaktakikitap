@@ -11,6 +11,8 @@ import type {
   DilStats,
   DilZorluk,
 } from "@/types/dil";
+import { isDil, SEVIYELER, type Dil, type Seviye } from "@/types/dil-ogrenme";
+import { bugunkunOdevGetir, odevEkle } from "@/app/actions/dil-ogrenme";
 import { showAdminToast } from "./admin-toast-events";
 
 const ETIKETLER = ["fiil", "isim", "sıfat", "deyim", "diğer"] as const;
@@ -29,7 +31,7 @@ const NOT_KATS: { id: DilNotKategori; label: string }[] = [
 const inputClass =
   "w-full rounded-xl border border-[#e8e0d4] bg-[#1a1612]/5 px-3.5 py-2.5 text-sm text-[#1a1612] placeholder:text-[#6b6158] outline-none focus:border-[#b8934a]/40";
 
-type Tab = "banka" | "flashcard" | "notlar";
+type Tab = "banka" | "flashcard" | "notlar" | "odev";
 
 export interface DilSayfasiProps {
   dil: DilKodu;
@@ -87,11 +89,14 @@ export function DilSayfasi({
       <div className="flex flex-wrap gap-2">
         {(
           [
-            ["banka", "Kelime Bankası"],
-            ["flashcard", "Flashcard"],
-            ["notlar", "Notlar"],
-          ] as const
-        ).map(([id, label]) => (
+            { id: "banka" as const, label: "Kelime Bankası" },
+            { id: "flashcard" as const, label: "Flashcard" },
+            { id: "notlar" as const, label: "Notlar" },
+            ...(isDil(dil)
+              ? [{ id: "odev" as const, label: "📋 Ödev" }]
+              : []),
+          ]
+        ).map(({ id, label }) => (
           <button
             key={id}
             type="button"
@@ -132,6 +137,87 @@ export function DilSayfasi({
           onChanged={refreshStats}
         />
       ) : null}
+      {tab === "odev" && isDil(dil) ? <OdevBolumu dil={dil} /> : null}
+    </div>
+  );
+}
+
+function OdevBolumu({ dil }: { dil: Dil }) {
+  const [seviye, setSeviye] = useState<Seviye>("A1");
+  const [prompt, setPrompt] = useState("");
+  const [mevcut, setMevcut] = useState<string | null>(null);
+  const [kaydediliyor, setKaydediliyor] = useState(false);
+
+  useEffect(() => {
+    let iptal = false;
+    bugunkunOdevGetir(dil, seviye).then((row) => {
+      if (iptal) return;
+      const text = row?.prompt_tr ? String(row.prompt_tr) : "";
+      setMevcut(text || null);
+      setPrompt(text);
+    });
+    return () => {
+      iptal = true;
+    };
+  }, [dil, seviye]);
+
+  async function kaydet() {
+    const prompt_tr = prompt.trim();
+    if (!prompt_tr) {
+      showAdminToast("error", "Görev açıklaması gerekli.");
+      return;
+    }
+    setKaydediliyor(true);
+    try {
+      await odevEkle({ dil, seviye, prompt_tr });
+      setMevcut(prompt_tr);
+      showAdminToast("success", "Bugünkü ödev kaydedildi.");
+    } catch (err) {
+      showAdminToast(
+        "error",
+        err instanceof Error ? err.message : "Ödev kaydedilemedi."
+      );
+    } finally {
+      setKaydediliyor(false);
+    }
+  }
+
+  return (
+    <div className="mt-4 space-y-4">
+      <h3 className="font-semibold text-[#1a1612]">Bugünkü Yazı Ödevi</h3>
+      {mevcut ? (
+        <p className="rounded-xl border border-[#e8e0d4] bg-white/60 px-3 py-2 text-sm text-[#6b6158]">
+          Kayıtlı: {mevcut}
+        </p>
+      ) : null}
+      <div className="space-y-3">
+        <select
+          value={seviye}
+          onChange={(e) => setSeviye(e.target.value as Seviye)}
+          className="w-full rounded-lg border border-[#e8e0d4] bg-white px-3 py-2 text-sm text-[#1a1612]"
+        >
+          {SEVIYELER.map((s) => (
+            <option key={s} value={s}>
+              {s}
+            </option>
+          ))}
+        </select>
+        <textarea
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          placeholder="Görev açıklaması (Türkçe)..."
+          rows={3}
+          className="w-full resize-none rounded-lg border border-[#e8e0d4] bg-white px-3 py-2 text-sm text-[#1a1612] placeholder-[#6b6158]/50"
+        />
+        <button
+          type="button"
+          onClick={kaydet}
+          disabled={kaydediliyor}
+          className="w-full rounded-lg bg-[#b8934a] py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#a07840] disabled:opacity-50"
+        >
+          {kaydediliyor ? "Kaydediliyor..." : "Bugünkü Ödevi Kaydet"}
+        </button>
+      </div>
     </div>
   );
 }

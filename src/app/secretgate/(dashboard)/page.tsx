@@ -1,16 +1,11 @@
-import {
-  getCinemaStats,
-  getBooksReadThisMonth,
-  getFilmsWatchedThisMonthList,
-  getSeriesWatchedThisMonthList,
-  getBooksReadThisMonthList,
-} from "@/lib/db/queries";
-import { AdminDashboardThisMonth } from "@/components/admin/AdminDashboardThisMonth";
-import { AdminIcerikOzetWidget } from "@/components/admin/AdminIcerikOzetWidget";
+import AdminDashboardPanel from "@/components/admin/AdminDashboardPanel";
 import { AdminSetupRequired } from "@/components/admin/AdminSetupRequired";
 import { AdminSiteSounds } from "@/components/admin/AdminSiteSounds";
+import { getMorningDashboard } from "@/lib/admin/morning-dashboard";
 
-export default async function AdminDashboardPage() {
+export const dynamic = "force-dynamic";
+
+export default async function DashboardSayfasi() {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!serviceRoleKey || serviceRoleKey === "YOUR_SERVICE_ROLE_KEY") {
     return (
@@ -21,25 +16,7 @@ export default async function AdminDashboardPage() {
     );
   }
 
-  const [cinemaStats, booksReadThisMonth, filmsList, seriesList, booksList] = await Promise.all([
-    getCinemaStats(),
-    getBooksReadThisMonth(),
-    getFilmsWatchedThisMonthList(),
-    getSeriesWatchedThisMonthList(),
-    getBooksReadThisMonthList(),
-  ]);
+  const data = await getMorningDashboard();
 
-  return (
-    <div>
-      <AdminIcerikOzetWidget />
-      <AdminDashboardThisMonth
-        filmCount={cinemaStats.filmWatchedThisMonth}
-        seriesCount={cinemaStats.seriesWatchedThisMonth}
-        booksCount={booksReadThisMonth}
-        films={filmsList}
-        series={seriesList}
-        books={booksList}
-      />
-    </div>
-  );
+  return <AdminDashboardPanel {...data} />;
 }

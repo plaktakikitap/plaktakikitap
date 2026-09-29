@@ -1,10 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Archive, Eye, EyeOff, Pencil, Plus } from "lucide-react";
-import { formatIstanbulLong, startOfIsoWeekISO } from "@/lib/date/istanbul";
+import { formatIstanbulLong, istanbulHour, startOfIsoWeekISO } from "@/lib/date/istanbul";
 import type {
   Aliskanlik,
+  AliskanlikAltAdim,
+  AliskanlikAksamKayit,
+  AliskanlikCevreAlani,
+  AliskanlikDurtu,
   AliskanlikGunModu,
   AliskanlikGunu,
   AliskanlikHaftalikDegerlendirme,
@@ -12,18 +16,29 @@ import type {
 } from "@/types/takip";
 import { showAdminToast } from "./admin-toast-events";
 import { DayModeSelector } from "./aliskanliklar/DayModeSelector";
+import { ContextSelector } from "./aliskanliklar/ContextSelector";
+import { NowSuggestionCard } from "./aliskanliklar/NowSuggestionCard";
 import { HabitsTodayView } from "./aliskanliklar/HabitsTodayView";
 import { HabitForm } from "./aliskanliklar/HabitForm";
 import { HabitStats } from "./aliskanliklar/HabitStats";
 import { WeeklyReview } from "./aliskanliklar/WeeklyReview";
 import { HabitPlanSetup } from "./aliskanliklar/HabitPlanSetup";
+import { EveningRitualCard } from "./aliskanliklar/EveningRitualCard";
+import { EnvironmentMap } from "./aliskanliklar/EnvironmentMap";
+import { ImpulseBrake } from "./aliskanliklar/ImpulseBrake";
 import { postAliskanlik, replaceLog } from "./aliskanliklar/api";
 import type { KayitPayload } from "./aliskanliklar/HabitCard";
+import {
+  isAksamSaati,
+  pickNowSuggestion,
+} from "@/lib/takip/aliskanlik-now";
+import { missedLastPlanned } from "@/lib/takip/aliskanlik-schedule";
 
-type Section = "bugun" | "olcum" | "hafta" | "plan" | "liste";
+type Section = "bugun" | "olcum" | "hafta" | "plan" | "cevre" | "liste";
 
 const SECTIONS: { id: Section; ad: string }[] = [
   { id: "bugun", ad: "Bugün" },
+  { id: "cevre", ad: "Çevrem" },
   { id: "olcum", ad: "Ölçümler" },
   { id: "hafta", ad: "Haftalık" },
   { id: "plan", ad: "Plan" },
@@ -35,18 +50,33 @@ export function AdminAliskanliklarPanel({
   initialLogs,
   initialGun,
   initialReviews,
+  initialAksam,
+  initialAksamSablon,
+  initialCevre,
+  initialDurtuler,
   today,
+  initialHour,
 }: {
   initialHabits: Aliskanlik[];
   initialLogs: AliskanlikKayit[];
   initialGun: AliskanlikGunu | null;
   initialReviews: AliskanlikHaftalikDegerlendirme[];
+  initialAksam: AliskanlikAksamKayit | null;
+  initialAksamSablon: AliskanlikAltAdim[];
+  initialCevre: AliskanlikCevreAlani[];
+  initialDurtuler: AliskanlikDurtu[];
   today: string;
+  initialHour: number;
 }) {
   const [habits, setHabits] = useState(initialHabits);
   const [logs, setLogs] = useState(initialLogs);
   const [gun, setGun] = useState<AliskanlikGunu | null>(initialGun);
   const [reviews, setReviews] = useState(initialReviews);
+  const [aksam, setAksam] = useState(initialAksam);
+  const [aksamSablon, setAksamSablon] = useState(initialAksamSablon);
+  const [cevre, setCevre] = useState(initialCevre);
+  const [durtuler, setDurtuler] = useState(initialDurtuler);
+  const [hour, setHour] = useState(initialHour);
   const [section, setSection] = useState<Section>("bugun");
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [showNew, setShowNew] = useState(false);
@@ -58,6 +88,17 @@ export function AdminAliskanliklarPanel({
   const thisReview = useMemo(
     () => reviews.find((r) => r.hafta_baslangici === hafta) ?? null,
     [reviews, hafta]
+  );
+
+  useEffect(() => {
+    const tick = () => setHour(istanbulHour());
+    const id = window.setInterval(tick, 60_000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  const oneri = useMemo(
+    () => pickNowSuggestion({ habits, logs, today, hour, gun }),
+    [habits, logs, today, hour, gun]
   );
 
   async function run<T>(
@@ -174,6 +215,60 @@ export function AdminAliskanliklarPanel({
 
       {section === "bugun" ? (
         <div className="space-y-6">
+          <NowSuggestionCard
+            habit={oneri}
+            gunModu={gunModu}
+            baglam={gun?.baglam ?? null}
+            missed={
+              oneri
+                ? gunModu === "normal" &&
+                  missedLastPlanned(oneri, today, logs)
+                : false
+            }
+            pending={pendingId === "oneri"}
+            onYapildi={() => {
+              if (!oneri) return;
+              void run<{ gun: AliskanlikGunu; kayit: AliskanlikKayit | null }>(
+                "oneri",
+                {
+                  action: "oneri",
+                  aliskanlik_id: oneri.id,
+                  eylem: "yapildi",
+                  tarih: today,
+                },
+                (data) => {
+                  setGun(data.gun);
+                  if (data.kayit) setLogs((p) => replaceLog(p, data.kayit!));
+                }
+              );
+            }}
+            onBaska={() => {
+              if (!oneri) return;
+              void run<{ gun: AliskanlikGunu }>(
+                "oneri",
+                {
+                  action: "oneri",
+                  aliskanlik_id: oneri.id,
+                  eylem: "baska",
+                  tarih: today,
+                },
+                (data) => setGun(data.gun)
+              );
+            }}
+            onUygunDegil={() => {
+              if (!oneri) return;
+              void run<{ gun: AliskanlikGunu }>(
+                "oneri",
+                {
+                  action: "oneri",
+                  aliskanlik_id: oneri.id,
+                  eylem: "uygun_degil",
+                  tarih: today,
+                },
+                (data) => setGun(data.gun)
+              );
+            }}
+          />
           <DayModeSelector
             gun={gun}
             disabled={pendingId === "gun"}
@@ -188,11 +283,86 @@ export function AdminAliskanliklarPanel({
               )
             }
           />
+          <ContextSelector
+            value={gun?.baglam ?? null}
+            disabled={pendingId === "baglam"}
+            onChange={(baglam) =>
+              void run<AliskanlikGunu>(
+                "baglam",
+                { action: "baglam", tarih: today, baglam },
+                (data) => setGun(data)
+              )
+            }
+          />
+          <ImpulseBrake
+            records={durtuler}
+            pending={pendingId === "durtu"}
+            onStart={async (input) => {
+              try {
+                setPendingId("durtu");
+                const row = await postAliskanlik<AliskanlikDurtu>({
+                  action: "durtu-ac",
+                  ...input,
+                });
+                setDurtuler((p) => [row, ...p]);
+                return row;
+              } catch (e) {
+                showAdminToast(
+                  "error",
+                  e instanceof Error ? e.message : "Kayıt alınamadı."
+                );
+                return null;
+              } finally {
+                setPendingId(null);
+              }
+            }}
+            onClose={(id, patch) =>
+              void run<AliskanlikDurtu>(
+                "durtu",
+                { action: "durtu-kapat", id, ...patch },
+                (data) =>
+                  setDurtuler((p) => p.map((d) => (d.id === data.id ? data : d)))
+              )
+            }
+          />
+          {isAksamSaati(hour) ? (
+            <EveningRitualCard
+              today={today}
+              habits={habits}
+              logs={logs}
+              kayit={aksam}
+              sablon={aksamSablon}
+              pending={pendingId === "aksam"}
+              onToggle={(kod, deger) =>
+                void run<AliskanlikAksamKayit>(
+                  "aksam",
+                  { action: "aksam", tarih: today, adim_kod: kod, adim_deger: deger },
+                  setAksam
+                )
+              }
+              onIlkDavranis={(value) =>
+                void run<AliskanlikAksamKayit>(
+                  "aksam",
+                  { action: "aksam", tarih: today, ilk_davranis: value },
+                  setAksam
+                )
+              }
+              onSaveSablon={(adimlar) =>
+                void run<{ sablon: AliskanlikAltAdim[] }>(
+                  "aksam",
+                  { action: "aksam", adimlar_sablon: adimlar },
+                  (data) => setAksamSablon(data.sablon)
+                )
+              }
+            />
+          ) : null}
           <HabitsTodayView
             habits={habits}
             logs={logs}
             today={today}
+            hour={hour}
             gunModu={gunModu}
+            baglam={gun?.baglam ?? null}
             pendingId={pendingId}
             onKayit={onKayit}
           />
@@ -223,6 +393,29 @@ export function AdminAliskanliklarPanel({
                 });
                 showAdminToast("success", "Değerlendirme kaydedildi.");
               }
+            )
+          }
+        />
+      ) : null}
+
+      {section === "cevre" ? (
+        <EnvironmentMap
+          alanlar={cevre}
+          pendingId={pendingId}
+          onSave={(id, patch) =>
+            void run<AliskanlikCevreAlani>(
+              id,
+              { action: "cevre", id, ...patch },
+              (data) =>
+                setCevre((prev) => {
+                  const next = prev.map((a) => (a.id === data.id ? data : a));
+                  if (data.bu_hafta_aktif) {
+                    return next.map((a) =>
+                      a.id === data.id ? data : { ...a, bu_hafta_aktif: false }
+                    );
+                  }
+                  return next;
+                })
             )
           }
         />

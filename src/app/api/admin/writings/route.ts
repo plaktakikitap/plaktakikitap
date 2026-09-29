@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getWritingsPublic, createWriting } from "@/lib/writings";
+import { getWritingsAdmin, createWriting, parseWritingDurum } from "@/lib/writings";
 import { requireAdminApi } from "@/lib/admin/requireAdminApi";
 
 export async function GET() {
   const denied = await requireAdminApi();
   if (denied) return denied;
 
-  const items = await getWritingsPublic();
+  const items = await getWritingsAdmin();
   return NextResponse.json(items);
 }
 
@@ -26,7 +26,8 @@ export async function POST(req: NextRequest) {
     const published_at = typeof b.published_at === "string" ? b.published_at : undefined;
     const tefrika_issue = typeof b.tefrika_issue === "string" ? b.tefrika_issue.trim() || null : null;
     const external_url = typeof b.external_url === "string" ? b.external_url.trim() || null : null;
-    const result = await createWriting({ category, title, body: bodyHtml, published_at, tefrika_issue, external_url });
+    const durum = parseWritingDurum(b.durum) ?? "taslak";
+    const result = await createWriting({ category, title, body: bodyHtml, published_at, tefrika_issue, external_url, durum });
     if (!result) return NextResponse.json({ error: "Create failed" }, { status: 500 });
     return NextResponse.json(result);
   } catch {

@@ -147,19 +147,9 @@ export function AdminReadingLogBookForm({ book, defaultStatus }: AdminReadingLog
               className="admin-input max-w-[8rem]"
             />
           </div>
-          <div className="flex items-start gap-2">
-            <input
-              type="checkbox"
-              id="is_featured_current"
-              name="is_featured_current"
-              defaultChecked={book?.is_featured_current ?? false}
-              className="mt-0.5 h-4 w-4 rounded border-[#e8e0d4]"
-            />
-            <label htmlFor="is_featured_current" className="text-sm text-[#6b6158]">
-              Şu an öne çıkan — „Şu an okuyorum“ kartında bu kitabı göster. Yalnızca bir kitap
-              işaretlenebilir.
-            </label>
-          </div>
+          <p className="text-sm text-[#6b6158]">
+            Okunuyor yapınca sitede otomatik öne çıkar; önceki öne çıkan kitap kalkar.
+          </p>
         </>
       )}
 

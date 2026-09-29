@@ -10,6 +10,7 @@ import {
   Settings2,
   Trash2,
   Users,
+  Clock,
   X,
 } from "lucide-react";
 import {
@@ -24,6 +25,7 @@ import {
   type IcTur,
 } from "@/types/icerik";
 import { IcerikPushSetup } from "./IcerikPushSetup";
+import { SaatAnalizTab } from "./SaatAnalizTab";
 import {
   AdminFieldLabel,
   AdminTextArea,
@@ -31,7 +33,7 @@ import {
 } from "@/components/admin/AdminFormPrimitives";
 import { showAdminToast } from "@/components/admin/admin-toast-events";
 
-type Tab = "pano" | "takvim" | "hesaplar" | "ayarlar";
+type Tab = "pano" | "takvim" | "hesaplar" | "ayarlar" | "analiz";
 
 const TUR_COLORS: Record<IcTur, string> = {
   post: "bg-amber-500/15 text-amber-700 border-amber-500/25",
@@ -155,6 +157,7 @@ export function AdminIcerikPanel({
   const tabs: { id: Tab; label: string; icon: typeof LayoutGrid }[] = [
     { id: "pano", label: "Pano", icon: LayoutGrid },
     { id: "takvim", label: "Takvim", icon: CalendarDays },
+    { id: "analiz", label: "Saat analizi", icon: Clock },
     { id: "hesaplar", label: "Hesaplar", icon: Users },
     { id: "ayarlar", label: "Ayarlar", icon: Settings2 },
   ];
@@ -223,6 +226,8 @@ export function AdminIcerikPanel({
           onItemClick={(item) => setModal({ mode: "edit", item })}
         />
       ) : null}
+
+      {tab === "analiz" ? <SaatAnalizTab /> : null}
 
       {tab === "hesaplar" ? (
         <HesaplarTab hesaplar={hesaplar} icerikler={icerikler} onRefresh={refresh} />

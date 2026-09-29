@@ -13,6 +13,7 @@ import { ScrollVinylIndicator } from "@/components/ScrollVinylIndicator";
 import IntroAnimation from "@/components/IntroAnimation";
 import { GlobalVinylCursor } from "@/components/GlobalVinylCursor";
 import { Analytics } from "@vercel/analytics/next";
+import { PageViewBeacon } from "@/components/analytics/PageViewBeacon";
 import Script from "next/script";
 import "./globals.css";
 
@@ -146,6 +147,7 @@ export default function RootLayout({
           </MainWrapper>
         </IntroAnimation>
         <Analytics />
+        <PageViewBeacon />
       </body>
     </html>
   );

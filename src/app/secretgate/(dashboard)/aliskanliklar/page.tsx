@@ -1,11 +1,21 @@
 import { Flame } from "lucide-react";
-import { addDaysISO, istanbulTodayISO } from "@/lib/date/istanbul";
+import {
+  addDaysISO,
+  istanbulHour,
+  istanbulTodayISO,
+} from "@/lib/date/istanbul";
 import {
   getAliskanlikGunu,
   listAliskanlikKayitlari,
   listAliskanliklar,
   listHaftalikDegerlendirmeler,
 } from "@/lib/takip/aliskanliklar";
+import {
+  getAksamKayit,
+  getAksamSablon,
+  listCevreAlanlari,
+  listDurtuler,
+} from "@/lib/takip/aliskanlik-anlik";
 import { AdminAliskanliklarPanel } from "@/components/admin/AdminAliskanliklarPanel";
 
 export const dynamic = "force-dynamic";
@@ -13,11 +23,24 @@ export const dynamic = "force-dynamic";
 export default async function AdminAliskanliklarPage() {
   const today = istanbulTodayISO();
   const from = addDaysISO(today, -100);
-  const [habits, logs, gun, reviews] = await Promise.all([
+  const [
+    habits,
+    logs,
+    gun,
+    reviews,
+    aksam,
+    aksamSablon,
+    cevre,
+    durtuler,
+  ] = await Promise.all([
     listAliskanliklar({ includeInactive: true, includeArchived: true }),
     listAliskanlikKayitlari({ from }),
     getAliskanlikGunu(today),
     listHaftalikDegerlendirmeler(),
+    getAksamKayit(today),
+    getAksamSablon(),
+    listCevreAlanlari(today),
+    listDurtuler(addDaysISO(today, -60)),
   ]);
 
   return (
@@ -36,7 +59,12 @@ export default async function AdminAliskanliklarPage() {
         initialLogs={logs}
         initialGun={gun}
         initialReviews={reviews}
+        initialAksam={aksam}
+        initialAksamSablon={aksamSablon}
+        initialCevre={cevre}
+        initialDurtuler={durtuler}
         today={today}
+        initialHour={istanbulHour()}
       />
     </div>
   );

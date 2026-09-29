@@ -112,6 +112,32 @@ export type AliskanlikSorunTuru =
   | "zorluk"
   | "enerji";
 
+export type AliskanlikBaglam = "ev" | "is" | "yol" | "dusuk_enerji";
+
+export type AliskanlikCevreAlaniKodu =
+  | "yatak_odasi"
+  | "calisma_masasi"
+  | "mutfak"
+  | "canta"
+  | "telefon"
+  | "yolculuk";
+
+export type AliskanlikDurtuSebep =
+  | "is"
+  | "paylasim"
+  | "mesaj"
+  | "merak"
+  | "can_sikintisi";
+
+export type AliskanlikDurtuDurum =
+  | "bekliyor"
+  | "amac_tamamlandi"
+  | "istek_gecti"
+  | "hala_istiyorum"
+  | "alternatif_yapildi";
+
+export type AliskanlikOneriEylem = "yapildi" | "baska" | "uygun_degil";
+
 export interface AliskanlikAltAdim {
   kod: string;
   ad: string;
@@ -157,6 +183,10 @@ export interface Aliskanlik {
   asama: number | null;
   alt_adimlar: AliskanlikAltAdim[];
   karsilayan_aliskanlik_id: string | null;
+  baglamlar: AliskanlikBaglam[];
+  muhtemel_engel: string | null;
+  eger_kosulu: string | null;
+  o_zaman_davranis: string | null;
   olusturma_tarihi: string;
   guncelleme_tarihi: string | null;
 }
@@ -180,6 +210,44 @@ export interface AliskanlikGunu {
   tarih: string;
   gun_modu: AliskanlikGunModu;
   notlar: string | null;
+  baglam: AliskanlikBaglam | null;
+  atlanan_oneriler: string[];
+  uygun_degil: string[];
+  olusturma_tarihi: string;
+  guncelleme_tarihi: string | null;
+}
+
+export interface AliskanlikAksamKayit {
+  id: string;
+  tarih: string;
+  adimlar: Record<string, boolean>;
+  ilk_davranis: string | null;
+  olusturma_tarihi: string;
+  guncelleme_tarihi: string | null;
+}
+
+export interface AliskanlikCevreAlani {
+  id: string;
+  alan: AliskanlikCevreAlaniKodu;
+  desteklenen_davranis: string | null;
+  gorunur_isaret: string | null;
+  kaldirilacak_engel: string | null;
+  surtunme: string | null;
+  haftanin_degisikligi: string | null;
+  bu_hafta_aktif: boolean;
+  tamamlandi: boolean;
+  aktif_hafta: string | null;
+  guncelleme_tarihi: string | null;
+}
+
+export interface AliskanlikDurtu {
+  id: string;
+  tarih: string;
+  saat: number;
+  sebep: AliskanlikDurtuSebep;
+  amac: string | null;
+  alternatif: string | null;
+  durum: AliskanlikDurtuDurum;
   olusturma_tarihi: string;
   guncelleme_tarihi: string | null;
 }

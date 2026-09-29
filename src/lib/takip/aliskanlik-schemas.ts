@@ -49,6 +49,26 @@ export const sorunTuruSchema = z.enum([
   "enerji",
 ]);
 
+export const baglamSchema = z.enum(["ev", "is", "yol", "dusuk_enerji"]);
+
+export const durtuSebepSchema = z.enum([
+  "is",
+  "paylasim",
+  "mesaj",
+  "merak",
+  "can_sikintisi",
+]);
+
+export const durtuDurumSchema = z.enum([
+  "bekliyor",
+  "amac_tamamlandi",
+  "istek_gecti",
+  "hala_istiyorum",
+  "alternatif_yapildi",
+]);
+
+export const oneriEylemSchema = z.enum(["yapildi", "baska", "uygun_degil"]);
+
 const altAdimSchema = z.object({
   kod: z.string().min(1),
   ad: z.string().min(1),
@@ -92,6 +112,10 @@ export const habitWriteSchema = z.object({
   alt_adimlar: z.array(altAdimSchema).optional(),
   karsilayan_aliskanlik_id: z.string().uuid().optional().nullable(),
   asama: optionalNum,
+  baglamlar: z.array(baglamSchema).optional(),
+  muhtemel_engel: optionalText,
+  eger_kosulu: optionalText,
+  o_zaman_davranis: optionalText,
 });
 
 export const kayitWriteSchema = z.object({
@@ -111,8 +135,45 @@ export const kayitWriteSchema = z.object({
 
 export const gunWriteSchema = z.object({
   tarih: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  gun_modu: gunModuSchema,
+  gun_modu: gunModuSchema.optional(),
   notlar: optionalText,
+  baglam: baglamSchema.optional().nullable(),
+  atlanan_oneriler: z.array(z.string().uuid()).optional(),
+  uygun_degil: z.array(z.string().uuid()).optional(),
+});
+
+export const aksamWriteSchema = z.object({
+  tarih: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  adim_kod: z.string().optional(),
+  adim_deger: z.boolean().optional(),
+  ilk_davranis: optionalText,
+  adimlar_sablon: z
+    .array(z.object({ kod: z.string().min(1), ad: z.string().min(1) }))
+    .optional(),
+});
+
+export const cevreWriteSchema = z.object({
+  id: z.string().uuid(),
+  desteklenen_davranis: optionalText,
+  gorunur_isaret: optionalText,
+  kaldirilacak_engel: optionalText,
+  surtunme: optionalText,
+  haftanin_degisikligi: optionalText,
+  bu_hafta_aktif: z.boolean().optional(),
+  tamamlandi: z.boolean().optional(),
+});
+
+export const durtuCreateSchema = z.object({
+  sebep: durtuSebepSchema,
+  amac: optionalText,
+  alternatif: optionalText,
+});
+
+export const durtuUpdateSchema = z.object({
+  id: z.string().uuid(),
+  durum: durtuDurumSchema.optional(),
+  amac: optionalText,
+  alternatif: optionalText,
 });
 
 export const reviewWriteSchema = z.object({

@@ -77,6 +77,23 @@ export function startOfMonthISO(iso: string): string {
   return `${iso.slice(0, 7)}-01`;
 }
 
+export function istanbulHour(now = new Date()): number {
+  const hour = new Intl.DateTimeFormat("en-GB", {
+    timeZone: ISTANBUL_TZ,
+    hour: "2-digit",
+    hourCycle: "h23",
+  })
+    .formatToParts(now)
+    .find((p) => p.type === "hour")?.value;
+  const n = Number.parseInt(hour ?? "0", 10);
+  return Number.isFinite(n) ? n : 0;
+}
+
+/** 0=Pazartesi … 6=Pazar (İstanbul). */
+export function istanbulWeekdayMon0(now = new Date()): number {
+  return isoWeekday(istanbulTodayISO(now)) - 1;
+}
+
 export function daysBetweenISO(from: string, to: string): number {
   const [y1, m1, d1] = from.split("-").map(Number);
   const [y2, m2, d2] = to.split("-").map(Number);

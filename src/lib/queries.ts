@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 import type { ContentItem, Film, Series, Book, BookStatus, Stats } from "@/types/database";
 import { isBookStatus } from "@/types/database";
+import { syncBookFeaturedCurrent } from "@/lib/books/featured";
 import { filmWatchMinutes, seriesWatchMinutes } from "@/lib/utils/time";
 
 export async function getFilms(includePrivate = false): Promise<(ContentItem & { film: Film })[]> {
@@ -139,16 +140,11 @@ export async function patchAdminBook(
 
   const status = row.status as BookStatus | undefined;
   if (status === "to_read") {
-    row.is_featured_current = false;
     if (payload.visibility === undefined) row.visibility = "private";
   }
   if (status === "reading") {
     row.last_progress_update_at = new Date().toISOString();
     if (payload.visibility === undefined) row.visibility = "public";
-    if (payload.is_featured_current === undefined) {
-      await supabase.from("books").update({ is_featured_current: false });
-      row.is_featured_current = true;
-    }
     const { data: current } = await supabase
       .from("books")
       .select("start_date")
@@ -159,7 +155,6 @@ export async function patchAdminBook(
     }
   }
   if (status === "finished") {
-    row.is_featured_current = false;
     if (payload.visibility === undefined) row.visibility = "public";
     const { data: current } = await supabase
       .from("books")
@@ -169,6 +164,12 @@ export async function patchAdminBook(
     if (!current?.end_date) {
       row.end_date = new Date().toISOString().slice(0, 10);
     }
+  }
+
+  if (status) {
+    row.is_featured_current = await syncBookFeaturedCurrent(status, id);
+  } else if (row.is_featured_current === true) {
+    await syncBookFeaturedCurrent("reading", id);
   }
 
   const { data, error } = await supabase
