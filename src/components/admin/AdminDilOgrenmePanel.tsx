@@ -266,10 +266,11 @@ export default function AdminDilOgrenmePanel({
         dil,
         seviye: secilenSev,
         prompt_tr: String(row.prompt_tr ?? ""),
+        prompt_hedef: row.prompt_hedef ? String(row.prompt_hedef) : null,
+        gun: row.gun != null ? Number(row.gun) : null,
         hedef_kelimeler: Array.isArray(row.hedef_kelimeler)
           ? (row.hedef_kelimeler as string[])
           : [],
-        tarih: String(row.tarih ?? ""),
       });
     });
     return () => {
@@ -696,9 +697,16 @@ export default function AdminDilOgrenmePanel({
                     >
                       {secilenSev}
                     </span>
-                    <span className="text-xs text-[#6b6158]">Bugünkü Görev</span>
+                    <span className="text-xs text-[#6b6158]">
+                      Gün {odev.gun}/30
+                    </span>
                   </div>
                   <p className="font-medium text-[#1a1612]">{odev.prompt_tr}</p>
+                  {odev.prompt_hedef ? (
+                    <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-[#1a1612]/80">
+                      {odev.prompt_hedef}
+                    </p>
+                  ) : null}
                 </div>
 
                 <textarea

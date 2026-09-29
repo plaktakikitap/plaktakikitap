@@ -1,0 +1,214 @@
+{
+  "B1": [
+    {
+      "gun": 1,
+      "tr": "Hayatındaki önemli bir kararı ve nasıl verdiğini anlat.",
+      "ingilizce": "Write about an important decision you made in your life. What was the situation? Why did you choose that option? How did it affect you? Write a paragraph of 8-12 sentences.",
+      "fransizca": "Écris sur une décision importante que tu as prise dans ta vie. Quelle était la situation ? Pourquoi as-tu choisi cette option ? Comment cela t'a-t-il affecté ? Écris un paragraphe de 8-12 phrases.",
+      "almanca": "Schreib über eine wichtige Entscheidung, die du in deinem Leben getroffen hast. Was war die Situation? Warum hast du diese Option gewählt? Wie hat sie dich beeinflusst? Schreib einen Absatz von 8-12 Sätzen."
+    },
+    {
+      "gun": 2,
+      "tr": "Teknoloji hayatımızı kolaylaştırıyor mu, zorlaştırıyor mu? Görüşünü savun.",
+      "ingilizce": "Write your opinion: does technology make life easier or more difficult? Give at least two reasons for your view and one example from your own experience. Write 8-12 sentences.",
+      "fransizca": "Donne ton opinion : la technologie facilite-t-elle ou complique-t-elle la vie ? Donne au moins deux raisons et un exemple tiré de ta propre expérience. Écris 8-12 phrases.",
+      "almanca": "Schreib deine Meinung: Macht die Technologie das Leben leichter oder schwieriger? Gib mindestens zwei Gründe für deine Ansicht und ein Beispiel aus deiner eigenen Erfahrung. Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 3,
+      "tr": "Hayatında seni en çok etkileyen kişiyi anlat.",
+      "ingilizce": "Write about a person who has influenced you most in your life. Who are they? What did they do or say that affected you? Write a paragraph of 8-12 sentences.",
+      "fransizca": "Écris sur la personne qui t'a le plus influencé(e) dans ta vie. Qui est-elle ? Qu'a-t-elle dit ou fait qui t'a affecté(e) ? Écris un paragraphe de 8-12 phrases.",
+      "almanca": "Schreib über die Person, die dich in deinem Leben am meisten beeinflusst hat. Wer ist das? Was hat sie gesagt oder getan, das dich geprägt hat? Schreib einen Absatz von 8-12 Sätzen."
+    },
+    {
+      "gun": 4,
+      "tr": "Yaşadığın bir zorluktan ve üstesinden nasıl geldiğinden bahset.",
+      "ingilizce": "Describe a challenge you faced in your life. What was the problem? How did you deal with it? What did you learn from the experience? Write 8-12 sentences.",
+      "fransizca": "Décris une difficulté que tu as vécue dans ta vie. Quel était le problème ? Comment l'as-tu surmonté ? Qu'as-tu appris de cette expérience ? Écris 8-12 phrases.",
+      "almanca": "Beschreibe eine Schwierigkeit, die du in deinem Leben erlebt hast. Was war das Problem? Wie hast du es überwunden? Was hast du aus der Erfahrung gelernt? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 5,
+      "tr": "İki farklı yaşam tarzını karşılaştır: şehir hayatı ve kırsal hayat.",
+      "ingilizce": "Compare living in a city and living in the countryside. What are the advantages and disadvantages of each? Which do you prefer and why? Write 8-12 sentences.",
+      "fransizca": "Compare la vie en ville et la vie à la campagne. Quels sont les avantages et les inconvénients de chacune ? Laquelle préfères-tu et pourquoi ? Écris 8-12 phrases.",
+      "almanca": "Vergleiche das Leben in der Stadt und auf dem Land. Was sind die Vor- und Nachteile? Was bevorzugst du und warum? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 6,
+      "tr": "Çevre sorunları hakkında ne düşünüyorsun? Bir çözüm öner.",
+      "ingilizce": "Write about an environmental problem that concerns you. Why is it serious? What can individuals do to help? Give a specific suggestion. Write 8-12 sentences.",
+      "fransizca": "Écris sur un problème environnemental qui te préoccupe. Pourquoi est-il grave ? Que peuvent faire les individus pour aider ? Propose une solution concrète. Écris 8-12 phrases.",
+      "almanca": "Schreib über ein Umweltproblem, das dich besorgt. Warum ist es ernst? Was können Einzelpersonen tun, um zu helfen? Mach einen konkreten Vorschlag. Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 7,
+      "tr": "Gençlerin sosyal medya kullanımına dair görüşünü yaz.",
+      "ingilizce": "Write about young people and social media. Do you think it has more positive or negative effects? Support your view with examples. Write 8-12 sentences.",
+      "fransizca": "Écris sur les jeunes et les réseaux sociaux. Penses-tu que les effets sont plutôt positifs ou négatifs ? Appuie ton point de vue avec des exemples. Écris 8-12 phrases.",
+      "almanca": "Schreib über Jugendliche und soziale Medien. Denkst du, die Auswirkungen sind eher positiv oder negativ? Unterstütze deine Meinung mit Beispielen. Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 8,
+      "tr": "Hayalindeki mesleği ve onu neden seçtiğini anlat.",
+      "ingilizce": "Write about your dream job or career. What is it? Why does it interest you? What skills do you need for it? Write 8-12 sentences.",
+      "fransizca": "Écris sur le métier de tes rêves. C'est quoi ? Pourquoi t'intéresse-t-il ? Quelles compétences faut-il ? Écris 8-12 phrases.",
+      "almanca": "Schreib über deinen Traumberuf. Was ist er? Warum interessiert er dich? Welche Fähigkeiten braucht man dafür? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 9,
+      "tr": "Bir ülkeyi ziyaret etme deneyimini veya hayalini anlat.",
+      "ingilizce": "Write about a country you have visited or would like to visit. What is interesting about it? What would you do there? Write 8-12 sentences.",
+      "fransizca": "Écris sur un pays que tu as visité ou que tu aimerais visiter. Qu'est-ce qui y est intéressant ? Qu'est-ce que tu ferais là-bas ? Écris 8-12 phrases.",
+      "almanca": "Schreib über ein Land, das du besucht hast oder besuchen möchtest. Was ist dort interessant? Was würdest du dort machen? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 10,
+      "tr": "Sağlıklı yaşamın önemi hakkında görüşünü yaz.",
+      "ingilizce": "Write about the importance of a healthy lifestyle. What habits are most important? Do you follow them yourself? Write 8-12 sentences.",
+      "fransizca": "Écris sur l'importance d'un mode de vie sain. Quelles habitudes sont les plus importantes ? Est-ce que tu les suis toi-même ? Écris 8-12 phrases.",
+      "almanca": "Schreib über die Bedeutung eines gesunden Lebensstils. Welche Gewohnheiten sind am wichtigsten? Befolgst du sie selbst? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 11,
+      "tr": "Bir kitabı veya filmi tavsiye et ve neden beğendiğini açıkla.",
+      "ingilizce": "Recommend a book or film to a friend. What is it about? Why should they read or watch it? What did you learn from it? Write 8-12 sentences.",
+      "fransizca": "Recommande un livre ou un film à un(e) ami(e). De quoi ça parle ? Pourquoi devrait-il/elle le lire ou le regarder ? Qu'as-tu appris ? Écris 8-12 phrases.",
+      "almanca": "Empfehle einem Freund oder einer Freundin ein Buch oder einen Film. Worum geht es? Warum sollte er/sie ihn lesen oder ansehen? Was hast du daraus gelernt? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 12,
+      "tr": "Aile değerleri ile kişisel özgürlük arasındaki dengeyi tartış.",
+      "ingilizce": "Write about the balance between family values and personal freedom. How important is family to you? When do you think people should make their own choices? Write 8-12 sentences.",
+      "fransizca": "Écris sur l'équilibre entre les valeurs familiales et la liberté personnelle. Quelle importance accordes-tu à ta famille ? Quand les gens doivent-ils faire leurs propres choix ? Écris 8-12 phrases.",
+      "almanca": "Schreib über das Gleichgewicht zwischen Familienwerten und persönlicher Freiheit. Wie wichtig ist dir deine Familie? Wann denkst du, sollten Menschen ihre eigenen Entscheidungen treffen? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 13,
+      "tr": "Para ve mutluluk ilişkisi hakkında düşüncelerini yaz.",
+      "ingilizce": "Write about the relationship between money and happiness. Do you think money brings happiness? What else is important? Write 8-12 sentences.",
+      "fransizca": "Écris sur la relation entre l'argent et le bonheur. Penses-tu que l'argent rend heureux ? Qu'est-ce qui est aussi important ? Écris 8-12 phrases.",
+      "almanca": "Schreib über die Beziehung zwischen Geld und Glück. Glaubst du, dass Geld glücklich macht? Was ist sonst noch wichtig? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 14,
+      "tr": "Eğitim sistemine dair görüşünü yaz: neler değişmeli?",
+      "ingilizce": "Write your opinion on education. What is good about the education system you know? What would you change? Write 8-12 sentences.",
+      "fransizca": "Donne ton avis sur l'éducation. Qu'est-ce qui est bien dans le système éducatif que tu connais ? Qu'est-ce que tu changerais ? Écris 8-12 phrases.",
+      "almanca": "Schreib deine Meinung über Bildung. Was ist gut am Bildungssystem, das du kennst? Was würdest du ändern? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 15,
+      "tr": "Seni en çok mutlu eden şeyi ve neden mutlu ettiğini açıkla.",
+      "ingilizce": "Write about something that makes you truly happy. Describe it in detail. Why does it affect you this way? Write 8-12 sentences.",
+      "fransizca": "Écris sur quelque chose qui te rend vraiment heureux/heureuse. Décris-le en détail. Pourquoi cela t'affecte-t-il ainsi ? Écris 8-12 phrases.",
+      "almanca": "Schreib über etwas, das dich wirklich glücklich macht. Beschreibe es genau. Warum wirkt es so auf dich? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 16,
+      "tr": "İklim değişikliği hakkında ne biliyorsun ve ne yapılmalı?",
+      "ingilizce": "Write about climate change. What do you know about it? What do you think governments and individuals should do? Write 8-12 sentences.",
+      "fransizca": "Écris sur le changement climatique. Qu'est-ce que tu sais à ce sujet ? Que devraient faire les gouvernements et les individus ? Écris 8-12 phrases.",
+      "almanca": "Schreib über den Klimawandel. Was weißt du darüber? Was sollten Regierungen und Einzelpersonen tun? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 17,
+      "tr": "Kültürlerarası farklılıklar insanları nasıl etkiler?",
+      "ingilizce": "Write about cultural differences. Have you ever experienced or witnessed a misunderstanding between cultures? What did you learn from it? Write 8-12 sentences.",
+      "fransizca": "Écris sur les différences culturelles. As-tu déjà vécu ou observé un malentendu entre cultures ? Qu'as-tu appris ? Écris 8-12 phrases.",
+      "almanca": "Schreib über kulturelle Unterschiede. Hast du jemals ein Missverständnis zwischen Kulturen erlebt oder beobachtet? Was hast du daraus gelernt? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 18,
+      "tr": "Gönüllü çalışmanın önemi hakkında yaz.",
+      "ingilizce": "Write about volunteering. Have you ever done volunteer work? Why is it important for society? Would you recommend it? Write 8-12 sentences.",
+      "fransizca": "Écris sur le bénévolat. As-tu déjà fait du bénévolat ? Pourquoi est-il important pour la société ? Le recommanderais-tu ? Écris 8-12 phrases.",
+      "almanca": "Schreib über Ehrenamt. Hast du schon mal ehrenamtlich gearbeitet? Warum ist es wichtig für die Gesellschaft? Würdest du es empfehlen? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 19,
+      "tr": "Yaşlılık ve gençlik arasındaki farklara dair görüşünü yaz.",
+      "ingilizce": "Write about the differences between being young and being old. What do young people and older people value differently? Write 8-12 sentences.",
+      "fransizca": "Écris sur les différences entre être jeune et être âgé(e). Qu'est-ce que les jeunes et les personnes âgées valorisent différemment ? Écris 8-12 phrases.",
+      "almanca": "Schreib über die Unterschiede zwischen Jung- und Altsein. Was schätzen junge und ältere Menschen unterschiedlich? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 20,
+      "tr": "Hayvanlara yönelik muamele hakkında düşüncelerini yaz.",
+      "ingilizce": "Write about how animals are treated in today's world. Are you concerned about animal welfare? What changes would you like to see? Write 8-12 sentences.",
+      "fransizca": "Écris sur la façon dont on traite les animaux dans le monde d'aujourd'hui. Es-tu préoccupé(e) par le bien-être animal ? Quels changements voudrais-tu voir ? Écris 8-12 phrases.",
+      "almanca": "Schreib darüber, wie Tiere in der heutigen Welt behandelt werden. Machst du dir Sorgen um das Tierwohl? Welche Veränderungen würdest du dir wünschen? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 21,
+      "tr": "Uzaktan çalışmanın avantaj ve dezavantajlarını tartış.",
+      "ingilizce": "Write about working from home. What are the advantages and disadvantages? Would you prefer remote work or going to an office? Write 8-12 sentences.",
+      "fransizca": "Écris sur le télétravail. Quels sont les avantages et les inconvénients ? Préférerais-tu travailler à distance ou au bureau ? Écris 8-12 phrases.",
+      "almanca": "Schreib über Homeoffice. Was sind die Vor- und Nachteile? Würdest du lieber remote oder im Büro arbeiten? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 22,
+      "tr": "Müzik hayatınızı nasıl etkiliyor? Anlat.",
+      "ingilizce": "Write about the role of music in your life. How does it make you feel? Do you listen to music when you are stressed or happy? Write 8-12 sentences.",
+      "fransizca": "Écris sur la place de la musique dans ta vie. Comment te fait-elle ressentir ? Écoutes-tu de la musique quand tu es stressé(e) ou heureux/heureuse ? Écris 8-12 phrases.",
+      "almanca": "Schreib über die Rolle von Musik in deinem Leben. Wie macht sie dich fühlen? Hörst du Musik, wenn du gestresst oder glücklich bist? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 23,
+      "tr": "Bir arkadaşına yaşadığın şehri tavsiye et.",
+      "ingilizce": "Write a letter to a friend recommending your city or town. What should they see and do? What should they eat? Write 8-12 sentences.",
+      "fransizca": "Écris une lettre à un(e) ami(e) pour lui recommander ta ville. Qu'est-ce qu'il/elle devrait voir et faire ? Qu'est-ce qu'il/elle devrait manger ? Écris 8-12 phrases.",
+      "almanca": "Schreib einen Brief an einen Freund oder eine Freundin und empfehle deine Stadt. Was soll er/sie sehen und machen? Was soll er/sie essen? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 24,
+      "tr": "Geleneksel değerlere mi, modern değerlere mi önem veriyorsun?",
+      "ingilizce": "Write about traditional and modern values. Which do you think are more important? Can they coexist? Write 8-12 sentences.",
+      "fransizca": "Écris sur les valeurs traditionnelles et modernes. Lesquelles te semblent les plus importantes ? Peuvent-elles coexister ? Écris 8-12 phrases.",
+      "almanca": "Schreib über traditionelle und moderne Werte. Welche sind deiner Meinung nach wichtiger? Können sie nebeneinander bestehen? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 25,
+      "tr": "Bir lider olsaydın ne değiştirirdin?",
+      "ingilizce": "Imagine you are a leader of your country. What one change would you make? Why? How would it help people? Write 8-12 sentences.",
+      "fransizca": "Imagine que tu es le/la chef(fe) de ton pays. Quel changement ferais-tu ? Pourquoi ? Comment cela aiderait-il les gens ? Écris 8-12 phrases.",
+      "almanca": "Stell dir vor, du bist das Staatsoberhaupt deines Landes. Welche eine Änderung würdest du vornehmen? Warum? Wie würde es den Menschen helfen? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 26,
+      "tr": "Spor hayatına etkilerini anlat: fiziksel mi, zihinsel mi?",
+      "ingilizce": "Write about the effects of sport on your life. Is it more important for your body or your mind? Write 8-12 sentences.",
+      "fransizca": "Écris sur les effets du sport dans ta vie. Est-il plus important pour ton corps ou pour ton esprit ? Écris 8-12 phrases.",
+      "almanca": "Schreib über die Auswirkungen von Sport in deinem Leben. Ist er wichtiger für deinen Körper oder deinen Geist? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 27,
+      "tr": "Favori yazarın veya sanatçından etkilendiğini anlat.",
+      "ingilizce": "Write about a writer or artist who has inspired you. What is their work like? How has it influenced you? Write 8-12 sentences.",
+      "fransizca": "Écris sur un écrivain ou un artiste qui t'a inspiré(e). Comment est son œuvre ? Comment t'a-t-il/elle influencé(e) ? Écris 8-12 phrases.",
+      "almanca": "Schreib über einen Schriftsteller oder Künstler, der dich inspiriert hat. Wie ist sein/ihr Werk? Wie hat er/sie dich beeinflusst? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 28,
+      "tr": "Sosyal adaletsizlikle karşılaştığında nasıl hissediyorsun?",
+      "ingilizce": "Write about a time you witnessed or experienced injustice. What happened? How did it make you feel? What did you do? Write 8-12 sentences.",
+      "fransizca": "Écris sur une situation d'injustice que tu as vécue ou observée. Qu'est-ce qui s'est passé ? Comment tu t'es senti(e) ? Qu'as-tu fait ? Écris 8-12 phrases.",
+      "almanca": "Schreib über eine Situation, in der du Ungerechtigkeit erlebt oder beobachtet hast. Was ist passiert? Wie hast du dich gefühlt? Was hast du getan? Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 29,
+      "tr": "Dijital oyunların gençler üzerindeki etkisini değerlendir.",
+      "ingilizce": "Write about the effects of video games on young people. Are they mostly positive or negative? Use examples to support your view. Write 8-12 sentences.",
+      "fransizca": "Écris sur les effets des jeux vidéo sur les jeunes. Sont-ils plutôt positifs ou négatifs ? Donne des exemples pour appuyer ton point de vue. Écris 8-12 phrases.",
+      "almanca": "Schreib über die Auswirkungen von Videospielen auf Jugendliche. Sind sie eher positiv oder negativ? Verwende Beispiele, um deine Meinung zu unterstützen. Schreib 8-12 Sätze."
+    },
+    {
+      "gun": 30,
+      "tr": "Kendi öğrenme alışkanlıklarını değerlendir: nasıl daha verimli öğrenirsin?",
+      "ingilizce": "Write about your study habits. What works best for you when learning something new? What would you like to improve? Write 8-12 sentences.",
+      "fransizca": "Écris sur tes habitudes d'apprentissage. Qu'est-ce qui fonctionne le mieux pour toi quand tu apprends quelque chose de nouveau ? Qu'est-ce que tu aimerais améliorer ? Écris 8-12 phrases.",
+      "almanca": "Schreib über deine Lerngewohnheiten. Was funktioniert am besten für dich, wenn du etwas Neues lernst? Was möchtest du verbessern? Schreib 8-12 Sätze."
+    }
+  ]
+}

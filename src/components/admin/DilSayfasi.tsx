@@ -146,6 +146,7 @@ function OdevBolumu({ dil }: { dil: Dil }) {
   const [seviye, setSeviye] = useState<Seviye>("A1");
   const [prompt, setPrompt] = useState("");
   const [mevcut, setMevcut] = useState<string | null>(null);
+  const [hedef, setHedef] = useState("");
   const [kaydediliyor, setKaydediliyor] = useState(false);
 
   useEffect(() => {
@@ -153,8 +154,10 @@ function OdevBolumu({ dil }: { dil: Dil }) {
     bugunkunOdevGetir(dil, seviye).then((row) => {
       if (iptal) return;
       const text = row?.prompt_tr ? String(row.prompt_tr) : "";
+      const hedef = row?.prompt_hedef ? String(row.prompt_hedef) : "";
       setMevcut(text || null);
       setPrompt(text);
+      setHedef(hedef);
     });
     return () => {
       iptal = true;
@@ -186,9 +189,12 @@ function OdevBolumu({ dil }: { dil: Dil }) {
     <div className="mt-4 space-y-4">
       <h3 className="font-semibold text-[#1a1612]">Bugünkü Yazı Ödevi</h3>
       {mevcut ? (
-        <p className="rounded-xl border border-[#e8e0d4] bg-white/60 px-3 py-2 text-sm text-[#6b6158]">
-          Kayıtlı: {mevcut}
-        </p>
+        <div className="rounded-xl border border-[#e8e0d4] bg-white/60 px-3 py-2 text-sm text-[#6b6158]">
+          <p>Kayıtlı: {mevcut}</p>
+          {hedef ? (
+            <p className="mt-2 whitespace-pre-wrap text-[#1a1612]/80">{hedef}</p>
+          ) : null}
+        </div>
       ) : null}
       <div className="space-y-3">
         <select

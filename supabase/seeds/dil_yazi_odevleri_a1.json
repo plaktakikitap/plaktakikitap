@@ -1,0 +1,222 @@
+{
+  "A1": [
+    {
+      "gun": 1,
+      "tr": "Kendini tanıt: adın, yaşın ve nerede yaşadığını yaz.",
+      "ingilizce": "Write 2-3 sentences about yourself. Tell us your name, your age, and where you live.",
+      "fransizca": "Écris 2-3 phrases pour te présenter. Comment tu t'appelles ? Quel âge as-tu ? Où habites-tu ?",
+      "almanca": "Schreib 2-3 Sätze über dich. Wie heißt du? Wie alt bist du? Wo wohnst du?"
+    },
+    {
+      "gun": 2,
+      "tr": "Aileni tanıt: kaç kişisiniz, kimler var?",
+      "ingilizce": "Write about your family. How many people are in your family? What are their names?",
+      "fransizca": "Écris sur ta famille. Combien de personnes y a-t-il dans ta famille ? Comment s'appellent-ils ?",
+      "almanca": "Schreib über deine Familie. Wie viele Personen sind in deiner Familie? Wie heißen sie?"
+    },
+    {
+      "gun": 3,
+      "tr": "En sevdiğin rengi ve neden sevdiğini yaz.",
+      "ingilizce": "What is your favorite color? Write 2 sentences. Why do you like it?",
+      "fransizca": "Quelle est ta couleur préférée ? Écris 2 phrases. Pourquoi tu aimes cette couleur ?",
+      "almanca": "Was ist deine Lieblingsfarbe? Schreib 2 Sätze. Warum magst du diese Farbe?"
+    },
+    {
+      "gun": 4,
+      "tr": "Sabah rutinini anlat: ne zaman uyanırsın, ne yaparsın?",
+      "ingilizce": "Write about your morning. What time do you wake up? What do you do first?",
+      "fransizca": "Écris sur ton matin. À quelle heure tu te lèves ? Qu'est-ce que tu fais d'abord ?",
+      "almanca": "Schreib über deinen Morgen. Um wie viel Uhr stehst du auf? Was machst du zuerst?"
+    },
+    {
+      "gun": 5,
+      "tr": "En sevdiğin yiyeceği tanıt.",
+      "ingilizce": "Write about your favorite food. What is it? Do you eat it every day?",
+      "fransizca": "Écris sur ton plat préféré. C'est quoi ? Est-ce que tu en manges souvent ?",
+      "almanca": "Schreib über dein Lieblingsessen. Was ist es? Isst du es oft?"
+    },
+    {
+      "gun": 6,
+      "tr": "Evcil hayvanın var mı? Varsa anlat, yoksa sahip olmak istediğin hayvanı yaz.",
+      "ingilizce": "Do you have a pet? Write 2-3 sentences. If not, what animal do you want?",
+      "fransizca": "Est-ce que tu as un animal de compagnie ? Écris 2-3 phrases. Sinon, quel animal tu voudrais avoir ?",
+      "almanca": "Hast du ein Haustier? Schreib 2-3 Sätze. Wenn nicht, welches Tier möchtest du haben?"
+    },
+    {
+      "gun": 7,
+      "tr": "Bugün hava nasıl? Hava durumunu yaz.",
+      "ingilizce": "Write about the weather today. Is it sunny, rainy, or cold? What do you wear?",
+      "fransizca": "Écris sur la météo aujourd'hui. Il fait beau, il pleut ou il fait froid ? Qu'est-ce que tu portes ?",
+      "almanca": "Schreib über das Wetter heute. Scheint die Sonne, regnet es oder ist es kalt? Was trägst du?"
+    },
+    {
+      "gun": 8,
+      "tr": "Oturduğun şehri veya köyü tanıt.",
+      "ingilizce": "Write about the place where you live. Is it a city or a village? Is it big or small?",
+      "fransizca": "Écris sur l'endroit où tu habites. C'est une ville ou un village ? C'est grand ou petit ?",
+      "almanca": "Schreib über den Ort, wo du wohnst. Ist es eine Stadt oder ein Dorf? Ist es groß oder klein?"
+    },
+    {
+      "gun": 9,
+      "tr": "Okul veya iş yerinle ilgili 2-3 cümle yaz.",
+      "ingilizce": "Write 2-3 sentences about your school or workplace. Where is it? Do you like it?",
+      "fransizca": "Écris 2-3 phrases sur ton école ou ton travail. Où est-il ? Est-ce que tu aimes y aller ?",
+      "almanca": "Schreib 2-3 Sätze über deine Schule oder deinen Arbeitsplatz. Wo ist er? Gefällt er dir?"
+    },
+    {
+      "gun": 10,
+      "tr": "Hafta sonu ne yaparsın? Kısa anlat.",
+      "ingilizce": "Write about your weekend. What do you do on Saturday or Sunday?",
+      "fransizca": "Écris sur ton week-end. Qu'est-ce que tu fais le samedi ou le dimanche ?",
+      "almanca": "Schreib über dein Wochenende. Was machst du am Samstag oder Sonntag?"
+    },
+    {
+      "gun": 11,
+      "tr": "En sevdiğin içeceği yaz ve neden sevdiğini açıkla.",
+      "ingilizce": "What is your favorite drink? Write 2 sentences about it.",
+      "fransizca": "Quelle est ta boisson préférée ? Écris 2 phrases à ce sujet.",
+      "almanca": "Was ist dein Lieblingsgetränk? Schreib 2 Sätze darüber."
+    },
+    {
+      "gun": 12,
+      "tr": "Kaç kardeşin var? Onları kısaca tanıt.",
+      "ingilizce": "Write about your brothers or sisters. How many do you have? What are their names and ages?",
+      "fransizca": "Écris sur tes frères et sœurs. Combien en as-tu ? Comment s'appellent-ils et quel âge ont-ils ?",
+      "almanca": "Schreib über deine Geschwister. Wie viele hast du? Wie heißen sie und wie alt sind sie?"
+    },
+    {
+      "gun": 13,
+      "tr": "Hangi sporu veya aktiviteyi seversin?",
+      "ingilizce": "Write about a sport or activity you like. Do you play it often?",
+      "fransizca": "Écris sur un sport ou une activité que tu aimes. Est-ce que tu le/la pratiques souvent ?",
+      "almanca": "Schreib über einen Sport oder eine Aktivität, die du magst. Machst du es oft?"
+    },
+    {
+      "gun": 14,
+      "tr": "En sevdiğin mevsim hangisi ve neden?",
+      "ingilizce": "What is your favorite season? Write 2-3 sentences. Why do you like it?",
+      "fransizca": "Quelle est ta saison préférée ? Écris 2-3 phrases. Pourquoi tu aimes cette saison ?",
+      "almanca": "Was ist deine Lieblingsjahreszeit? Schreib 2-3 Sätze. Warum magst du sie?"
+    },
+    {
+      "gun": 15,
+      "tr": "Akşam yemeğinde ne yersin? Yaz.",
+      "ingilizce": "Write about your dinner. What do you eat in the evening? Who do you eat with?",
+      "fransizca": "Écris sur ton dîner. Qu'est-ce que tu manges le soir ? Avec qui tu manges ?",
+      "almanca": "Schreib über dein Abendessen. Was isst du am Abend? Mit wem isst du?"
+    },
+    {
+      "gun": 16,
+      "tr": "Evini kısaca tanıt: kaç odası var, nerede?",
+      "ingilizce": "Write about your home. How many rooms does it have? Do you have a garden?",
+      "fransizca": "Écris sur ta maison ou ton appartement. Combien de pièces y a-t-il ? Est-ce qu'il y a un jardin ?",
+      "almanca": "Schreib über dein Haus oder deine Wohnung. Wie viele Zimmer hat es? Gibt es einen Garten?"
+    },
+    {
+      "gun": 17,
+      "tr": "En iyi arkadaşını tanıt.",
+      "ingilizce": "Write about your best friend. What is their name? How old are they?",
+      "fransizca": "Écris sur ton/ta meilleur(e) ami(e). Comment il/elle s'appelle ? Quel âge a-t-il/elle ?",
+      "almanca": "Schreib über deinen besten Freund oder deine beste Freundin. Wie heißt er/sie? Wie alt ist er/sie?"
+    },
+    {
+      "gun": 18,
+      "tr": "Hangi müziği seversin? Yaz.",
+      "ingilizce": "Write about music you like. What kind of music is it? Who is your favorite singer?",
+      "fransizca": "Écris sur la musique que tu aimes. Quel genre de musique tu préfères ? Qui est ton chanteur ou ta chanteuse préféré(e) ?",
+      "almanca": "Schreib über Musik, die du magst. Welche Art von Musik ist es? Wer ist dein Lieblingssänger oder deine Lieblingssängerin?"
+    },
+    {
+      "gun": 19,
+      "tr": "1'den 10'a kadar olan sayıları İngilizce yaz ve bir cümlede kullan.",
+      "tr_overrides": {
+        "fransizca": "1'den 10'a kadar olan sayıları Fransızca yaz ve bir cümlede kullan.",
+        "almanca": "1'den 10'a kadar olan sayıları Almanca yaz ve bir cümlede kullan."
+      },
+      "ingilizce": "Write the numbers 1 to 10 in English. Then write one sentence using a number.",
+      "fransizca": "Écris les chiffres de 1 à 10 en français. Ensuite, écris une phrase avec un chiffre.",
+      "almanca": "Schreib die Zahlen von 1 bis 10 auf Deutsch. Dann schreib einen Satz mit einer Zahl."
+    },
+    {
+      "gun": 20,
+      "tr": "Haftanın günlerini yaz ve hangi gün sever olduğunu belirt.",
+      "tr_overrides": {
+        "fransizca": "Haftanın günlerini yaz ve hangi günü sevdiğini belirt.",
+        "almanca": "Haftanın günlerini yaz ve hangi günü sevdiğini belirt."
+      },
+      "ingilizce": "Write the days of the week. Which day do you like best and why?",
+      "fransizca": "Écris les jours de la semaine. Quel jour tu préfères et pourquoi ?",
+      "almanca": "Schreib die Wochentage. Welchen Tag magst du am liebsten und warum?"
+    },
+    {
+      "gun": 21,
+      "tr": "Bugün ne giydin? Renklerle birlikte yaz.",
+      "ingilizce": "Write about what you are wearing today. What colors are your clothes?",
+      "fransizca": "Écris sur ce que tu portes aujourd'hui. De quelle couleur sont tes vêtements ?",
+      "almanca": "Schreib über das, was du heute trägst. Welche Farben haben deine Kleider?"
+    },
+    {
+      "gun": 22,
+      "tr": "Annen veya babanı kısaca tanıt.",
+      "ingilizce": "Write about your mother or father. What does she/he look like? What does she/he do?",
+      "fransizca": "Écris sur ta mère ou ton père. À quoi ressemble-t-il/elle ? Qu'est-ce qu'il/elle fait dans la vie ?",
+      "almanca": "Schreib über deine Mutter oder deinen Vater. Wie sieht er/sie aus? Was macht er/sie?"
+    },
+    {
+      "gun": 23,
+      "tr": "Favori filmini veya çizgi filmini yaz.",
+      "ingilizce": "Write about your favorite movie or cartoon. What is it about? Do you watch it often?",
+      "fransizca": "Écris sur ton film ou ton dessin animé préféré. C'est quoi l'histoire ? Tu le/la regardes souvent ?",
+      "almanca": "Schreib über deinen Lieblingsfilm oder deinen Lieblingszeichentrickfilm. Worum geht es? Schaust du ihn oft?"
+    },
+    {
+      "gun": 24,
+      "tr": "Alışveriş yaparken ne satın alırsın? Yaz.",
+      "ingilizce": "Write about shopping. What do you buy? Where do you shop?",
+      "fransizca": "Écris sur tes achats. Qu'est-ce que tu achètes ? Où est-ce que tu fais tes courses ?",
+      "almanca": "Schreib über das Einkaufen. Was kaufst du? Wo kaufst du ein?"
+    },
+    {
+      "gun": 25,
+      "tr": "Hangi meyveleri seversin? Listele ve bir cümle yaz.",
+      "ingilizce": "Write about fruits you like. List three fruits and write one sentence about them.",
+      "fransizca": "Écris sur les fruits que tu aimes. Cite trois fruits et écris une phrase à leur sujet.",
+      "almanca": "Schreib über Früchte, die du magst. Nenne drei Früchte und schreib einen Satz darüber."
+    },
+    {
+      "gun": 26,
+      "tr": "Bugün ne yedin? Öğle yemeğini yaz.",
+      "ingilizce": "Write about your lunch today. What did you eat? Was it good?",
+      "fransizca": "Écris sur ton déjeuner aujourd'hui. Qu'est-ce que tu as mangé ? C'était bon ?",
+      "almanca": "Schreib über dein Mittagessen heute. Was hast du gegessen? War es gut?"
+    },
+    {
+      "gun": 27,
+      "tr": "Evinin yakınında ne var? Okul, park, market?",
+      "ingilizce": "Write about your neighbourhood. What is near your home? Is there a park or a shop?",
+      "fransizca": "Écris sur ton quartier. Qu'est-ce qu'il y a près de chez toi ? Un parc ou un magasin ?",
+      "almanca": "Schreib über dein Viertel. Was ist in der Nähe von deinem Haus? Gibt es einen Park oder einen Laden?"
+    },
+    {
+      "gun": 28,
+      "tr": "Seçtiğin bir hayvanı tanıt: neye benzer, ne yer?",
+      "ingilizce": "Write 2-3 sentences about an animal you like. What does it look like? What does it eat?",
+      "fransizca": "Écris 2-3 phrases sur un animal que tu aimes. À quoi ressemble-t-il ? Qu'est-ce qu'il mange ?",
+      "almanca": "Schreib 2-3 Sätze über ein Tier, das du magst. Wie sieht es aus? Was frisst es?"
+    },
+    {
+      "gun": 29,
+      "tr": "En sevdiğin oyunu veya oyuncağı anlat.",
+      "ingilizce": "Write about your favorite game or toy. What is it? Why do you like it?",
+      "fransizca": "Écris sur ton jeu ou ton jouet préféré. C'est quoi ? Pourquoi tu l'aimes ?",
+      "almanca": "Schreib über dein Lieblingsspiel oder dein Lieblingsspielzeug. Was ist es? Warum magst du es?"
+    },
+    {
+      "gun": 30,
+      "tr": "Bugün mutlu musun? Neden? Duygularını yaz.",
+      "ingilizce": "Write about how you feel today. Are you happy or tired? Write 2-3 sentences.",
+      "fransizca": "Écris sur comment tu te sens aujourd'hui. Tu es content(e) ou fatigué(e) ? Écris 2-3 phrases.",
+      "almanca": "Schreib darüber, wie du dich heute fühlst. Bist du glücklich oder müde? Schreib 2-3 Sätze."
+    }
+  ]
+}

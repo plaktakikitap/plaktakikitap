@@ -1,0 +1,214 @@
+{
+  "A2": [
+    {
+      "gun": 1,
+      "tr": "Geçen hafta sonu nerede olduğunu ve ne yaptığını yaz.",
+      "ingilizce": "Write about last weekend. Where did you go? What did you do? Did you enjoy it? Write 5-6 sentences.",
+      "fransizca": "Écris sur ton week-end dernier. Où es-tu allé(e) ? Qu'as-tu fait ? Est-ce que tu as aimé ? Écris 5-6 phrases.",
+      "almanca": "Schreib über dein letztes Wochenende. Wohin bist du gegangen? Was hast du gemacht? Hat es dir gefallen? Schreib 5-6 Sätze."
+    },
+    {
+      "gun": 2,
+      "tr": "En sevdiğin hobiden bahset: ne zaman, nasıl öğrendin?",
+      "ingilizce": "Write about your hobby. When did you start? How often do you do it? Write 5-7 sentences.",
+      "fransizca": "Écris sur ton passe-temps. Quand as-tu commencé ? Combien de fois par semaine tu le pratiques ? Écris 5-7 phrases.",
+      "almanca": "Schreib über dein Hobby. Wann hast du damit angefangen? Wie oft machst du es? Schreib 5-7 Sätze."
+    },
+    {
+      "gun": 3,
+      "tr": "Bir seyahat planı yap: nereye gitmek istiyorsun?",
+      "ingilizce": "Write about a place you want to visit. Where is it? Why do you want to go there? Write 5-6 sentences.",
+      "fransizca": "Écris sur un endroit que tu veux visiter. Où est-il ? Pourquoi tu veux y aller ? Écris 5-6 phrases.",
+      "almanca": "Schreib über einen Ort, den du besuchen möchtest. Wo ist er? Warum möchtest du dorthin? Schreib 5-6 Sätze."
+    },
+    {
+      "gun": 4,
+      "tr": "En son gittiğin alışverişi anlat.",
+      "ingilizce": "Write about the last time you went shopping. What did you buy? Where did you go? How much did you spend? Write 5-7 sentences.",
+      "fransizca": "Écris sur la dernière fois que tu as fait des courses. Qu'as-tu acheté ? Où es-tu allé(e) ? Écris 5-7 phrases.",
+      "almanca": "Schreib über das letzte Mal, als du eingekauft hast. Was hast du gekauft? Wohin bist du gegangen? Schreib 5-7 Sätze."
+    },
+    {
+      "gun": 5,
+      "tr": "Okul veya iş hayatını anlat: ne öğreniyorsun/yapıyorsun?",
+      "ingilizce": "Write about your school or job. What subjects do you study or what do you do at work? Write 6-8 sentences.",
+      "fransizca": "Écris sur ton école ou ton travail. Quelles matières tu étudies ou qu'est-ce que tu fais au travail ? Écris 6-8 phrases.",
+      "almanca": "Schreib über deine Schule oder deinen Job. Welche Fächer lernst du oder was machst du bei der Arbeit? Schreib 6-8 Sätze."
+    },
+    {
+      "gun": 6,
+      "tr": "En iyi arkadaşınla ilgili bir anı anlat.",
+      "ingilizce": "Write a memory about your best friend. What happened? When was it? Why do you remember it? Write 5-7 sentences.",
+      "fransizca": "Écris un souvenir avec ton/ta meilleur(e) ami(e). Qu'est-ce qui s'est passé ? Quand ? Pourquoi tu t'en souviens ? Écris 5-7 phrases.",
+      "almanca": "Schreib eine Erinnerung mit deinem besten Freund oder deiner besten Freundin. Was ist passiert? Wann war das? Warum erinnerst du dich daran? Schreib 5-7 Sätze."
+    },
+    {
+      "gun": 7,
+      "tr": "Doğum günü kutlamanı anlat.",
+      "ingilizce": "Write about a birthday celebration. Whose birthday was it? What did you do? Write 6-8 sentences.",
+      "fransizca": "Écris sur une fête d'anniversaire. C'était l'anniversaire de qui ? Qu'est-ce que vous avez fait ? Écris 6-8 phrases.",
+      "almanca": "Schreib über eine Geburtstagsfeier. Wessen Geburtstag war es? Was habt ihr gemacht? Schreib 6-8 Sätze."
+    },
+    {
+      "gun": 8,
+      "tr": "Mevsimlerden birini seç ve açıkla: ne yaparsın?",
+      "ingilizce": "Choose a season. Write about what the weather is like and what you do in that season. Write 5-7 sentences.",
+      "fransizca": "Choisis une saison. Décris le temps qu'il fait et ce que tu fais pendant cette saison. Écris 5-7 phrases.",
+      "almanca": "Wähle eine Jahreszeit. Beschreibe das Wetter und was du in dieser Jahreszeit machst. Schreib 5-7 Sätze."
+    },
+    {
+      "gun": 9,
+      "tr": "Ailenle bir akşam yemeği hakkında yaz.",
+      "ingilizce": "Write about a dinner with your family. What did you eat? Who was there? Was it fun? Write 5-7 sentences.",
+      "fransizca": "Écris sur un dîner en famille. Qu'est-ce que vous avez mangé ? Qui était là ? C'était sympa ? Écris 5-7 phrases.",
+      "almanca": "Schreib über ein Abendessen mit deiner Familie. Was habt ihr gegessen? Wer war dabei? War es schön? Schreib 5-7 Sätze."
+    },
+    {
+      "gun": 10,
+      "tr": "Geçen ay yaptığın bir şeyi anlat.",
+      "ingilizce": "Write about something you did last month. What was it? Where did it happen? Write 6-8 sentences.",
+      "fransizca": "Écris sur quelque chose que tu as fait le mois dernier. C'était quoi ? Où ça s'est passé ? Écris 6-8 phrases.",
+      "almanca": "Schreib über etwas, das du letzten Monat gemacht hast. Was war das? Wo hat es stattgefunden? Schreib 6-8 Sätze."
+    },
+    {
+      "gun": 11,
+      "tr": "Bir film veya dizi hakkında yaz: kısaca anlat.",
+      "ingilizce": "Write about a movie or TV show you watched recently. What was it about? Did you like it? Write 5-7 sentences.",
+      "fransizca": "Écris sur un film ou une série que tu as regardé(e) récemment. C'était quoi l'histoire ? Tu as aimé ? Écris 5-7 phrases.",
+      "almanca": "Schreib über einen Film oder eine Serie, die du kürzlich gesehen hast. Worum geht es? Hat er/sie dir gefallen? Schreib 5-7 Sätze."
+    },
+    {
+      "gun": 12,
+      "tr": "Okul veya iş arkadaşlarından birini tanıt.",
+      "ingilizce": "Write about a classmate or colleague. What is their name? What are they like? Write 5-6 sentences.",
+      "fransizca": "Écris sur un(e) camarade de classe ou un(e) collègue. Comment il/elle s'appelle ? Comment est-il/elle ? Écris 5-6 phrases.",
+      "almanca": "Schreib über einen Mitschüler oder einen Kollegen. Wie heißt er/sie? Wie ist er/sie so? Schreib 5-6 Sätze."
+    },
+    {
+      "gun": 13,
+      "tr": "En sevdiğin yemek tarifini adım adım anlat.",
+      "ingilizce": "Write a simple recipe for your favorite dish. What ingredients do you need? What are the steps? Write 6-8 sentences.",
+      "fransizca": "Écris une recette simple de ton plat préféré. De quoi as-tu besoin ? Quelles sont les étapes ? Écris 6-8 phrases.",
+      "almanca": "Schreib ein einfaches Rezept für dein Lieblingsessen. Was brauchst du? Welche Schritte gibt es? Schreib 6-8 Sätze."
+    },
+    {
+      "gun": 14,
+      "tr": "Bir parkı veya doğal alanı tanıt.",
+      "ingilizce": "Write about a park or natural place you like. Where is it? What can you do there? Write 5-7 sentences.",
+      "fransizca": "Écris sur un parc ou un endroit naturel que tu aimes. Où est-il ? Qu'est-ce qu'on peut y faire ? Écris 5-7 phrases.",
+      "almanca": "Schreib über einen Park oder einen natürlichen Ort, den du magst. Wo ist er? Was kann man dort machen? Schreib 5-7 Sätze."
+    },
+    {
+      "gun": 15,
+      "tr": "Geçen yaz tatilini anlat.",
+      "ingilizce": "Write about last summer. Where did you go? What did you do? Write 6-8 sentences using past tense.",
+      "fransizca": "Écris sur l'été dernier. Où es-tu allé(e) ? Qu'as-tu fait ? Écris 6-8 phrases au passé composé.",
+      "almanca": "Schreib über den letzten Sommer. Wohin bist du gefahren? Was hast du gemacht? Schreib 6-8 Sätze im Perfekt."
+    },
+    {
+      "gun": 16,
+      "tr": "Sevdiğin bir müzisyen veya grup hakkında yaz.",
+      "ingilizce": "Write about a musician or band you like. Who are they? What kind of music do they make? Write 5-7 sentences.",
+      "fransizca": "Écris sur un musicien ou un groupe que tu aimes. Qui sont-ils ? Quel genre de musique font-ils ? Écris 5-7 phrases.",
+      "almanca": "Schreib über einen Musiker oder eine Band, die du magst. Wer sind sie? Was für Musik machen sie? Schreib 5-7 Sätze."
+    },
+    {
+      "gun": 17,
+      "tr": "Sabahtan akşama günlük rutinini anlat.",
+      "ingilizce": "Write about your daily routine from morning to evening. Use time expressions like \"first\", \"then\", \"after that\". Write 7-8 sentences.",
+      "fransizca": "Écris sur ta routine quotidienne du matin au soir. Utilise des expressions comme « d'abord », « ensuite », « après ». Écris 7-8 phrases.",
+      "almanca": "Schreib über deinen Tagesablauf vom Morgen bis zum Abend. Benutze Ausdrücke wie „zuerst\", „dann\", „danach\". Schreib 7-8 Sätze."
+    },
+    {
+      "gun": 18,
+      "tr": "Yaşadığın şehrin en güzel yerini tanıt.",
+      "ingilizce": "Write about the most beautiful place in your city or town. Why is it special? Write 5-7 sentences.",
+      "fransizca": "Écris sur le plus bel endroit de ta ville ou de ton village. Pourquoi est-il spécial ? Écris 5-7 phrases.",
+      "almanca": "Schreib über den schönsten Ort in deiner Stadt oder in deinem Dorf. Warum ist er besonders? Schreib 5-7 Sätze."
+    },
+    {
+      "gun": 19,
+      "tr": "Bir spor maçı veya yarışmayı anlat.",
+      "ingilizce": "Write about a sports match or competition you watched or played. What happened? Who won? Write 5-7 sentences.",
+      "fransizca": "Écris sur un match ou une compétition sportive que tu as regardé(e) ou pratiqué(e). Qu'est-ce qui s'est passé ? Qui a gagné ? Écris 5-7 phrases.",
+      "almanca": "Schreib über ein Sportspiel oder einen Wettkampf, den du gesehen oder mitgemacht hast. Was ist passiert? Wer hat gewonnen? Schreib 5-7 Sätze."
+    },
+    {
+      "gun": 20,
+      "tr": "Bir kutlama veya bayramı anlat: nasıl geçirdin?",
+      "ingilizce": "Write about a holiday or celebration you had. What did you do? Who was with you? Write 6-8 sentences.",
+      "fransizca": "Écris sur une fête ou une célébration. Qu'as-tu fait ? Qui était avec toi ? Écris 6-8 phrases.",
+      "almanca": "Schreib über ein Fest oder eine Feier. Was habt ihr gemacht? Wer war dabei? Schreib 6-8 Sätze."
+    },
+    {
+      "gun": 21,
+      "tr": "Çocukluğundan bir anı yaz.",
+      "ingilizce": "Write a memory from your childhood. How old were you? What happened? Write 6-8 sentences.",
+      "fransizca": "Écris un souvenir de ton enfance. Quel âge avais-tu ? Qu'est-ce qui s'est passé ? Écris 6-8 phrases.",
+      "almanca": "Schreib eine Erinnerung aus deiner Kindheit. Wie alt warst du? Was ist passiert? Schreib 6-8 Sätze."
+    },
+    {
+      "gun": 22,
+      "tr": "Gittiğin bir restoranı veya kafeyi anlat.",
+      "ingilizce": "Write about a restaurant or café you visited. What did you eat? Was the service good? Write 5-7 sentences.",
+      "fransizca": "Écris sur un restaurant ou un café que tu as visité. Qu'as-tu mangé ? Le service était bien ? Écris 5-7 phrases.",
+      "almanca": "Schreib über ein Restaurant oder ein Café, das du besucht hast. Was hast du gegessen? War der Service gut? Schreib 5-7 Sätze."
+    },
+    {
+      "gun": 23,
+      "tr": "Favori kitabını kısaca tanıt.",
+      "ingilizce": "Write about a book you like. What is it about? Why did you like it? Write 5-7 sentences.",
+      "fransizca": "Écris sur un livre que tu aimes. De quoi ça parle ? Pourquoi tu l'as aimé ? Écris 5-7 phrases.",
+      "almanca": "Schreib über ein Buch, das du magst. Worum geht es? Warum hast du es gemocht? Schreib 5-7 Sätze."
+    },
+    {
+      "gun": 24,
+      "tr": "İki şehri veya iki ülkeyi karşılaştır.",
+      "ingilizce": "Write about two cities or countries. How are they similar? How are they different? Write 6-8 sentences.",
+      "fransizca": "Écris sur deux villes ou deux pays. En quoi sont-ils similaires ? En quoi sont-ils différents ? Écris 6-8 phrases.",
+      "almanca": "Schreib über zwei Städte oder zwei Länder. Was haben sie gemeinsam? Was ist unterschiedlich? Schreib 6-8 Sätze."
+    },
+    {
+      "gun": 25,
+      "tr": "Gelecek hafta için planlarını yaz.",
+      "ingilizce": "Write about your plans for next week. What will you do on different days? Use \"going to\" or \"will\". Write 5-7 sentences.",
+      "fransizca": "Écris sur tes projets pour la semaine prochaine. Qu'est-ce que tu vas faire chaque jour ? Utilise « aller + infinitif ». Écris 5-7 phrases.",
+      "almanca": "Schreib über deine Pläne für nächste Woche. Was wirst du an verschiedenen Tagen machen? Benutze „werden\" oder „vorhaben\". Schreib 5-7 Sätze."
+    },
+    {
+      "gun": 26,
+      "tr": "Bir hastalık veya kötü gün geçirdiğinde ne yaparsın?",
+      "ingilizce": "Write about what you do when you are sick or having a bad day. What helps you feel better? Write 5-7 sentences.",
+      "fransizca": "Écris sur ce que tu fais quand tu es malade ou quand tu as une mauvaise journée. Qu'est-ce qui t'aide à te sentir mieux ? Écris 5-7 phrases.",
+      "almanca": "Schreib darüber, was du machst, wenn du krank bist oder einen schlechten Tag hast. Was hilft dir, dich besser zu fühlen? Schreib 5-7 Sätze."
+    },
+    {
+      "gun": 27,
+      "tr": "Evinde yardım ettiğin işleri anlat.",
+      "ingilizce": "Write about chores you do at home. What do you help with? How often? Write 5-7 sentences.",
+      "fransizca": "Écris sur les tâches ménagères que tu fais à la maison. À quoi est-ce que tu aides ? Combien de fois par semaine ? Écris 5-7 phrases.",
+      "almanca": "Schreib über Haushaltsaufgaben, die du zu Hause erledigst. Wobei hilfst du? Wie oft? Schreib 5-7 Sätze."
+    },
+    {
+      "gun": 28,
+      "tr": "İnternet veya sosyal medyayı nasıl kullandığını anlat.",
+      "ingilizce": "Write about how you use the internet or social media. What do you do online? Write 6-8 sentences.",
+      "fransizca": "Écris sur comment tu utilises Internet ou les réseaux sociaux. Qu'est-ce que tu fais en ligne ? Écris 6-8 phrases.",
+      "almanca": "Schreib darüber, wie du das Internet oder soziale Medien nutzt. Was machst du online? Schreib 6-8 Sätze."
+    },
+    {
+      "gun": 29,
+      "tr": "Sana güzel gelen bir yer hakkında yaz: ev, okul, doğa.",
+      "ingilizce": "Write about a place where you feel happy and comfortable. What is it like? Why do you like it? Write 5-7 sentences.",
+      "fransizca": "Écris sur un endroit où tu te sens bien et à l'aise. Comment est-il ? Pourquoi tu l'aimes ? Écris 5-7 phrases.",
+      "almanca": "Schreib über einen Ort, an dem du dich wohl und glücklich fühlst. Wie ist er? Warum magst du ihn? Schreib 5-7 Sätze."
+    },
+    {
+      "gun": 30,
+      "tr": "Bu dil öğrenme yolculuğuna neden başladığını anlat.",
+      "ingilizce": "Write about why you started learning English. When did you start? How do you practise? Write 6-8 sentences.",
+      "fransizca": "Écris sur les raisons pour lesquelles tu as commencé à apprendre le français. Quand as-tu commencé ? Comment tu t'entraînes ? Écris 6-8 phrases.",
+      "almanca": "Schreib darüber, warum du angefangen hast, Deutsch zu lernen. Wann hast du begonnen? Wie übst du? Schreib 6-8 Sätze."
+    }
+  ]
+}

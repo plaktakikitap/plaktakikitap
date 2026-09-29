@@ -73,8 +73,9 @@ export interface YaziOdevi {
   dil: Dil;
   seviye: Seviye;
   prompt_tr: string;
+  prompt_hedef?: string | null;
+  gun?: number | null;
   hedef_kelimeler: string[];
-  tarih: string;
 }
 
 export interface XpKaydi {

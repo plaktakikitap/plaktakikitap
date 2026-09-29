@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { isAdminApiAuthorized } from "@/lib/admin/requireAdminApi";
-import { addDaysISO, istanbulTodayISO } from "@/lib/date/istanbul";
+import { addDaysISO, daysBetweenISO, istanbulTodayISO } from "@/lib/date/istanbul";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { degerlendirYazi } from "@/lib/takip/dil-yazi-degerlendirme";
 import type {
@@ -402,17 +402,59 @@ export async function quizSorularUret(
 
 // ─── Yazı ödevi ────────────────────────────────────────────────────────────
 
+async function mufredatGunu(dil: Dil, seviye: Seviye): Promise<number> {
+  const today = istanbulTodayISO();
+  const client = sb();
+  const { data: existing, error } = await client
+    .from("dil_yazi_ilerleme")
+    .select("baslangic_tarihi")
+    .eq("dil", dil)
+    .eq("seviye", seviye)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+
+  let start = existing?.baslangic_tarihi
+    ? String(existing.baslangic_tarihi).slice(0, 10)
+    : "";
+
+  if (!start) {
+    const { error: insertErr } = await client.from("dil_yazi_ilerleme").insert({
+      dil,
+      seviye,
+      baslangic_tarihi: today,
+    });
+    if (insertErr) {
+      const { data: again, error: againErr } = await client
+        .from("dil_yazi_ilerleme")
+        .select("baslangic_tarihi")
+        .eq("dil", dil)
+        .eq("seviye", seviye)
+        .maybeSingle();
+      if (againErr) throw new Error(againErr.message);
+      start = again?.baslangic_tarihi
+        ? String(again.baslangic_tarihi).slice(0, 10)
+        : today;
+    } else {
+      start = today;
+    }
+  }
+
+  return Math.min(30, Math.max(1, daysBetweenISO(start, today) + 1));
+}
+
 export async function bugunkunOdevGetir(dil: Dil, seviye: Seviye) {
   await requireWrite();
   const dilKod = assertDil(dil);
   const seviyeKod = assertSeviye(seviye);
-  const { data } = await sb()
+  const gun = await mufredatGunu(dilKod, seviyeKod);
+  const { data, error } = await sb()
     .from("dil_yazi_odevleri")
     .select("*")
     .eq("dil", dilKod)
     .eq("seviye", seviyeKod)
-    .eq("tarih", istanbulTodayISO())
+    .eq("gun", gun)
     .maybeSingle();
+  if (error) throw new Error(error.message);
   return data;
 }
 
@@ -427,17 +469,13 @@ export async function odevEkle(data: {
   const prompt_tr = data.prompt_tr.trim();
   if (!prompt_tr) throw new Error("Görev açıklaması gerekli.");
 
+  const gun = await mufredatGunu(dil, seviye);
   const { error } = await sb()
     .from("dil_yazi_odevleri")
-    .upsert(
-      {
-        dil,
-        seviye,
-        prompt_tr,
-        tarih: istanbulTodayISO(),
-      },
-      { onConflict: "dil,seviye,tarih" }
-    );
+    .update({ prompt_tr })
+    .eq("dil", dil)
+    .eq("seviye", seviye)
+    .eq("gun", gun);
   if (error) throw new Error(error.message);
   revalidateDil(dil);
 }
