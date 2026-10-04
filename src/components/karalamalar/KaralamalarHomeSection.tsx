@@ -1,8 +1,5 @@
 import Link from "next/link";
-import {
-  SECTION_NAME,
-  SECTION_PATH,
-} from "@/lib/karalamalar-section";
+import { SECTION_PATH } from "@/lib/karalamalar-section";
 import type { Karalama } from "@/lib/karalamalar";
 import { hasSpoilerMarkup, stripSpoilers } from "@/lib/spoiler";
 
@@ -25,14 +22,14 @@ function preview(text: string, max = 120): string {
   return `${clean.slice(0, max).trimEnd()}...`;
 }
 
-/** Ana sayfa: son 5 karalama, hafif çerçeveli. */
+/** Ana sayfa: son 3 karalama, hafif çerçeveli. */
 export function KaralamalarHomeSection({ items }: { items: Karalama[] }) {
-  const shown = items.slice(0, 5);
+  const shown = items.slice(0, 3);
   if (shown.length === 0) return null;
 
   return (
     <section className="mx-auto w-full max-w-[720px] px-4 sm:px-6">
-      <p className="section-eyebrow mb-8">{SECTION_NAME}</p>
+      <p className="section-eyebrow mb-8">Son karalamalarım</p>
 
       <div className="space-y-3">
         {shown.map((item) => (
@@ -61,14 +58,20 @@ export function KaralamalarHomeSection({ items }: { items: Karalama[] }) {
         ))}
       </div>
 
-      <p className="mt-6">
+      <div className="mt-6 flex justify-end">
         <Link
           href={SECTION_PATH}
-          className="type-4 tracking-[0.06em] text-ink-muted no-underline transition hover:text-gold"
+          className="group inline-flex items-center gap-3 text-ink-muted no-underline transition hover:text-ink"
         >
-          tümü →
+          <span className="type-4 tracking-[0.04em]">diğer karalamalar için</span>
+          <span
+            aria-hidden
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#1a1612]/15 text-[1.05rem] leading-none text-ink transition group-hover:border-gold group-hover:text-gold"
+          >
+            →
+          </span>
         </Link>
-      </p>
+      </div>
     </section>
   );
 }

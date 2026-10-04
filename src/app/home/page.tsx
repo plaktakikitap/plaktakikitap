@@ -20,7 +20,7 @@ export default async function HomePage() {
     [latestVideo, siteSettings, karalamalarPreview] = await Promise.all([
       getLatestVideo().then((v) => v ?? null),
       getSiteSettings(),
-      getKaralamalarPublic({ limit: 5 }),
+      getKaralamalarPublic({ limit: 3 }),
     ]);
     latestVideoThumb = latestVideo ? getVideoThumbnail(latestVideo) : null;
   } catch {

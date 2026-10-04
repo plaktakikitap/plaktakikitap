@@ -190,8 +190,11 @@ function IzYazisi({
 
 export function VinylRecord({
   logoSrc = DEFAULT_LABEL_LOGO,
+  allowPageScroll = false,
 }: {
   logoSrc?: string | null;
+  /** Dikey kaydırma sayfayı hareket ettirsin; plağı sürükleyerek döndürme kapalı kalır */
+  allowPageScroll?: boolean;
 } = {}) {
   const router = useRouter();
   const reduceMotion = useReducedMotion();
@@ -438,6 +441,7 @@ export function VinylRecord({
   }, [playing, syncTargetSpeed]);
 
   const onPointerDown = (e: ReactPointerEvent) => {
+    if (allowPageScroll) return;
     if (e.button !== 0 && e.pointerType === "mouse") return;
     e.currentTarget.setPointerCapture(e.pointerId);
     isDraggingRef.current = true;
@@ -450,6 +454,7 @@ export function VinylRecord({
   };
 
   const onPointerMove = (e: ReactPointerEvent) => {
+    if (allowPageScroll) return;
     if (isDraggingRef.current) {
       const angle = getAngleFromEvent(e.clientX, e.clientY);
       const delta = angle - dragStartRef.current.angle;
@@ -504,7 +509,7 @@ export function VinylRecord({
         position: "relative",
         background: "transparent",
         cursor,
-        touchAction: "none",
+        touchAction: allowPageScroll ? "pan-y" : "none",
       }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}

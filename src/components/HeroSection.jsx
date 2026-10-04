@@ -7,7 +7,7 @@ import {
   AnimatePresence,
   useScroll,
 } from "framer-motion";
-import FlipFrame from "@/components/home/FlipFrame";
+import { VinylRecord } from "@/components/VinylRecord";
 import AnimatedTitle from "@/components/home/AnimatedTitle";
 import RoomBackdrop from "@/components/home/RoomBackdrop";
 import { ScrollIndicator } from "@/components/home/ScrollHint";
@@ -235,15 +235,15 @@ function EasterEggCharacter() {
 }
 
 /**
+ * Mobil karşılama — sabit dönen plak. Masaüstündeki kaydırmalı pikap sahnesi burada yok.
  * @param {{
- *   photoSrc: string;
+ *   photoSrc?: string;
  *   logoSrc: string;
  *   title?: string;
  *   subtitle?: string;
  * }} props
  */
 export default function HeroSection({
-  photoSrc,
   logoSrc,
   title = "Hoş geldiniz, ben Eymen!",
   subtitle = "yanii... nam-ı diğer Plaktaki Kitap",
@@ -279,19 +279,16 @@ export default function HeroSection({
           initial={reduce ? false : { opacity: 0, y: 24, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.75, ease: EASE }}
-          className="flex w-full max-w-[280px] justify-center sm:max-w-[320px]"
+          className="relative aspect-square w-[min(84vw,22.5rem)]"
         >
-          <FlipFrame
-            aSrc={photoSrc}
-            bSrc={logoSrc}
-            size={320}
-            variant="antiqueGold"
-            intervalMs={4200}
-            fadeMs={1600}
-            altA="Eymen portre"
-            altB="Plaktaki Kitap logo"
-            glowColor={timePalette.glow}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-1/2 h-[120%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            style={{
+              background: `radial-gradient(circle, ${timePalette.glow} 0%, transparent 68%)`,
+            }}
           />
+          <VinylRecord logoSrc={logoSrc} allowPageScroll />
         </motion.div>
 
         <div className="mt-8 flex w-full max-w-6xl flex-col items-center sm:mt-12 sm:flex-row sm:items-center sm:px-4">

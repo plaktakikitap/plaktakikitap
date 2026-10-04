@@ -1059,6 +1059,27 @@ body::before {
   animation: pageFadeIn 0.5s ease-out forwards;
 }
 
+@keyframes karalama-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.karalama-card {
+  animation: karalama-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .karalama-card {
+    animation: none;
+  }
+}
+
 /* Yazılarım: okuma deneyimi — kağıt dokusu */
 .yazilarim-paper {
   background-color: #fafaf8;

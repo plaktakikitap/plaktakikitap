@@ -12,6 +12,7 @@ import {
 } from "@/lib/karalamalar-section";
 import SpoilerText from "@/components/SpoilerText";
 import { stripSpoilers } from "@/lib/spoiler";
+import { formatDateTr } from "@/lib/format-date-tr";
 
 export const revalidate = 60;
 
@@ -35,18 +36,6 @@ export async function generateMetadata({
   };
 }
 
-function formatDate(iso: string): string {
-  try {
-    return new Date(iso).toLocaleDateString("tr-TR", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-  } catch {
-    return "";
-  }
-}
-
 export default async function KaralamaDetailPage({
   params,
 }: {
@@ -61,28 +50,27 @@ export default async function KaralamaDetailPage({
       <article className="animate-page-fade-in mx-auto max-w-[720px] px-4 py-12 sm:px-6 sm:py-16">
         <Link
           href={SECTION_PATH}
-          className="mb-10 inline-block text-[0.78rem] tracking-[0.08em] text-ink-muted no-underline transition hover:text-gold"
+          className="mb-10 inline-flex items-center gap-2 text-[0.78rem] tracking-[0.08em] text-ink-muted no-underline transition hover:text-gold"
         >
-          ← {SECTION_NAME}
+          <span aria-hidden>←</span>
+          {SECTION_NAME}
         </Link>
-
-        <h1
-          className="m-0 mb-3 text-[1.15rem] font-semibold tracking-[-0.01em] text-ink sm:text-[1.35rem]"
-          style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
-        >
-          {item.baslik}
-        </h1>
-
-        <div className="max-w-[680px] whitespace-pre-wrap text-[0.95rem] leading-[1.75] text-ink/80">
-          <SpoilerText content={item.icerik} />
-        </div>
 
         <time
           dateTime={item.olusturma_tarihi}
-          className="mt-3 block text-[0.78rem] tracking-[0.03em] text-ink-muted"
+          className="mb-3 block font-editorial text-[1.05rem] tracking-[-0.01em] text-gold"
         >
-          {formatDate(item.olusturma_tarihi)}
+          {formatDateTr(item.olusturma_tarihi).label}
         </time>
+        <h1 className="type-2 m-0 font-editorial font-medium tracking-[-0.02em] text-ink">
+          {item.baslik}
+        </h1>
+
+        <div className="mt-8 rounded-2xl border border-[#1a1612]/[0.08] bg-white/55 px-5 py-6 shadow-[0_12px_32px_rgba(26,22,18,0.05)] sm:px-8 sm:py-8">
+          <div className="max-w-[640px] whitespace-pre-wrap text-[1.05rem] leading-[1.85] text-ink/85">
+            <SpoilerText content={item.icerik} />
+          </div>
+        </div>
       </article>
     </main>
   );
