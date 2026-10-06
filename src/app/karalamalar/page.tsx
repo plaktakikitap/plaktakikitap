@@ -29,7 +29,7 @@ export default async function KaralamalarPage() {
           <header className="mb-12 flex items-end justify-between gap-6 sm:mb-14">
             <div>
               <p className="section-eyebrow mb-3">{SECTION_NAME}</p>
-              <h1 className="type-2 m-0 font-editorial font-medium tracking-[-0.02em] text-ink">
+              <h1 className="karalama-title type-2 m-0 tracking-[-0.02em] text-ink">
                 {SECTION_TITLE}
               </h1>
               <p className="mt-2 max-w-md text-[1rem] leading-[1.6] text-ink-muted">

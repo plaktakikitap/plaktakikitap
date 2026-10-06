@@ -62,7 +62,7 @@ export default async function KaralamaDetailPage({
         >
           {formatDateTr(item.olusturma_tarihi).label}
         </time>
-        <h1 className="type-2 m-0 font-editorial font-medium tracking-[-0.02em] text-ink">
+        <h1 className="karalama-title type-2 m-0 tracking-[-0.02em] text-ink">
           {item.baslik}
         </h1>
 

@@ -37,7 +37,7 @@ export function KaralamalarHomeSection({ items }: { items: Karalama[] }) {
             key={item.id}
             className="rounded-xl border border-[#1a1612]/[0.08] bg-white/[0.28] px-5 py-4 sm:px-6 sm:py-5"
           >
-            <h3 className="type-3 m-0 mb-2 font-editorial font-medium tracking-[-0.01em] text-ink">
+            <h3 className="karalama-title type-3 m-0 mb-2 tracking-[-0.01em] text-ink">
               <Link
                 href={`${SECTION_PATH}/${item.slug}`}
                 className="text-inherit no-underline"

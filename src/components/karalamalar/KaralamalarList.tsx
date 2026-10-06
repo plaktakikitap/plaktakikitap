@@ -88,7 +88,7 @@ export function KaralamalarList({ items }: { items: Karalama[] }) {
                       href={`${SECTION_PATH}/${item.slug}`}
                       className="group block rounded-2xl border border-[#1a1612]/[0.08] bg-white/55 px-5 py-5 no-underline shadow-[0_12px_32px_rgba(26,22,18,0.05)] transition duration-300 hover:-translate-y-1 hover:border-gold/45 hover:shadow-[0_18px_40px_rgba(26,22,18,0.09)] sm:px-6 sm:py-6"
                     >
-                      <h3 className="type-3 m-0 font-editorial font-medium tracking-[-0.01em] text-ink">
+                      <h3 className="karalama-title type-3 m-0 tracking-[-0.01em] text-ink">
                         {item.baslik}
                       </h3>
                       {preview ? (
