@@ -156,6 +156,11 @@ export default async function DiziDetayPage({ params }: Props) {
                   {series.overview}
                 </p>
               ) : null}
+              {series.review ? (
+                <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-ink">
+                  {series.review}
+                </p>
+              ) : null}
             </div>
           </div>
 

@@ -260,6 +260,25 @@ function SeasonAccordion({
                           </span>
                           {episode.name || `Bölüm ${episode.episodeNumber}`}
                         </p>
+                        {(episode.watchCount ?? 0) > 0 ? (
+                          <p
+                            className={`text-xs ${
+                              admin ? "text-white/40" : "text-ink/45"
+                            }`}
+                          >
+                            {(episode.watched ? 1 : 0) + (episode.watchCount ?? 0)}{" "}
+                            kez izlendi
+                          </p>
+                        ) : null}
+                        {episode.review ? (
+                          <p
+                            className={`mt-0.5 whitespace-pre-wrap text-xs ${
+                              admin ? "text-white/55" : "text-ink/60"
+                            }`}
+                          >
+                            {episode.review}
+                          </p>
+                        ) : null}
                       </div>
                       {episode.runtime ? (
                         <span

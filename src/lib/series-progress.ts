@@ -38,6 +38,9 @@ export type SeriesEpisodeItem = {
   airDate: string | null;
   stillUrl: string | null;
   watched: boolean;
+  /** Ek izleme; toplam = izlendiyse 1 + watchCount */
+  watchCount?: number;
+  review?: string | null;
 };
 
 export type SeriesSeasonItem = {
@@ -55,6 +58,8 @@ export type SeriesDetail = SeriesGridItem & {
   originalTitle: string | null;
   backdropUrl: string | null;
   overview: string | null;
+  /** İzleyenin dizi yorumu (TMDB özeti overview'dan ayrı) */
+  review: string | null;
   episodeRuntime: number | null;
   seasons: SeriesSeasonItem[];
 };

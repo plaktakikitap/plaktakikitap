@@ -19,6 +19,7 @@ import {
   Tv,
 } from "lucide-react";
 import { ExcelIndirButonu } from "@/components/admin/ExcelIndirButonu";
+import { AdminSeriesWatchJournal } from "@/components/admin/AdminSeriesWatchJournal";
 
 export interface SeriesRow {
   content_id: string;
@@ -958,6 +959,7 @@ export function AdminDizilerPanelV2({
   const [filterTab, setFilterTab] = useState<TabFilter>("hepsi");
   const [search, setSearch] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [journalId, setJournalId] = useState<string | null>(null);
 
   const counts = {
     hepsi: series.length,
@@ -1118,7 +1120,7 @@ export function AdminDizilerPanelV2({
                             </p>
                           )}
                         </div>
-                        <div className="flex shrink-0 items-center gap-1 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
+                        <div className="flex shrink-0 items-center gap-1">
                           {s.is_favorite && (
                             <Heart className="h-3.5 w-3.5 fill-red-400 text-red-400" />
                           )}
@@ -1139,7 +1141,28 @@ export function AdminDizilerPanelV2({
                           </span>
                           <button
                             type="button"
-                            onClick={() => setEditingId(s.content_items.id)}
+                            onClick={() => {
+                              setEditingId(null);
+                              setJournalId((current) =>
+                                current === s.content_items.id
+                                  ? null
+                                  : s.content_items.id
+                              );
+                            }}
+                            className={`rounded-lg px-2 py-1 text-xs font-medium transition-colors ${
+                              journalId === s.content_items.id
+                                ? "bg-[#1a1612] text-[#faf7f2]"
+                                : "text-[#6b6158] hover:bg-[#b8934a]/10 hover:text-[#b8934a]"
+                            }`}
+                          >
+                            Bölümler
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setJournalId(null);
+                              setEditingId(s.content_items.id);
+                            }}
                             className="rounded-lg p-1.5 text-[#6b6158] transition-colors hover:bg-[#b8934a]/10 hover:text-[#b8934a]"
                           >
                             <Edit3 className="h-3.5 w-3.5" />
@@ -1149,6 +1172,21 @@ export function AdminDizilerPanelV2({
                     </div>
                   </div>
                 )}
+                {journalId === s.content_items.id && editingId !== s.content_items.id ? (
+                  <AdminSeriesWatchJournal
+                    seriesId={s.content_items.id}
+                    initialReview={s.review ?? ""}
+                    onReviewSaved={(review) => {
+                      setSeries((prev) =>
+                        prev.map((row) =>
+                          row.content_items.id === s.content_items.id
+                            ? { ...row, review }
+                            : row
+                        )
+                      );
+                    }}
+                  />
+                ) : null}
               </div>
             ))}
           </div>

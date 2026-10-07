@@ -122,6 +122,160 @@ export async function toggleSeason(
   return { ok: true as const };
 }
 
+function writeError(message: string) {
+  if (/row-level security/i.test(message)) {
+    return "Kayıt yazılamadı. Sunucuda SUPABASE_SERVICE_ROLE_KEY tanımlı değil.";
+  }
+  return message;
+}
+
+async function markSeriesRewatching(seriesId: string) {
+  const supabase = createAdminClient();
+  const { data } = await supabase
+    .from("series")
+    .select("watch_status, status")
+    .eq("content_id", seriesId)
+    .maybeSingle();
+  const row = data as { watch_status?: string | null; status?: string | null } | null;
+  const dropped = row?.watch_status === "dropped" || row?.status === "dropped";
+  await supabase
+    .from("series")
+    .update({
+      watched_at: new Date().toISOString(),
+      ...(dropped ? {} : { watch_status: "rewatching" }),
+    })
+    .eq("content_id", seriesId);
+}
+
+/** Dizinin kendi yorumu. */
+export async function saveSeriesReview(seriesId: string, review: string) {
+  const denied = await requireAdminWrite({ allowDevBypass: true });
+  if (denied) return denied;
+  if (!UUID_RE.test(seriesId)) return { error: "Geçersiz dizi" };
+  const text = review.trim().slice(0, 8000);
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from("series")
+    .update({ review: text || null })
+    .eq("content_id", seriesId)
+    .select("content_id");
+  if (error) return { error: writeError(error.message) };
+  if (!data?.length) {
+    return {
+      error:
+        "Kayıt yazılamadı. Sunucuda SUPABASE_SERVICE_ROLE_KEY tanımlı değil.",
+    };
+  }
+  revalidateDiziler();
+  return { ok: true as const, review: text || null };
+}
+
+/** Tek bölüm yorumu. */
+export async function saveEpisodeReview(episodeId: string, review: string) {
+  const denied = await requireAdminWrite({ allowDevBypass: true });
+  if (denied) return denied;
+  if (!UUID_RE.test(episodeId)) return { error: "Geçersiz bölüm" };
+  const text = review.trim().slice(0, 4000);
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from("series_episodes")
+    .update({ review: text || null })
+    .eq("id", episodeId)
+    .select("id");
+  if (error) return { error: writeError(error.message) };
+  if (!data?.length) {
+    return {
+      error:
+        "Kayıt yazılamadı. Sunucuda SUPABASE_SERVICE_ROLE_KEY tanımlı değil.",
+    };
+  }
+  revalidateDiziler();
+  return { ok: true as const, review: text || null };
+}
+
+async function bumpEpisodeRewatch(episodeIds: string[], seriesId: string) {
+  const supabase = createAdminClient();
+  const now = new Date().toISOString();
+  const { data, error } = await supabase
+    .from("series_episodes")
+    .select("id, watch_count")
+    .in("id", episodeIds)
+    .eq("series_id", seriesId);
+  if (error) return { error: writeError(error.message) };
+  const rows = (data ?? []) as { id: string; watch_count: number | null }[];
+  if (rows.length === 0) return { error: "Bölüm bulunamadı" };
+
+  const updated: { id: string; watchCount: number }[] = [];
+  for (let i = 0; i < rows.length; i += 20) {
+    const chunk = rows.slice(i, i + 20);
+    const results = await Promise.all(
+      chunk.map(async (row) => {
+        const watchCount = (row.watch_count ?? 0) + 1;
+        const { data: saved, error: updateError } = await supabase
+          .from("series_episodes")
+          .update({
+            watched: true,
+            watched_at: now,
+            watch_count: watchCount,
+          })
+          .eq("id", row.id)
+          .select("id");
+        return {
+          id: row.id,
+          watchCount,
+          error: updateError?.message
+            ? updateError.message
+            : saved?.length
+              ? undefined
+              : "row-level security",
+        };
+      })
+    );
+    const failed = results.find((result) => result.error);
+    if (failed?.error) return { error: writeError(failed.error) };
+    updated.push(
+      ...results.map((result) => ({
+        id: result.id,
+        watchCount: result.watchCount,
+      }))
+    );
+  }
+  await markSeriesRewatching(seriesId);
+  revalidateDiziler();
+  return { ok: true as const, episodes: updated };
+}
+
+/** Seçilen bölümleri bir kez daha izlendi say. */
+export async function rewatchEpisodes(seriesId: string, episodeIds: string[]) {
+  const denied = await requireAdminWrite({ allowDevBypass: true });
+  if (denied) return denied;
+  if (!UUID_RE.test(seriesId)) return { error: "Geçersiz dizi" };
+  const ids = [...new Set(episodeIds)].filter((id) => UUID_RE.test(id));
+  if (ids.length === 0) return { error: "Bölüm seçilmedi" };
+  if (ids.length > 80) return { error: "Bir seferde en fazla 80 bölüm" };
+  return bumpEpisodeRewatch(ids, seriesId);
+}
+
+/** Sezonun yayınlanmış tüm bölümlerini tekrar izlendi say. */
+export async function rewatchSeason(seriesId: string, seasonNumber: number) {
+  const denied = await requireAdminWrite({ allowDevBypass: true });
+  if (denied) return denied;
+  if (!UUID_RE.test(seriesId)) return { error: "Geçersiz dizi" };
+  if (!Number.isInteger(seasonNumber) || seasonNumber < 0) {
+    return { error: "Geçersiz sezon" };
+  }
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from("series_episodes")
+    .select("id")
+    .eq("series_id", seriesId)
+    .eq("season_number", seasonNumber);
+  if (error) return { error: writeError(error.message) };
+  const ids = ((data ?? []) as { id: string }[]).map((row) => row.id);
+  if (ids.length === 0) return { error: "Bu sezonda bölüm yok" };
+  return bumpEpisodeRewatch(ids, seriesId);
+}
+
 export async function updateWatchStatus(
   seriesId: string,
   status: WatchStatus

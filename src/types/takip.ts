@@ -18,6 +18,45 @@ export interface BeslenmeKayit {
   olusturma_tarihi: string;
 }
 
+export type VucutOlcumAlani =
+  | "kilo_kg"
+  | "boy_cm"
+  | "yag_yuzde"
+  | "kas_yuzde"
+  | "su_yuzde"
+  | "protein_yuzde"
+  | "iskelet_kas_yuzde"
+  | "kemik_kg"
+  | "visseral_yag"
+  | "bmr_kcal"
+  | "metabolik_yas"
+  | "bel_cm"
+  | "kalca_cm"
+  | "gogus_cm"
+  | "boyun_cm";
+
+export interface VucutOlcum {
+  id: string;
+  tarih: string;
+  kilo_kg: number | null;
+  boy_cm: number | null;
+  yag_yuzde: number | null;
+  kas_yuzde: number | null;
+  su_yuzde: number | null;
+  protein_yuzde: number | null;
+  iskelet_kas_yuzde: number | null;
+  kemik_kg: number | null;
+  visseral_yag: number | null;
+  bmr_kcal: number | null;
+  metabolik_yas: number | null;
+  bel_cm: number | null;
+  kalca_cm: number | null;
+  gogus_cm: number | null;
+  boyun_cm: number | null;
+  notlar: string | null;
+  olusturma_tarihi: string;
+}
+
 export interface SporKayit {
   id: string;
   tarih: string;

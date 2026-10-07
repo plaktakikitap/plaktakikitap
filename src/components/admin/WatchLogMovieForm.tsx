@@ -25,7 +25,7 @@ const GENRES = [
   "Diğer",
 ] as const;
 
-export function WatchLogMovieForm() {
+export function WatchLogMovieForm({ onCreated }: { onCreated?: () => void } = {}) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -90,6 +90,7 @@ export function WatchLogMovieForm() {
 
     setSuccess(true);
     router.refresh();
+    onCreated?.();
     form.reset();
     setRating5(null);
     setReviewHtml("");

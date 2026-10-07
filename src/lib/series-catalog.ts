@@ -30,6 +30,8 @@ type EpisodeDetailRow = {
   air_date: string | null;
   still_url: string | null;
   watched: boolean | null;
+  watch_count?: number | null;
+  review?: string | null;
 };
 
 type SeasonRow = {
@@ -71,6 +73,7 @@ type SeriesJoin = {
   watched_at?: string | null;
   backdrop_url?: string | null;
   overview?: string | null;
+  review?: string | null;
   content_items:
     | { id: string; title: string; visibility: string }
     | { id: string; title: string; visibility: string }[]
@@ -285,7 +288,7 @@ async function loadEpisodesForSeries(
     const { data, error } = await supabase
       .from("series_episodes")
       .select(
-        "id, season_id, season_number, episode_number, name, overview, runtime, air_date, still_url, watched"
+        "id, season_id, season_number, episode_number, name, overview, runtime, air_date, still_url, watched, watch_count, review"
       )
       .eq("series_id", seriesId)
       .order("season_number", { ascending: true })
@@ -310,6 +313,8 @@ function toEpisodeItem(ep: EpisodeDetailRow): SeriesEpisodeItem {
     airDate: ep.air_date,
     stillUrl: ep.still_url,
     watched: Boolean(ep.watched),
+    watchCount: ep.watch_count ?? 0,
+    review: ep.review ?? null,
   };
 }
 
@@ -321,7 +326,7 @@ export async function getPublicSeriesDetail(
     supabase
       .from("series")
       .select(
-        "content_id, year, poster_url, backdrop_url, overview, genre_tags, origin_country, watch_status, tmdb_status, status, imdb_id, imdb_rating, imdb_position, total_seasons, total_episodes, episode_runtime, total_watched_minutes, content_items!inner(id, title, visibility)"
+        "content_id, year, poster_url, backdrop_url, overview, review, genre_tags, origin_country, watch_status, tmdb_status, status, imdb_id, imdb_rating, imdb_position, total_seasons, total_episodes, episode_runtime, total_watched_minutes, content_items!inner(id, title, visibility)"
       )
       .eq("content_id", contentId)
       .in("content_items.visibility", ["public", "unlisted"])
@@ -408,6 +413,7 @@ export async function getPublicSeriesDetail(
     posterUrl: row.poster_url,
     backdropUrl: row.backdrop_url ?? null,
     overview: row.overview ?? null,
+    review: row.review ?? null,
     genres: row.genre_tags ?? [],
     originCountry: row.origin_country ?? [],
     watchStatus: row.watch_status,

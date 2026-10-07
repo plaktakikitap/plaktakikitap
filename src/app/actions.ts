@@ -20,6 +20,26 @@ function parseBookVisibility(raw: FormDataEntryValue | null, status: BookStatus)
   return "public";
 }
 
+function revalidateFilmPaths() {
+  revalidatePath("/");
+  revalidatePath("/cinema");
+  revalidatePath("/izleme-gunlugum");
+  revalidatePath("/izleme-gunlugum/filmler");
+  revalidatePath("/secretgate");
+  revalidatePath("/secretgate/films");
+  revalidatePath("/secretgate/movie-watch-log");
+}
+
+const FILM_ID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function filmWriteError(message: string) {
+  if (/row-level security/i.test(message)) {
+    return "Kayıt yazılamadı. .env.local içinde SUPABASE_SERVICE_ROLE_KEY yok; admin yazmaları bu anahtar olmadan veritabanına gitmiyor.";
+  }
+  return message;
+}
+
 function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -103,12 +123,7 @@ export async function createFilm(formData: FormData) {
   });
 
   if (filmError) return { error: filmError.message };
-  revalidatePath("/");
-  revalidatePath("/cinema");
-  revalidatePath("/izleme-gunlugum");
-  revalidatePath("/izleme-gunlugum/filmler");
-  revalidatePath("/secretgate");
-  revalidatePath("/secretgate/films");
+  revalidateFilmPaths();
   return { success: true };
 }
 
@@ -153,7 +168,6 @@ export async function updateFilm(contentId: string, formData: FormData) {
     rating_5: rating_5 != null && !Number.isNaN(rating_5) ? rating_5 : null,
     is_favorite,
   };
-  if (watched_at) updatePayload.watched_at = watched_at;
   if (is_favorite) updatePayload.favorite_order = Date.now();
   else updatePayload.favorite_order = null;
 
@@ -163,10 +177,25 @@ export async function updateFilm(contentId: string, formData: FormData) {
     .eq("content_id", contentId);
 
   if (filmError) return { error: filmError.message };
-  revalidatePath("/");
-  revalidatePath("/izleme-gunlugum/filmler");
-  revalidatePath("/secretgate");
-  revalidatePath("/secretgate/films");
+
+  if (watched_at) {
+    const { data: latest } = await supabase
+      .from("films")
+      .select("id")
+      .eq("content_id", contentId)
+      .order("watched_at", { ascending: false, nullsFirst: false })
+      .limit(1);
+    const latestId = latest?.[0]?.id;
+    if (latestId) {
+      const { error: dateError } = await supabase
+        .from("films")
+        .update({ watched_at })
+        .eq("id", latestId);
+      if (dateError) return { error: dateError.message };
+    }
+  }
+
+  revalidateFilmPaths();
   return { success: true };
 }
 
@@ -559,6 +588,93 @@ export async function setSeriesFavorite(contentId: string, isFavorite: boolean) 
   revalidatePath("/izleme-gunlugum/diziler");
   revalidatePath("/diziler");
   return { success: true };
+}
+
+/** Aynı filmin yeni bir izlenme kaydı. Rafta ayrı bir tarih olarak görünür. */
+export async function logFilmRewatch(contentId: string, watchedAtRaw: string) {
+  await requireAdmin();
+  if (!FILM_ID_RE.test(contentId)) return { error: "Geçersiz film." };
+  const trimmed = watchedAtRaw?.trim();
+  if (!trimmed) return { error: "İzlenme tarihi zorunludur." };
+  const watchedAt = new Date(trimmed);
+  if (Number.isNaN(watchedAt.getTime())) return { error: "Geçersiz tarih." };
+
+  const supabase = createAdminClient();
+  const { data: source, error: readError } = await supabase
+    .from("films")
+    .select(
+      "duration_min, year, poster_url, spine_url, director, genre_tags, rating_5"
+    )
+    .eq("content_id", contentId)
+    .order("watched_at", { ascending: false, nullsFirst: false })
+    .limit(1)
+    .maybeSingle();
+  if (readError) return { error: filmWriteError(readError.message) };
+  if (!source) return { error: "Film bulunamadı." };
+
+  const { data: inserted, error } = await supabase
+    .from("films")
+    .insert({
+      content_id: contentId,
+      duration_min: source.duration_min,
+      year: source.year,
+      poster_url: source.poster_url,
+      spine_url: source.spine_url,
+      director: source.director,
+      genre_tags: source.genre_tags,
+      rating_5: source.rating_5,
+      review: null,
+      watched_at: watchedAt.toISOString(),
+      is_favorite: false,
+      favorite_order: null,
+      rewatch_count: 0,
+    })
+    .select("id, watched_at, rating_5")
+    .single();
+  if (error || !inserted) return { error: filmWriteError(error?.message ?? "Kayıt eklenemedi.") };
+
+  revalidateFilmPaths();
+  return {
+    success: true as const,
+    viewing: {
+      id: inserted.id as string,
+      watchedAt: (inserted.watched_at as string | null) ?? watchedAt.toISOString(),
+      rating5:
+        inserted.rating_5 != null ? Number(inserted.rating_5) : null,
+    },
+  };
+}
+
+/** Tek bir izlenme satırını siler. Filmde tek kayıt kaldıysa silmez. */
+export async function deleteFilmViewing(viewingId: string) {
+  await requireAdmin();
+  if (!FILM_ID_RE.test(viewingId)) return { error: "Geçersiz kayıt." };
+
+  const supabase = createAdminClient();
+  const { data: row, error: readError } = await supabase
+    .from("films")
+    .select("id, content_id")
+    .eq("id", viewingId)
+    .maybeSingle();
+  if (readError) return { error: readError.message };
+  if (!row) return { error: "Kayıt bulunamadı." };
+
+  const { count, error: countError } = await supabase
+    .from("films")
+    .select("id", { count: "exact", head: true })
+    .eq("content_id", row.content_id);
+  if (countError) return { error: countError.message };
+  if ((count ?? 0) <= 1) {
+    return {
+      error:
+        "Tek izlenme silinemez. Filmin kendisini Filmler sayfasından silebilirsin.",
+    };
+  }
+
+  const { error } = await supabase.from("films").delete().eq("id", viewingId);
+  if (error) return { error: error.message };
+  revalidateFilmPaths();
+  return { success: true as const };
 }
 
 /** contentId = content_items.id. addCount = ek izleme sayısı (0–999). */
