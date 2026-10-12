@@ -109,7 +109,7 @@ function RewatchControl({
       setError(result.error);
       return;
     }
-    if (result && "viewing" in result) {
+    if (result && "viewing" in result && result.viewing) {
       onAdded(result.viewing);
       setOpen(false);
       setWhen(nowLocalDatetime());

@@ -2,6 +2,16 @@ import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { stripHtml } from "@/lib/watch-log-poster";
 
+function text(v: unknown): string {
+  if (typeof v === "string") return v;
+  if (typeof v === "number" && Number.isFinite(v)) return String(v);
+  return "";
+}
+
+function dateText(v: unknown): string | null {
+  return typeof v === "string" ? v : null;
+}
+
 function formatDate(v: string | null | undefined): string {
   if (!v) return "";
   try {
@@ -35,12 +45,12 @@ export async function fetchExportKitaplar(): Promise<Record<string, unknown>[]> 
     status: b.status ?? "",
     rating: b.rating ?? "",
     tags: Array.isArray(b.tags) ? b.tags.join(", ") : "",
-    review: stripHtml(b.review),
-    quote: b.quote ?? "",
-    start_date: formatDate(b.start_date),
-    end_date: formatDate(b.end_date),
-    visibility: b.visibility ?? "",
-    created_at: formatDate(b.created_at),
+    review: stripHtml(dateText(b.review)),
+    quote: text(b.quote),
+    start_date: formatDate(dateText(b.start_date)),
+    end_date: formatDate(dateText(b.end_date)),
+    visibility: text(b.visibility),
+    created_at: formatDate(dateText(b.created_at)),
   }));
 }
 

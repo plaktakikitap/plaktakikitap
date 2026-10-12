@@ -53,7 +53,7 @@ export function AdminSeriesWatchJournal({
         setSeasons([]);
         return;
       }
-      if (res && "seasons" in res) setSeasons(res.seasons);
+      if (res && "seasons" in res && res.seasons) setSeasons(res.seasons);
     })();
     return () => {
       cancelled = true;
@@ -84,7 +84,7 @@ export function AdminSeriesWatchJournal({
       return;
     }
     if (res && "review" in res) {
-      onReviewSaved(res.review);
+      onReviewSaved(res.review ?? null);
       setReviewNote("Yorum kaydedildi");
     }
   }
@@ -98,7 +98,7 @@ export function AdminSeriesWatchJournal({
       setActionError(res.error);
       return;
     }
-    if (res && "episodes" in res) {
+    if (res && "episodes" in res && res.episodes) {
       const byId = new Map(res.episodes.map((episode) => [episode.id, episode.watchCount]));
       patchEpisodes(
         (episode) => byId.has(episode.id),
@@ -124,7 +124,7 @@ export function AdminSeriesWatchJournal({
       setActionError(res.error);
       return;
     }
-    if (res && "episodes" in res) {
+    if (res && "episodes" in res && res.episodes) {
       const byId = new Map(res.episodes.map((episode) => [episode.id, episode.watchCount]));
       patchEpisodes(
         (episode) => byId.has(episode.id),
@@ -151,7 +151,7 @@ export function AdminSeriesWatchJournal({
       setActionError(res.error);
       return;
     }
-    const next = res && "episodes" in res ? res.episodes[0] : null;
+    const next = res && "episodes" in res && res.episodes ? res.episodes[0] : null;
     if (!next) return;
     patchEpisodes(
       (episode) => episode.id === episodeId,
@@ -172,7 +172,7 @@ export function AdminSeriesWatchJournal({
     if (res && "review" in res) {
       patchEpisodes(
         (item) => item.id === episode.id,
-        (item) => ({ ...item, review: res.review })
+        (item) => ({ ...item, review: res.review ?? null })
       );
       setCommentId(null);
     }
