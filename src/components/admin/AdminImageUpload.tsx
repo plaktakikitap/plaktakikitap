@@ -11,6 +11,8 @@ interface AdminImageUploadProps {
   className?: string;
   /** Form gönderiminde kullanılacak hidden input; controlled değilse name ile form'a eklenir */
   required?: boolean;
+  /** false ise adres başka bir input üzerinden gönderilir */
+  submit?: boolean;
 }
 
 export function AdminImageUpload({
@@ -20,6 +22,7 @@ export function AdminImageUpload({
   placeholder = "Dosya seç veya sürükle",
   className = "",
   required = false,
+  submit = true,
 }: AdminImageUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [url, setUrl] = useState(value);
@@ -62,7 +65,9 @@ export function AdminImageUpload({
 
   return (
     <div className={className}>
-      <input type="hidden" name={name} value={displayUrl} required={required && !displayUrl} />
+      {submit ? (
+        <input type="hidden" name={name} value={displayUrl} required={required && !displayUrl} />
+      ) : null}
       <div
         onClick={() => inputRef.current?.click()}
         onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add("ring-2", "ring-amber-400/50"); }}

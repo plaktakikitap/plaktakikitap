@@ -34,7 +34,7 @@ export async function PATCH(
     const durum = parseWritingDurum(b.durum);
     if (durum) payload.durum = durum;
     const result = await updateWriting(id, payload);
-    if (!result) return NextResponse.json({ error: "Update failed" }, { status: 500 });
+    if ("error" in result) return NextResponse.json({ error: result.error }, { status: 500 });
     return NextResponse.json(result);
   } catch {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });

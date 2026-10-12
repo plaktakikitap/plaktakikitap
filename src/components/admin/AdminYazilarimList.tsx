@@ -1,9 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { Pencil, Trash2, ExternalLink } from "lucide-react";
+import {
+  formatIstanbul,
+  isFutureInstant,
+  istanbulLocalToUtc,
+  utcToIstanbulInput,
+} from "@/lib/istanbul-time";
+import { PublishBar } from "./PublishBar";
 
 const RichTextEditor = dynamic(
   () => import("./RichTextEditor").then((m) => ({ default: m.RichTextEditor })),
@@ -101,7 +108,12 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
   }
 
   async function durumDegistir(id: string, durum: WritingDurum) {
-    await handleUpdate(id, { durum });
+    await handleUpdate(
+      id,
+      durum === "yayinda"
+        ? { durum, published_at: new Date().toISOString() }
+        : { durum }
+    );
   }
 
   async function handleDelete(id: string) {
@@ -187,7 +199,7 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
                   ) : (
                     <div className="group flex items-center gap-3 rounded-xl border border-[#e8e0d4] bg-white/60 px-4 py-3 transition-all hover:border-[#d4c9bb]">
                       <div className="min-w-0 flex-1">
-                        {w.durum === "yayinda" ? (
+                        {w.durum === "yayinda" && !isFutureInstant(w.published_at) ? (
                           <a
                             href={`/writings/${w.id}`}
                             target="_blank"
@@ -203,11 +215,19 @@ export function AdminYazilarimList({ initialWritings }: { initialWritings: Writi
                           </p>
                         )}
                         <p className="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-[#a09588]">
-                          {formatDate(w.published_at)}
+                          {w.durum === "yayinda" && isFutureInstant(w.published_at)
+                            ? formatIstanbul(w.published_at)
+                            : formatDate(w.published_at)}
                           <span
-                            className={`rounded-full px-2 py-0.5 text-xs ${DURUM_STIL[w.durum]}`}
+                            className={`rounded-full px-2 py-0.5 text-xs ${
+                              w.durum === "yayinda" && isFutureInstant(w.published_at)
+                                ? "border border-[#b8934a]/40 bg-[#b8934a]/10 text-[#8a6427]"
+                                : DURUM_STIL[w.durum]
+                            }`}
                           >
-                            {DURUM_ETIKET[w.durum]}
+                            {w.durum === "yayinda" && isFutureInstant(w.published_at)
+                              ? "zamanlandı"
+                              : DURUM_ETIKET[w.durum]}
                           </span>
                           {w.tefrika_issue ? (
                             <span className="rounded-full bg-[#b8934a]/10 px-1.5 py-0.5 text-[10px] font-medium text-[#b8934a]">
@@ -311,65 +331,61 @@ function EditForm({
   const [category, setCategory] = useState(writing.category);
   const [title, setTitle] = useState(writing.title);
   const [body, setBody] = useState(writing.body);
-  const [published_at, setPublishedAt] = useState(
-    writing.published_at ? String(writing.published_at).slice(0, 16) : new Date().toISOString().slice(0, 16)
-  );
   const [tefrika_issue, setTefrikaIssue] = useState(writing.tefrika_issue ?? "");
   const [external_url, setExternalUrl] = useState(writing.external_url ?? "");
-  const [durum, setDurum] = useState<WritingDurum>(writing.durum ?? "yayinda");
+  const [zamanOpen, setZamanOpen] = useState(false);
+  const [zaman, setZaman] = useState(() =>
+    isFutureInstant(writing.published_at) ? utcToIstanbulInput(writing.published_at) : ""
+  );
+  const niyetRef = useRef<"yayinla" | "taslak" | "zamanla">("yayinla");
+  const [zamanHata, setZamanHata] = useState<string | null>(null);
+
+  function kaydet(niyet: "yayinla" | "taslak" | "zamanla") {
+    let published_at = new Date().toISOString();
+    let durum: WritingDurum = niyet === "taslak" ? "taslak" : "yayinda";
+    if (niyet === "zamanla") {
+      const utc = istanbulLocalToUtc(zaman);
+      if (!utc || !isFutureInstant(utc)) {
+        setZamanHata("Türkiye saatine göre gelecek bir zaman seç.");
+        return;
+      }
+      published_at = utc;
+    }
+    setZamanHata(null);
+    onSave({
+      category,
+      title,
+      body,
+      published_at,
+      tefrika_issue: tefrika_issue.trim() || null,
+      external_url: external_url.trim() || null,
+      durum,
+    });
+  }
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        onSave({
-          category,
-          title,
-          body,
-          published_at: new Date(published_at).toISOString(),
-          tefrika_issue: tefrika_issue.trim() || null,
-          external_url: external_url.trim() || null,
-          durum,
-        });
+        const niyet = niyetRef.current;
+        niyetRef.current = "yayinla";
+        kaydet(niyet);
       }}
       className="w-full space-y-4"
     >
-      <div className="grid gap-4 sm:grid-cols-3">
-        <div>
-          <label className="admin-label">Kategori</label>
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="admin-input admin-select"
-          >
-            {CATEGORY_ORDER.map((c) => (
-              <option key={c} value={c}>
-                {CATEGORY_LABELS[c]}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="admin-label">Durum</label>
-          <select
-            value={durum}
-            onChange={(e) => setDurum(e.target.value as WritingDurum)}
-            className="admin-input admin-select"
-          >
-            <option value="taslak">Taslak</option>
-            <option value="yayinda">Yayında</option>
-            <option value="arsivlendi">Arşiv</option>
-          </select>
-        </div>
-        <div>
-          <label className="admin-label">Tarih</label>
-          <input
-            type="datetime-local"
-            value={published_at}
-            onChange={(e) => setPublishedAt(e.target.value)}
-            className="admin-input"
-          />
-        </div>
+      <div>
+        <label className="admin-label">Kategori</label>
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="admin-input admin-select"
+        >
+          {CATEGORY_ORDER.map((c) => (
+            <option key={c} value={c}>
+              {CATEGORY_LABELS[c]}
+            </option>
+          ))}
+        </select>
       </div>
       <div>
         <label className="admin-label">Başlık</label>
@@ -406,10 +422,7 @@ function EditForm({
         <label className="admin-label">İçerik</label>
         <RichTextEditor value={body} onChange={setBody} placeholder="Yazı içeriği…" minHeight="12rem" variant="admin" />
       </div>
-      <div className="flex flex-wrap gap-2 pt-1">
-        <button type="submit" disabled={disabled} className="admin-btn-gold disabled:opacity-50">
-          Kaydet
-        </button>
+      <div className="flex flex-wrap items-end justify-between gap-2 pt-1">
         <button
           type="button"
           onClick={onCancel}
@@ -417,6 +430,30 @@ function EditForm({
         >
           İptal
         </button>
+        <PublishBar
+          loading={disabled}
+          scheduledLabel={
+            writing.durum === "yayinda" && isFutureInstant(writing.published_at)
+              ? `${formatIstanbul(writing.published_at)} TSİ'de yayınlanacak`
+              : null
+          }
+          zamanOpen={zamanOpen}
+          zamanValue={zaman}
+          onZamanChange={setZaman}
+          onTaslak={() => {
+            niyetRef.current = "taslak";
+            kaydet("taslak");
+          }}
+          onZamanla={() => {
+            if (!zamanOpen) {
+              setZamanOpen(true);
+              return;
+            }
+            niyetRef.current = "zamanla";
+            kaydet("zamanla");
+          }}
+        />
+        {zamanHata ? <p className="w-full text-right text-xs text-red-700">{zamanHata}</p> : null}
       </div>
     </form>
   );

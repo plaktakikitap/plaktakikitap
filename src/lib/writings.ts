@@ -1,5 +1,6 @@
 import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createPrivilegedClient } from "@/lib/supabase/privileged";
 
 export type WritingCategory = "denemeler" | "siirler" | "diger";
 export type WritingDurum = "taslak" | "yayinda" | "arsivlendi";
@@ -33,6 +34,13 @@ export interface Writing {
 const SELECT_COLS =
   "id, category, title, body, published_at, created_at, updated_at, tefrika_issue, external_url, durum";
 
+function writeError(message: string) {
+  if (/row-level security/i.test(message)) {
+    return "Kayıt yazılamadı. .env.local içinde SUPABASE_SERVICE_ROLE_KEY yok; admin yazmaları bu anahtar olmadan veritabanına gitmiyor.";
+  }
+  return message || "Kaydedilemedi.";
+}
+
 function mapWriting(row: Record<string, unknown>): Writing {
   const durum = parseWritingDurum(row.durum) ?? "yayinda";
   return {
@@ -57,6 +65,7 @@ export async function getWritingsPublic(): Promise<Writing[]> {
       .from("writings")
       .select(SELECT_COLS)
       .eq("durum", "yayinda")
+      .lte("published_at", new Date().toISOString())
       .order("published_at", { ascending: false });
     if (error) return [];
     return (data ?? []).map((r) => mapWriting(r as Record<string, unknown>));
@@ -68,7 +77,7 @@ export async function getWritingsPublic(): Promise<Writing[]> {
 /** Admin: tüm durumlar */
 export async function getWritingsAdmin(): Promise<Writing[]> {
   try {
-    const supabase = createAdminClient();
+    const supabase = await createPrivilegedClient();
     const { data, error } = await supabase
       .from("writings")
       .select(SELECT_COLS)
@@ -89,6 +98,7 @@ export async function getWritingById(id: string): Promise<Writing | null> {
       .select(SELECT_COLS)
       .eq("id", id)
       .eq("durum", "yayinda")
+      .lte("published_at", new Date().toISOString())
       .maybeSingle();
     if (error || !data) return null;
     return mapWriting(data as Record<string, unknown>);
@@ -109,8 +119,8 @@ export interface WritingInsert {
 
 export async function createWriting(
   payload: WritingInsert
-): Promise<Writing | null> {
-  const supabase = createAdminClient();
+): Promise<Writing | { error: string }> {
+  const supabase = await createPrivilegedClient();
   const { data, error } = await supabase
     .from("writings")
     .insert({
@@ -124,7 +134,7 @@ export async function createWriting(
     })
     .select(SELECT_COLS)
     .single();
-  if (error) return null;
+  if (error) return { error: writeError(error.message) };
   return mapWriting(data as Record<string, unknown>);
 }
 
@@ -141,8 +151,8 @@ export interface WritingUpdate {
 export async function updateWriting(
   id: string,
   payload: WritingUpdate
-): Promise<Writing | null> {
-  const supabase = createAdminClient();
+): Promise<Writing | { error: string }> {
+  const supabase = await createPrivilegedClient();
   const updates: Record<string, unknown> = {
     ...payload,
     updated_at: new Date().toISOString(),
@@ -153,12 +163,12 @@ export async function updateWriting(
     .eq("id", id)
     .select(SELECT_COLS)
     .single();
-  if (error) return null;
+  if (error) return { error: writeError(error.message) };
   return mapWriting(data as Record<string, unknown>);
 }
 
 export async function deleteWriting(id: string): Promise<boolean> {
-  const supabase = createAdminClient();
+  const supabase = await createPrivilegedClient();
   const { error } = await supabase.from("writings").delete().eq("id", id);
   return !error;
 }

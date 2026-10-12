@@ -13,13 +13,22 @@ function formatDate(v: string | null | undefined): string {
 
 export async function fetchExportKitaplar(): Promise<Record<string, unknown>[]> {
   const supabase = createAdminClient();
-  const { data, error } = await supabase
-    .from("books")
-    .select("*")
-    .order("created_at", { ascending: false });
-  if (error) throw new Error(error.message);
+  const pageSize = 1000;
+  const data: Record<string, unknown>[] = [];
+  for (let from = 0; ; from += pageSize) {
+    const { data: page, error } = await supabase
+      .from("books")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .order("id", { ascending: false })
+      .range(from, from + pageSize - 1);
+    if (error) throw new Error(error.message);
+    const rows = page ?? [];
+    data.push(...rows);
+    if (rows.length < pageSize) break;
+  }
 
-  return (data ?? []).map((b) => ({
+  return data.map((b) => ({
     title: b.title ?? "",
     author: b.author ?? "",
     page_count: b.page_count ?? "",

@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { BookForm } from "@/components/admin/BookForm";
@@ -13,14 +12,11 @@ export default function NewBookPage() {
         <ArrowLeft className="h-4 w-4" />
         Kitaplar
       </Link>
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
+      <div>
         <h1 className="text-2xl font-bold">Yeni Kitap</h1>
         <p className="mt-1 text-[var(--muted)]">Kitap bilgilerini girin</p>
         <BookForm />
-      </motion.div>
+      </div>
     </div>
   );
 }

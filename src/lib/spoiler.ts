@@ -29,10 +29,19 @@ export function hasSpoilerMarkup(content: string): boolean {
   return /\[spoiler\]/i.test(content);
 }
 
-/** Önizleme / meta için spoiler gövdesini ve etiketleri çıkarır. */
+/** Önizleme / meta için spoiler gövdesini, HTML etiketlerini ve boşlukları çıkarır. */
 export function stripSpoilers(content: string): string {
   return content
     .replace(/\[spoiler\][\s\S]*?\[\/spoiler\]/gi, "")
+    .replace(/<br\s*\/?>/gi, " ")
+    .replace(/<\/(?:p|div|h2|h3|li|blockquote)>/gi, " ")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
     .replace(/\s+/g, " ")
     .trim();
 }

@@ -7,6 +7,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { SECTION_PATH } from "@/lib/karalamalar-section";
 import type { Karalama } from "@/lib/karalamalar";
 import { hasSpoilerMarkup, stripSpoilers } from "@/lib/spoiler";
+import { formatIstanbul, isFutureInstant } from "@/lib/istanbul-time";
 import { AdminKaralamalarForm } from "./AdminKaralamalarForm";
 
 type Filtre = "hepsi" | "yayinda" | "taslak";
@@ -125,7 +126,11 @@ export function AdminKaralamalarList({
                     <h3 className="text-sm font-medium text-[#1a1612]">
                       {item.baslik}
                     </h3>
-                    {item.yayinda ? (
+                    {item.yayinda && isFutureInstant(item.yayin_zamani) ? (
+                      <span className="rounded bg-[#b8934a]/15 px-1.5 py-0.5 text-[10px] text-[#8a6427]">
+                        zamanlandı · {formatIstanbul(item.yayin_zamani!)}
+                      </span>
+                    ) : item.yayinda ? (
                       <span className="text-[10px] text-[#b8934a]">
                         {formatDate(item.olusturma_tarihi)}
                       </span>

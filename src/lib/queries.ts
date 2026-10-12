@@ -84,18 +84,29 @@ export async function getBooks(includePrivate = false): Promise<Book[]> {
   const supabase = includePrivate
     ? createAdminClient()
     : await createServerClient();
-  let query = supabase
-    .from("books")
-    .select("*")
-    .order("created_at", { ascending: false });
+  const pageSize = 1000;
+  const all: Book[] = [];
 
-  if (!includePrivate) {
-    query = query.in("visibility", ["public", "unlisted"]).neq("status", "to_read");
+  for (let from = 0; ; from += pageSize) {
+    let query = supabase
+      .from("books")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .order("id", { ascending: false })
+      .range(from, from + pageSize - 1);
+
+    if (!includePrivate) {
+      query = query.in("visibility", ["public", "unlisted"]).neq("status", "to_read");
+    }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    const rows = (data ?? []) as Book[];
+    all.push(...rows);
+    if (rows.length < pageSize) break;
   }
 
-  const { data, error } = await query;
-  if (error) throw error;
-  return (data ?? []) as Book[];
+  return all;
 }
 
 export async function patchAdminBook(
@@ -239,7 +250,11 @@ export async function getStats(includePrivate = false): Promise<Stats> {
   const [filmsRes, seriesRes, booksRes] = await Promise.all([
     supabase.from("content_items").select("id").eq("type", "film").in("visibility", vis),
     supabase.from("content_items").select("id").eq("type", "series").in("visibility", vis),
-    supabase.from("books").select("id, review").in("visibility", vis),
+    supabase
+      .from("books")
+      .select("id, review")
+      .in("visibility", vis)
+      .neq("status", "to_read"),
   ]);
 
   const films = filmsRes.data ?? [];

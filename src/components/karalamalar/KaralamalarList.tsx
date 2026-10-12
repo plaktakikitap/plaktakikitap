@@ -4,17 +4,14 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { SECTION_NAME, SECTION_PATH } from "@/lib/karalamalar-section";
 import type { Karalama } from "@/lib/karalamalar";
-import { hasSpoilerMarkup } from "@/lib/spoiler";
+import { hasSpoilerMarkup, stripSpoilers } from "@/lib/spoiler";
 import { formatDateTr } from "@/lib/format-date-tr";
 
 const PAGE_SIZE = 12;
 const PREVIEW_MAX = 220;
 
 function previewOf(content: string): string {
-  const clean = content
-    .replace(/\[spoiler\][\s\S]*?\[\/spoiler\]/gi, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+  const clean = stripSpoilers(content);
   if (!clean) return hasSpoilerMarkup(content) ? "Spoiler içerir" : "";
   if (clean.length <= PREVIEW_MAX) return clean;
   const cut = clean.slice(0, PREVIEW_MAX);

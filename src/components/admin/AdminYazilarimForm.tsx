@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { PenLine, Plus } from "lucide-react";
+import { isFutureInstant, istanbulLocalToUtc } from "@/lib/istanbul-time";
+import { PublishBar } from "./PublishBar";
 
 const RichTextEditor = dynamic(
   () => import("@/components/admin/RichTextEditor").then((m) => ({ default: m.RichTextEditor })),
@@ -22,6 +24,9 @@ export function AdminYazilarimForm() {
   const [error, setError] = useState<string | null>(null);
   const [bodyHtml, setBodyHtml] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [zamanOpen, setZamanOpen] = useState(false);
+  const [zaman, setZaman] = useState("");
+  const niyetRef = useRef<"yayinla" | "taslak" | "zamanla">("yayinla");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -30,11 +35,23 @@ export function AdminYazilarimForm() {
     const fd = new FormData(e.currentTarget);
     const title = (fd.get("title") as string)?.trim() ?? "";
     const category = (fd.get("category") as string) || "diger";
-    const published_at = (fd.get("published_at") as string) || new Date().toISOString().slice(0, 16);
     const tefrika_issue = (fd.get("tefrika_issue") as string)?.trim() || null;
     const external_url = (fd.get("external_url") as string)?.trim() || null;
-    const durum = (fd.get("durum") as string) || "taslak";
+    const niyet = niyetRef.current;
+    niyetRef.current = "yayinla";
     const body = bodyHtml;
+
+    let durum: "taslak" | "yayinda" = niyet === "taslak" ? "taslak" : "yayinda";
+    let published_at = new Date().toISOString();
+    if (niyet === "zamanla") {
+      const utc = istanbulLocalToUtc(zaman);
+      if (!utc || !isFutureInstant(utc)) {
+        setError("Türkiye saatine göre gelecek bir zaman seç.");
+        setLoading(false);
+        return;
+      }
+      published_at = utc;
+    }
 
     if (!title) {
       setError("Başlık gerekli.");
@@ -63,6 +80,8 @@ export function AdminYazilarimForm() {
       }
       (e.target as HTMLFormElement).reset();
       setBodyHtml("");
+      setZaman("");
+      setZamanOpen(false);
       setShowForm(false);
       router.refresh();
     } finally {
@@ -70,7 +89,15 @@ export function AdminYazilarimForm() {
     }
   }
 
-  const today = new Date().toISOString().slice(0, 16);
+  function iste(niyet: "taslak" | "zamanla") {
+    if (niyet === "zamanla" && !zamanOpen) {
+      setZamanOpen(true);
+      return;
+    }
+    niyetRef.current = niyet;
+    const form = document.getElementById("yeni-yazi-form") as HTMLFormElement | null;
+    form?.requestSubmit();
+  }
 
   return (
     <div className="space-y-3">
@@ -84,7 +111,7 @@ export function AdminYazilarimForm() {
       </button>
 
       {showForm && (
-    <form onSubmit={handleSubmit} className="rounded-2xl border border-[#e8e0d4] bg-white/70 p-5 sm:p-6">
+    <form id="yeni-yazi-form" onSubmit={handleSubmit} className="rounded-2xl border border-[#e8e0d4] bg-white/70 p-5 sm:p-6">
       <div className="mb-6 flex items-center gap-3 border-b border-[#e8e0d4] pb-5">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(184,147,74,0.12)] text-[#b8934a]">
           <PenLine className="h-5 w-5" />
@@ -97,51 +124,22 @@ export function AdminYazilarimForm() {
 
       {error ? <p className="admin-error">{error}</p> : null}
 
-      <div className="grid gap-5 sm:grid-cols-3">
-        <div>
-          <label className="admin-label" htmlFor="writing-category">
-            Kategori
-          </label>
-          <select
-            id="writing-category"
-            name="category"
-            className="admin-input admin-select"
-            defaultValue="denemeler"
-          >
-            {CATEGORIES.map((c) => (
-              <option key={c.value} value={c.value}>
-                {c.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="admin-label" htmlFor="writing-durum">
-            Durum
-          </label>
-          <select
-            id="writing-durum"
-            name="durum"
-            className="admin-input admin-select"
-            defaultValue="taslak"
-          >
-            <option value="taslak">Taslak</option>
-            <option value="yayinda">Yayında</option>
-            <option value="arsivlendi">Arşiv</option>
-          </select>
-        </div>
-        <div>
-          <label className="admin-label" htmlFor="writing-date">
-            Tarih
-          </label>
-          <input
-            id="writing-date"
-            name="published_at"
-            type="datetime-local"
-            className="admin-input"
-            defaultValue={today}
-          />
-        </div>
+      <div>
+        <label className="admin-label" htmlFor="writing-category">
+          Kategori
+        </label>
+        <select
+          id="writing-category"
+          name="category"
+          className="admin-input admin-select"
+          defaultValue="denemeler"
+        >
+          {CATEGORIES.map((c) => (
+            <option key={c.value} value={c.value}>
+              {c.label}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="mt-5">
@@ -198,11 +196,15 @@ export function AdminYazilarimForm() {
         <input type="hidden" name="body" value={bodyHtml} readOnly aria-hidden />
       </div>
 
-      <div className="mt-8 flex justify-end">
-        <button type="submit" disabled={loading} className="admin-btn-gold disabled:cursor-not-allowed disabled:opacity-50">
-          {loading ? "Ekleniyor…" : "Yazıyı ekle"}
-        </button>
-      </div>
+      <PublishBar
+        loading={loading}
+        scheduledLabel={null}
+        zamanOpen={zamanOpen}
+        zamanValue={zaman}
+        onZamanChange={setZaman}
+        onTaslak={() => iste("taslak")}
+        onZamanla={() => iste("zamanla")}
+      />
     </form>
       )}
     </div>

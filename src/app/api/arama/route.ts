@@ -81,6 +81,7 @@ export async function GET(req: NextRequest) {
         .from("karalamalar")
         .select("id, baslik, icerik, slug")
         .eq("yayinda", true)
+        .or(`yayin_zamani.is.null,yayin_zamani.lte."${new Date().toISOString()}"`)
         .or(`baslik.ilike."${pattern}",icerik.ilike."${pattern}"`)
         .limit(5),
 
@@ -88,6 +89,7 @@ export async function GET(req: NextRequest) {
         .from("writings")
         .select("id, title")
         .eq("durum", "yayinda")
+        .lte("published_at", new Date().toISOString())
         .ilike("title", pattern)
         .limit(3),
 

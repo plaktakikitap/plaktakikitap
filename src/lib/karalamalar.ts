@@ -1,6 +1,8 @@
 import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createPrivilegedClient } from "@/lib/supabase/privileged";
 import { slugify } from "@/lib/slug";
+import { richTextIsEmpty } from "@/lib/rich-html";
 
 export interface Karalama {
   id: string;
@@ -8,6 +10,7 @@ export interface Karalama {
   icerik: string;
   slug: string;
   yayinda: boolean;
+  yayin_zamani: string | null;
   olusturma_tarihi: string;
   guncelleme_tarihi: string;
   has_spoiler?: boolean;
@@ -24,7 +27,19 @@ export interface KaralamaVersiyon {
 }
 
 const SELECT_COLS =
-  "id, baslik, icerik, slug, yayinda, olusturma_tarihi, guncelleme_tarihi, has_spoiler";
+  "id, baslik, icerik, slug, yayinda, yayin_zamani, olusturma_tarihi, guncelleme_tarihi, has_spoiler";
+
+function writeError(message: string) {
+  if (/row-level security/i.test(message)) {
+    return "Kayıt yazılamadı. .env.local içinde SUPABASE_SERVICE_ROLE_KEY yok; admin yazmaları bu anahtar olmadan veritabanına gitmiyor.";
+  }
+  return message || "Kaydedilemedi.";
+}
+
+function publicKaralamaFilter<T extends { or: (filters: string) => T }>(query: T): T {
+  const now = new Date().toISOString();
+  return query.or(`yayin_zamani.is.null,yayin_zamani.lte."${now}"`);
+}
 
 export async function getKaralamalarPublic(opts?: {
   limit?: number;
@@ -34,8 +49,8 @@ export async function getKaralamalarPublic(opts?: {
     let q = supabase
       .from("karalamalar")
       .select(SELECT_COLS)
-      .eq("yayinda", true)
-      .order("olusturma_tarihi", { ascending: false });
+      .eq("yayinda", true);
+    q = publicKaralamaFilter(q).order("olusturma_tarihi", { ascending: false });
     if (opts?.limit) q = q.limit(opts.limit);
     const { data, error } = await q;
     if (error) return [];
@@ -48,7 +63,7 @@ export async function getKaralamalarPublic(opts?: {
 /** Admin: yayında olmayanlar dahil */
 export async function getKaralamalarAdmin(): Promise<Karalama[]> {
   try {
-    const supabase = createAdminClient();
+    const supabase = await createPrivilegedClient();
     const { data, error } = await supabase
       .from("karalamalar")
       .select(SELECT_COLS)
@@ -67,7 +82,7 @@ export async function getKaralamaBySlug(
   try {
     const supabase = createAdminClient();
     let q = supabase.from("karalamalar").select(SELECT_COLS).eq("slug", slug);
-    if (!opts?.includeDraft) q = q.eq("yayinda", true);
+    if (!opts?.includeDraft) q = publicKaralamaFilter(q.eq("yayinda", true));
     const { data, error } = await q.maybeSingle();
     if (error || !data) return null;
     return data as Karalama;
@@ -81,6 +96,7 @@ export interface KaralamaInsert {
   icerik: string;
   slug?: string;
   yayinda?: boolean;
+  yayin_zamani?: string | null;
 }
 
 export async function createKaralama(
@@ -89,12 +105,12 @@ export async function createKaralama(
   const baslik = payload.baslik.trim();
   const icerik = payload.icerik.trim();
   if (!baslik) return { error: "Başlık gerekli." };
-  if (!icerik) return { error: "İçerik gerekli." };
+  if (!icerik || richTextIsEmpty(icerik)) return { error: "İçerik gerekli." };
 
   let slug = (payload.slug?.trim() || slugify(baslik)).replace(/^\/+|\/+$/g, "");
   if (!slug) return { error: "Geçerli bir slug üretilemedi." };
 
-  const supabase = createAdminClient();
+  const supabase = await createPrivilegedClient();
   const { data, error } = await supabase
     .from("karalamalar")
     .insert({
@@ -102,13 +118,14 @@ export async function createKaralama(
       icerik,
       slug,
       yayinda: payload.yayinda ?? true,
+      yayin_zamani: payload.yayinda === false ? null : (payload.yayin_zamani ?? null),
     })
     .select(SELECT_COLS)
     .single();
 
   if (error) {
     if (error.code === "23505") return { error: "Bu slug zaten kullanılıyor." };
-    return { error: error.message || "Kaydedilemedi." };
+    return { error: writeError(error.message) };
   }
   return data as Karalama;
 }
@@ -118,13 +135,14 @@ export interface KaralamaUpdate {
   icerik?: string;
   slug?: string;
   yayinda?: boolean;
+  yayin_zamani?: string | null;
 }
 
 export async function updateKaralama(
   id: string,
   payload: KaralamaUpdate
 ): Promise<Karalama | { error: string }> {
-  const supabase = createAdminClient();
+  const supabase = await createPrivilegedClient();
 
   const { data: mevcut, error: fetchErr } = await supabase
     .from("karalamalar")
@@ -143,7 +161,7 @@ export async function updateKaralama(
   }
   if (payload.icerik !== undefined) {
     const icerik = payload.icerik.trim();
-    if (!icerik) return { error: "İçerik gerekli." };
+    if (!icerik || richTextIsEmpty(icerik)) return { error: "İçerik gerekli." };
     updates.icerik = icerik;
   }
   if (payload.slug !== undefined) {
@@ -152,6 +170,9 @@ export async function updateKaralama(
     updates.slug = slug;
   }
   if (payload.yayinda !== undefined) updates.yayinda = payload.yayinda;
+  if (payload.yayin_zamani !== undefined) {
+    updates.yayin_zamani = payload.yayinda === false ? null : payload.yayin_zamani;
+  }
 
   const baslikDegisti =
     updates.baslik !== undefined && updates.baslik !== mevcut.baslik;
@@ -186,7 +207,7 @@ export async function updateKaralama(
 
   if (error) {
     if (error.code === "23505") return { error: "Bu slug zaten kullanılıyor." };
-    return { error: error.message || "Güncellenemedi." };
+    return { error: writeError(error.message) };
   }
   return data as Karalama;
 }
@@ -195,7 +216,7 @@ export async function getKaralamaVersiyonlar(
   karalamaId: string
 ): Promise<KaralamaVersiyon[]> {
   try {
-    const supabase = createAdminClient();
+    const supabase = await createPrivilegedClient();
     const { data, error } = await supabase
       .from("karalama_versiyonlar")
       .select(
@@ -211,7 +232,7 @@ export async function getKaralamaVersiyonlar(
 }
 
 export async function deleteKaralama(id: string): Promise<boolean> {
-  const supabase = createAdminClient();
+  const supabase = await createPrivilegedClient();
   const { error } = await supabase.from("karalamalar").delete().eq("id", id);
   return !error;
 }

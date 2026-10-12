@@ -12,9 +12,10 @@ import {
 } from "@/lib/karalamalar-section";
 import SpoilerText from "@/components/SpoilerText";
 import { stripSpoilers } from "@/lib/spoiler";
+import { isRichHtml, sanitizeRichHtml } from "@/lib/rich-html";
 import { formatDateTr } from "@/lib/format-date-tr";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export async function generateStaticParams() {
   const items = await getKaralamalarPublic();
@@ -67,9 +68,16 @@ export default async function KaralamaDetailPage({
         </h1>
 
         <div className="mt-8 rounded-2xl border border-[#1a1612]/[0.08] bg-white/55 px-5 py-6 shadow-[0_12px_32px_rgba(26,22,18,0.05)] sm:px-8 sm:py-8">
-          <div className="max-w-[640px] whitespace-pre-wrap text-[1.05rem] leading-[1.85] text-ink/85">
-            <SpoilerText content={item.icerik} />
-          </div>
+          {isRichHtml(item.icerik) ? (
+            <div
+              className="max-w-[640px] text-[1.05rem] leading-[1.85] text-ink/85 [&_a]:text-gold [&_a]:underline [&_blockquote]:my-4 [&_blockquote]:border-l-4 [&_blockquote]:border-gold [&_blockquote]:pl-4 [&_blockquote]:italic [&_h2]:mb-2 [&_h2]:mt-6 [&_h2]:text-2xl [&_h3]:mb-2 [&_h3]:mt-5 [&_h3]:text-xl [&_li]:my-1 [&_ol]:my-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:my-3 [&_ul]:my-3 [&_ul]:list-disc [&_ul]:pl-5"
+              dangerouslySetInnerHTML={{ __html: sanitizeRichHtml(item.icerik) }}
+            />
+          ) : (
+            <div className="max-w-[640px] whitespace-pre-wrap text-[1.05rem] leading-[1.85] text-ink/85">
+              <SpoilerText content={item.icerik} />
+            </div>
+          )}
         </div>
       </article>
     </main>

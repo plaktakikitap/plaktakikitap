@@ -28,6 +28,10 @@ export async function POST(req: NextRequest) {
       icerik: typeof b.icerik === "string" ? b.icerik : "",
       slug: typeof b.slug === "string" ? b.slug : undefined,
       yayinda: typeof b.yayinda === "boolean" ? b.yayinda : true,
+      yayin_zamani:
+        b.yayin_zamani === null || typeof b.yayin_zamani === "string"
+          ? b.yayin_zamani
+          : null,
     });
     if ("error" in result) {
       return NextResponse.json({ error: result.error }, { status: 400 });

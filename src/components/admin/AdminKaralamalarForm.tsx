@@ -1,19 +1,32 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { slugify } from "@/lib/slug";
+import { isRichHtml, sanitizeRichHtml } from "@/lib/rich-html";
+import {
+  formatIstanbul,
+  isFutureInstant,
+  istanbulLocalToUtc,
+  utcToIstanbulInput,
+} from "@/lib/istanbul-time";
 import { showAdminToast } from "./admin-toast-events";
+import { PublishBar } from "./PublishBar";
 import {
   AdminFieldLabel,
-  AdminOptionalSection,
   AdminRecentList,
   AdminTextInput,
   useAdminCmdEnter,
 } from "./AdminFormPrimitives";
 import type { Karalama, KaralamaVersiyon } from "@/lib/karalamalar";
 
-type KaralamaDurum = "yayinda" | "taslak" | "arsiv";
+const RichTextEditor = dynamic(
+  () => import("@/components/admin/RichTextEditor").then((m) => ({ default: m.RichTextEditor })),
+  { ssr: false }
+);
+
+type YayinNiyeti = "yayinla" | "taslak" | "zamanla";
 
 type Props = {
   initial?: Karalama | null;
@@ -42,12 +55,6 @@ function alanLabel(alan: string | null): string {
   return alan ?? "içerik";
 }
 
-function initialDurum(k: Karalama | null): KaralamaDurum {
-  if (!k) return "taslak";
-  if (k.yayinda) return "yayinda";
-  return "taslak";
-}
-
 export function AdminKaralamalarForm({
   initial = null,
   recent = [],
@@ -55,14 +62,19 @@ export function AdminKaralamalarForm({
 }: Props) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
-  const icerikRef = useRef<HTMLTextAreaElement>(null);
+  const niyetRef = useRef<YayinNiyeti>("yayinla");
   useAdminCmdEnter(formRef);
 
   const [baslik, setBaslik] = useState(initial?.baslik ?? "");
   const [slug, setSlug] = useState(initial?.slug ?? "");
   const [slugTouched, setSlugTouched] = useState(Boolean(initial?.slug));
   const [icerik, setIcerik] = useState(initial?.icerik ?? "");
-  const [durum, setDurum] = useState<KaralamaDurum>(() => initialDurum(initial));
+  const [zamanOpen, setZamanOpen] = useState(false);
+  const [zaman, setZaman] = useState(() =>
+    initial?.yayin_zamani && isFutureInstant(initial.yayin_zamani)
+      ? utcToIstanbulInput(initial.yayin_zamani)
+      : ""
+  );
   const [loading, setLoading] = useState(false);
   const [versiyonlar, setVersiyonlar] = useState<KaralamaVersiyon[]>([]);
 
@@ -102,37 +114,31 @@ export function AdminKaralamalarForm({
     );
   }
 
-  function insertSpoiler() {
-    const ta = icerikRef.current;
-    if (!ta) return;
-    const start = ta.selectionStart;
-    const end = ta.selectionEnd;
-    const selected = icerik.slice(start, end);
-    const before = icerik.slice(0, start);
-    const after = icerik.slice(end);
-    const wrapped = `[spoiler]${selected || "metin"}[/spoiler]`;
-    const next = before + wrapped + after;
-    setIcerik(next);
-    requestAnimationFrame(() => {
-      ta.focus();
-      const cursor = start + 9 + (selected || "metin").length;
-      ta.setSelectionRange(cursor, cursor);
-    });
-  }
-
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    if (!baslik.trim() || !icerik.trim()) {
+  async function kaydet(niyet: YayinNiyeti) {
+    const icerikText = icerik.replace(/<[^>]*>/g, "").replace(/&nbsp;/gi, " ").trim();
+    if (!baslik.trim() || !icerikText) {
       showAdminToast("error", "Başlık ve içerik zorunludur.");
       return;
     }
+
+    let yayinZamani: string | null = null;
+    if (niyet === "zamanla") {
+      const utc = istanbulLocalToUtc(zaman);
+      if (!utc || !isFutureInstant(utc)) {
+        showAdminToast("error", "Türkiye saatine göre gelecek bir zaman seç.");
+        return;
+      }
+      yayinZamani = utc;
+    }
+
     setLoading(true);
     try {
       const payload = {
         baslik,
         icerik,
         slug,
-        yayinda: durum === "yayinda",
+        yayinda: niyet !== "taslak",
+        yayin_zamani: yayinZamani,
       };
       const res = await fetch(
         initial
@@ -149,21 +155,28 @@ export function AdminKaralamalarForm({
         showAdminToast("error", data.error ?? "Kaydedilemedi.");
         return;
       }
+      const mesaj =
+        niyet === "zamanla" && yayinZamani
+          ? `${formatIstanbul(yayinZamani)} TSİ'de yayınlanacak`
+          : niyet === "taslak"
+            ? "Taslağa alındı"
+            : initial
+              ? "Yayınlandı ✓"
+              : "Karalama yayınlandı ✓";
+      showAdminToast("success", mesaj);
       if (initial) {
-        showAdminToast("success", "Güncellendi ✓");
-        // Yenile versiyon listesi
         const vRes = await fetch(
           `/api/admin/karalamalar/${initial.id}/versiyonlar`
         );
         if (vRes.ok) setVersiyonlar(await vRes.json());
         onDone?.();
       } else {
-        showAdminToast("success", "Karalama eklendi ✓");
         setBaslik("");
         setSlug("");
         setSlugTouched(false);
         setIcerik("");
-        setDurum("taslak");
+        setZaman("");
+        setZamanOpen(false);
       }
       router.refresh();
     } catch {
@@ -171,6 +184,22 @@ export function AdminKaralamalarForm({
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    const niyet = niyetRef.current;
+    niyetRef.current = "yayinla";
+    void kaydet(niyet);
+  }
+
+  function iste(niyet: YayinNiyeti) {
+    if (niyet === "zamanla" && !zamanOpen) {
+      setZamanOpen(true);
+      return;
+    }
+    niyetRef.current = niyet;
+    formRef.current?.requestSubmit();
   }
 
   const recentItems = (initial ? [] : recent).slice(0, 5).map((k) => ({
@@ -221,59 +250,18 @@ export function AdminKaralamalarForm({
         </div>
 
         <div>
-          <div className="mb-1.5 flex items-center justify-between gap-2">
-            <AdminFieldLabel htmlFor="karalama-icerik" required className="mb-0">
-              İçerik
-            </AdminFieldLabel>
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                onClick={insertSpoiler}
-                title="Spoiler ekle ([spoiler]...[/spoiler])"
-                className="flex items-center gap-1 rounded border border-[#e8e0d4] px-2 py-0.5 text-[10px] font-mono text-[#6b6158] hover:border-[#b8934a]/40 hover:text-[#b8934a]"
-              >
-                [spoiler]
-              </button>
-            </div>
-          </div>
-          <textarea
-            ref={icerikRef}
-            id="karalama-icerik"
+          <AdminFieldLabel required className="mb-2">
+            İçerik
+          </AdminFieldLabel>
+          <RichTextEditor
             value={icerik}
-            onChange={(e) => setIcerik(e.target.value)}
-            rows={12}
-            required
-            className="min-h-[220px] w-full rounded-xl border border-[#e8e0d4] bg-white px-3 py-2.5 text-sm text-[#1a1612] placeholder:text-[#1a1612]/30 focus:outline-none focus:ring-2 focus:ring-[#b8934a]/40"
+            onChange={setIcerik}
+            placeholder="Karalama içeriği…"
+            minHeight="220px"
           />
         </div>
 
-        <AdminOptionalSection>
-          <div>
-            <AdminFieldLabel className="mb-2">Durum</AdminFieldLabel>
-            <div className="flex gap-2">
-              {(["taslak", "yayinda", "arsiv"] as KaralamaDurum[]).map((d) => (
-                <button
-                  key={d}
-                  type="button"
-                  onClick={() => setDurum(d)}
-                  className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition ${
-                    durum === d
-                      ? d === "yayinda"
-                        ? "border-[#b8934a] bg-[#b8934a]/10 text-[#b8934a]"
-                        : d === "arsiv"
-                          ? "border-[#6b6158] bg-[#6b6158]/10 text-[#6b6158]"
-                          : "border-[#1a1612]/30 bg-[#1a1612]/8 text-[#1a1612]"
-                      : "border-[#e8e0d4] text-[#6b6158] hover:border-[#1a1612]/20"
-                  }`}
-                >
-                  {d === "taslak" ? "Taslak" : d === "yayinda" ? "Yayında" : "Arşiv"}
-                </button>
-              ))}
-            </div>
-          </div>
-        </AdminOptionalSection>
-
-        <div className="flex flex-wrap items-center justify-end gap-3 pt-2">
+        <div className="flex items-end justify-between gap-3">
           {initial && onDone ? (
             <button
               type="button"
@@ -282,17 +270,22 @@ export function AdminKaralamalarForm({
             >
               İptal
             </button>
-          ) : null}
-          <button
-            type="submit"
-            disabled={loading}
-            className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-medium text-black transition hover:bg-amber-400 disabled:opacity-50"
-          >
-            {loading ? "Kaydediliyor…" : initial ? "Güncelle" : "Kaydet"}
-            <span className="ml-2 hidden text-[10px] font-normal text-black/50 sm:inline">
-              ⌘/Ctrl+Enter
-            </span>
-          </button>
+          ) : (
+            <span />
+          )}
+          <PublishBar
+            loading={loading}
+            scheduledLabel={
+              initial?.yayin_zamani && isFutureInstant(initial.yayin_zamani)
+                ? `${formatIstanbul(initial.yayin_zamani)} TSİ'de yayınlanacak`
+                : null
+            }
+            zamanOpen={zamanOpen}
+            zamanValue={zaman}
+            onZamanChange={setZaman}
+            onTaslak={() => iste("taslak")}
+            onZamanla={() => iste("zamanla")}
+          />
         </div>
       </div>
 
@@ -318,7 +311,14 @@ export function AdminKaralamalarForm({
                 </summary>
                 <div className="mt-2 text-[0.85rem] text-[#1a1612]">
                   <strong className="text-[#1a1612]">{v.baslik}</strong>
-                  <p className="mt-1 whitespace-pre-wrap">{v.icerik}</p>
+                  {isRichHtml(v.icerik) ? (
+                    <div
+                      className="mt-1 [&_p]:my-1 [&_a]:underline"
+                      dangerouslySetInnerHTML={{ __html: sanitizeRichHtml(v.icerik) }}
+                    />
+                  ) : (
+                    <p className="mt-1 whitespace-pre-wrap">{v.icerik}</p>
+                  )}
                 </div>
               </details>
               <button

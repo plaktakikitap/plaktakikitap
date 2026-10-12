@@ -225,6 +225,7 @@ export async function GET() {
         "id, title, author, rating, tags, review, cover_url, status, end_date, created_at, visibility"
       )
       .in("visibility", ["public", "unlisted"])
+      .neq("status", "to_read")
       .order("created_at", { ascending: true });
 
     if (error) {

@@ -11,7 +11,6 @@ import { VinylRecord } from "@/components/VinylRecord";
 import AnimatedTitle from "@/components/home/AnimatedTitle";
 import RoomBackdrop from "@/components/home/RoomBackdrop";
 import { ScrollIndicator } from "@/components/home/ScrollHint";
-import { useTimeOfDay, TIME_PALETTES } from "@/hooks/useTimeOfDay";
 
 const EASE = [0.22, 1, 0.36, 1];
 
@@ -251,8 +250,6 @@ export default function HeroSection({
   const reduce = useReducedMotion();
   const sectionRef = useRef(null);
   const scrollEffectsEnabled = !reduce;
-  const timeOfDay = useTimeOfDay();
-  const timePalette = TIME_PALETTES[timeOfDay];
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -262,11 +259,7 @@ export default function HeroSection({
   return (
     <section
       ref={sectionRef}
-      className="relative flex flex-col items-center justify-start overflow-hidden px-4 pt-10 pb-4 sm:px-6 sm:pt-14 sm:pb-6"
-      style={{
-        background: timePalette.bg,
-        transition: "background 2s ease",
-      }}
+      className="relative flex flex-col items-center justify-start overflow-hidden bg-transparent px-4 pt-10 pb-4 sm:px-6 sm:pt-14 sm:pb-6"
     >
       <RoomBackdrop
         scrollYProgress={scrollEffectsEnabled ? scrollYProgress : undefined}
@@ -285,7 +278,8 @@ export default function HeroSection({
             aria-hidden
             className="pointer-events-none absolute left-1/2 top-1/2 h-[120%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full"
             style={{
-              background: `radial-gradient(circle, ${timePalette.glow} 0%, transparent 68%)`,
+              background:
+                "radial-gradient(circle, rgba(184,147,74,0.14) 0%, transparent 68%)",
             }}
           />
           <VinylRecord logoSrc={logoSrc} allowPageScroll />

@@ -21,11 +21,15 @@ export async function PATCH(
       icerik?: string;
       slug?: string;
       yayinda?: boolean;
+      yayin_zamani?: string | null;
     } = {};
     if (typeof b.baslik === "string") payload.baslik = b.baslik;
     if (typeof b.icerik === "string") payload.icerik = b.icerik;
     if (typeof b.slug === "string") payload.slug = b.slug;
     if (typeof b.yayinda === "boolean") payload.yayinda = b.yayinda;
+    if (b.yayin_zamani === null || typeof b.yayin_zamani === "string") {
+      payload.yayin_zamani = b.yayin_zamani;
+    }
 
     const result = await updateKaralama(id, payload);
     if ("error" in result) {

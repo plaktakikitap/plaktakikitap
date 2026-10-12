@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     const external_url = typeof b.external_url === "string" ? b.external_url.trim() || null : null;
     const durum = parseWritingDurum(b.durum) ?? "taslak";
     const result = await createWriting({ category, title, body: bodyHtml, published_at, tefrika_issue, external_url, durum });
-    if (!result) return NextResponse.json({ error: "Create failed" }, { status: 500 });
+    if ("error" in result) return NextResponse.json({ error: result.error }, { status: 500 });
     return NextResponse.json(result);
   } catch {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });

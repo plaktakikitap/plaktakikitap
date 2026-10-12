@@ -8,7 +8,7 @@ import {
 import { PageTransitionTarget } from "@/components/layout/PageTransitionTarget";
 import { KaralamalarList } from "@/components/karalamalar/KaralamalarList";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: `${SECTION_TITLE} | Plaktaki Kitap`,
