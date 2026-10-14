@@ -25,7 +25,7 @@ export default async function Footer() {
         <TornPaper />
       </div>
       <div className="footer-content">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-4 sm:px-6 md:flex-row md:items-center md:justify-between md:py-5">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 sm:px-6 md:flex-row md:items-center md:justify-between">
           <FooterCopy>© 2026 Eymen — Plaktaki Kitap</FooterCopy>
           <div className="flex justify-end md:ml-auto">
             <SocialLinksSection links={links} />

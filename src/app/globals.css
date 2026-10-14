@@ -497,15 +497,18 @@ h3.karalama-title {
   mask-image: linear-gradient(to bottom, #000 0%, #000 calc(100% - 80px), transparent 100%);
 }
 
-/* Footer — yırtık kağıt; zemin sayfa kremiyle aynı */
+/* Footer — yırtık kenar footer’ın kendisi; metin yırtığın hemen altında */
 .footer-paper {
   background-color: var(--cream);
 }
 
 .torn-layers {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  left: 0;
   z-index: 0;
+  height: 7.25rem;
   overflow: hidden;
   pointer-events: none;
 }
@@ -520,14 +523,9 @@ h3.karalama-title {
   position: relative;
   z-index: 1;
   background: transparent;
-  padding-top: 12rem;
-  padding-bottom: 0.5rem;
-}
-
-@media (min-width: 768px) {
-  .footer-content {
-    padding-top: 8.75rem;
-  }
+  /* Yırtık kenar bu yüksekliğin hemen altında; desen footer’la tek parça */
+  padding-top: 4.15rem;
+  padding-bottom: 0.85rem;
 }
 
 @keyframes floatNote {
